@@ -29,7 +29,7 @@ const Sidebar = () => {
           openSidebar ? 'translate-x-0' : '-translate-x-full'
         } sm:translate-x-0`}
          aria-label="Sidebar">
-   <div className="h-full overflow-y-auto  bg-gray-800">
+   <div className="h-full overflow-y-auto  bg-[#1A202E]">
       <Link href="https://flowbite.com/" className="flex items-center justify-center w-full h-max py-4">
          
          <span className="px-2 text-xl text-white font-semibold whitespace-nowrap">Arkiva</span>
