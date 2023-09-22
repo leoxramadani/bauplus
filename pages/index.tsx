@@ -21,17 +21,7 @@ export default function Home() {
       </Head>
 
       <main className="h-screen w-full flex flex-row gap-4">
-      <Sidebar>
-        <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert={true} />
-        <SidebarItem icon={<UserCircle size={20}/>} text="Users" active={false} alert={false}/>
-        <SidebarItem icon={<Boxes size={20}/>} text="Companies" active={false} alert={false}/>
-        <SidebarItem icon={<Package size={20}/>} text="Activities" active={false} alert/>
-        <SidebarItem icon={<Receipt size={20}/>} text="Billings" active={false} alert={false}/>
-        <hr className='my-3'/>
-        {/* Ktu mujtmu me e vendos logon e kompanis */}
-        <SidebarItem icon={<Settings size={20}/>} text="Settings" active={false} alert={false}/>
-        <SidebarItem icon={<LifeBuoy size={20}/>} text="Help" active={false} alert={false}/>
-      </Sidebar>
+      <Sidebar/>
       <div className='max-w-[calc(100%-250px)]'>
         <h2 className='w-full bg-blue-200'>hello</h2>
         <GridLayout />

@@ -1,12 +1,12 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react';
 import { useContext, createContext, useState } from "react"
-
+import { LifeBuoy,Receipt,Boxes,Package,UserCircle,BarChart3,LayoutDashboard,Settings } from 'lucide-react';
 
 interface SidebarItemInterface { icon:any, text:any, active:any, alert:any }
 
 const SidebarContext = createContext<any>(false);
 
-const Sidebar = ({children}:any) => {
+const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -23,13 +23,21 @@ const Sidebar = ({children}:any) => {
 
         <SidebarContext.Provider value={{expanded}}>
         <ul className='flex-1 px-3'>
-          {children}
+        <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert={true} />
+        <SidebarItem icon={<UserCircle size={20}/>} text="Users" active={false} alert={false}/>
+        <SidebarItem icon={<Boxes size={20}/>} text="Companies" active={false} alert={false}/>
+        <SidebarItem icon={<Package size={20}/>} text="Activities" active={false} alert/>
+        <SidebarItem icon={<Receipt size={20}/>} text="Billings" active={false} alert={false}/>
+        <hr className='my-3'/>
+        {/* Ktu mujtmu me e vendos logon e kompanis */}
+        <SidebarItem icon={<Settings size={20}/>} text="Settings" active={false} alert={false}/>
+        <SidebarItem icon={<LifeBuoy size={20}/>} text="Help" active={false} alert={false}/>
         </ul>
         </SidebarContext.Provider>
 
         <div className="border-t flex p-3 text-gray-50">
           <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
             alt=""
             className="w-10 h-10 rounded-md"
           />
@@ -55,6 +63,9 @@ export default Sidebar
 
 export function SidebarItem({ icon, text, active, alert }:SidebarItemInterface) {
   const { expanded } = useContext<any>(SidebarContext)
+
+
+  const [isActive,setIsActive]=useState(active)
   
   return (
     <li
@@ -63,11 +74,12 @@ export function SidebarItem({ icon, text, active, alert }:SidebarItemInterface) 
         font-medium rounded-[0.6rem] cursor-pointer
         transition-colors group
         ${
-          active
+          isActive
             ? "bg-gradient-to-tr from-blue-400 to-blue-300 text-[#1A202E]"
             : "hover:bg-blue-200 text-white hover:text-[#1A202E]"
         }
     `}
+    onClick={()=> !isActive ? setIsActive(true): null}
     >
       {icon}
       <span
