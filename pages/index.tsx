@@ -1,12 +1,8 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css';
-import { Button } from '@/components/ui/button';
-import Sidebar from '@/components/molecules/Sidebar';
+import Sidebar, { SidebarItem } from '@/components/molecules/Sidebar';
 import GridLayout from '@/components/molecules/GridLayout';
+import { LifeBuoy,Receipt,Boxes,Package,UserCircle,BarChart3,LayoutDashboard,Settings } from 'lucide-react';
 
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return (
@@ -23,10 +19,23 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Sidebar />
-      <main className="h-screen max-w-[calc(100%-250px)] w-full ml-[250px] flex flex-col gap-4">
+
+      <main className="h-screen w-full flex flex-row gap-4">
+      <Sidebar>
+        <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert={true} />
+        <SidebarItem icon={<UserCircle size={20}/>} text="Users" active={false} alert={false}/>
+        <SidebarItem icon={<Boxes size={20}/>} text="Companies" active={false} alert={false}/>
+        <SidebarItem icon={<Package size={20}/>} text="Activities" active={false} alert/>
+        <SidebarItem icon={<Receipt size={20}/>} text="Billings" active={false} alert={false}/>
+        <hr className='my-3'/>
+        {/* Ktu mujtmu me e vendos logon e kompanis */}
+        <SidebarItem icon={<Settings size={20}/>} text="Settings" active={false} alert={false}/>
+        <SidebarItem icon={<LifeBuoy size={20}/>} text="Help" active={false} alert={false}/>
+      </Sidebar>
+      <div className='max-w-[calc(100%-250px)]'>
         <h2 className='w-full bg-blue-200'>hello</h2>
         <GridLayout />
+      </div>
       </main>
     </>
   );

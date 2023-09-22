@@ -1,64 +1,102 @@
-import Link from 'next/link';
-import React, {useState, Key} from 'react'
+import { ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react';
+import { useContext, createContext, useState } from "react"
 
 
-const Sidebar = () => {
-    const [openSidebar, setOpenSidebar] = useState<boolean>(false);
-    const toggleSidebar = () => {
-        setOpenSidebar(!openSidebar);
-      };
+interface SidebarItemInterface { icon:any, text:any, active:any, alert:any }
 
-      const links = [ 
-        {href: '/dashboad', label: 'Dashboard', icon: 'icon'},
-        {href: '/dashboad', label: 'Inflow', icon: 'icon'},
-        {href: '/dashboad', label: 'Outflow', icon: 'icon'},
-        {href: '/dashboad', label: 'Companies', icon: 'icon'},
-        {href: '/dashboad', label: 'Archive', icon: 'icon'},
-        {href: '/dashboad', label: 'Reports', icon: 'icon'},
-      ]
+const SidebarContext = createContext<any>(false);
+
+const Sidebar = ({children}:any) => {
+  const [expanded, setExpanded] = useState(true);
+
   return (
-    <>
-        <button onClick={toggleSidebar} data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-   <span className="sr-only">Open sidebar</span>
-   <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-   </svg>
-</button>
+    <aside className='h-screen'>
+      <nav className='h-full flex flex-col bg-[#1A202E] border-r shadow-sm'>
+        {/* Ktu mujm ne mbyllje me e shfaq nje logo me te vogel */}
+        <div className='p-4 pb-2 justify-between items-center flex flex-row'>
+          <img src="https://img.logoipsum.com/243.svg" alt="assa" className={`overflow-hidden transition-all ${expanded?`w-32`:`w-0`} hover:cursor-pointer`} />
 
-<aside id="logo-sidebar" className={`fixed top-0 left-0 z-40 max-w-[230px] w-full h-screen transition-transform ${
-          openSidebar ? 'translate-x-0' : '-translate-x-full'
-        } sm:translate-x-0`}
-         aria-label="Sidebar">
-   <div className="h-full overflow-y-auto  bg-[#1A202E]">
-      <Link href="https://flowbite.com/" className="flex items-center justify-center w-full h-max py-4">
-         
-         <span className="px-2 text-xl text-white font-semibold whitespace-nowrap">Arkiva</span>
-      </Link>
-      <ul className="flex flex-col w-full border-t border-gray-700">
-        {
-            links.map((link, i:Key) => (
-                <li className='flex flex-row gap-2 items-center w-full' key={i}>
-                    <Link href={link.href} className="w-full flex flex-row gap-2 items-center px-3 py-2 text-white  hover:bg-gray-700 group">
-               <span className="">{link.label}</span>
-            </Link>
-                </li>
-            ))
-        }
-      </ul>
+          <button className='p-1.5 rounded-full  bg-gray-50 hover:bg-gray-100' onClick={()=>setExpanded(current=>!current)}>
+            {expanded ?<ChevronFirst/>:<ChevronLast/>}
+          </button>
+        </div>
+
+        <SidebarContext.Provider value={{expanded}}>
+        <ul className='flex-1 px-3'>
+          {children}
+        </ul>
+        </SidebarContext.Provider>
+
+        <div className="border-t flex p-3 text-gray-50">
+          <img
+            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            alt=""
+            className="w-10 h-10 rounded-md"
+          />
+          <div
+            className={`
+              flex justify-between items-center
+              overflow-hidden transition-all ${expanded ? "w-56 ml-3" : "w-0"}
+          `}
+          >
+            <div className="leading-4">
+              <h4 className="font-semibold ">Ardrin Rexhepi</h4>
+              <span className="text-xs ">ardrin.rexhepi@thorindustriesmk.com</span>
+            </div>
+            <MoreVertical size={20} />
+          </div>
+        </div>
+      </nav>
       
-
-   
-   </div>
-</aside>
-
-{openSidebar && (
-        <div
-          className="fixed top-0 left-0 z-30 w-screen h-screen bg-black opacity-20"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-    </>
+    </aside>
   )
 }
-
 export default Sidebar
+
+export function SidebarItem({ icon, text, active, alert }:SidebarItemInterface) {
+  const { expanded } = useContext<any>(SidebarContext)
+  
+  return (
+    <li
+      className={`
+        relative flex items-center py-2 px-3 my-2
+        font-medium rounded-[0.6rem] cursor-pointer
+        transition-colors group
+        ${
+          active
+            ? "bg-gradient-to-tr from-blue-400 to-blue-300 text-[#1A202E]"
+            : "hover:bg-blue-200 text-white hover:text-[#1A202E]"
+        }
+    `}
+    >
+      {icon}
+      <span
+        className={`overflow-hidden transition-all ${
+          expanded ? "w-52 ml-3" : "w-0"
+        }`}
+      >
+        {text}
+      </span>
+      {alert && (
+        <div
+          className={`absolute right-2 w-2 h-2 rounded bg-red-500 ${
+            expanded ? "" : "top-2"
+          }`}
+        />
+      )}
+
+      {!expanded && (
+        <div
+          className={`
+          absolute left-full rounded-md px-2 py-1 ml-6 
+          bg-indigo-100 text-white text-sm z-50
+          invisible opacity-20 -translate-x-3 transition-all
+          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+      `}
+        >
+          {text}
+        </div>
+      )}
+    </li>
+  )
+}
