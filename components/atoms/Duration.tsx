@@ -89,7 +89,7 @@ const Duration: React.FC = () => {
   console.log("start: ",startDate)
   return (
     <div className='absolute right-4'>
-      <div className='relative flex flex-col gap-4 w-max h-full'>
+      <div className='relative flex flex-col  w-max h-full'>
         <div
           onClick={() => setDropDown(!dropDown)}
           className='hover:bg-zinc-50 cursor-pointer min-w-[80px] w-max flex justify-center items-center px-3 py-1 bg-zinc-100 text-zinc-500 rounded-sm font-semibold'
@@ -115,7 +115,7 @@ const Duration: React.FC = () => {
           <ul className='flex flex-col justify-center items-center'>
             {range.map((range) => (
               <li
-                className='w-full px-3 py-2 text-slate-500 hover:bg-zinc-100 justify-start cursor-pointer items-center flex'
+                className={`${selectedRange === range && 'bg-zinc-100'} w-full px-3 py-2 text-slate-500 hover:bg-zinc-100 justify-start cursor-pointer items-center flex`}
                 key={range}
                 onClick={() => handleDateRangeChange(range)}
               >
