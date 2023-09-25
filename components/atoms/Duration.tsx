@@ -7,9 +7,12 @@ const Duration: React.FC = () => {
   const [dropDown, setDropDown] = useState<boolean>(false);
 
   const formatDate = (date: Date): string => {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    return `${day}/${month}`;
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
   };
 
   const todayRange = (): [string, string] => {
@@ -68,9 +71,9 @@ const Duration: React.FC = () => {
 
   const [startDate, endDate] = dateRanges[selectedRange] ? dateRanges[selectedRange]() : ['', ''];
 
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined
+  const [date, setDate] = useState<DateRange>({
+    from: new Date(),
+    to: new Date()
   })
 
   const range = [
@@ -91,11 +94,20 @@ const Duration: React.FC = () => {
           onClick={() => setDropDown(!dropDown)}
           className='hover:bg-zinc-50 cursor-pointer min-w-[80px] w-max flex justify-center items-center px-3 py-1 bg-zinc-100 text-zinc-500 rounded-sm font-semibold'
         >
-          {startDate && endDate && (
+           {selectedRange === "Custom range" ? 
+           (
             <p>
-              {startDate} - {endDate}
+                    {date.from && date.to && `${formatDate(date.from)} - ${formatDate(date.to)}`}
+
             </p>
-          )}
+           ): (
+            startDate && endDate && (
+                <p>
+                  {startDate} - {endDate}
+                </p>
+              )
+           )}
+         
         </div>
       </div>
       {dropDown && (
