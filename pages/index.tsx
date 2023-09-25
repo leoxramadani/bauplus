@@ -1,14 +1,50 @@
+"use client";
 import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import { Button } from '@/components/ui/button';
 import Sidebar from '@/components/molecules/Sidebar';
-import GridLayout from '@/components/molecules/GridLayout';
+import { Card, Title } from '@tremor/react';
+import GraphBlock from '@/components/molecules/GridLayout/GraphBlock';
+import GridLayout from '@/components/molecules/GridLayout/GridLayout';
+import layoutConfig from '@/lib/helper/layoutConfig';
+import React, {useState} from 'react'
+import { randomUUID } from 'crypto';
+import Duration from '@/components/atoms/Duration';
 
-const inter = Inter({ subsets: ['latin'] });
+
+const cities = [
+  {
+    name: "New York",
+    sales: 9800,
+  },
+  {
+    name: "London",
+    sales: 4567,
+  },
+  {
+    name: "Hong Kong",
+    sales: 3908,
+  },
+  {
+    name: "San Francisco",
+    sales: 2400,
+  },
+  {
+    name: "Singapore",
+    sales: 1908,
+  },
+  {
+    name: "Zurich",
+    sales: 1398,
+  },
+];
+
 
 export default function Home() {
+  const [breakpoint, setBreakpoint] = useState<string>("");
+
   return (
     <>
       <Head>
@@ -24,9 +60,32 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Sidebar />
-      <main className="h-screen max-w-[calc(100%-250px)] w-full ml-[250px] flex flex-col gap-4">
+      <main className="h-screen max-w-[calc(100%-250px)] w-full md:ml-[250px] flex flex-col gap-4">
         <h2 className='w-full bg-blue-200'>hello</h2>
-        <GridLayout />
+      
+        <div className='w-full flex flex-col md:grid grid-cols-2 lg:grid-cols-4 gap-4 justify-center items-center '>
+        <Card key="graph1" className=' max-w-sm w-full'>
+          <Title>Sales</Title>
+          <GraphBlock type='pie' data={cities} colors={["rose","blue"]} index='name' /> 
+        </Card>
+        <Card key="graph2" className='w-full max-w-sm'>
+          <Duration />
+          <Title>Sales</Title>
+          <GraphBlock type='pie' data={cities} colors={["rose","blue"]} index='name' /> 
+        </Card>
+        <Card key="graph2" className='w-full max-w-sm'>
+          <Title>Sales</Title>
+          <GraphBlock type='pie' data={cities} colors={["rose","blue"]} index='name' /> 
+        </Card>
+        <Card key="graph2" className='w-full max-w-sm'>
+          <Title>Sales</Title>
+          <GraphBlock type='pie' data={cities} colors={["rose","blue"]} index='name' /> 
+        </Card>
+        </div>
+
+        <div className='h-max p-8 border w-full'>
+        <GridLayout data={["1", "2", "3"]} layouts={layoutConfig}  setBreakPoint={setBreakpoint} />
+        </div>
       </main>
     </>
   );
