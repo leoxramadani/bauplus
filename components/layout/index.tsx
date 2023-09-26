@@ -6,15 +6,15 @@ import { useState, useEffect } from 'react';
 
 const Layout = ({ children }: PropsWithChildren) => {
   //state to check screen size
-  const [isSmall, setIsSmall] = useState(false);
+  const [isWindowSmall, setIsWindowSmall] = useState(false);
   //to open or not the sidebar
   const [isOpen, setIsOpen] = useState(false);
 
   //effect to react to screen size
   useEffect(() => {
     const handleResize = () => {
-      setIsSmall(window.innerWidth < 1024);
-      if (window.innerWidth > 1024) setIsOpen(isOpen);
+      setIsWindowSmall(window.innerWidth < 768);
+      if (window.innerWidth > 768) setIsOpen(isOpen);
     };
 
     window.addEventListener('resize', handleResize);
@@ -46,13 +46,28 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>Arkiva</title>
       </Head>
       <div className={`min-h-screen flex flex-col w-full`}>
-        {isSmall ? (
-          <Navbar />
+        {isWindowSmall ? (
+          <Navbar
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            isWindowSmall={isWindowSmall}
+            setIsWindowSmall={setIsWindowSmall}
+          />
         ) : (
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <Sidebar
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            isWindowSmall={isWindowSmall}
+            setIsWindowSmall={setIsWindowSmall}
+          />
         )}
-        {isOpen && isSmall && (
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        {isOpen && isWindowSmall && (
+          <Sidebar
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            isWindowSmall={isWindowSmall}
+            setIsWindowSmall={setIsWindowSmall}
+          />
         )}
 
         <main>{children}</main>

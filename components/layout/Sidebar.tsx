@@ -13,19 +13,18 @@ import {
   Dispatch,
 } from 'react';
 import {
-  LifeBuoy,
-  Receipt,
   Boxes,
   Package,
   UserCircle,
-  BarChart3,
   LayoutDashboard,
   Settings,
+  X,
 } from 'lucide-react';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
 import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
+
 interface SidebarItemInterface {
   icon: any;
   text: any;
@@ -35,16 +34,27 @@ interface SidebarItemInterface {
 
 interface SidebarProps {
   isOpen?: boolean;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isWindowSmall?: boolean;
+  setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
 }
 
 const SidebarContext = createContext<any>(false);
 
-const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+const Sidebar = ({
+  isOpen,
+  setIsOpen,
+  isWindowSmall,
+  setIsWindowSmall,
+}: SidebarProps) => {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className={`h-screen ${expanded ? `w-56` : `w-[72px]`}`}>
+    <aside
+      className={`fixed top-0 left-0 h-screen ${
+        expanded ? `w-fit` : `w-[72px]`
+      }`}
+    >
       <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
         {/* Ktu mujm ne mbyllje me e shfaq nje logo me te vogel */}
         <div className="p-4 pb-2 justify-between items-center flex flex-row">
@@ -58,34 +68,44 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
           <button
             className="p-1.5 rounded-full  bg-gray-50 hover:bg-gray-100"
-            onClick={() => setExpanded((current) => !current)}
+            // onClick={() => setExpanded((current) => !current)}
           >
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            {isWindowSmall ? (
+              <X onClick={() => setIsOpen((current) => !current)} />
+            ) : expanded ? (
+              <ChevronFirst
+                onClick={() => setExpanded((current) => !current)}
+              />
+            ) : (
+              <ChevronLast
+                onClick={() => setExpanded((current) => !current)}
+              />
+            )}
           </button>
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">
             <SidebarItem
-              icon={<LayoutDashboard size={35} />}
+              icon={<LayoutDashboard size={30} />}
               text="Dashboard"
               alert={true}
               href="/dashboard"
             />
             <SidebarItem
-              icon={<UserCircle size={35} />}
+              icon={<UserCircle size={30} />}
               text="Users"
               alert={false}
               href="/users"
             />
             <SidebarItem
-              icon={<Boxes size={35} />}
+              icon={<Boxes size={30} />}
               text="Companies"
               alert={false}
               href="/companies"
             />
             <SidebarItem
-              icon={<Package size={35} />}
+              icon={<Package size={30} />}
               text="Activities"
               alert
               href="/activities"
@@ -94,7 +114,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             <hr className="my-3" />
             {/* Ktu mujtmu me e vendos logon e kompanis */}
             <SidebarItem
-              icon={<Settings size={35} />}
+              icon={<Settings size={30} />}
               text="Settings"
               alert={false}
               href="/settings"
@@ -102,29 +122,31 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           </ul>
         </SidebarContext.Provider>
 
-        <div className="border-t flex p-3 text-gray-50">
-          <img
-            src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
-            alt=""
-            className="w-10 h-10 rounded-md"
-          />
-          <div
-            className={`
+        {!isWindowSmall && (
+          <div className="border-t flex py-3 px-1 text-gray-50">
+            <img
+              src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
+              alt=""
+              className="w-10 h-10 rounded-md mx-auto"
+            />
+            <div
+              className={`
               flex justify-between items-center
               overflow-hidden transition-all ${
                 expanded ? 'w-56 ml-3' : 'w-0'
               }
           `}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold ">Ardrin Rexhepi</h4>
-              <span className="text-xs">
-                ardrin.rexhepi@thorindustriesmk.com
-              </span>
+            >
+              <div className="leading-4 ">
+                <h4 className="font-semibold ">Ardrin Rexhepi</h4>
+                <span className="text-xs">
+                  ardrin.rexhepi@thorindustriesmk.com
+                </span>
+              </div>
+              {/* <MoreVertical size={20} /> */}
             </div>
-            <MoreVertical size={20} />
           </div>
-        </div>
+        )}
       </nav>
     </aside>
   );
@@ -144,7 +166,7 @@ export function SidebarItem({
       return (
         <Link
           {...props}
-          className={`relative flex items-center py-1 px-3 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
+          className={`relative flex items-center p-1 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
               ? 'bg-slate-500 text-white'
@@ -177,7 +199,7 @@ export function SidebarItem({
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-[0.3rem] px-2 py-1 ml-6 bg-slate-500 text-white text-sm z-50
+          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50
           invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}
         >
