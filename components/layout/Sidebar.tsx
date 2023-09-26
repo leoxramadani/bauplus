@@ -9,6 +9,8 @@ import {
   createContext,
   useState,
   PropsWithChildren,
+  SetStateAction,
+  Dispatch,
 } from 'react';
 import {
   LifeBuoy,
@@ -31,14 +33,19 @@ interface SidebarItemInterface {
   href?: any;
 }
 
+interface SidebarProps {
+  isOpen?: boolean;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+}
+
 const SidebarContext = createContext<any>(false);
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className="h-screen">
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm">
+    <aside className={`h-screen ${expanded ? `w-56` : `w-[72px]`}`}>
+      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
         {/* Ktu mujm ne mbyllje me e shfaq nje logo me te vogel */}
         <div className="p-4 pb-2 justify-between items-center flex flex-row">
           <Image
@@ -60,25 +67,25 @@ const Sidebar = () => {
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">
             <SidebarItem
-              icon={<LayoutDashboard size={20} />}
+              icon={<LayoutDashboard size={35} />}
               text="Dashboard"
               alert={true}
               href="/dashboard"
             />
             <SidebarItem
-              icon={<UserCircle size={20} />}
+              icon={<UserCircle size={35} />}
               text="Users"
               alert={false}
               href="/users"
             />
             <SidebarItem
-              icon={<Boxes size={20} />}
+              icon={<Boxes size={35} />}
               text="Companies"
               alert={false}
               href="/companies"
             />
             <SidebarItem
-              icon={<Package size={20} />}
+              icon={<Package size={35} />}
               text="Activities"
               alert
               href="/activities"
@@ -87,7 +94,7 @@ const Sidebar = () => {
             <hr className="my-3" />
             {/* Ktu mujtmu me e vendos logon e kompanis */}
             <SidebarItem
-              icon={<Settings size={20} />}
+              icon={<Settings size={35} />}
               text="Settings"
               alert={false}
               href="/settings"
@@ -137,7 +144,7 @@ export function SidebarItem({
       return (
         <Link
           {...props}
-          className={`relative flex items-center py-2 px-3 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group
+          className={`relative flex items-center py-1 px-3 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
               ? 'bg-slate-500 text-white'
