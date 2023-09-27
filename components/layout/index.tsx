@@ -45,7 +45,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <Head>
         <title>Arkiva</title>
       </Head>
-      <div className={`min-h-screen flex flex-col w-full`}>
+      <div className={`min-h-screen flex flex-col w-full`} onClick={()=>isOpen ? setIsOpen(false) : null }>
         {isWindowSmall ? (
           <Navbar
             isOpen={isOpen}
@@ -62,15 +62,19 @@ const Layout = ({ children }: PropsWithChildren) => {
           />
         )}
         {isOpen && isWindowSmall && (
+          <div onClick={(e: any) => e.stopPropagation()}>
           <Sidebar
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             isWindowSmall={isWindowSmall}
             setIsWindowSmall={setIsWindowSmall}
+            
           />
+          
+          </div>
         )}
 
-        <main>{children}</main>
+        <main >{children}</main>
       </div>
     </>
   );

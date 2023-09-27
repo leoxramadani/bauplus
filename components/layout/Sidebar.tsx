@@ -54,17 +54,19 @@ const Sidebar = ({
       className={`fixed top-0 left-0 h-screen ${
         expanded ? `w-fit` : `w-[72px]`
       }`}
+      
     >
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
-        {/* Ktu mujm ne mbyllje me e shfaq nje logo me te vogel */}
+      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full" >
         <div className="p-4 pb-2 justify-between items-center flex flex-row">
-          <Image
-            src={Logo}
-            alt="Arkiva Logo"
-            className={`overflow-hidden transition-all ${
-              expanded ? `w-32` : `w-0`
-            } hover:cursor-pointer`}
-          />
+          <Link href='/dashboard' onClick={()=>isWindowSmall ? setIsOpen(false): null}>
+            <Image
+              src={Logo}
+              alt="Arkiva Logo"
+              className={`overflow-hidden transition-all ${
+                expanded ? `w-32` : `w-0`
+              } hover:cursor-pointer`}
+            />
+          </Link>
 
           <button
             className="p-1.5 rounded-full  bg-gray-50 hover:bg-gray-100"
@@ -84,8 +86,8 @@ const Sidebar = ({
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3">
+        <SidebarContext.Provider value={{ expanded }} >
+          <ul className="flex flex-col sm:flex-1 px-3" onClick={()=>isWindowSmall ? setIsOpen(false): null}>
             <SidebarItem
               icon={<LayoutDashboard size={30} />}
               text="Dashboard"
@@ -111,14 +113,19 @@ const Sidebar = ({
               href="/activities"
             />
 
-            <hr className="my-3" />
-            {/* Ktu mujtmu me e vendos logon e kompanis */}
-            <SidebarItem
-              icon={<Settings size={30} />}
-              text="Settings"
-              alert={false}
-              href="/settings"
-            />
+            {
+              !isWindowSmall &&
+              <>
+                <hr className="my-3" />
+                <SidebarItem
+                  icon={<Settings size={30} />}
+                  text="Settings"
+                  alert={false}
+                  href="/settings"
+                 />
+              </>
+            }
+
           </ul>
         </SidebarContext.Provider>
 
