@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import { Button } from '@/components/ui/button';
-import Sidebar from '@/components/molecules/Sidebar';
+import Sidebar from '@/components/layout/Sidebar';
 import { Card, Title } from '@tremor/react';
 import GraphBlock from '@/components/molecules/GridLayout/GraphBlock';
 import GridLayout from '@/components/molecules/GridLayout/GridLayout';
