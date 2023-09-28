@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 const Layout = ({ children }: PropsWithChildren) => {
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
-
   //to open or not the sidebar
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +25,10 @@ const Layout = ({ children }: PropsWithChildren) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    console.log('isOpen', isOpen);
+  }, [isOpen, setIsOpen]);
 
   return (
     <>
@@ -62,7 +65,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
 
-        <main className={`ml-72`}>{children}</main>
+        <main className={`ml-[15rem]`}>{children}</main>
       </div>
     </>
   );
