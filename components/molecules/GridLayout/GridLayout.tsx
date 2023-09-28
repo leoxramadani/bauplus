@@ -71,7 +71,6 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data, layouts, setBreakPoint })
       cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
       autoSize={true}
     >
-   
           <Card key="graph1" className=''>
           <Title>Sales</Title>
           <GraphBlock type='pie' data={cities} colors={["rose","blue"]} index='name' /> 
