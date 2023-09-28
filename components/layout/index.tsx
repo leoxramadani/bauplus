@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 const Layout = ({ children }: PropsWithChildren) => {
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
+
   //to open or not the sidebar
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,26 +27,15 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  // return (
-  //   <div className="h-screen w-screen">
-  //     <Head>
-  //       <title>Arkiva</title>
-  //     </Head>
-  //     <Navbar />
-  //     <div className="flex flex-row">
-  //       <Sidebar />
-  //       <main>{children}</main>
-  //     </div>
-  //     dasd
-  //   </div>
-  // );
-
   return (
     <>
       <Head>
         <title>Arkiva</title>
       </Head>
-      <div className={`min-h-screen flex flex-col w-full`} onClick={()=>isOpen ? setIsOpen(false) : null }>
+      <div
+        className={`min-h-screen flex flex-col w-full`}
+        onClick={() => (isOpen ? setIsOpen(false) : null)}
+      >
         {isWindowSmall ? (
           <Navbar
             isOpen={isOpen}
@@ -63,18 +53,16 @@ const Layout = ({ children }: PropsWithChildren) => {
         )}
         {isOpen && isWindowSmall && (
           <div onClick={(e: any) => e.stopPropagation()}>
-          <Sidebar
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            isWindowSmall={isWindowSmall}
-            setIsWindowSmall={setIsWindowSmall}
-            
-          />
-          
+            <Sidebar
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              isWindowSmall={isWindowSmall}
+              setIsWindowSmall={setIsWindowSmall}
+            />
           </div>
         )}
 
-        <main >{children}</main>
+        <main className={`ml-72`}>{children}</main>
       </div>
     </>
   );

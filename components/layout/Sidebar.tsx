@@ -52,13 +52,15 @@ const Sidebar = ({
   return (
     <aside
       className={`fixed top-0 left-0 h-screen ${
-        expanded ? `w-fit` : `w-[72px]`
+        expanded ? `max-w-[15rem]` : 'max-w-[4.5rem]'
       }`}
-      
     >
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full" >
-        <div className="p-4 pb-2 justify-between items-center flex flex-row">
-          <Link href='/dashboard' onClick={()=>isWindowSmall ? setIsOpen(false): null}>
+      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
+        <div className="p-3.5 justify-between items-center flex flex-row">
+          <Link
+            href="/dashboard"
+            onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
+          >
             <Image
               src={Logo}
               alt="Arkiva Logo"
@@ -69,7 +71,7 @@ const Sidebar = ({
           </Link>
 
           <button
-            className="p-1.5 rounded-full  bg-gray-50 hover:bg-gray-100"
+            className="rounded-full bg-gray-50 hover:bg-gray-100"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
@@ -77,17 +79,24 @@ const Sidebar = ({
             ) : expanded ? (
               <ChevronFirst
                 onClick={() => setExpanded((current) => !current)}
+                width={30}
+                height={30}
               />
             ) : (
               <ChevronLast
+                width={30}
+                height={30}
                 onClick={() => setExpanded((current) => !current)}
               />
             )}
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }} >
-          <ul className="flex flex-col sm:flex-1 px-3" onClick={()=>isWindowSmall ? setIsOpen(false): null}>
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul
+            className="flex flex-col sm:flex-1 px-3"
+            onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
+          >
             <SidebarItem
               icon={<LayoutDashboard size={30} />}
               text="Dashboard"
@@ -113,8 +122,7 @@ const Sidebar = ({
               href="/activities"
             />
 
-            {
-              !isWindowSmall &&
+            {!isWindowSmall && (
               <>
                 <hr className="my-3" />
                 <SidebarItem
@@ -122,10 +130,9 @@ const Sidebar = ({
                   text="Settings"
                   alert={false}
                   href="/settings"
-                 />
+                />
               </>
-            }
-
+            )}
           </ul>
         </SidebarContext.Provider>
 
@@ -146,9 +153,7 @@ const Sidebar = ({
             >
               <div className="leading-4 ">
                 <h4 className="font-semibold ">Ardrin Rexhepi</h4>
-                <span className="text-xs">
-                  ardrin.rexhepi@thorindustriesmk.com
-                </span>
+                <span className="text-xs">ardrin.rexhepi</span>
               </div>
               {/* <MoreVertical size={20} /> */}
             </div>
@@ -173,7 +178,7 @@ export function SidebarItem({
       return (
         <Link
           {...props}
-          className={`relative flex items-center p-1 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
+          className={`relative flex items-center p-1 justify-center my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
               ? 'bg-slate-500 text-white'
@@ -198,9 +203,7 @@ export function SidebarItem({
       </span>
       {alert && (
         <div
-          className={`absolute right-2 w-2 h-2 rounded bg-red-500 ${
-            expanded ? '' : 'top-2'
-          }`}
+          className={`absolute right-1.5 w-2 h-2 rounded bg-red-500 top-0.5`}
         />
       )}
       {!expanded && (
