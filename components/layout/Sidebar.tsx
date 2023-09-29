@@ -3,6 +3,7 @@ import {
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
+  FileText
 } from 'lucide-react';
 import {
   useContext,
@@ -129,6 +130,12 @@ const Sidebar = ({
               text="Activities"
               alert
               href="/activities"
+            />
+            <SidebarItem
+              icon={<FileText size={30} />}
+              text="Fiscal Invoices"
+              alert
+              href="/fiscal"
             />
 
             {!isWindowSmall && (

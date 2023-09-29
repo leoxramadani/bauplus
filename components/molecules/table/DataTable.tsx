@@ -22,14 +22,7 @@ import {
 } from '@/components/ui/table';
 
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableViewOptions } from './DataTableViewOptions';
 
@@ -73,7 +66,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-10 justify-evenly py-4">
         {/* Input for filterin are here */}
         <Input
           placeholder="Filter emails..."
@@ -86,8 +79,10 @@ export function DataTable<TData, TValue>({
               .getColumn('email')
               ?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-lg"
         />
+        
+        {/* dropdown view columns select */}
         <DataTableViewOptions table={table} />
       </div>
       {/* The table component is here */}

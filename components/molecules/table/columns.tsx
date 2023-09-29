@@ -47,14 +47,14 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-  },
-  {
     accessorKey: 'email',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
   },
   {
     accessorKey: 'amount',
