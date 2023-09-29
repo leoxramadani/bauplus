@@ -37,6 +37,8 @@ interface SidebarProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
   setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
+  toggleSidebar:()=>void
+  expanded:boolean
 }
 
 const SidebarContext = createContext<any>(false);
@@ -46,8 +48,13 @@ const Sidebar = ({
   setIsOpen,
   isWindowSmall,
   setIsWindowSmall,
+  toggleSidebar,expanded
 }: SidebarProps) => {
-  const [expanded, setExpanded] = useState(true);
+  
+
+  // const collapsSidebar = ()=>{
+  //   toggleSidebar();
+  // }
 
   return (
     <aside
@@ -78,7 +85,8 @@ const Sidebar = ({
               <X onClick={() => setIsOpen((current) => !current)} />
             ) : expanded ? (
               <ChevronFirst
-                onClick={() => setExpanded((current) => !current)}
+                // onClick={() => setExpanded((current) => !current)}
+                onClick={() => toggleSidebar()}
                 width={30}
                 height={30}
               />
@@ -86,7 +94,8 @@ const Sidebar = ({
               <ChevronLast
                 width={30}
                 height={30}
-                onClick={() => setExpanded((current) => !current)}
+                // onClick={() => setExpanded((current) => !current)}
+                onClick={() => toggleSidebar()}
               />
             )}
           </button>

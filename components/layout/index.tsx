@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import { useState, useEffect } from 'react';
 
 const Layout = ({ children }: PropsWithChildren) => {
+  const [expanded,setExpanded] = useState(true);
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   //to open or not the sidebar
@@ -26,9 +27,11 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('isOpen', isOpen);
-  }, [isOpen, setIsOpen]);
+  const toggleSidebar = () =>{
+    setExpanded(prev=>!prev);
+    console.log("Toggle sidebar here:");
+    
+  }
 
   return (
     <>
@@ -52,6 +55,8 @@ const Layout = ({ children }: PropsWithChildren) => {
             setIsOpen={setIsOpen}
             isWindowSmall={isWindowSmall}
             setIsWindowSmall={setIsWindowSmall}
+            toggleSidebar={toggleSidebar}
+            expanded={expanded}
           />
         )}
         {isOpen && isWindowSmall && (
@@ -61,11 +66,13 @@ const Layout = ({ children }: PropsWithChildren) => {
               setIsOpen={setIsOpen}
               isWindowSmall={isWindowSmall}
               setIsWindowSmall={setIsWindowSmall}
+              toggleSidebar={toggleSidebar}
+              expanded={expanded}
             />
           </div>
         )}
 
-        <main className={`ml-[15rem]`}>{children}</main>
+        <main className={`${expanded ? `ml-[15rem]` : `ml-[4.5rem]`}`}>{children}</main>
       </div>
     </>
   );
