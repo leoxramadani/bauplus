@@ -225,7 +225,7 @@ export function SidebarItem({
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50
+          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50 p-1
           invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}
         >
