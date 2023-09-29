@@ -39,7 +39,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>Arkiva</title>
       </Head>
       <div
-        className={`min-h-screen flex flex-col w-full`}
+        className={`min-h-screen flex flex-col w-full scroll`}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (
@@ -72,7 +72,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
 
-        <main className={`${expanded ? `ml-[15rem]` : `ml-[4.5rem]`}`}>{children}</main>
+        <main className={`mt-5 sm:p-4 ${expanded ? `ml-[15rem]` : `sm:ml-[4.5rem]`}`}>{children}</main>
       </div>
     </>
   );

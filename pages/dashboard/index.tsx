@@ -9,7 +9,7 @@ const Dashboard = () => {
   const data = getData();
   return (
     <>
-      <div>Table component</div>
+      <h1 className='text-xl font-medium'>Dashboard</h1>
       <DataTable columns={columns} data={data} />
     </>
   );
