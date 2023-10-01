@@ -5,8 +5,8 @@ import {
   LanguageContext,
   defaultLocale,
   locales,
-} from "~/lib/contexts/LanguageContext";
-import { strings } from "~/lib/i18n";
+} from "@/lib/contexts/LanguageContext";
+import { strings } from "@/lib/i18n";
 
 /**
  * Custom hook to be used for internationalizating strings.
