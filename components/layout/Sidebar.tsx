@@ -1,5 +1,5 @@
 import {
-  ChevronFirst,
+  ChevronsLeft,
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
@@ -52,7 +52,7 @@ const Sidebar = ({
   return (
     <aside
       className={`fixed top-0 left-0 h-screen ${
-        expanded ? `w-fit` : `w-[72px]`
+        expanded ? `w-full max-w-[15rem]` : `w-[72px]`
       }`}
       
     >
@@ -69,17 +69,20 @@ const Sidebar = ({
           </Link>
 
           <button
-            className="p-1.5 rounded-full  bg-gray-50 hover:bg-gray-100"
+            className="p-1.5 rounded-full hover:bg-gray-100/20"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
               <X onClick={() => setIsOpen && setIsOpen((current) => !current)} />
             ) : expanded ? (
-              <ChevronFirst
+              <ChevronsLeft
+                strokeWidth={2}
+                color='white'
                 onClick={() => setExpanded((current) => !current)}
               />
             ) : (
               <ChevronLast
+                color='white'
                 onClick={() => setExpanded((current) => !current)}
               />
             )}

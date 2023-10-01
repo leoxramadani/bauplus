@@ -4,8 +4,12 @@
     "React": "readonly"
   },
   "rules": {
+    "no-redeclare": [
+      0,
+      {}
+    ],
     "no-unused-vars": [
-      1,
+      0,
       {
         "args": "after-used",
         "argsIgnorePattern": "^_",

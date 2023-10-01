@@ -26,26 +26,12 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  // return (
-  //   <div className="h-screen w-screen">
-  //     <Head>
-  //       <title>Arkiva</title>
-  //     </Head>
-  //     <Navbar />
-  //     <div className="flex flex-row">
-  //       <Sidebar />
-  //       <main>{children}</main>
-  //     </div>
-  //     dasd
-  //   </div>
-  // );
-
   return (
     <>
       <Head>
         <title>Arkiva</title>
       </Head>
-      <div className={`min-h-screen flex flex-col w-full`} onClick={()=>isOpen ? setIsOpen(false) : null }>
+      <div className={`min-h-screen flex justify-between w-full`} onClick={()=>isOpen ? setIsOpen(false) : null }>
         {isWindowSmall ? (
           <Navbar
             isOpen={isOpen}
@@ -74,7 +60,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
 
-        <main >{children}</main>
+        <main className='w-full max-w-[calc(100vw-16rem)]'>{children}</main>
       </div>
     </>
   );
