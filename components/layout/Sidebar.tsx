@@ -61,12 +61,12 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen ${
+      className={`fixed top-0 left-0 h-screen group/sidebar ${
         expanded ? `max-w-[15rem]` : 'max-w-[4.5rem]'
       }`}
     >
       <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
-        <div className="p-3.5 justify-between items-center flex flex-row">
+        <div className="p-3.5 justify-between items-center flex flex-row ">
           <Link
             href="/dashboard"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
@@ -89,7 +89,7 @@ const Sidebar = ({
           </Link>
 
           <button
-            className="rounded-full text-white p-2 hover:bg-gray-100/10 transition-all"
+            className="rounded-full text-white p-2 hover:bg-gray-100/10 transition-all opacity-0 group-hover/sidebar:opacity-100"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
