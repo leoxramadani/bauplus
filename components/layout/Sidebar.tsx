@@ -3,6 +3,8 @@ import {
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
+  FileText,
+  ChevronFirst
 } from 'lucide-react';
 import {
   useContext,
@@ -34,9 +36,11 @@ interface SidebarItemInterface {
 
 interface SidebarProps {
   isOpen?: boolean;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
-  setIsWindowSmall?: Dispatch<SetStateAction<boolean>>;
+  setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
+  toggleSidebar:()=>void
+  expanded:boolean
 }
 
 const SidebarContext = createContext<any>(false);
@@ -45,20 +49,27 @@ const Sidebar = ({
   isOpen,
   setIsOpen,
   isWindowSmall,
-  setIsWindowSmall
+  setIsWindowSmall,
+  toggleSidebar,expanded
 }: SidebarProps) => {
-  const [expanded, setExpanded] = useState(true);
+  
+
+  // const collapsSidebar = ()=>{
+  //   toggleSidebar();
+  // }
 
   return (
     <aside
       className={`fixed top-0 left-0 h-screen ${
-        expanded ? `w-full max-w-[15rem]` : `w-[72px]`
+        expanded ? `max-w-[15rem]` : 'max-w-[4.5rem]'
       }`}
-      
     >
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full" >
-        <div className="p-4 pb-2 justify-between items-center flex flex-row">
-          <Link href='/dashboard' onClick={()=> setIsOpen && isWindowSmall ? setIsOpen(false): null}>
+      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
+        <div className="p-3.5 justify-between items-center flex flex-row">
+          <Link
+            href="/dashboard"
+            onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
+          >
             <Image
               src={Logo}
               alt="Arkiva Logo"
@@ -69,28 +80,34 @@ const Sidebar = ({
           </Link>
 
           <button
-            className="p-1.5 rounded-full hover:bg-gray-100/20"
+            className="rounded-full bg-gray-50 hover:bg-gray-100"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
               <X onClick={() => setIsOpen && setIsOpen((current) => !current)} />
             ) : expanded ? (
-              <ChevronsLeft
-                strokeWidth={2}
-                color='white'
-                onClick={() => setExpanded((current) => !current)}
+              <ChevronFirst
+                // onClick={() => setExpanded((current) => !current)}
+                onClick={() => toggleSidebar()}
+                width={30}
+                height={30}
               />
             ) : (
               <ChevronLast
-                color='white'
-                onClick={() => setExpanded((current) => !current)}
+                width={30}
+                height={30}
+                // onClick={() => setExpanded((current) => !current)}
+                onClick={() => toggleSidebar()}
               />
             )}
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }} >
-          <ul className="flex flex-col sm:flex-1 px-3" onClick={()=> setIsOpen && isWindowSmall ? setIsOpen(false): null}>
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul
+            className="flex flex-col sm:flex-1 px-3"
+            onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
+          >
             <SidebarItem
               icon={<LayoutDashboard size={30} />}
               text="Dashboard"
@@ -115,9 +132,14 @@ const Sidebar = ({
               alert
               href="/activities"
             />
+            <SidebarItem
+              icon={<FileText size={30} />}
+              text="Fiscal Invoices"
+              alert
+              href="/fiscal"
+            />
 
-            {
-              !isWindowSmall &&
+            {!isWindowSmall && (
               <>
                 <hr className="my-3" />
                 <SidebarItem
@@ -125,10 +147,9 @@ const Sidebar = ({
                   text="Settings"
                   alert={false}
                   href="/settings"
-                 />
+                />
               </>
-            }
-
+            )}
           </ul>
         </SidebarContext.Provider>
 
@@ -149,9 +170,7 @@ const Sidebar = ({
             >
               <div className="leading-4 ">
                 <h4 className="font-semibold ">Ardrin Rexhepi</h4>
-                <span className="text-xs">
-                  ardrin.rexhepi@thorindustriesmk.com
-                </span>
+                <span className="text-xs">ardrin.rexhepi</span>
               </div>
               {/* <MoreVertical size={20} /> */}
             </div>
@@ -176,7 +195,7 @@ export function SidebarItem({
       return (
         <Link
           {...props}
-          className={`relative flex items-center p-1 my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
+          className={`relative flex items-center p-1 justify-center my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
               ? 'bg-slate-500 text-white'
@@ -201,15 +220,13 @@ export function SidebarItem({
       </span>
       {alert && (
         <div
-          className={`absolute right-2 w-2 h-2 rounded bg-red-500 ${
-            expanded ? '' : 'top-2'
-          }`}
+          className={`absolute right-1.5 w-2 h-2 rounded bg-red-500 top-0.5`}
         />
       )}
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50
+          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50 p-1
           invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}
         >
