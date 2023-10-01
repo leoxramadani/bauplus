@@ -36,7 +36,7 @@ export function DataTableViewOptions<TData>({
 
 
       {/* This is the Popover body */}
-      <DropdownMenuContent align="center" className="w-[150px]">
+      <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
@@ -52,7 +52,7 @@ export function DataTableViewOptions<TData>({
                 key={column.id}
                 className="capitalize"
                 checked={column.getIsVisible()}
-                onCheckedChange={(value) =>
+                onCheckedChange={(value: any) =>
                   column.toggleVisibility(!!value)
                 }
               >

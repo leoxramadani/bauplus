@@ -65,8 +65,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center gap-10 justify-evenly py-4">
+    <div className='flex flex-col gap-3 my-3'>
+      <div className="flex items-center gap-3 justify-between">
         {/* Input for filterin are here */}
         <Input
           placeholder="Filter emails..."

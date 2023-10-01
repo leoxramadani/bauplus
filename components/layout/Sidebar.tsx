@@ -4,7 +4,9 @@ import {
   Link as LinkIcon,
   MoreVertical,
   FileText,
-  ChevronFirst
+  ChevronFirst,
+  Square,
+  ChevronsRight,
 } from 'lucide-react';
 import {
   useContext,
@@ -39,8 +41,8 @@ interface SidebarProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
   setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
-  toggleSidebar:()=>void
-  expanded:boolean
+  toggleSidebar: () => void;
+  expanded: boolean;
 }
 
 const SidebarContext = createContext<any>(false);
@@ -50,10 +52,9 @@ const Sidebar = ({
   setIsOpen,
   isWindowSmall,
   setIsWindowSmall,
-  toggleSidebar,expanded
+  toggleSidebar,
+  expanded,
 }: SidebarProps) => {
-  
-
   // const collapsSidebar = ()=>{
   //   toggleSidebar();
   // }
@@ -64,36 +65,48 @@ const Sidebar = ({
         expanded ? `max-w-[15rem]` : 'max-w-[4.5rem]'
       }`}
     >
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
+      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
         <div className="p-3.5 justify-between items-center flex flex-row">
           <Link
             href="/dashboard"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
-            <Image
+            {/* <Image
               src={Logo}
               alt="Arkiva Logo"
               className={`overflow-hidden transition-all ${
                 expanded ? `w-32` : `w-0`
               } hover:cursor-pointer`}
-            />
+            /> */}
+            <h1 className="text-white text-3xl font-bold flex gap-2 items-center">
+              <Square
+                strokeWidth={10}
+                size={expanded ? 36 : 0}
+                radius={0}
+              />
+              {expanded && 'Arkiva'}
+            </h1>
           </Link>
 
           <button
-            className="rounded-full bg-gray-50 hover:bg-gray-100"
+            className="rounded-full text-white p-2 hover:bg-gray-100/10 transition-all"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
-              <X onClick={() => setIsOpen && setIsOpen((current) => !current)} />
+              <X
+                onClick={() =>
+                  setIsOpen && setIsOpen((current) => !current)
+                }
+              />
             ) : expanded ? (
-              <ChevronFirst
+              <ChevronsLeft
                 // onClick={() => setExpanded((current) => !current)}
                 onClick={() => toggleSidebar()}
                 width={30}
                 height={30}
               />
             ) : (
-              <ChevronLast
+              <ChevronsRight
                 width={30}
                 height={30}
                 // onClick={() => setExpanded((current) => !current)}
@@ -109,31 +122,31 @@ const Sidebar = ({
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
-              icon={<LayoutDashboard size={30} />}
+              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
               text="Dashboard"
               alert={true}
               href="/dashboard"
             />
             <SidebarItem
-              icon={<UserCircle size={30} />}
+              icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Users"
               alert={false}
               href="/users"
             />
             <SidebarItem
-              icon={<Boxes size={30} />}
+              icon={<Boxes size={20} strokeWidth={1.5} />}
               text="Companies"
               alert={false}
               href="/companies"
             />
             <SidebarItem
-              icon={<Package size={30} />}
+              icon={<Package size={20} strokeWidth={1.5} />}
               text="Activities"
               alert
               href="/activities"
             />
             <SidebarItem
-              icon={<FileText size={30} />}
+              icon={<FileText size={20} strokeWidth={1.5} />}
               text="Fiscal Invoices"
               alert
               href="/fiscal"
@@ -141,9 +154,9 @@ const Sidebar = ({
 
             {!isWindowSmall && (
               <>
-                <hr className="my-3" />
+                <hr className="my-3 border-slate-600" />
                 <SidebarItem
-                  icon={<Settings size={30} />}
+                  icon={<Settings size={20} strokeWidth={1.5} />}
                   text="Settings"
                   alert={false}
                   href="/settings"
@@ -154,7 +167,7 @@ const Sidebar = ({
         </SidebarContext.Provider>
 
         {!isWindowSmall && (
-          <div className="border-t flex py-3 px-1 text-gray-50">
+          <div className="border-t border-slate-600 flex py-3 px-1 text-gray-50">
             <img
               src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
               alt=""
@@ -195,11 +208,11 @@ export function SidebarItem({
       return (
         <Link
           {...props}
-          className={`relative flex items-center p-1 justify-center my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
+          className={`relative flex items-center w-full px-3 py-1.5 justify-between my-2 rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
-              ? 'bg-slate-500 text-white'
-              : 'hover:bg-slate-600 text-white'
+              ? 'bg-slate-700 text-white'
+              : 'hover:bg-slate-800 text-white'
           }`}
         >
           {children}
@@ -210,7 +223,7 @@ export function SidebarItem({
 
   return (
     <ActiveLink href={href}>
-      {icon}
+      <div className='w-max flex items-center'>{icon}</div>
       <span
         className={`overflow-hidden transition-all ${
           expanded ? 'w-52 ml-3' : 'w-0'
@@ -219,15 +232,15 @@ export function SidebarItem({
         {text}
       </span>
       {alert && (
-        <div
-          className={`absolute right-1.5 w-2 h-2 rounded bg-red-500 top-0.5`}
-        />
+        <div className={`absolute flex justify-end w-full left-0 pr-3 ${!expanded && ` top-1`}`}>
+          <div className={`w-2 h-2 rounded-full bg-red-500`} />
+        </div>
       )}
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-[0.3rem] ml-6 bg-slate-500 text-white text-sm z-50 p-1
-          invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+          absolute max-w-xs w-max left-full rounded-md ml-1 bg-slate-500 text-white z-[500] px-2 py-1 flex items-center
+          invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}
         >
           {text}
