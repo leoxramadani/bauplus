@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <div className="flex items-center gap-10 justify-evenly py-4">
         {/* Input for filterin are here */}
         <Input
@@ -81,7 +81,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-lg"
         />
-        
+
         {/* dropdown view columns select */}
         <DataTableViewOptions table={table} />
       </div>

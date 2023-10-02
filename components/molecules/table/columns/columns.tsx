@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DataTableColumnHeader } from './DataTableColumnHeader';
+import { DataTableColumnHeader } from '../DataTableColumnHeader';
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
@@ -29,7 +29,8 @@ export const columns: ColumnDef<Payment>[] = [
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value: boolean) =>
-          table.toggleAllPageRowsSelected(!!value)
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
         }
         aria-label="Select all"
       />
