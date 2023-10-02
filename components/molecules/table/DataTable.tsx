@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-10 justify-evenly py-4">
+      <div className="flex items-center gap-10 justify-between py-4">
         {/* Input for filterin are here */}
         <Input
           placeholder="Filter emails..."
@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
               .getColumn('email')
               ?.setFilterValue(event.target.value)
           }
-          className="max-w-lg"
+          className="max-w-xl"
         />
 
         {/* dropdown view columns select */}
