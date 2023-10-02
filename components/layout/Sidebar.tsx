@@ -3,7 +3,7 @@ import {
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
-  FileText
+  FileText,
 } from 'lucide-react';
 import {
   useContext,
@@ -27,10 +27,10 @@ import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
 
 interface SidebarItemInterface {
-  icon: any;
-  text: any;
-  alert: any;
-  href?: any;
+  icon: React.JSX.Element;
+  text: string;
+  alert: boolean;
+  href?: string;
 }
 
 interface SidebarProps {
@@ -38,29 +38,31 @@ interface SidebarProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
   setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
-  toggleSidebar:()=>void
-  expanded:boolean
+  toggleSidebar: () => void;
+  expanded: boolean;
 }
 
-const SidebarContext = createContext<any>(false);
+const SidebarContext = createContext<any>({
+  expanded: false,
+  isWindowSmall: false,
+});
 
 const Sidebar = ({
   isOpen,
   setIsOpen,
   isWindowSmall,
   setIsWindowSmall,
-  toggleSidebar,expanded
+  toggleSidebar,
+  expanded,
 }: SidebarProps) => {
-  
-
-  // const collapsSidebar = ()=>{
-  //   toggleSidebar();
-  // }
-
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen ${
-        expanded ? `max-w-[15rem]` : 'max-w-[4.5rem]'
+      className={`fixed z-50 top-0 left-0 h-full ${
+        !isWindowSmall
+          ? expanded
+            ? `max-w-[15rem]`
+            : 'max-w-[4.5rem]'
+          : `max-w-[15rem]`
       }`}
     >
       <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
@@ -73,7 +75,7 @@ const Sidebar = ({
               src={Logo}
               alt="Arkiva Logo"
               className={`overflow-hidden transition-all ${
-                expanded ? `w-32` : `w-0`
+                !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
               } hover:cursor-pointer`}
             />
           </Link>
@@ -86,7 +88,6 @@ const Sidebar = ({
               <X onClick={() => setIsOpen((current) => !current)} />
             ) : expanded ? (
               <ChevronFirst
-                // onClick={() => setExpanded((current) => !current)}
                 onClick={() => toggleSidebar()}
                 width={30}
                 height={30}
@@ -95,14 +96,13 @@ const Sidebar = ({
               <ChevronLast
                 width={30}
                 height={30}
-                // onClick={() => setExpanded((current) => !current)}
                 onClick={() => toggleSidebar()}
               />
             )}
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
+        <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
           <ul
             className="flex flex-col sm:flex-1 px-3"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
@@ -153,11 +153,11 @@ const Sidebar = ({
         </SidebarContext.Provider>
 
         {!isWindowSmall && (
-          <div className="border-t flex py-3 px-1 text-gray-50">
+          <div className="border-t flex py-3 px-1 text-gray-50 hover:bg-slate-600 hover:cursor-pointer">
             <img
               src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
               alt=""
-              className="w-10 h-10 rounded-md mx-auto"
+              className="w-10 h-10 rounded-md mx-auto "
             />
             <div
               className={`
@@ -187,14 +187,16 @@ export function SidebarItem({
   alert,
   href,
 }: SidebarItemInterface) {
-  const { expanded } = useContext<any>(SidebarContext);
+  const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
 
   const ActiveLink = withRouter(
     ({ router, children, ...props }: PropsWithChildren<any>) => {
       return (
         <Link
           {...props}
-          className={`relative flex items-center p-1 justify-center my-2 font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
+          className={`relative flex items-center p-1 justify-center ${
+            !isWindowSmall ? `my-2` : `my-1.5`
+          } font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
           ${
             router.pathname.startsWith(props.href)
               ? 'bg-slate-500 text-white'
@@ -212,7 +214,11 @@ export function SidebarItem({
       {icon}
       <span
         className={`overflow-hidden transition-all ${
-          expanded ? 'w-52 ml-3' : 'w-0'
+          !isWindowSmall
+            ? expanded
+              ? 'w-52 ml-3'
+              : 'w-0'
+            : `w-32 ml-2.5`
         }`}
       >
         {text}

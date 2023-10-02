@@ -5,21 +5,24 @@ import Navbar from './Navbar';
 import { useState, useEffect } from 'react';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const [expanded,setExpanded] = useState(true);
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   //to open or not the sidebar
+  const [expanded, setExpanded] = useState(true);
+  console.log('Expanded', expanded);
   const [isOpen, setIsOpen] = useState(false);
 
   //effect to react to screen size
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 768);
-      if (window.innerWidth > 768) setIsOpen(isOpen);
+      if (window.innerWidth > 768) {
+        setIsOpen(isOpen);
+        // setExpanded(false);
+      }
     };
 
     window.addEventListener('resize', handleResize);
-
     handleResize();
 
     return () => {
@@ -27,11 +30,10 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  const toggleSidebar = () =>{
-    setExpanded(prev=>!prev);
-    console.log("Toggle sidebar here:");
-    
-  }
+  const toggleSidebar = () => {
+    setExpanded((prev) => !prev);
+    console.log('Toggle sidebar here:');
+  };
 
   return (
     <>
@@ -71,8 +73,14 @@ const Layout = ({ children }: PropsWithChildren) => {
             />
           </div>
         )}
-
-        <main className={`mt-5 sm:p-4 ${expanded ? `ml-[15rem]` : `sm:ml-[4.5rem]`}`}>{children}</main>
+        <main
+          className={`mt-2 sm:mt-4 p-4 ${
+            !isWindowSmall &&
+            (expanded ? `ml-[15rem]` : `md:ml-[4.5rem]`)
+          }`}
+        >
+          {children}
+        </main>
       </div>
     </>
   );

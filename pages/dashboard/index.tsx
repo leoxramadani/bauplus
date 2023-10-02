@@ -2,14 +2,14 @@ import { DataTable } from '@/components/molecules/table/DataTable';
 import {
   Payment,
   columns,
-} from '@/components/molecules/table/columns';
+} from '@/components/molecules/table/columns/columns';
 import React from 'react';
 
 const Dashboard = () => {
   const data = getData();
   return (
     <>
-      <h1 className='text-xl font-medium'>Dashboard</h1>
+      <h1 className="text-xl font-medium">Dashboard</h1>
       <DataTable columns={columns} data={data} />
     </>
   );
