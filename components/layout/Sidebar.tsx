@@ -3,7 +3,7 @@ import {
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
-  FileText
+  FileText,
 } from 'lucide-react';
 import {
   useContext,
@@ -27,10 +27,10 @@ import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
 
 interface SidebarItemInterface {
-  icon: any;
-  text: any;
-  alert: any;
-  href?: any;
+  icon: React.JSX.Element;
+  text: string;
+  alert: boolean;
+  href?: string;
 }
 
 interface SidebarProps {
@@ -38,8 +38,8 @@ interface SidebarProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
   setIsWindowSmall: Dispatch<SetStateAction<boolean>>;
-  toggleSidebar:()=>void
-  expanded:boolean
+  toggleSidebar: () => void;
+  expanded: boolean;
 }
 
 const SidebarContext = createContext<any>(false);
@@ -49,14 +49,9 @@ const Sidebar = ({
   setIsOpen,
   isWindowSmall,
   setIsWindowSmall,
-  toggleSidebar,expanded
+  toggleSidebar,
+  expanded,
 }: SidebarProps) => {
-  
-
-  // const collapsSidebar = ()=>{
-  //   toggleSidebar();
-  // }
-
   return (
     <aside
       className={`fixed top-0 left-0 h-screen ${
