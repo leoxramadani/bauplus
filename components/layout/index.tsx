@@ -3,9 +3,11 @@ import { PropsWithChildren } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const [expanded,setExpanded] = useState(true);
+  const router = useRouter();
+  const [expanded, setExpanded] = useState(true);
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   //to open or not the sidebar
@@ -27,40 +29,30 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  const toggleSidebar = () =>{
-    setExpanded(prev=>!prev);
-    console.log("Toggle sidebar here:");
-    
-  }
+  const toggleSidebar = () => {
+    setExpanded((prev) => !prev);
+    console.log('Toggle sidebar here:');
+  };
 
-  return (
-    <>
-      <Head>
-        <title>Arkiva</title>
-      </Head>
-      <div
-        className={`min-h-screen flex flex-col w-full scroll`}
-        onClick={() => (isOpen ? setIsOpen(false) : null)}
-      >
-        {isWindowSmall ? (
-          <Navbar
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            isWindowSmall={isWindowSmall}
-            setIsWindowSmall={setIsWindowSmall}
-          />
-        ) : (
-          <Sidebar
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            isWindowSmall={isWindowSmall}
-            setIsWindowSmall={setIsWindowSmall}
-            toggleSidebar={toggleSidebar}
-            expanded={expanded}
-          />
-        )}
-        {isOpen && isWindowSmall && (
-          <div onClick={(e: any) => e.stopPropagation()}>
+  if (router.asPath === '/login') return children;
+  else
+    return (
+      <>
+        <Head>
+          <title>Arkiva</title>
+        </Head>
+        <div
+          className={`min-h-screen flex flex-col w-full scroll`}
+          onClick={() => (isOpen ? setIsOpen(false) : null)}
+        >
+          {isWindowSmall ? (
+            <Navbar
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              isWindowSmall={isWindowSmall}
+              setIsWindowSmall={setIsWindowSmall}
+            />
+          ) : (
             <Sidebar
               isOpen={isOpen}
               setIsOpen={setIsOpen}
@@ -69,13 +61,30 @@ const Layout = ({ children }: PropsWithChildren) => {
               toggleSidebar={toggleSidebar}
               expanded={expanded}
             />
-          </div>
-        )}
+          )}
+          {isOpen && isWindowSmall && (
+            <div onClick={(e: any) => e.stopPropagation()}>
+              <Sidebar
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                isWindowSmall={isWindowSmall}
+                setIsWindowSmall={setIsWindowSmall}
+                toggleSidebar={toggleSidebar}
+                expanded={expanded}
+              />
+            </div>
+          )}
 
-        <main className={`mt-5 sm:p-4 ${expanded ? `ml-[15rem]` : `sm:ml-[4.5rem]`}`}>{children}</main>
-      </div>
-    </>
-  );
+          <main
+            className={`mt-5 sm:p-4 ${
+              expanded ? `ml-[15rem]` : `sm:ml-[4.5rem]`
+            }`}
+          >
+            {children}
+          </main>
+        </div>
+      </>
+    );
 };
 
 export default Layout;
