@@ -38,7 +38,7 @@ const Navbar = ({
       className={`bg-[#1A202E] p-2 py-2.5 flex flex-row justify-between`}
     >
       <button
-        className="flex flex-col border py-4 px-[22px] bg-white rounded-[0.35rem] gap-1.5"
+        className="flex flex-col border py-4 px-[18px] bg-white rounded-[0.35rem] gap-1.5"
         onClick={() => setIsOpen(true)}
       >
         <div className="w-9 h-[0.15rem] py-[0.12rem] bg-black mx-0"></div>

@@ -60,9 +60,9 @@ const Sidebar = ({
       className={`fixed z-50 top-0 left-0 h-full ${
         !isWindowSmall
           ? expanded
-            ? `max-w-[15rem]`
-            : 'max-w-[4.5rem]'
-          : `max-w-[15rem]`
+            ? `max-w-[15rem] transition-all duration-[250ms]`
+            : 'max-w-[4.5rem] transition-all duration-[250ms]'
+          : `max-w-[15rem] transition-all duration-[250ms]`
       }`}
     >
       <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full">
