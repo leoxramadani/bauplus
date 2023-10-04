@@ -3,6 +3,8 @@ import {
   ChevronLast,
   Link as LinkIcon,
   MoreVertical,
+  ChevronLeft,
+  ChevronRight,
   FileText,
 } from 'lucide-react';
 import {
@@ -81,19 +83,19 @@ const Sidebar = ({
           </Link>
 
           <button
-            className="rounded-full bg-gray-50 hover:bg-gray-100"
+            className="rounded-full text-white hover:bg-slate-600 p-0.5"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
               <X onClick={() => setIsOpen((current) => !current)} />
             ) : expanded ? (
-              <ChevronFirst
+              <ChevronLeft
                 onClick={() => toggleSidebar()}
                 width={30}
                 height={30}
               />
             ) : (
-              <ChevronLast
+              <ChevronRight
                 width={30}
                 height={30}
                 onClick={() => toggleSidebar()}
