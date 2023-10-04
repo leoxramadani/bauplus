@@ -74,9 +74,11 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`mt-2 sm:mt-4 p-4 ${
+          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] ${
             !isWindowSmall &&
-            (expanded ? `ml-[15rem]` : `md:ml-[4.5rem]`)
+            (expanded
+              ? `ml-[15rem] transition-all duration-[250ms]`
+              : `md:ml-[4.5rem] transition-all duration-[250ms]`)
           }`}
         >
           {children}
