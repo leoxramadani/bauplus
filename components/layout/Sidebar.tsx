@@ -1,11 +1,11 @@
 import {
-  ChevronFirst,
-  ChevronLast,
-  Link as LinkIcon,
-  MoreVertical,
   ChevronLeft,
   ChevronRight,
   FileText,
+  ChevronDown,
+  ChevronUp,
+  DollarSign,
+  Users,
 } from 'lucide-react';
 import {
   useContext,
@@ -14,6 +14,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   Dispatch,
+  useEffect,
 } from 'react';
 import {
   Boxes,
@@ -23,16 +24,17 @@ import {
   Settings,
   X,
 } from 'lucide-react';
-import { withRouter } from 'next/router';
+import { useRouter, withRouter } from 'next/router';
 import Link from 'next/link';
 import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
 
 interface SidebarItemInterface {
-  icon: React.JSX.Element;
+  icon?: React.JSX.Element;
   text: string;
   alert: boolean;
   href?: string;
+  isDropdown?: boolean;
 }
 
 interface SidebarProps {
@@ -115,6 +117,19 @@ const Sidebar = ({
               alert={true}
               href="/dashboard"
             />
+            <Dropdown
+              icon={<Users size={30} />}
+              text="HR"
+              href="/hr"
+              alert={false}
+            >
+              <SidebarItem
+                text="Department"
+                alert={false}
+                href="/departments"
+              />
+            </Dropdown>
+
             <SidebarItem
               icon={<UserCircle size={30} />}
               text="Users"
@@ -122,23 +137,24 @@ const Sidebar = ({
               href="/users"
             />
             <SidebarItem
-              icon={<Boxes size={30} />}
-              text="Companies"
-              alert={false}
-              href="/companies"
-            />
-            <SidebarItem
               icon={<Package size={30} />}
-              text="Activities"
+              text="Finance"
               alert
-              href="/activities"
+              href="/finance"
             />
-            <SidebarItem
-              icon={<FileText size={30} />}
-              text="Fiscal Invoices"
-              alert
-              href="/fiscal"
-            />
+
+            <Dropdown
+              icon={<DollarSign size={30} />}
+              text="Payroll"
+              href="/payroll"
+              alert={false}
+            >
+              <SidebarItem
+                text="Bank Account"
+                alert={false}
+                href="/bankaccounts"
+              />
+            </Dropdown>
 
             {!isWindowSmall && (
               <>
@@ -183,11 +199,108 @@ const Sidebar = ({
 };
 export default Sidebar;
 
+const Dropdown = ({
+  children,
+  icon,
+  text,
+  alert,
+  href,
+}: PropsWithChildren<{
+  icon: React.JSX.Element;
+  text: string;
+  alert: boolean;
+  href: string;
+}>) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
+  const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
+
+  useEffect(() => {
+    if (expanded == false) {
+      setIsDropdownOpen(false);
+    }
+  }, [expanded]);
+
+  const ActiveLink = withRouter(
+    ({ router, children, ...props }: PropsWithChildren<any>) => {
+      return (
+        <Link
+          {...props}
+          className={`relative flex p-1 flex-1 ${
+            router.pathname.startsWith(props.href)
+              ? 'bg-slate-500 text-white'
+              : 'hover:bg-slate-600 text-white'
+          } font-medium rounded-[0.6rem] cursor-pointer transition-colors group`}
+        >
+          {children}
+        </Link>
+      );
+    }
+  );
+
+  return (
+    <>
+      <div
+        className={`flex rounded-[0.6rem] cursor-pointer ${
+          router.pathname.startsWith(href)
+            ? 'bg-slate-500 text-white'
+            : 'hover:bg-slate-600 text-white'
+        }`}
+      >
+        <ActiveLink href={href}>
+          <div className="flex gap-2">
+            <DollarSign size={30} />
+
+            {expanded ? (
+              <div className="my-auto">{text}</div>
+            ) : (
+              isWindowSmall && <div className="my-auto">{text}</div>
+            )}
+          </div>
+        </ActiveLink>
+        {expanded ? (
+          <div
+            className="cursor-pointer text-white my-auto"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsDropdownOpen(!isDropdownOpen);
+            }}
+          >
+            {isDropdownOpen ? (
+              <ChevronUp size={20} />
+            ) : (
+              <ChevronDown size={20} />
+            )}
+          </div>
+        ) : (
+          isWindowSmall && (
+            <div
+              className="cursor-pointer text-white my-auto"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDropdownOpen(!isDropdownOpen);
+              }}
+            >
+              {isDropdownOpen ? (
+                <ChevronUp size={20} />
+              ) : (
+                <ChevronDown size={20} />
+              )}
+            </div>
+          )
+        )}
+      </div>
+      {isDropdownOpen && children}
+    </>
+  );
+};
+
 export function SidebarItem({
   icon,
   text,
   alert,
   href,
+  isDropdown,
 }: SidebarItemInterface) {
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
 
@@ -213,9 +326,11 @@ export function SidebarItem({
 
   return (
     <ActiveLink href={href}>
-      {icon}
+      {icon && icon}
       <span
         className={`overflow-hidden transition-all ${
+          !icon && `p-1 ml-5`
+        } ${
           !isWindowSmall
             ? expanded
               ? 'w-52 ml-3'
