@@ -150,9 +150,39 @@ const Sidebar = ({
               alert={false}
             >
               <SidebarItem
+                text="Proposal"
+                alert={false}
+                href="/finance/proposal"
+              />
+              <SidebarItem
+                text="Estimates"
+                alert={false}
+                href="/finance/estimates"
+              />
+              <SidebarItem
+                text="Invoices"
+                alert={false}
+                href="/finance/invoice"
+              />
+              <SidebarItem
+                text="Payments"
+                alert={false}
+                href="/finance/payments"
+              />
+              <SidebarItem
+                text="Credit Note"
+                alert={false}
+                href="/finance/creditnote"
+              />
+              <SidebarItem
+                text="Expenses"
+                alert={false}
+                href="/finance/expenses"
+              />
+              <SidebarItem
                 text="Bank Account"
                 alert={false}
-                href="/bankaccounts"
+                href="/finance/bankaccounts"
               />
             </Dropdown>
 
