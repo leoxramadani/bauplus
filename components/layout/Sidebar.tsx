@@ -124,9 +124,44 @@ const Sidebar = ({
               alert={false}
             >
               <SidebarItem
+                text="Employees"
+                alert={false}
+                href="/hr/employees"
+              />
+              <SidebarItem
+                text="Leaves"
+                alert={false}
+                href="/hr/leaves"
+              />
+              <SidebarItem
+                text="Shift Roster"
+                alert={false}
+                href="/hr/shiftroster"
+              />
+              <SidebarItem
+                text="Attendace"
+                alert={false}
+                href="/hr/attendace"
+              />
+              <SidebarItem
+                text="Holiday"
+                alert={false}
+                href="/hr/holiday"
+              />
+              <SidebarItem
+                text="Designation"
+                alert={false}
+                href="/hr/designation"
+              />
+              <SidebarItem
                 text="Department"
                 alert={false}
-                href="/departments"
+                href="/hr/departments"
+              />
+              <SidebarItem
+                text="Appreciation"
+                alert={false}
+                href="/hr/appreciation"
               />
             </Dropdown>
 
