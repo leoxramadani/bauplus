@@ -102,7 +102,7 @@ const BankAccounts = () => {
 
     <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
       a
-    </RightModal>
+    </RightModal> 
     {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
       asda
     </Modal> */}
