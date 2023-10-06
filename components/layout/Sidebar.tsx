@@ -173,15 +173,15 @@ const Sidebar = ({
             />
             <SidebarItem
               icon={<Package size={30} />}
-              text="Finance"
+              text="Payroll"
               alert
-              href="/finance"
+              href="/payroll"
             />
 
             <Dropdown
               icon={<DollarSign size={30} />}
-              text="Payroll"
-              href="/payroll"
+              text="Finance"
+              href="/finance"
               alert={false}
             >
               <SidebarItem
