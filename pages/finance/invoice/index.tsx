@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const Invoice = () => {
-  return (
-    <div>index</div>
-  )
-}
+  return <div>index</div>;
+};
 
-export default Invoice
+export default Invoice;
