@@ -41,7 +41,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>Arkiva</title>
       </Head>
       <div
-        className={`min-h-screen flex flex-col w-full scroll`}
+        className={`min-h-screen flex flex-col w-full scroll bg-[#f2f4f7] `}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (
@@ -74,7 +74,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] ${
+          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] bg-[#f2f4f7] ${
             !isWindowSmall &&
             (expanded
               ? `ml-[15rem] transition-all duration-[250ms]`

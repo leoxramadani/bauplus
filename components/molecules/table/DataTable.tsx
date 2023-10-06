@@ -65,8 +65,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-10 justify-between py-4">
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center gap-10 justify-between">
         {/* Input for filterin are here */}
         <Input
           placeholder="Filter emails..."
@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({
         <DataTableViewOptions table={table} />
       </div>
       {/* The table component is here */}
-      <div className="rounded-md border">
+      <div className="rounded-md shadow-sm border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
