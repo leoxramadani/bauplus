@@ -100,12 +100,12 @@ const BankAccounts = () => {
       <DataTable data={data} columns={financeColumnDef} />
     </section>
 
-    {/* <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+    <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
       a
-    </RightModal> */}
-    <Modal open={isModalOpen} setOpen={setIsModalOpen}>
+    </RightModal> 
+    {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
       asda
-    </Modal>
+    </Modal> */}
 
    </>
   );

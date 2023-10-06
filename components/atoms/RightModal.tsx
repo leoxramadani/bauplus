@@ -33,8 +33,8 @@ const CandidatesModal: React.FC<ModalProps> = ({
       <MotionConfig
         transition={{
           type: 'tween',
-          ease: 'easeInOut',
-          duration: isModalOpen ? 0.5 : 0.4,
+          
+          duration: 0.25,
         }}
       >
         <AnimatePresence initial={false}>
@@ -56,7 +56,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   closed: { opacity: 0 },
                   open: { opacity: 1 },
                 }}
-                className="fixed inset-0  bg-black bg-opacity-25 "
+                className="fixed inset-0 w-full bg-black bg-opacity-25 "
                 onClick={() => setIsModalOpen(false)}
               />
               <div className="flex h-screen justify-end">
@@ -64,18 +64,17 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   as={motion.div}
                   variants={{
                     closed: {
-                      opacity: 0,
-                      scale: 0.8, // Adjust if needed
-                      x: '100vw', // Start from outside the right side of the screen
+                      opacity: 'var(--opacity-from)',
+                      x:'var(--x-from)', // Start from outside the right side of the screen
                     },
                     open: {
-                      opacity: 1,
-                      scale: 1,
-                      x: '0%', // Move to the center (fully visible)
+                      opacity: 'var(--opacity-to)',
+                      
+                      x: 'var(--x-to)', // Move to the center (fully visible)
                     },
                   }}
                   className="relative z-50 flex  min-h-screen w-full max-w-3xl flex-col items-center justify-start gap-8 bg-white p-4 [--opacity-from:0%] [--opacity-to:100%] 
-                    max-sm:[--y-from:16px] max-sm:[--y-to:0px] sm:[--scale-from:80%] sm:[--scale-to:100%] md:mt-0 md:min-h-max md:p-8"
+                    sm:[--x-from:50%] sm:[--x-to:0px] max-sm:[--y-from:-50px] max-sm:[--y-to:0px] md:mt-0 md:min-h-max md:p-8"
                 >
                   {children}
 
