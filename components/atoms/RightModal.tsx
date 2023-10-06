@@ -33,7 +33,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
       <MotionConfig
         transition={{
           type: 'tween',
-          
+
           duration: 0.25,
         }}
       >
@@ -48,7 +48,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
               className="fixed inset-0 z-[50]"
               onClose={() => setIsModalOpen(false)}
               open={isModalOpen}
-              initialFocus={undefined}
+              // initialFocus={undefined}
               suppressHydrationWarning={true}
             >
               <motion.div
@@ -56,7 +56,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   closed: { opacity: 0 },
                   open: { opacity: 1 },
                 }}
-                className="fixed inset-0 w-full bg-black bg-opacity-25 "
+                className="fixed inset-0 w-full bg-black bg-opacity-25 -z-10 "
                 onClick={() => setIsModalOpen(false)}
               />
               <div className="flex h-screen justify-end">
@@ -65,11 +65,11 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   variants={{
                     closed: {
                       opacity: 'var(--opacity-from)',
-                      x:'var(--x-from)', // Start from outside the right side of the screen
+                      x: 'var(--x-from)', // Start from outside the right side of the screen
                     },
                     open: {
                       opacity: 'var(--opacity-to)',
-                      
+
                       x: 'var(--x-to)', // Move to the center (fully visible)
                     },
                   }}
@@ -78,7 +78,10 @@ const CandidatesModal: React.FC<ModalProps> = ({
                 >
                   {children}
 
-                  <X className='absolute right-8 top-4 hover:cursor-pointer' onClick={() => setIsModalOpen(false)}/>
+                  <X
+                    className="absolute right-8 top-4 hover:cursor-pointer w-max"
+                    onClick={() => setIsModalOpen(false)}
+                  />
                 </Dialog.Panel>
               </div>
             </Dialog>

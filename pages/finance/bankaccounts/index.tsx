@@ -10,8 +10,9 @@ import {
 import RightModal from '../../../components/atoms/RightModal';
 import { Button } from '@/components/ui/button';
 import Modal from '@/components/atoms/Modal';
+import BankAccountCreate from '@/components/molecules/bank/account/BankAccountCreate';
 const BankAccounts = () => {
-  const [isModalOpen,setIsModalOpen]=useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -86,28 +87,34 @@ const BankAccounts = () => {
   ];
 
   return (
-   <>
-    <section className="flex flex-col gap-5">
-      <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2" onClick={()=>setIsModalOpen(true)}>
-          <Plus size={20} /> <span>Add Bank Account</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2">
-          <FileInput />
-          <span>Export</span>
-        </Button>
-      </div>
-      <DataTable data={data} columns={financeColumnDef} />
-    </section>
+    <>
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="destructive"
+            className="flex gap-2"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Plus size={20} /> <span>Add Bank Account</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2">
+            <FileInput />
+            <span>Export</span>
+          </Button>
+        </div>
+        <DataTable data={data} columns={financeColumnDef} />
+      </section>
 
-    <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
-      a
-    </RightModal> 
-    {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
+      <RightModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      >
+        <BankAccountCreate />
+      </RightModal>
+      {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
       asda
     </Modal> */}
-
-   </>
+    </>
   );
 };
 
