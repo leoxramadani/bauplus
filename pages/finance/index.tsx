@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Activities = () => {
-  return <div>Activities</div>;
+const Finance = () => {
+  return <div>Finance page</div>;
 };
 
-export default Activities;
+export default Finance;
