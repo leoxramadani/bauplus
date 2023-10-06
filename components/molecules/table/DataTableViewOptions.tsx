@@ -34,7 +34,6 @@ export function DataTableViewOptions<TData>({
         </Button>
       </DropdownMenuTrigger>
 
-
       {/* This is the Popover body */}
       <DropdownMenuContent align="center" className="w-[150px]">
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>

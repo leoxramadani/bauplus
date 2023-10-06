@@ -1,61 +1,57 @@
-import React from 'react'
-import { Card, Title, AreaChart } from "@tremor/react";
-
+import React from 'react';
+import { Card, Title, AreaChart } from '@tremor/react';
 
 const AreaChartt = () => {
   return (
     <Card>
-    <Title>Newsletter revenue over time (USD)</Title>
-    <AreaChart
-      className="h-72 w-24 mt-4"
-      data={chartdata}
-      index="date"
-      categories={["SemiAnalysis", "The Pragmatic Engineer"]}
-      colors={["indigo", "cyan"]}
-      valueFormatter={dataFormatter}
-    />
-  </Card>
-  )
-}
+      <Title>Newsletter revenue over time (USD)</Title>
+      <AreaChart
+        className="h-72 w-24 mt-4"
+        data={chartdata}
+        index="date"
+        categories={['SemiAnalysis', 'The Pragmatic Engineer']}
+        colors={['indigo', 'cyan']}
+        valueFormatter={dataFormatter}
+      />
+    </Card>
+  );
+};
 
-export default AreaChartt
-
-
+export default AreaChartt;
 
 const chartdata = [
   {
-    date: "Jan 22",
+    date: 'Jan 22',
     SemiAnalysis: 2890,
-    "The Pragmatic Engineer": 2338,
+    'The Pragmatic Engineer': 2338,
   },
   {
-    date: "Feb 22",
+    date: 'Feb 22',
     SemiAnalysis: 2756,
-    "The Pragmatic Engineer": 2103,
+    'The Pragmatic Engineer': 2103,
   },
   {
-    date: "Mar 22",
+    date: 'Mar 22',
     SemiAnalysis: 3322,
-    "The Pragmatic Engineer": 2194,
+    'The Pragmatic Engineer': 2194,
   },
   {
-    date: "Apr 22",
+    date: 'Apr 22',
     SemiAnalysis: 3470,
-    "The Pragmatic Engineer": 2108,
+    'The Pragmatic Engineer': 2108,
   },
   {
-    date: "May 22",
+    date: 'May 22',
     SemiAnalysis: 3475,
-    "The Pragmatic Engineer": 1812,
+    'The Pragmatic Engineer': 1812,
   },
   {
-    date: "Jun 22",
+    date: 'Jun 22',
     SemiAnalysis: 3129,
-    "The Pragmatic Engineer": 1726,
+    'The Pragmatic Engineer': 1726,
   },
 ];
 
 const dataFormatter = (number: number) => {
-  return "$ " + Intl.NumberFormat("us").format(number).toString();
+  return '$ ' + Intl.NumberFormat('us').format(number).toString();
 };
-

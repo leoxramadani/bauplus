@@ -5,19 +5,19 @@ export type TFiscalColumns = {
   // amount: number;
   // status: 'pending' | 'processing' | 'success' | 'failed';
   // email: string;
-  nr:number;
-  userName:string;
-  companyName:string;
-  dataNeDokument:string;
-  shumaPaTVSH : number;
-  vleraTVSH : number;
-  shumaTVSH : number;
-  nrLHD:number,
-  dataKohaRec:string;
-  nrExtern:string;
+  nr: number;
+  userName: string;
+  companyName: string;
+  dataNeDokument: string;
+  shumaPaTVSH: number;
+  vleraTVSH: number;
+  shumaTVSH: number;
+  nrLHD: number;
+  dataKohaRec: string;
+  nrExtern: string;
 };
 
-export const FiscalColumns: ColumnDef<TFiscalColumns>[] = [ 
+export const FiscalColumns: ColumnDef<TFiscalColumns>[] = [
   {
     accessorKey: 'nr',
     header: 'Number',
@@ -58,4 +58,4 @@ export const FiscalColumns: ColumnDef<TFiscalColumns>[] = [
     accessorKey: 'dataKohaRec',
     header: 'Recorded date time',
   },
-]
+];
