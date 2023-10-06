@@ -4,7 +4,7 @@ import React from 'react';
 import {
   financeColumnDef,
   IInvoiceSchema,
-} from '@/lib/schema/finance';
+} from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
 const CreditNote = () => {
   const data: IInvoiceSchema[] = [

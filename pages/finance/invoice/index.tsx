@@ -2,7 +2,7 @@ import React from 'react';
 import {
   financeColumnDef,
   IInvoiceSchema,
-} from '@/lib/schema/finance';
+} from '@/lib/schema/Finance/finance';
 import { Button } from '@/components/ui/button';
 import { FileInput, Plus, RotateCw } from 'lucide-react';
 import { DataTable } from '@/components/molecules/table/DataTable';

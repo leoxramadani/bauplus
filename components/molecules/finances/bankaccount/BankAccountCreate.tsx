@@ -28,7 +28,7 @@ import {
   IInvoiceSchema,
   bankAccountSchema,
   invoiceSchema,
-} from '@/lib/schema/finance';
+} from '@/lib/schema/Finance/finance';
 import { Input } from '@/components/ui/input';
 import { watch } from 'fs';
 import {

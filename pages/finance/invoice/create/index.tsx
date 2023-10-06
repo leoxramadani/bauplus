@@ -23,7 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { IInvoiceSchema, invoiceSchema } from '@/lib/schema/finance';
+import { IInvoiceSchema, invoiceSchema } from '@/lib/schema/Finance/finance';
 import { Input } from '@/components/ui/input';
 import { watch } from 'fs';
 import {
