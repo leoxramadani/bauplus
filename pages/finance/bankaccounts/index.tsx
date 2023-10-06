@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileInput, Plus } from 'lucide-react';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
@@ -7,9 +7,10 @@ import {
   financeColumnDef,
   IInvoiceSchema,
 } from '@/lib/schema/finance';
-
+import RightModal from '../../../components/atoms/RightModal';
 import { Button } from '@/components/ui/button';
 const BankAccounts = () => {
+  const [isModalOpen,setIsModalOpen]=useState(false);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -84,9 +85,10 @@ const BankAccounts = () => {
   ];
 
   return (
+   <>
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2">
+        <Button variant="destructive" className="flex gap-2" onClick={()=>setIsModalOpen(true)}>
           <Plus size={20} /> <span>Add Bank Account</span>
         </Button>
         <Button variant="outline" className="flex gap-2">
@@ -96,6 +98,12 @@ const BankAccounts = () => {
       </div>
       <DataTable data={data} columns={financeColumnDef} />
     </section>
+
+    <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+      a
+    </RightModal>
+
+   </>
   );
 };
 
