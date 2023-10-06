@@ -9,6 +9,7 @@ import {
 } from '@/lib/schema/finance';
 import RightModal from '../../../components/atoms/RightModal';
 import { Button } from '@/components/ui/button';
+import Modal from '@/components/atoms/Modal';
 const BankAccounts = () => {
   const [isModalOpen,setIsModalOpen]=useState(false);
   const data: IInvoiceSchema[] = [
@@ -99,9 +100,12 @@ const BankAccounts = () => {
       <DataTable data={data} columns={financeColumnDef} />
     </section>
 
-    <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+    {/* <RightModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
       a
-    </RightModal>
+    </RightModal> */}
+    <Modal open={isModalOpen} setOpen={setIsModalOpen}>
+      asda
+    </Modal>
 
    </>
   );

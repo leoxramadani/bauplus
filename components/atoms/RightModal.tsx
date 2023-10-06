@@ -79,7 +79,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                 >
                   {children}
 
-                  <X className='absolute right-8 top-4' onClick={() => setIsModalOpen(false)}/>
+                  <X className='absolute right-8 top-4 hover:cursor-pointer' onClick={() => setIsModalOpen(false)}/>
                 </Dialog.Panel>
               </div>
             </Dialog>
