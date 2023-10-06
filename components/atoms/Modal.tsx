@@ -6,6 +6,7 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 type ModalProps = {
   children: React.ReactNode;
+  className?: string;
   ButtonText?: string;
   handleOpener?: () => void;
   handleButton?: () => void;
@@ -39,6 +40,7 @@ const Modal = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
+        setOpen(false)
       }
     };
 
@@ -102,7 +104,7 @@ const Modal = ({
               animate="open"
               exit="closed"
               static
-              className="fixed inset-0 z-[50] overflow-y-scroll "
+              className="fixed inset-0 z-[50] overflow-y-scroll flex items-center justify-center "
               onClose={() => {
                 handleCloser();
                 setOpen(false);
@@ -116,19 +118,13 @@ const Modal = ({
                   closed: { opacity: 0 },
                   open: { opacity: 1 },
                 }}
-                className="fixed inset-0  bg-black bg-opacity-25 "
+                className="fixed inset-0  bg-black bg-opacity-25"
                 onClick={() => {
                   handleCloser();
                   setOpen(false);
                 }}
               />
-              <div className="flex min-h-screen items-center justify-center md:my-8">
-                {/*                
-                  <div
-                    className={
-                      'relative z-50 mt-36 flex w-full max-w-3xl flex-col items-center justify-center gap-8 rounded-3xl  bg-white p-4 md:mx-auto  md:mt-0 md:p-10'
-                    }
-                  > */}
+             
                 <Dialog.Panel
                   as={motion.div}
                   variants={{
@@ -143,8 +139,8 @@ const Modal = ({
                       y: 'var(--y-to, 0px)',
                     },
                   }}
-                  className=" relative z-50 mt-32 flex  min-h-screen w-full max-w-3xl flex-col items-center justify-start gap-8  rounded-3xl bg-white p-4 [--opacity-from:0%] [--opacity-to:100%] 
-                    max-sm:[--y-from:16px] max-sm:[--y-to:0px] sm:[--scale-from:80%] sm:[--scale-to:100%] md:mt-0 md:min-h-max md:p-8"
+                  className="relative z-50 mt-32 flex   w-full max-w-3xl flex-col items-center justify-start gap-8  rounded-3xl bg-white  [--opacity-from:0%] [--opacity-to:100%] 
+                    max-sm:[--y-from:16px] max-sm:[--y-to:0px] sm:[--scale-from:80%] sm:[--scale-to:100%] md:mt-0  "
                 >
                   {children}
                   <X className='absolute right-8 top-4 hover:cursor-pointer'
@@ -153,8 +149,7 @@ const Modal = ({
                     setOpen(false)
                   }}/>
                 </Dialog.Panel>
-                {/* </div> */}
-              </div>
+          
             </Dialog>
           )}
         </AnimatePresence>
