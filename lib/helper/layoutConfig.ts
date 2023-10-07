@@ -1,15 +1,15 @@
 export default {
     lg: [
       {
-        w: 2,
-        h: 2,
+        w: 8,
+        h: 5,
         x: 0,
         y: 0,
         i: "graph1",
-        minW:3,
-        minH:2,
-        maxH: 2,
-        maxW:4
+        minW:5,
+        minH:4,
+        maxH:4,
+        maxW:5
        
       },
       {

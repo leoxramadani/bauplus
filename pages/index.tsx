@@ -11,7 +11,13 @@ import layoutConfig from '@/lib/helper/layoutConfig';
 import React, { useState } from 'react';
 import { randomUUID } from 'crypto';
 import Duration from '@/components/atoms/Duration';
+import KpiCard from '@/components/atoms/KpiCard';
 
+import dynamic from 'next/dynamic';
+
+const NoSSR = dynamic(() => import('../pages/dashboard'), {
+  ssr: false,
+});
 const cities = [
   {
     name: 'New York',
@@ -56,55 +62,36 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen max-w-[calc(100%-250px)] w-full md:ml-[250px] flex flex-col gap-4">
-        <h2 className="w-full bg-blue-200">hello</h2>
-
-        <div className="w-full flex flex-col md:grid grid-cols-2 lg:grid-cols-4 gap-4 justify-center items-center ">
-          <Card key="graph1" className=" max-w-sm w-full">
-            <Title>Sales</Title>
-            <GraphBlock
-              type="pie"
-              data={cities}
-              colors={['rose', 'blue']}
-              index="name"
-            />
-          </Card>
-          <Card key="graph2" className="w-full max-w-sm">
-            <Duration />
-            <Title>Sales</Title>
-            <GraphBlock
-              type="pie"
-              data={cities}
-              colors={['rose', 'blue']}
-              index="name"
-            />
-          </Card>
-          <Card key="graph2" className="w-full max-w-sm">
-            <Title>Sales</Title>
-            <GraphBlock
-              type="pie"
-              data={cities}
-              colors={['rose', 'blue']}
-              index="name"
-            />
-          </Card>
-          <Card key="graph2" className="w-full max-w-sm">
-            <Title>Sales</Title>
-            <GraphBlock
-              type="pie"
-              data={cities}
-              colors={['rose', 'blue']}
-              index="name"
-            />
-          </Card>
+      <main className="h-screen max-w-[calc(100%-250px)] w-full md:ml-[250px] flex flex-col gap-4 mt-24">
+        <div className="w-full bg-[#6E71F1] p-8 flex flex-col lg:flex-row gap-4">
+          <KpiCard
+            title="Total Income"
+            metric="317,000"
+            percentage="3,48"
+            delta="increase"
+          />
+          <KpiCard
+            title="Total Profit"
+            metric="96,000"
+            percentage="1,48"
+            delta="increase"
+          />
+          <KpiCard
+            title="Total Loss"
+            metric="317,000"
+            percentage="1,48"
+            delta="decrease"
+          />
+          <KpiCard
+            title="Total something"
+            metric="23,317,000"
+            percentage="100"
+            delta="decrease"
+          />
         </div>
 
         <div className="h-max p-8 border w-full">
-          <GridLayout
-            data={['1', '2', '3']}
-            layouts={layoutConfig}
-            setBreakPoint={setBreakpoint}
-          />
+          <NoSSR />
         </div>
       </main>
     </>

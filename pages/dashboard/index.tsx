@@ -1,18 +1,14 @@
-import { DataTable } from '@/components/molecules/table/DataTable';
+import GridLayout from '@/components/molecules/GridLayout/GridLayout';
+import React from 'react';
 import {
   Payment,
   columns,
 } from '@/components/molecules/table/columns/columns';
-import React from 'react';
 
 const Dashboard = () => {
-  const data = getData();
   return (
-    <>
-      <h1 className="text-xl font-medium">Dashboard</h1>
-      <DataTable columns={columns} data={data} />
-    </>
-  );
+    <GridLayout data={["1", "2", "3"]}   />
+  )
 };
 
 export default Dashboard;
