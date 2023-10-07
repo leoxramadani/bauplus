@@ -14,7 +14,7 @@ const AddUser = () => {
       <div className="add-edit-container">
         <UsersForm mutation={REGISTER_USER_QUERY}/>
       </div>
-    </>
+    </> 
   );
 };
 

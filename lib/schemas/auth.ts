@@ -5,7 +5,7 @@ const PASSWORD_REGEX = new RegExp(
 ); // 1 uppercase, 1 lowercase, 1 number, 1 special
 
 export const loginSchema = z.object({
-  username: z.string(),
+  email: z.string(),
   password: z.string(),
 });
 
