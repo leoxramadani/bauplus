@@ -79,14 +79,14 @@ export function DataTable<TData, TValue>({
               .getColumn('email')
               ?.setFilterValue(event.target.value)
           }
-          className="max-w-lg"
+          className="max-w-xl"
         />
-        
+
         {/* dropdown view columns select */}
         <DataTableViewOptions table={table} />
       </div>
       {/* The table component is here */}
-      <div className="rounded-md border">
+      <div className="rounded-md shadow-sm border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

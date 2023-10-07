@@ -32,20 +32,26 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground">
+      {/*  *****SELECTED ROW(S)*****  */}
+      <div className="flex text-xs min-[500px]:text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
+
+      <div className="flex items-center min-[500px]:gap-6 lg:space-x-8">
+        {/*  *****ROWS PER PAGE*****  */}
+
+        <div className="flex items-center gap-1 sm:space-x-2">
+          <p className="text-xs min-[500px]:text-sm font-medium">
+            Rows per page
+          </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 w-12 min-[500px]:w-14 sm:w-[70px] ">
               <SelectValue
                 placeholder={table.getState().pagination.pageSize}
               />
@@ -59,11 +65,15 @@ export function DataTablePagination<TData>({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+
+        {/*  *****PAGE OF*****  */}
+        <div className="flex w-[100px] items-center justify-center text-xs min-[500px]:text-sm font-medium">
           Page {table.getState().pagination.pageIndex + 1} of{' '}
           {table.getPageCount()}
         </div>
-        <div className="flex items-center space-x-2">
+
+        {/*  *****ARROWS*****  */}
+        <div className="flex items-center gap-1 min-[500px]:gap-2">
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
