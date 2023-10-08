@@ -85,3 +85,12 @@
 .error {
   @apply text-red-600 font-medium text-sm pointer-events-none;
 }
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}

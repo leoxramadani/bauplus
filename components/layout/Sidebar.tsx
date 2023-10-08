@@ -4,6 +4,7 @@ import {
   Square,
   ChevronsLeft,
   ChevronsRight,
+  Calculator,
 } from 'lucide-react';
 import {
   useContext,
@@ -74,7 +75,7 @@ const Sidebar = ({
           : `max-w-[15rem] transition-all duration-[250ms]`
       }`}
     >
-      <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
+      <nav className="relative h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
         <div className="p-3.5 justify-between items-center flex">
           {expanded && (
             <Link
@@ -127,7 +128,7 @@ const Sidebar = ({
 
         <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
           <ul
-            className="flex flex-col sm:flex-1 px-3"
+            className="sidebar flex flex-col sm:flex-1 px-3 overflow-y-auto mb-20"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
@@ -136,6 +137,50 @@ const Sidebar = ({
               alert={true}
               href="/dashboard"
             />
+            <SidebarItem
+              icon={<Calculator size={20} strokeWidth={1.5} />}
+              text="Finance"
+              asDropdown
+              toggleSidebar={toggleSidebar}
+            >
+              <>
+                <SidebarItem
+                  text="Bank accounts"
+                  alert={false}
+                  href="/finance/bankaccounts"
+                />
+                <SidebarItem
+                  text="Credit note"
+                  alert={false}
+                  href="/finance/creditnote"
+                />
+                <SidebarItem
+                  text="Estimates"
+                  alert={false}
+                  href="/finance/estimates"
+                />
+                <SidebarItem
+                  text="Expenses"
+                  alert={false}
+                  href="/finance/expenses"
+                />
+                <SidebarItem
+                  text="Invoice"
+                  alert={false}
+                  href="/finance/invoice"
+                />
+                <SidebarItem
+                  text="Payments"
+                  alert={false}
+                  href="/finance/payments"
+                />
+                <SidebarItem
+                  text="Proposal"
+                  alert={false}
+                  href="/finance/proposal"
+                />
+              </>
+            </SidebarItem>
             <SidebarItem
               icon={<Users size={20} strokeWidth={1.5} />}
               text="HR"
@@ -248,7 +293,7 @@ const Sidebar = ({
             )}
           </ul>
         </SidebarContext.Provider>
-        <div className="border-t border-slate-600">
+        <div className="border-t border-slate-600 absolute bottom-0 left-0 w-full h-max bg-inherit">
           {!isWindowSmall && status === 'authenticated' ? (
             <div className='hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer'>
               <Image
