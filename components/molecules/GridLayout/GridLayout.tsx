@@ -104,9 +104,6 @@ const originalItems = [
   // Add more items as needed
 ];
 
-
-
-
 const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
   const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("lg");
   const [items, setItems] = useState(originalItems);

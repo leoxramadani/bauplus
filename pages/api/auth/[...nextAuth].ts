@@ -12,6 +12,7 @@ import {
   gql,
 } from '@apollo/client';
 import { LOGIN_QUERY } from '@/lib/queries/auth';
+import { LOGIN } from '@/lib/constants/endpoints';
 
 const client = new ApolloClient({
   ssrMode: true,
@@ -31,75 +32,66 @@ export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: 'credentials',
-      credentials: {
-        email: {
-          label: 'Email',
-          type: 'email',
-        },
-        password: {
-          label: 'Password',
-          type: 'password',
-        },
-      },
+      credentials: {},
       authorize: async (credentials) => {
         try {
           const { username, password } =
             await loginSchema.parseAsync(credentials);
 
-          const { data, loading, error } = await client.query({
-            query: LOGIN_QUERY,
-            variables: { username, password },
-          });
+          const response = await fetch(
+            LOGIN + `?Username=${username}&Password=${password}`,
+            {
+              method: 'POST',
+            }
+          )
+            .then(async (data) => {
+              return await data.json();
+            })
+            .catch((error) => {
+              console.error("Couldn't log in.\n", error);
+              return Promise.reject(
+                new Error('There was something wrong.')
+              );
+            });
 
-          if (!loading && (!data || error)) {
-            return null;
-          }
-
-          if (data.login.status !== 200) {
-            return null;
-          } else
-            return {
-              refreshToken: '',
-              accessToken: data.login.result.jwt,
-              accessTokenExpires: '',
-              user: data.login.result,
-              id: data.login.result.username,
-              username: data.login.result.username,
-              firstName: data.login.result.firstName,
-              lastName: data.login.result.lastName,
-              companies: data.login.result.companies,
-              email: data.login.result.email,
-            };
+          return {
+            id: '',
+            refreshToken: '',
+            accessToken: response.result.jwt,
+            accessTokenExpires: '',
+            user: {
+              username: response.result.username,
+              email: response.result.email,
+              firstName: response.result.firstName,
+              lastName: response.result.lastName,
+            },
+          };
         } catch (error) {
+          console.error(error);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async (data) => {
+      const { token, user } = data;
       if (user) {
         token.accessToken = user.accessToken;
-        token.username = user.user.username;
+        token.user = user.user;
         token.email = user.email;
-        token.firstName = user.user.firstName;
-        token.lastName = user.user.lastName;
-        token.companies = user.user.companies;
       }
 
       return token;
     },
-    // session: async ({ session, token }) => {
-    //   if (token) {
-    //     session.accessToken = token.accessToken;
-    //     session.user.username = token.username;
-    //     session.user.email = token.email;
-    //     session.user.firstName = token.firstName;
-    //     session.user.lastName = token.lastName;
-    //     session.user.companies = token.companies;
-    //   }
-    //   return session;
-    // },
+    session: async ({ session, token }: any) => {
+      // Send properties to the client, e.g. accessToken and user from the provider
+      session.accessToken = token.accessToken;
+      session.accessTokenExpires = token.accessTokenExpires;
+      session.user = token.user;
+
+      return session;
+    },
   },
   session: {
     strategy: 'jwt',

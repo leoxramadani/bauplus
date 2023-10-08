@@ -1,11 +1,15 @@
 import Layout from '@/components/layout';
-import client from '@/lib/apollo/client';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
-import { ApolloProvider } from '@apollo/client';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
-import type { AppProps, AppType } from 'next/app';
+import type { AppType } from 'next/app';
+
+const client = new QueryClient();
 
 const ArkivaApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,13 +18,13 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ApolloProvider client={client}>
+      <QueryClientProvider client={client}>
         <LanguageProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </LanguageProvider>
-      </ApolloProvider>
+      </QueryClientProvider>
     </SessionProvider>
   );
 };

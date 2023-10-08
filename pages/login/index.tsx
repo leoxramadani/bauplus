@@ -7,20 +7,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Square } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-interface UserAuthFormProps
+interface AuthFormProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+const AuthForm = ({ className, ...props }: AuthFormProps) => {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<ILogin>({
     resolver: zodResolver(loginSchema),
@@ -28,20 +30,21 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
 
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
     setIsLoading(true);
-    const response = await fetch(
-      LOGIN + `?Username=${data.email}&Password=${data.password}`,
-      {
-        method: 'POST',
+    signIn('credentials', {
+      redirect: false,
+      ...data,
+    }).then((res) => {
+      if (res?.ok) {
+        setIsLoading(false);
+        console.log(res);
+        router.push('/');
+        toast.success('Successfully logged in.');
+      } else {
+        setIsLoading(false);
+        console.error(res);
+        toast.error('Something went wrong.');
       }
-    ).then((res) => {
-      return res.json();
     });
-
-    if (response) {
-      
-      console.log(response);
-      setIsLoading(false);
-    }
   };
 
   const onError = (errors: any) => console.error(errors);
@@ -51,19 +54,23 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label className="sr-only" htmlFor="email">
-              Email
+            <label className="sr-only" htmlFor="username">
+              Username
             </label>
             <Input
-              id="email"
-              placeholder="name@example.com"
+              id="username"
+              placeholder="Username"
               type="text"
               autoCapitalize="none"
-              autoComplete="email"
+              autoComplete="username"
               autoCorrect="off"
               disabled={isLoading}
-              {...register("email")}
+              required
+              {...register('username')}
             />
+            {errors.username && (
+              <p className="error">{errors.username.message}</p>
+            )}
           </div>
           <div className="grid gap-1">
             <label className="sr-only" htmlFor="password">
@@ -74,11 +81,16 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
               placeholder="Password"
               type="password"
               autoCorrect="off"
-              autoComplete='current-password'
+              autoComplete="current-password"
               disabled={isLoading}
-              {...register("password")}
+              required
+              {...register('password')}
             />
           </div>
+          {errors.password && (
+            <p className="error">{errors.password.message}</p>
+          )}
+
           <Button disabled={isLoading} loading={isLoading}>
             Continue with email
           </Button>
@@ -146,7 +158,7 @@ const Login = () => {
                 Sign in
               </h1>
             </div>
-            <UserAuthForm />
+            <AuthForm />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link

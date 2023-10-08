@@ -11,7 +11,6 @@ const Layout = ({ children }: PropsWithChildren) => {
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   //to open or not the sidebar
   const [expanded, setExpanded] = useState(true);
-  console.log('Expanded', expanded);
   const [isOpen, setIsOpen] = useState(false);
 
   //effect to react to screen size
@@ -36,6 +35,7 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
   };
+
   if (router.asPath === '/login') return children;
   return (
     <>
@@ -43,7 +43,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>Arkiva</title>
       </Head>
       <div
-        className={`min-h-screen flex flex-col w-full scroll bg-[#f2f4f7] `}
+        className={`min-h-screen flex flex-col w-full scroll`}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (
@@ -76,7 +76,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] bg-[#f2f4f7] ${
+          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] ${
             !isWindowSmall &&
             (expanded
               ? `ml-[15rem] transition-all duration-[250ms]`

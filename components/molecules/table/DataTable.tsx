@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center gap-3 justify-between">
         {/* Input for filterin are here */}
         <Input
-          placeholder="Filter emails..."
+          placeholder="Search"
           value={
             (table.getColumn('email')?.getFilterValue() as string) ??
             ''

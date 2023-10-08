@@ -1,4 +1,6 @@
-import { MRT_ColumnDef } from "material-react-table";
+
+import { ColumnDef } from '@tanstack/react-table';
+
 import * as z from "zod";
 import useTranslation from "../hooks/useTranslation";
 const PASSWORD_REGEX = new RegExp(
@@ -94,53 +96,53 @@ const userSchema = z.object({
 
 export type columns = z.infer<typeof userSchema>;
 
-export const columns: MRT_ColumnDef<columns>[] = [
+export const columns: ColumnDef<columns>[] = [
   {
     accessorKey: "firstName",
     header: "First name",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
   {
     accessorKey: "lastName",
     header: "Last name",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
   {
     accessorKey: "userName",
     header: "Username",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
   {
     accessorKey: "address",
     header: "Address",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
   {
     accessorKey: "phoneNumber",
     header: "Phone Number",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
   {
     accessorKey: "email",
     header: "Email",
-    Header: ({ header }) => {
-      const { t } = useTranslation();
-      return <p>{t(header.column.columnDef.header)}</p>;
-    },
+    // Header: ({ header }) => {
+    //   const { t } = useTranslation();
+    //   return <p>{t(header.column.columnDef.header)}</p>;
+    // },
   },
 ];

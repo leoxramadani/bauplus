@@ -1,12 +1,9 @@
 import {
-  ChevronLeft,
-  ChevronRight,
-  FileText,
   ChevronDown,
-  ChevronUp,
-  DollarSign,
   Users,
   Square,
+  ChevronsLeft,
+  ChevronsRight,
 } from 'lucide-react';
 import {
   useContext,
@@ -16,6 +13,8 @@ import {
   SetStateAction,
   Dispatch,
   useEffect,
+  ReactNode,
+  Children,
 } from 'react';
 import {
   Boxes,
@@ -29,16 +28,19 @@ import { useRouter, withRouter } from 'next/router';
 import Link from 'next/link';
 import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
-interface SidebarItemInterface {
+interface SidebarItem {
   icon?: React.JSX.Element;
-  text: string;
-  alert: boolean;
+  text?: string;
+  alert?: boolean;
   href?: string;
-  isDropdown?: boolean;
+  asDropdown?: boolean;
+  toggleSidebar?: () => void;
+  children?: ReactNode;
 }
 
-interface SidebarProps {
+interface Sidebar {
   isOpen?: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isWindowSmall?: boolean;
@@ -59,10 +61,12 @@ const Sidebar = ({
   setIsWindowSmall,
   toggleSidebar,
   expanded,
-}: SidebarProps) => {
+}: Sidebar) => {
+  const { data: session, status } = useSession();
+
   return (
     <aside
-      className={`fixed z-50 top-0 left-0 h-full ${
+      className={`fixed z-50 w-full top-0 left-0 h-full group/sidebar ${
         !isWindowSmall
           ? expanded
             ? `max-w-[15rem] transition-all duration-[250ms]`
@@ -71,30 +75,30 @@ const Sidebar = ({
       }`}
     >
       <nav className="h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
-        <div className="p-3.5 justify-between items-center flex flex-row ">
-          <Link
-            href="/dashboard"
-            onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
-          >
-            {/* <Image
+        <div className="p-3.5 justify-between items-center flex">
+          {expanded && (
+            <Link
+              href="/dashboard"
+              onClick={() =>
+                isWindowSmall ? setIsOpen(false) : null
+              }
+            >
+              {/* <Image
               src={Logo}
               alt="Arkiva Logo"
               className={`overflow-hidden transition-all ${
                 !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
               } hover:cursor-pointer`}
             /> */}
-            <h1 className="text-white text-3xl font-bold flex gap-2 items-center">
-              <Square
-                strokeWidth={10}
-                size={expanded ? 36 : 0}
-                radius={0}
-              />
-              {expanded && 'Arkiva'}
-            </h1>
-          </Link>
+              <h1 className="text-white text-3xl font-bold flex gap-2 items-center">
+                <Square strokeWidth={10} size={36} radius={0} />
+                Arkiva
+              </h1>
+            </Link>
+          )}
 
           <button
-            className="rounded-full text-white hover:bg-slate-600 p-0.5"
+            className="flex justify-center items-center rounded-full text-white hover:bg-slate-600 p-1 transition-all opacity-0 group-hover/sidebar:opacity-100"
             // onClick={() => setExpanded((current) => !current)}
           >
             {isWindowSmall ? (
@@ -104,13 +108,15 @@ const Sidebar = ({
                 }
               />
             ) : expanded ? (
-              <ChevronLeft
+              <ChevronsLeft
                 onClick={() => toggleSidebar()}
+                strokeWidth={1.5}
                 width={30}
                 height={30}
               />
             ) : (
-              <ChevronRight
+              <ChevronsRight
+                strokeWidth={1.5}
                 width={30}
                 height={30}
                 onClick={() => toggleSidebar()}
@@ -130,53 +136,55 @@ const Sidebar = ({
               alert={true}
               href="/dashboard"
             />
-            <Dropdown
-              icon={<Users size={30} />}
+            <SidebarItem
+              icon={<Users size={20} strokeWidth={1.5} />}
               text="HR"
-              href="/hr"
-              alert={false}
+              asDropdown
+              toggleSidebar={toggleSidebar}
             >
-              <SidebarItem
-                text="Employees"
-                alert={false}
-                href="/hr/employees"
-              />
-              <SidebarItem
-                text="Leaves"
-                alert={false}
-                href="/hr/leaves"
-              />
-              <SidebarItem
-                text="Shift Roster"
-                alert={false}
-                href="/hr/shiftroster"
-              />
-              <SidebarItem
-                text="Attendace"
-                alert={false}
-                href="/hr/attendace"
-              />
-              <SidebarItem
-                text="Holiday"
-                alert={false}
-                href="/hr/holiday"
-              />
-              <SidebarItem
-                text="Designation"
-                alert={false}
-                href="/hr/designation"
-              />
-              <SidebarItem
-                text="Department"
-                alert={false}
-                href="/hr/departments"
-              />
-              <SidebarItem
-                text="Appreciation"
-                alert={false}
-                href="/hr/appreciation"
-              />
-            </Dropdown>
+              <>
+                <SidebarItem
+                  text="Employees"
+                  alert={false}
+                  href="/hr/employees"
+                />
+                <SidebarItem
+                  text="Leaves"
+                  alert={false}
+                  href="/hr/leaves"
+                />
+                <SidebarItem
+                  text="Shift Roster"
+                  alert={false}
+                  href="/hr/shiftroster"
+                />
+                <SidebarItem
+                  text="Attendace"
+                  alert={false}
+                  href="/hr/attendace"
+                />
+                <SidebarItem
+                  text="Holiday"
+                  alert={false}
+                  href="/hr/holiday"
+                />
+                <SidebarItem
+                  text="Designation"
+                  alert={false}
+                  href="/hr/designation"
+                />
+                <SidebarItem
+                  text="Department"
+                  alert={false}
+                  href="/hr/departments"
+                />
+                <SidebarItem
+                  text="Appreciation"
+                  alert={false}
+                  href="/hr/appreciation"
+                />
+              </>
+            </SidebarItem>
 
             <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
@@ -185,17 +193,10 @@ const Sidebar = ({
               href="/users"
             />
             <SidebarItem
-              icon={<Package size={30} />}
+              icon={<Package size={20} strokeWidth={1.5} />}
               text="Payroll"
               alert
               href="/payroll"
-            />
-
-            <Dropdown
-              icon={<DollarSign size={30} />}
-              text="Finance"
-              href="/finance"
-              alert={false}
             >
               <SidebarItem
                 text="Proposal"
@@ -232,7 +233,7 @@ const Sidebar = ({
                 alert={false}
                 href="/finance/bankaccounts"
               />
-            </Dropdown>
+            </SidebarItem>
 
             {!isWindowSmall && (
               <>
@@ -247,192 +248,122 @@ const Sidebar = ({
             )}
           </ul>
         </SidebarContext.Provider>
-
-        {!isWindowSmall && (
-          <div className="border-t flex py-3 px-1 text-gray-50 hover:bg-slate-600 hover:cursor-pointer">
-            <img
-              src="https://ui-avatars.com/api/?name=AR&background=c7d2fe&color=3730a3&bold=true"
-              alt=""
-              className="w-10 h-10 rounded-md mx-auto "
-            />
-            <div
-              className={`
+        <div className="border-t border-slate-600">
+          {!isWindowSmall && status === 'authenticated' ? (
+            <div className='hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer'>
+              <Image
+                src={`https://ui-avatars.com/api/?name=${
+                  session.user.firstName.charAt(0) +
+                  session.user.lastName.charAt(0)
+                }&background=c7d2fe&color=3730a3&bold=true`}
+                alt=""
+                width={100}
+                height={100}
+                className="w-10 h-10 rounded-md mx-auto "
+              />
+              <div
+                className={`
               flex justify-between items-center
               overflow-hidden transition-all ${
-                expanded ? 'w-56 ml-3' : 'w-0'
+                expanded ? 'w-full ml-3' : 'w-0'
               }
           `}
-            >
-              <div className="leading-4 ">
-                <h4 className="font-semibold ">Ardrin Rexhepi</h4>
-                <span className="text-xs">ardrin.rexhepi</span>
+              >
+                <div className="leading-4 ">
+                  <h4 className="font-semibold ">
+                    {session.user.firstName} {session.user.lastName}
+                  </h4>
+                  <span className="text-xs">
+                    {session?.user.email}
+                  </span>
+                </div>
+                {/* <MoreVertical size={20} /> */}
               </div>
-              {/* <MoreVertical size={20} /> */}
             </div>
-          </div>
-        )}
+          ) : (
+            <>
+              <Link href={'/login'} className="p-3">
+                Login
+              </Link>
+            </>
+          )}{' '}
+        </div>
       </nav>
     </aside>
   );
 };
 export default Sidebar;
 
-const Dropdown = ({
-  children,
-  icon,
-  text,
-  alert,
-  href,
-}: PropsWithChildren<{
-  icon: React.JSX.Element;
-  text: string;
-  alert: boolean;
-  href: string;
-}>) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const router = useRouter();
-  const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
-
-  useEffect(() => {
-    if (expanded == false) {
-      setIsDropdownOpen(false);
-    }
-  }, [expanded]);
-
-  const ActiveLink = withRouter(
-    ({ router, children, ...props }: PropsWithChildren<any>) => {
-      return (
-        <Link
-          {...props}
-          className={`relative flex p-1 flex-1 ${
-            router.pathname.startsWith(props.href)
-              ? 'bg-slate-500 text-white'
-              : 'hover:bg-slate-600 text-white'
-          } font-medium rounded-[0.6rem] cursor-pointer transition-colors group`}
-        >
-          {children}
-        </Link>
-      );
-    }
-  );
-
-  return (
-    <>
-      <div
-        className={`flex rounded-[0.6rem] cursor-pointer ${
-          router.pathname.startsWith(href)
-            ? 'bg-slate-500 text-white'
-            : 'hover:bg-slate-600 text-white'
-        }`}
-      >
-        <ActiveLink href={href}>
-          <div className="flex gap-2">
-            <DollarSign size={30} />
-
-            {expanded ? (
-              <div className="my-auto">{text}</div>
-            ) : (
-              isWindowSmall && <div className="my-auto">{text}</div>
-            )}
-          </div>
-        </ActiveLink>
-        {expanded ? (
-          <div
-            className="cursor-pointer text-white my-auto"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsDropdownOpen(!isDropdownOpen);
-            }}
-          >
-            {isDropdownOpen ? (
-              <ChevronUp size={20} />
-            ) : (
-              <ChevronDown size={20} />
-            )}
-          </div>
-        ) : (
-          isWindowSmall && (
-            <div
-              className="cursor-pointer text-white my-auto"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsDropdownOpen(!isDropdownOpen);
-              }}
-            >
-              {isDropdownOpen ? (
-                <ChevronUp size={20} />
-              ) : (
-                <ChevronDown size={20} />
-              )}
-            </div>
-          )
-        )}
-      </div>
-      {isDropdownOpen && children}
-    </>
-  );
-};
-
 export function SidebarItem({
   icon,
   text,
   alert,
-  href,
-  isDropdown,
-}: SidebarItemInterface) {
+  href = '#',
+  children,
+  toggleSidebar = () => {},
+  asDropdown = false,
+}: SidebarItem) {
+  const router = useRouter();
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const ActiveLink = withRouter(
-    ({ router, children, ...props }: PropsWithChildren<any>) => {
-      return (
-        <Link
-          {...props}
-          className={`relative flex items-center p-1 justify-center ${
-            !isWindowSmall ? `my-2` : `my-1.5`
-          } font-medium rounded-[0.6rem] cursor-pointer transition-colors group 
-          ${
-            router.pathname.startsWith(props.href)
-              ? 'bg-slate-700 text-white'
-              : 'hover:bg-slate-800 text-white'
-          }`}
-        >
-          {children}
-        </Link>
-      );
-    }
-  );
+  const handleClick = () => {
+    if (asDropdown) {
+      setIsOpen(!isOpen);
+      if (expanded == false) toggleSidebar();
+    } else router.push(href);
+  };
 
   return (
-    <ActiveLink href={href}>
-      {icon && icon}
-      <span
-        className={`overflow-hidden transition-all ${
-          !icon && `p-1 ml-5`
-        } ${
-          !isWindowSmall
-            ? expanded
-              ? 'w-52 ml-3'
-              : 'w-0'
-            : `w-32 ml-2.5`
+    <>
+      <button
+        onClick={handleClick}
+        className={`relative w-full flex items-center p-2 justify-start ${
+          !isWindowSmall ? `my-2` : `my-1.5`
+        } rounded-[0.6rem] cursor-pointer transition-colors group 
+        ${
+          router.pathname.startsWith(href) || (asDropdown && isOpen)
+            ? 'bg-slate-700 text-white'
+            : 'hover:bg-slate-800 text-white'
         }`}
       >
-        {text}
-      </span>
-      {alert && (
-        <div className={`absolute flex justify-end w-full left-0 pr-3 ${!expanded && ` top-1`}`}>
-          <div className={`w-2 h-2 rounded-full bg-red-500`} />
-        </div>
-      )}
-      {!expanded && (
-        <div
-          className={`
-          absolute max-w-xs w-max left-full rounded-md ml-1 bg-slate-500 text-white z-[500] px-2 py-1 flex items-center
-          invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-      `}
+        {asDropdown && expanded && (
+          <span className="absolute right-2 h-full flex items-center">
+            <ChevronDown size={20} strokeWidth={2} />
+          </span>
+        )}
+        {icon && <div className="ml-1">{icon}</div>}
+
+        <span
+          className={`overflow-hidden ml-1 text-left transition-all ${
+            icon && `ml-3`
+          } ${
+            !isWindowSmall ? (expanded ? 'w-full' : 'w-0') : `w-full`
+          }`}
         >
           {text}
-        </div>
-      )}
-    </ActiveLink>
+        </span>
+        {alert && (
+          <div
+            className={`absolute flex justify-end w-full pr-3 ${
+              !expanded ? `top-1 left-2` : `left-0`
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full bg-red-500`} />
+          </div>
+        )}
+        {!expanded && (
+          <div
+            className={`
+                          absolute max-w-xs left-full rounded-md ml-1 bg-slate-500 text-white z-[500] px-2 py-1 flex items-center
+                          invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+                      `}
+          >
+            {text}
+          </div>
+        )}
+      </button>
+      {asDropdown && isOpen && <div>{children}</div>}
+    </>
   );
 }

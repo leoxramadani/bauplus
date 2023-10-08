@@ -1,29 +1,25 @@
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useCompany } from "@/lib/hooks/useCompany";
-import { columns } from "@/lib/schemas/user";
-import { GET_ALL_USERS_QUERY } from "@/lib/queries/user";
+import { useSession } from 'next-auth/react';
+import useTranslation from '@/lib/hooks/useTranslation';
+import { DataTable } from '@/components/molecules/table/DataTable';
+import { columns } from '@/lib/schemas/user';
+import useData from '@/lib/hooks/useData';
+import { GET_ALL_USERS } from '@/lib/constants/endpoints/users';
 
-import useTranslation from "@/lib/hooks/useTranslation";
 const Users = () => {
   const { t } = useTranslation();
-  const { hasPrivilege } = useCompany();
+
+  const { data, isLoading, isError, error } = useData(
+    ['users'],
+    GET_ALL_USERS
+  );
 
   return (
     <>
-      <h1 className="title">{t("Users")}</h1>
-      {/* {hasPrivilege("UserList") && ( */}
-      {/* <Table
-        columns={columns}
-        query={GET_ALL_USERS_QUERY}
-        module="users"
-        canCreate={hasPrivilege("UserRegister")}
-        canEdit={hasPrivilege("UserUpdate")}
-        actionsEnable={hasPrivilege("UserUpdate")}
-        keyColumn={"userName"}
-      /> */}
-      {/* )} */}
+      <h1 className="title">{t('Users')}</h1>
+      {isLoading && <p>Loading...</p>}
+      {/*@ts-ignore*/}
+      {isError && <p className="error">{error.message}</p>}
+      {data && <DataTable columns={columns} data={data}></DataTable>}
     </>
   );
 };

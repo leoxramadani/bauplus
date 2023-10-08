@@ -62,7 +62,7 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen max-w-[calc(100%-250px)] w-full md:ml-[250px] flex flex-col gap-4 mt-24">
+      <main className="h-screen w-full flex flex-col gap-4 mt-24">
         <div className="w-full bg-[#6E71F1] p-8 flex flex-col lg:flex-row gap-4">
           <KpiCard
             title="Total Income"
