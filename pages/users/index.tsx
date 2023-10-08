@@ -8,7 +8,7 @@ import { GET_ALL_USERS } from '@/lib/constants/endpoints/users';
 const Users = () => {
   const { t } = useTranslation();
 
-  const { data, isLoading, isError, error } = useData(
+  const { data, isLoading, isError, error }: any = useData(
     ['users'],
     GET_ALL_USERS
   );
