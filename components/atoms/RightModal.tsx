@@ -44,11 +44,12 @@ const CandidatesModal: React.FC<ModalProps> = ({
               initial="closed"
               animate="open"
               exit="closed"
-              static
-              className="fixed inset-0 z-[50]"
-              onClose={() => setIsModalOpen(false)}
+              className="fixed inset-0 z-10"
+              onClose={() => {
+                setIsModalOpen(false);
+              }}
               open={isModalOpen}
-              // initialFocus={undefined}
+              initialFocus={undefined}
               suppressHydrationWarning={true}
             >
               <motion.div
@@ -57,7 +58,10 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   open: { opacity: 1 },
                 }}
                 className="fixed inset-0 w-full bg-black bg-opacity-25 -z-10 "
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {
+                  console.log("Overlay Clicked!");
+                  setIsModalOpen(false);
+                }}
               />
               <div className="flex h-screen justify-end">
                 <Dialog.Panel
@@ -80,7 +84,10 @@ const CandidatesModal: React.FC<ModalProps> = ({
 
                   <X
                     className="absolute right-8 top-4 hover:cursor-pointer w-max"
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={() => {
+                      console.log("Overlay Clicked!");
+                      setIsModalOpen(false);
+                    }}
                   />
                 </Dialog.Panel>
               </div>
