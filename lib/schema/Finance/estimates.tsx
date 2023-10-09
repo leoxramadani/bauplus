@@ -7,11 +7,13 @@ export const estimatesSchema = z.object({
   exchangeRate: z.coerce.number(),
   price: z.coerce.number(),
   purchaseDate: z.string(),
-  employee: z.string(),
+  employee: z.string({
+    required_error: 'Please select an employee.',
+  }),
   project: z.string(),
   expenseCategory: z.string(),
   purchasedFrom: z.string(),
   bankAccount: z.string(),
-  description:z.string(),
+  description: z.string(),
 });
 export type estimatesType = z.infer<typeof estimatesSchema>;
