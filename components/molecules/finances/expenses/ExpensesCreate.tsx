@@ -73,8 +73,8 @@ const ExpensesCreate = () => {
     defaultValues: {
       itemName: '',
       currency: 'mkd',
-      exchangeRate: 1,
-      price: 1,
+      // exchangeRate: 1,
+      // price: 1,
       purchaseDate: '',
       employee: '',
       project: '',
@@ -94,8 +94,15 @@ const ExpensesCreate = () => {
   };
 
   return (
-    <>
-      <div>Estimates Create</div>
+    <div className="flex flex-col gap-4 w-full">
+      <div>
+        <h2 className="text-3xl font-bold text-blue-500">
+          Estimates
+        </h2>
+        <h3 className="font-normal text-lg text-gray-900">
+          Add an estimate
+        </h3>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -540,7 +547,7 @@ const ExpensesCreate = () => {
           </Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
 
