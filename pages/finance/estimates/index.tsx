@@ -6,41 +6,42 @@ import {
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
-import RightModal from '../../../components/atoms/RightModal'
+import RightModal from '@/components/atoms/RightModal';
 import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
 const Estimates = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
   return (
     <>
-    <section className="flex flex-col gap-5">
-      <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2" onClick={()=>setIsModalOpen(true)}>
-          <Plus size={20} /> <span>Create Estimate</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2">
-          <Layers size={20} /> <span>Estimate Template</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2">
-          <FileInput /> <span>Export</span>
-        </Button>
-      </div>
-      <DataTable data={data} columns={financeColumnDef} />
-    </section>
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="destructive"
+            className="flex gap-2"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Plus size={20} /> <span>Create Estimate</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2">
+            <Layers size={20} /> <span>Estimate Template</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2">
+            <FileInput /> <span>Export</span>
+          </Button>
+        </div>
+        <DataTable data={data} columns={financeColumnDef} />
+      </section>
 
-<RightModal
-isModalOpen={isModalOpen}
-setIsModalOpen={setIsModalOpen}
->
-  <EstimatesCreate/>
-</RightModal>
+      <RightModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      >
+        <EstimatesCreate />
+      </RightModal>
     </>
   );
 };
-
-
+export default Estimates;
 
 const data: IInvoiceSchema[] = [
   {
@@ -114,5 +115,3 @@ const data: IInvoiceSchema[] = [
     generatedBy: 'User 5',
   },
 ];
-
-export default Estimates;

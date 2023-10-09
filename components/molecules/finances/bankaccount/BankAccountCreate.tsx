@@ -63,7 +63,7 @@ const BankAccountCreate = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full ">
+    <div className="flex flex-col gap-4 w-full">
       <div>
         <h2 className="text-3xl font-bold text-blue-500">
           Bank Account

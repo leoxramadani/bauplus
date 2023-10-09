@@ -295,7 +295,7 @@ const Sidebar = ({
         </SidebarContext.Provider>
         <div className="border-t border-slate-600 absolute bottom-0 left-0 w-full h-max bg-inherit">
           {!isWindowSmall && status === 'authenticated' ? (
-            <div className='hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer'>
+            <div className="hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer">
               <Image
                 src={`https://ui-avatars.com/api/?name=${
                   session.user.firstName.charAt(0) +
