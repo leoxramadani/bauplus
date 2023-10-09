@@ -1,11 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
+import RightModal from '@/components/atoms/RightModal';
+
 import {
   financeColumnDef,
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import CreatePayment from '@/components/molecules/finances/payments/CreatePayment';
 const Payments = () => {
   const data: IInvoiceSchema[] = [
     {
@@ -80,10 +83,12 @@ const Payments = () => {
     },
   ];
 
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2">
+        <Button onClick={()=> setOpenModal(true)} variant="destructive" className="flex gap-2">
           <Plus size={20} /> <span>Add Payment</span>
         </Button>
         <Button variant="destructive" className="flex gap-2">
@@ -94,6 +99,13 @@ const Payments = () => {
         </Button>
       </div>
       <DataTable data={data} columns={financeColumnDef} />
+
+      <RightModal
+        isModalOpen={openModal}
+        setIsModalOpen={setOpenModal}
+      >
+        <CreatePayment />
+      </RightModal>
     </section>
   );
 };

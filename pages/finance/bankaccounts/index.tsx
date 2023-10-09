@@ -9,7 +9,6 @@ import {
 } from '@/lib/schema/Finance/finance';
 import RightModal from '@/components/atoms/RightModal';
 import { Button } from '@/components/ui/button';
-import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 const BankAccounts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
