@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import {
-  estimatesSchema,
-  estimatesType,
-} from '@/lib/schema/Finance/estimates';
+  expensesSchema,
+  expensesType,
+} from '@/lib/schema/Finance/expenses';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -68,8 +68,8 @@ const ExpensesCreate = () => {
   //   resolver:zodResolver(estimatesSchema)
   // })
 
-  const form = useForm<estimatesType>({
-    resolver: zodResolver(estimatesSchema),
+  const form = useForm<expensesType>({
+    resolver: zodResolver(expensesSchema),
     defaultValues: {
       itemName: '',
       currency: 'mkd',
@@ -85,7 +85,7 @@ const ExpensesCreate = () => {
     },
   });
 
-  const onSubmit = useCallback(async (data: estimatesType) => {
+  const onSubmit = useCallback(async (data: expensesType) => {
     console.log(data);
   }, []);
 
@@ -96,11 +96,9 @@ const ExpensesCreate = () => {
   return (
     <div className="flex flex-col gap-4 w-full">
       <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Estimates
-        </h2>
+        <h2 className="text-3xl font-bold text-blue-500">Expenses</h2>
         <h3 className="font-normal text-lg text-gray-900">
-          Add an estimate
+          Add an expense
         </h3>
       </div>
       <Form {...form}>
@@ -239,17 +237,17 @@ const ExpensesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            ' justify-between flex items-center gap-4',
+                            'w-full flex items-center gap-1 justify-between',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           {field.value
                             ? employees.find(
                                 (employee) =>
                                   employee.value === field.value
                               )?.label
                             : 'Select employee'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -309,17 +307,17 @@ const ExpensesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            ' justify-between flex items-center gap-4',
+                            'w-full flex items-center gap-1 justify-between',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           {field.value
                             ? projects.find(
                                 (project) =>
                                   project.value === field.value
                               )?.label
                             : 'Select project'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -377,11 +375,10 @@ const ExpensesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            ' justify-between flex items-center gap-4',
+                            'w-full flex items-center gap-1 justify-between',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           {field.value
                             ? expenseCategories.find(
                                 (expenseCategory) =>
@@ -389,6 +386,7 @@ const ExpensesCreate = () => {
                                   field.value
                               )?.label
                             : 'Select category'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -466,17 +464,17 @@ const ExpensesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            ' justify-between flex items-center gap-4',
+                            'w-full flex items-center gap-1 justify-between',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           {field.value
                             ? bankAccounts.find(
                                 (bankAccount) =>
                                   bankAccount.value === field.value
                               )?.label
                             : 'Select account'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>

@@ -7,7 +7,7 @@ import {
 } from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import RightModal from '@/components/atoms/RightModal';
-import EstimatesCreate from '@/components/molecules/finances/expenses/ExpensesCreate';
+import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
 const Estimates = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
