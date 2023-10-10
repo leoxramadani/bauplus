@@ -8,22 +8,52 @@ import {
   employeeSchema,
   EmployeeType,
 } from '@/lib/schema/employee/employee';
+import { useQuery } from '@tanstack/react-query';
 import { FileInput, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const Employees = () => {
+  const [employeeData, setEmployeeData] = useState<any>();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { data, isLoading, isError, error }: any = useData(
-    ['employees'],
-    GET_ALL_EMPLOYEES
-  );
-  useEffect(() => {
-    console.log('Employees-a->\n', data);
 
-    if (isError) {
-      console.log('Error from query:', isError);
+  // const { data, isLoading, isError, error }: any = useData(
+  //   ['employees'],
+  //   GET_ALL_EMPLOYEES
+  // );
+  // useEffect(() => {
+  //   console.log('Employees-a->\n', data);
+
+  //   if (isError) {
+  //     console.log('Error from query:', isError);
+  //   }
+  // }, [data]);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch(GET_ALL_EMPLOYEES, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            console.log('error->', response);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setEmployeeData(data);
+          console.log('employeeData->', data);
+        })
+        .catch((error) => {
+          console.log('error in fetch funx->', error);
+        });
+
+      return response;
     }
-  }, [data]);
+    getData();
+  }, []);
 
   return (
     <>
@@ -41,14 +71,13 @@ const Employees = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {isLoading && <p>Loading...</p>}
-
-        {isError && <p className="error">{error.message}</p>}
-        {/* <DataTable
-          // data={employeeData}
-          columns={employeeDef}
-          searchVal="estimateNumber"
-        /> */}
+        {employeeData && (
+          <DataTable
+            data={employeeData}
+            columns={employeeDef}
+            searchVal="estimateNumber"
+          />
+        )}
       </section>
 
       {/* <Modal
