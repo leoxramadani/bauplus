@@ -75,7 +75,7 @@ const Sidebar = ({
           : `max-w-[15rem] transition-all duration-[250ms]`
       }`}
     >
-      <nav className="relative h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-[500]">
+      <nav className="relative h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-50">
         <div className="p-3.5 justify-between items-center flex">
           {expanded && (
             <Link
@@ -295,7 +295,7 @@ const Sidebar = ({
         </SidebarContext.Provider>
         <div className="border-t border-slate-600 absolute bottom-0 left-0 w-full h-max bg-inherit">
           {!isWindowSmall && status === 'authenticated' ? (
-            <div className='hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer'>
+            <div className="hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer">
               <Image
                 src={`https://ui-avatars.com/api/?name=${
                   session.user.firstName.charAt(0) +
@@ -363,7 +363,7 @@ export function SidebarItem({
     <>
       <button
         onClick={handleClick}
-        className={`relative w-full flex items-center p-2 justify-start ${
+        className={`relative z-50 w-full flex items-center p-2 justify-start ${
           !isWindowSmall ? `my-2` : `my-1.5`
         } rounded-[0.6rem] cursor-pointer transition-colors group 
         ${
@@ -400,7 +400,7 @@ export function SidebarItem({
         {!expanded && (
           <div
             className={`
-                          absolute max-w-xs left-full rounded-md ml-1 bg-slate-500 text-white z-[500] px-2 py-1 flex items-center
+                          absolute max-w-xs left-full rounded-md ml-1 bg-slate-500 text-white px-2 py-1 flex items-center
                           invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
                       `}
           >
