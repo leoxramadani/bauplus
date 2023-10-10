@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
 export const expensesSchema = z.object({
+  id: z.string().optional(),
   itemName: z.string(),
   currency: z.string(),
   exchangeRate: z.coerce.number(),
@@ -30,6 +31,9 @@ export const expensesSchema = z.object({
 export type expensesType = z.infer<typeof expensesSchema>;
 
 export const expensesDef: ColumnDef<expensesType>[] = [
+  {
+    id: 'id',
+  },
   {
     id: 'select',
     header: ({ table }) => (
@@ -101,7 +105,7 @@ export const expensesDef: ColumnDef<expensesType>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original;
+      const expenses = row.original;
 
       return (
         <DropdownMenu>
@@ -115,10 +119,10 @@ export const expensesDef: ColumnDef<expensesType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(payment.itemName)
+                navigator.clipboard.writeText(expenses.id!)
               }
             >
-              Copy item name
+              Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>

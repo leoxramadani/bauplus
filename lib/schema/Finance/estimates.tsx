@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
 export const estimatesSchema = z.object({
+  id: z.string().optional(),
   estimateNumber: z.coerce.number(),
   validTill: z.date({
     required_error: 'A date is required.',
@@ -35,6 +36,9 @@ export const estimatesSchema = z.object({
 export type estimatesType = z.infer<typeof estimatesSchema>;
 
 export const estimatesDef: ColumnDef<estimatesType>[] = [
+  {
+    id: 'id',
+  },
   {
     id: 'select',
     header: ({ table }) => (
@@ -96,7 +100,7 @@ export const estimatesDef: ColumnDef<estimatesType>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original;
+      const estimate = row.original;
 
       return (
         <DropdownMenu>
@@ -110,9 +114,7 @@ export const estimatesDef: ColumnDef<estimatesType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(
-                  payment.estimateNumber.toString()
-                )
+                navigator.clipboard.writeText(estimate.id!)
               }
             >
               Copy payment ID

@@ -45,6 +45,7 @@ export default Expenses;
 
 const expensesData: expensesType[] = [
   {
+    id: '1',
     itemName: 'Item 1',
     currency: 'USD',
     exchangeRate: 1.25,
@@ -58,6 +59,7 @@ const expensesData: expensesType[] = [
     description: 'Expense 1 description',
   },
   {
+    id: '2',
     itemName: 'Item 2',
     currency: 'EUR',
     exchangeRate: 0.95,
@@ -71,6 +73,7 @@ const expensesData: expensesType[] = [
     description: 'Expense 2 description',
   },
   {
+    id: '3',
     itemName: 'Item 3',
     currency: 'GBP',
     exchangeRate: 0.8,
