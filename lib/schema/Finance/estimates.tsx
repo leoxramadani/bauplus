@@ -22,3 +22,40 @@ export const estimatesSchema = z.object({
   // bankAccount: z.string(),
 });
 export type estimatesType = z.infer<typeof estimatesSchema>;
+
+export const estimatesDef: ColumnDef<estimatesType>[] = [
+  {
+    accessorKey: 'estimateNumber',
+    header: 'Estimate Number',
+  },
+  {
+    accessorKey: 'validTill',
+    header: 'Valid Till',
+    cell({ row }) {
+      const formattedDate = new Date(
+        row.getValue('validTill')
+      ).toLocaleDateString('en-GB');
+      return <div>{formattedDate}</div>;
+    },
+  },
+  {
+    accessorKey: 'currency',
+    header: 'Currency',
+  },
+  {
+    accessorKey: 'client',
+    header: 'Client',
+  },
+  {
+    accessorKey: 'calculateTax',
+    header: 'Calculate Tax',
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+  },
+  {
+    accessorKey: 'product',
+    header: 'Product',
+  },
+];

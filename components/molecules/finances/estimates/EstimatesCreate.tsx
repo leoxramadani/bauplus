@@ -336,6 +336,7 @@ const EstimatesCreate = () => {
               </FormItem>
             )}
           />
+          <hr />
           <Button
             className="w-max flex flex-none"
             variant="outline"

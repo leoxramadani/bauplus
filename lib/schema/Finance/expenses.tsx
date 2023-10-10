@@ -17,3 +17,50 @@ export const expensesSchema = z.object({
   description: z.string(),
 });
 export type expensesType = z.infer<typeof expensesSchema>;
+
+export const expensesDef: ColumnDef<expensesType>[] = [
+  {
+    accessorKey: 'itemName',
+    header: 'Item Name',
+  },
+  {
+    accessorKey: 'currency',
+    header: 'Currency',
+  },
+  {
+    accessorKey: 'exchangeRate',
+    header: 'Exchange Rate',
+  },
+  {
+    accessorKey: 'price',
+    header: 'Price',
+  },
+  {
+    accessorKey: 'purchaseDate',
+    header: 'Purchase Date',
+  },
+  {
+    accessorKey: 'employee',
+    header: 'Employee',
+  },
+  {
+    accessorKey: 'project',
+    header: 'Project',
+  },
+  {
+    accessorKey: 'expenseCategory',
+    header: 'Expense Category',
+  },
+  {
+    accessorKey: 'purchasedFrom',
+    header: 'Purchased From',
+  },
+  {
+    accessorKey: 'bankAccount',
+    header: 'Bank Account',
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+  },
+];
