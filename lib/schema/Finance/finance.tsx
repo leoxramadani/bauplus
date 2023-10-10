@@ -15,6 +15,7 @@ export const invoiceSchema = z.object({
   shippingAddress: z.string(),
   generatedBy: z.string(),
 });
+
 export type IInvoiceSchema = z.infer<typeof invoiceSchema>;
 
 export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
@@ -91,3 +92,12 @@ export const bankAccountSchema = z.object({
   status: z.string(),
 });
 export type IBankAccount = z.infer<typeof bankAccountSchema>;
+
+export const bankAccountSchemaCash = z.object({
+  cashAccountHolderName: z.string(),
+  cashCurrency: z.string(),
+  cashContactNumber: z.string(),
+  cashOpeningBalance: z.string(),
+  cashStatus: z.string(),
+});
+export type IBankAccountCash = z.infer<typeof bankAccountSchemaCash>;

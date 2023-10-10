@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import { ColumnDef } from '@tanstack/react-table';
-import { Checkbox } from '@radix-ui/react-checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,30 +12,25 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
-export const estimatesSchema = z.object({
+export const expensesSchema = z.object({
   id: z.string().optional(),
-  estimateNumber: z.coerce.number(),
-  validTill: z.date({
-    required_error: 'A date is required.',
-  }),
+  itemName: z.string(),
   currency: z.string(),
-  client: z.string(),
-  calculateTax: z.string(),
+  exchangeRate: z.coerce.number(),
+  price: z.coerce.number(),
+  purchaseDate: z.string(),
+  employee: z.string({
+    required_error: 'Please select an employee.',
+  }),
+  project: z.string(),
+  expenseCategory: z.string(),
+  purchasedFrom: z.string(),
+  bankAccount: z.string(),
   description: z.string(),
-  product: z.string(),
-
-  // purchaseDate: z.string(),
-  // employee: z.string({
-  //   required_error: 'Please select an employee.',
-  // }),
-  // project: z.string(),
-  // expenseCategory: z.string(),
-  // purchasedFrom: z.string(),
-  // bankAccount: z.string(),
 });
-export type estimatesType = z.infer<typeof estimatesSchema>;
+export type expensesType = z.infer<typeof expensesSchema>;
 
-export const estimatesDef: ColumnDef<estimatesType>[] = [
+export const expensesDef: ColumnDef<expensesType>[] = [
   {
     id: 'id',
   },
@@ -64,44 +59,54 @@ export const estimatesDef: ColumnDef<estimatesType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'estimateNumber',
-    header: 'Estimate Number',
-  },
-  {
-    accessorKey: 'validTill',
-    header: 'Valid Till',
-    cell({ row }) {
-      const formattedDate = new Date(
-        row.getValue('validTill')
-      ).toLocaleDateString('en-GB');
-      return <div>{formattedDate}</div>;
-    },
+    accessorKey: 'itemName',
+    header: 'Item Name',
   },
   {
     accessorKey: 'currency',
     header: 'Currency',
   },
   {
-    accessorKey: 'client',
-    header: 'Client',
+    accessorKey: 'exchangeRate',
+    header: 'Exchange Rate',
   },
   {
-    accessorKey: 'calculateTax',
-    header: 'Calculate Tax',
+    accessorKey: 'price',
+    header: 'Price',
+  },
+  {
+    accessorKey: 'purchaseDate',
+    header: 'Purchase Date',
+  },
+  {
+    accessorKey: 'employee',
+    header: 'Employee',
+  },
+  {
+    accessorKey: 'project',
+    header: 'Project',
+  },
+  {
+    accessorKey: 'expenseCategory',
+    header: 'Expense Category',
+  },
+  {
+    accessorKey: 'purchasedFrom',
+    header: 'Purchased From',
+  },
+  {
+    accessorKey: 'bankAccount',
+    header: 'Bank Account',
   },
   {
     accessorKey: 'description',
     header: 'Description',
   },
   {
-    accessorKey: 'product',
-    header: 'Product',
-  },
-  {
     id: 'actions',
     cell: ({ row }) => {
-      const estimate = row.original;
-
+      const expenses = row.original;
+      const editId = expenses.id!;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -117,13 +122,15 @@ export const estimatesDef: ColumnDef<estimatesType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(estimate.id!)
+                navigator.clipboard.writeText(expenses.id!)
               }
             >
-              Copy payment ID
+              Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => null}>
+              Edit row
+            </DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

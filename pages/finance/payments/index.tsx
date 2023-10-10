@@ -1,11 +1,18 @@
-import { Button } from '@/components/ui/button';
+"use client"
+// import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
+import RightModal from '@/components/atoms/RightModal';
+
 import {
   financeColumnDef,
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import CreatePayment from '@/components/molecules/finances/payments/CreatePayment';
+// import Modal from '@/components/atoms/ModalOld';
+import Modal from '@/components/atoms/Modal';
+import Button from '@/components/Button';
 const Payments = () => {
   const data: IInvoiceSchema[] = [
     {
@@ -80,20 +87,38 @@ const Payments = () => {
     },
   ];
 
+
   return (
-    <section className="flex flex-col gap-5">
+    <section className="z-0 flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2">
-          <Plus size={20} /> <span>Add Payment</span>
-        </Button>
-        <Button variant="destructive" className="flex gap-2">
+      <Modal>
+        <Modal.Trigger asChild>
+        <Button className='button flex gap-1 justify-center items-center' >
+            <Plus size={20}/> Add Payment
+          </Button>
+        </Modal.Trigger>
+        <Modal.Content title='Add Payment' description='Fill all the fields to add a payment' >
+         <CreatePayment />
+        </Modal.Content>
+      </Modal>
+        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white">
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button variant="outline" className="flex gap-2">
+        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white ">
           <FileInput /> <span>Export</span>
         </Button>
       </div>
       <DataTable data={data} columns={financeColumnDef} />
+
+      {/* <Modal
+        open={openModal}
+      setOpen={setOpenModal}
+      hideButton='hidden'
+      >
+        <CreatePayment />
+        <p>hello</p>
+      </Modal> */}
+
     </section>
   );
 };

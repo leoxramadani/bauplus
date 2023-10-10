@@ -2,117 +2,90 @@ import { Button } from '@/components/ui/button';
 import { FileInput, Plus, Layers } from 'lucide-react';
 import React, { useState } from 'react';
 import {
-  financeColumnDef,
-  IInvoiceSchema,
-} from '@/lib/schema/Finance/finance';
+  estimatesDef,
+  estimatesType,
+} from '@/lib/schema/Finance/estimates';
 import { DataTable } from '@/components/molecules/table/DataTable';
-import RightModal from '../../../components/atoms/RightModal'
+import RightModal from '@/components/atoms/RightModal';
 import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
+import Modal from '@/components/Modal';
 const Estimates = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <>
-    <section className="flex flex-col gap-5">
-      <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2" onClick={()=>setIsModalOpen(true)}>
-          <Plus size={20} /> <span>Create Estimate</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2">
-          <Layers size={20} /> <span>Estimate Template</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2">
-          <FileInput /> <span>Export</span>
-        </Button>
-      </div>
-      <DataTable data={data} columns={financeColumnDef} />
-    </section>
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="destructive"
+            className="flex gap-2"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <Plus size={20} /> <span>Create Estimate</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2">
+            <Layers size={20} /> <span>Estimate Template</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2">
+            <FileInput /> <span>Export</span>
+          </Button>
+        </div>
+        <DataTable
+          data={estimatesData}
+          columns={estimatesDef}
+          searchVal="estimateNumber"
+        />
+      </section>
 
-<RightModal
-isModalOpen={isModalOpen}
-setIsModalOpen={setIsModalOpen}
->
-  <EstimatesCreate/>
-</RightModal>
+      <RightModal
+        isModalOpen={isCreateModalOpen}
+        setIsModalOpen={setIsCreateModalOpen}
+      >
+        <EstimatesCreate />
+      </RightModal>
+
+      <Modal
+        openModalOutside={isEditModalOpen}
+        setOpenModalOutside={setIsEditModalOpen}
+      >
+        a
+      </Modal>
     </>
   );
 };
-
-
-
-const data: IInvoiceSchema[] = [
-  {
-    invoiceNumber: 1,
-    invoiceDate: new Date('2023-01-15'),
-    dueDate: new Date('2023-02-15'),
-    currency: 'USD',
-    exchangeRate: '1.25',
-    client: 'Client A',
-    project: 'Project X',
-    calculateTax: 'Yes',
-    bankAccount: 'Account 12345',
-    billingAddress: '123 Main St, City, Country',
-    shippingAddress: '456 Elm St, City, Country',
-    generatedBy: 'User 1',
-  },
-  {
-    invoiceNumber: 2,
-    invoiceDate: new Date('2023-02-20'),
-    dueDate: new Date('2023-03-20'),
-    currency: 'EUR',
-    exchangeRate: '0.95',
-    client: 'Client B',
-    project: 'Project Y',
-    calculateTax: 'No',
-    bankAccount: 'Account 67890',
-    billingAddress: '789 Oak St, City, Country',
-    shippingAddress: '101 Pine St, City, Country',
-    generatedBy: 'User 2',
-  },
-  {
-    invoiceNumber: 3,
-    invoiceDate: new Date('2023-03-10'),
-    dueDate: new Date('2023-04-10'),
-    currency: 'GBP',
-    exchangeRate: '0.80',
-    client: 'Client C',
-    project: 'Project Z',
-    calculateTax: 'Yes',
-    bankAccount: 'Account 54321',
-    billingAddress: '321 Elm St, City, Country',
-    shippingAddress: '789 Oak St, City, Country',
-    generatedBy: 'User 3',
-  },
-  {
-    invoiceNumber: 4,
-    invoiceDate: new Date('2023-04-05'),
-    dueDate: new Date('2023-05-05'),
-    currency: 'CAD',
-    exchangeRate: '1.10',
-    client: 'Client D',
-    project: 'Project W',
-    calculateTax: 'No',
-    bankAccount: 'Account 98765',
-    billingAddress: '567 Maple St, City, Country',
-    shippingAddress: '789 Birch St, City, Country',
-    generatedBy: 'User 4',
-  },
-  {
-    invoiceNumber: 5,
-    invoiceDate: new Date('2023-05-20'),
-    dueDate: new Date('2023-06-20'),
-    currency: 'AUD',
-    exchangeRate: '0.70',
-    client: 'Client E',
-    project: 'Project V',
-    calculateTax: 'Yes',
-    bankAccount: 'Account 24680',
-    billingAddress: '901 Cedar St, City, Country',
-    shippingAddress: '123 Redwood St, City, Country',
-    generatedBy: 'User 5',
-  },
-];
-
 export default Estimates;
+
+const estimatesData: estimatesType[] = [
+  {
+    id: '1',
+    estimateNumber: 1,
+    validTill: new Date('2023-01-15'),
+    currency: 'USD',
+    client: 'Client A',
+    calculateTax: 'Yes',
+    description: 'Estimate 1 description',
+    product: 'Product 1',
+  },
+  {
+    id: '2',
+    estimateNumber: 2,
+    validTill: new Date('2023-02-20'),
+    currency: 'EUR',
+    client: 'Client B',
+    calculateTax: 'No',
+    description: 'Estimate 2 description',
+    product: 'Product 2',
+  },
+  {
+    id: '3',
+    estimateNumber: 3,
+    validTill: new Date('2023-03-10'),
+    currency: 'GBP',
+    client: 'Client C',
+    calculateTax: 'Yes',
+    description: 'Estimate 3 description',
+    product: 'Product 3',
+  },
+  // Add more estimate data here as needed
+];

@@ -8,11 +8,14 @@ import {
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
 import RightModal from '@/components/atoms/RightModal';
-import { Button } from '@/components/ui/button';
-import Modal from '@/components/atoms/Modal';
+// import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import Modal from '@/components/atoms/Modal';
+import Button from '@/components/Button';
+import ModalOld from '@/components/atoms/ModalOld';
+// import Modal from '@/components/atoms/ModalOld';
 const BankAccounts = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -86,34 +89,29 @@ const BankAccounts = () => {
     },
   ];
 
+  const [open, setOpen] = useState(false)
   return (
     <>
       <section className="flex flex-col gap-5">
-        <div className="flex flex-row gap-2">
-          <Button
-            variant="destructive"
-            className="flex gap-2"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Plus size={20} /> <span>Add Bank Account</span>
+      <div className="relative flex flex-row gap-2">
+      <Modal>
+        <Modal.Trigger asChild>
+          <Button className='button flex gap-1 justify-center items-center'>
+            <Plus size={20}/> Add Bank Account
           </Button>
-          <Button variant="outline" className="flex gap-2">
-            <FileInput />
-            <span>Export</span>
-          </Button>
-        </div>
+        </Modal.Trigger>
+        <Modal.Content title='Add Bank Account' description='Fill all the fields to add a bank account' >
+         <BankAccountCreate />
+        </Modal.Content>
+      </Modal>
+       
+        <Button  className=" button-secondary flex gap-1 justify-center items-center ">
+          <FileInput size={20} /> <span>Export</span>
+        </Button>
+      </div>
         <DataTable data={data} columns={financeColumnDef} />
       </section>
 
-      <RightModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      >
-        <BankAccountCreate />
-      </RightModal>
-      {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-      asda
-    </Modal> */}
     </>
   );
 };
