@@ -86,7 +86,7 @@
 
   .button {
     @apply cursor-pointer rounded-sm bg-blue-500
-    border-2 border-blue-500
+     
             px-3 py-2 text-center text-base font-normal text-white
             
             transition-all hover:bg-blue-600

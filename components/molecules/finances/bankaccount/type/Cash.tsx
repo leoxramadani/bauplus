@@ -1,19 +1,26 @@
 import { Button } from '@/components/ui/button'
+import Btn from '@/components/Button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { IBankAccount, IBankAccountCash, bankAccountSchema, bankAccountSchemaCash } from '@/lib/schema/Finance/finance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 
 const Cash = () => {
+  const [test, isTest] = useState(false)
     const form = useForm<IBankAccountCash>({
         resolver: zodResolver(bankAccountSchemaCash),
       });
 
       function onSubmitCash(data: IBankAccountCash) {
-        console.log('test');
+        isTest(true)
+        setTimeout(() => {
+          console.log('test');
+          isTest(false)
+
+        }, 3000);
       }
   return (
     <Form {...form}>
@@ -139,9 +146,9 @@ const Cash = () => {
             />
           </div>
 
-          <Button className="w-max" type="submit">
+          <Btn isProgress={test} className="w-max" type="submit" disabled={test}>
             Submit
-          </Button>
+          </Btn>
         </form>
       </Form>
   )

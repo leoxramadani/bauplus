@@ -8,9 +8,11 @@ import {
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
 import RightModal from '@/components/atoms/RightModal';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import Modal from '@/components/atoms/Modal';
+import Button from '@/components/Button';
+import ModalOld from '@/components/atoms/ModalOld';
 // import Modal from '@/components/atoms/ModalOld';
 const BankAccounts = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -87,45 +89,29 @@ const BankAccounts = () => {
     },
   ];
 
+  const [open, setOpen] = useState(false)
   return (
     <>
       <section className="flex flex-col gap-5">
-        <div className="flex flex-row gap-2">
-        <Modal>
-        <Modal.Trigger>
-        <Button
-            variant="destructive"
-            className="flex gap-2"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Plus size={20} /> <span>Add Bank Account</span>
+      <div className="relative flex flex-row gap-2">
+      <Modal>
+        <Modal.Trigger asChild>
+          <Button className='button flex gap-1 justify-center items-center'>
+            <Plus size={20}/> Add Bank Account
           </Button>
         </Modal.Trigger>
-        <Modal.Content>
-          <BankAccountCreate />
+        <Modal.Content title='Add Bank Account' description='Fill all the fields to add a bank account' >
+         <BankAccountCreate />
         </Modal.Content>
       </Modal>
-          <Button variant="outline" className="flex gap-2">
-            <FileInput />
-            <span>Export</span>
-          </Button>
-        </div>
+       
+        <Button  className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white ">
+          <FileInput /> <span>Export</span>
+        </Button>
+      </div>
         <DataTable data={data} columns={financeColumnDef} />
       </section>
 
-      {/* <Modal
-       setOpen={setIsModalOpen}
-       open={isModalOpen}
-       buttonStyle='hidden'
-      >
-        <BankAccountCreate />
-      </Modal> */}
-
-      
-
-      {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
-      asda
-    </Modal> */}
     </>
   );
 };

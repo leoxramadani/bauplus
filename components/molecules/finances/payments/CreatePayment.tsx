@@ -106,7 +106,7 @@ const form = useForm<IPayment>({
   ] as const
 
   return (
-    <div className="flex flex-col gap-4 w-full  ">
+    <div className="z-0 flex flex-col gap-4 w-full  ">
       {/* <div>
         <h2 className="text-3xl font-bold text-blue-500">
             Add Payment
@@ -206,9 +206,9 @@ const form = useForm<IPayment>({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[250px] p-0 ">
+                <PopoverContent className="w-[250px] p-0 relative z-50 ">
                   <Command className='relative'>
-                    <CommandInput placeholder="Search invoice..." />
+                    <CommandInput placeholder="Search invoice..." /> 
                     <CommandEmpty>No invoice found.</CommandEmpty>
                     <CommandGroup>
                       {invoice.map((invoice) => (
