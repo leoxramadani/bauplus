@@ -49,7 +49,7 @@ export default Expenses;
 
 const expensesData: expensesType[] = [
   {
-    id: '1',
+    id: 'valon ahmeti',
     itemName: 'Item 1',
     currency: 'USD',
     exchangeRate: 1.25,

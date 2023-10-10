@@ -8,8 +8,10 @@ import {
 import { DataTable } from '@/components/molecules/table/DataTable';
 import RightModal from '@/components/atoms/RightModal';
 import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
+import Modal from '@/components/Modal';
 const Estimates = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <>
@@ -18,7 +20,7 @@ const Estimates = () => {
           <Button
             variant="destructive"
             className="flex gap-2"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus size={20} /> <span>Create Estimate</span>
           </Button>
@@ -37,11 +39,18 @@ const Estimates = () => {
       </section>
 
       <RightModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isCreateModalOpen}
+        setIsModalOpen={setIsCreateModalOpen}
       >
         <EstimatesCreate />
       </RightModal>
+
+      <Modal
+        openModalOutside={isEditModalOpen}
+        setOpenModalOutside={setIsEditModalOpen}
+      >
+        a
+      </Modal>
     </>
   );
 };

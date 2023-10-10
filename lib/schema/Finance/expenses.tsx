@@ -106,11 +106,14 @@ export const expensesDef: ColumnDef<expensesType>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const expenses = row.original;
-
+      const editId = expenses.id!;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 flex items-center justify-center"
+            >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -125,7 +128,9 @@ export const expensesDef: ColumnDef<expensesType>[] = [
               Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => null}>
+              Edit row
+            </DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
