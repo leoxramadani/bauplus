@@ -75,7 +75,7 @@ const Employees = () => {
           <DataTable
             data={employeeData}
             columns={employeeDef}
-            searchVal="estimateNumber"
+            searchVal="firstName"
           />
         )}
       </section>
