@@ -106,15 +106,15 @@ const form = useForm<IPayment>({
   ] as const
 
   return (
-    <div className="flex flex-col gap-4 w-full ">
-      <div>
+    <div className="flex flex-col gap-4 w-full  ">
+      {/* <div>
         <h2 className="text-3xl font-bold text-blue-500">
             Add Payment
         </h2>
         <h3 className="font-normal text-lg text-gray-900">
             Payment Details
         </h3>
-      </div>
+      </div> */}
 
       <Form {...form} >
             <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
@@ -206,8 +206,8 @@ const form = useForm<IPayment>({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[250px] p-0">
-                  <Command>
+                <PopoverContent className="w-[250px] p-0 ">
+                  <Command className='relative'>
                     <CommandInput placeholder="Search invoice..." />
                     <CommandEmpty>No invoice found.</CommandEmpty>
                     <CommandGroup>
@@ -381,7 +381,7 @@ const form = useForm<IPayment>({
 
               <FormControl className="relative">
                 <Input
-                  placeholder="Enter account number"
+                  placeholder="Enter exchange rate"
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   type="number"
                   autoComplete="off"
@@ -403,7 +403,7 @@ const form = useForm<IPayment>({
 
               <FormControl className="relative">
                 <Input
-                  placeholder="Enter account number"
+                  placeholder="Enter transaction id"
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   type="number"
                   autoComplete="off"

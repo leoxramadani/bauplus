@@ -10,8 +10,10 @@ import {
 import RightModal from '@/components/atoms/RightModal';
 import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import Modal from '@/components/atoms/Modal';
+// import Modal from '@/components/atoms/ModalOld';
 const BankAccounts = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -89,13 +91,20 @@ const BankAccounts = () => {
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Button
+        <Modal>
+        <Modal.Trigger>
+        <Button
             variant="destructive"
             className="flex gap-2"
             onClick={() => setIsModalOpen(true)}
           >
             <Plus size={20} /> <span>Add Bank Account</span>
           </Button>
+        </Modal.Trigger>
+        <Modal.Content>
+          <BankAccountCreate />
+        </Modal.Content>
+      </Modal>
           <Button variant="outline" className="flex gap-2">
             <FileInput />
             <span>Export</span>
@@ -104,12 +113,15 @@ const BankAccounts = () => {
         <DataTable data={data} columns={financeColumnDef} />
       </section>
 
-      <RightModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+      {/* <Modal
+       setOpen={setIsModalOpen}
+       open={isModalOpen}
+       buttonStyle='hidden'
       >
         <BankAccountCreate />
-      </RightModal>
+      </Modal> */}
+
+      
 
       {/* <Modal open={isModalOpen} setOpen={setIsModalOpen}>
       asda
