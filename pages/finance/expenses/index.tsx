@@ -28,7 +28,11 @@ const Expenses = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        <DataTable data={expensesData} columns={expensesDef} />
+        <DataTable
+          data={expensesData}
+          columns={expensesDef}
+          searchVal="itemName"
+        />
       </section>
 
       <RightModal
@@ -45,6 +49,7 @@ export default Expenses;
 
 const expensesData: expensesType[] = [
   {
+    id: 'valon ahmeti',
     itemName: 'Item 1',
     currency: 'USD',
     exchangeRate: 1.25,
@@ -58,6 +63,7 @@ const expensesData: expensesType[] = [
     description: 'Expense 1 description',
   },
   {
+    id: '2',
     itemName: 'Item 2',
     currency: 'EUR',
     exchangeRate: 0.95,
@@ -71,6 +77,7 @@ const expensesData: expensesType[] = [
     description: 'Expense 2 description',
   },
   {
+    id: '3',
     itemName: 'Item 3',
     currency: 'GBP',
     exchangeRate: 0.8,

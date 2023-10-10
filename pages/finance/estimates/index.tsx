@@ -1,17 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { FileInput, Plus, Layers } from 'lucide-react';
 import React, { useState } from 'react';
-
 import {
   estimatesDef,
   estimatesType,
 } from '@/lib/schema/Finance/estimates';
-
 import { DataTable } from '@/components/molecules/table/DataTable';
 import RightModal from '@/components/atoms/RightModal';
 import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
+import Modal from '@/components/Modal';
 const Estimates = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <>
@@ -20,7 +20,7 @@ const Estimates = () => {
           <Button
             variant="destructive"
             className="flex gap-2"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus size={20} /> <span>Create Estimate</span>
           </Button>
@@ -31,15 +31,26 @@ const Estimates = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        <DataTable data={estimatesData} columns={estimatesDef} />
+        <DataTable
+          data={estimatesData}
+          columns={estimatesDef}
+          searchVal="estimateNumber"
+        />
       </section>
 
       <RightModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isCreateModalOpen}
+        setIsModalOpen={setIsCreateModalOpen}
       >
         <EstimatesCreate />
       </RightModal>
+
+      <Modal
+        openModalOutside={isEditModalOpen}
+        setOpenModalOutside={setIsEditModalOpen}
+      >
+        a
+      </Modal>
     </>
   );
 };
@@ -47,6 +58,7 @@ export default Estimates;
 
 const estimatesData: estimatesType[] = [
   {
+    id: '1',
     estimateNumber: 1,
     validTill: new Date('2023-01-15'),
     currency: 'USD',
@@ -56,6 +68,7 @@ const estimatesData: estimatesType[] = [
     product: 'Product 1',
   },
   {
+    id: '2',
     estimateNumber: 2,
     validTill: new Date('2023-02-20'),
     currency: 'EUR',
@@ -65,6 +78,7 @@ const estimatesData: estimatesType[] = [
     product: 'Product 2',
   },
   {
+    id: '3',
     estimateNumber: 3,
     validTill: new Date('2023-03-10'),
     currency: 'GBP',

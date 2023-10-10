@@ -29,11 +29,13 @@ import { DataTableViewOptions } from './DataTableViewOptions';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchVal?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  searchVal,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -65,18 +67,19 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className='flex flex-col gap-3 my-3'>
+    <div className="flex flex-col gap-3 my-3">
       <div className="flex items-center gap-3 justify-between">
         {/* Input for filterin are here */}
         <Input
           placeholder="Search"
           value={
-            (table.getColumn('email')?.getFilterValue() as string) ??
-            ''
+            (table
+              .getColumn(searchVal ?? 'id')
+              ?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
             table
-              .getColumn('email')
+              .getColumn(searchVal ?? 'id')
               ?.setFilterValue(event.target.value)
           }
           className="max-w-xl"
