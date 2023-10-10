@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import CreatePayment from "../molecules/finances/payments/CreatePayment"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { cn } from "@/lib/utils";
 
 
@@ -35,11 +35,15 @@ const ModalContent = ({title, children, description, className}: IModal) => {
       </DialogDescription>)}
     </DialogHeader>
     {children}
+
+  
+    
   </DialogContent>
     )
 }
 
 Modal.Trigger = DialogTrigger
 Modal.Content = ModalContent
+Modal.Close = DialogClose
 
 export default Modal

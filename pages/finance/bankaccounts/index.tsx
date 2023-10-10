@@ -11,8 +11,9 @@ import RightModal from '@/components/atoms/RightModal';
 // import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import Modal from '@/components/atoms/Modal';
-import Button from '@/components/Button';
+// import Button from '@/components/Button';
 import ModalOld from '@/components/atoms/ModalOld';
+import { Button } from '@/components/ui/button';
 // import Modal from '@/components/atoms/ModalOld';
 const BankAccounts = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -96,7 +97,7 @@ const BankAccounts = () => {
       <div className="relative flex flex-row gap-2">
       <Modal>
         <Modal.Trigger asChild>
-          <Button className='button flex gap-1 justify-center items-center'>
+          <Button variant="destructive" className='flex gap-1 justify-center items-center' >
             <Plus size={20}/> Add Bank Account
           </Button>
         </Modal.Trigger>
@@ -104,8 +105,7 @@ const BankAccounts = () => {
          <BankAccountCreate />
         </Modal.Content>
       </Modal>
-       
-        <Button  className=" button-secondary flex gap-1 justify-center items-center ">
+        <Button variant="outline" className="flex gap-1 justify-center items-center ">
           <FileInput size={20} /> <span>Export</span>
         </Button>
       </div>
