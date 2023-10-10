@@ -16,7 +16,6 @@ export const invoiceSchema = z.object({
   generatedBy: z.string(),
 });
 
-
 export type IInvoiceSchema = z.infer<typeof invoiceSchema>;
 
 export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
