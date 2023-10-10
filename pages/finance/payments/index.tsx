@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+"use client"
+// import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import RightModal from '@/components/atoms/RightModal';
@@ -11,6 +12,7 @@ import { DataTable } from '@/components/molecules/table/DataTable';
 import CreatePayment from '@/components/molecules/finances/payments/CreatePayment';
 // import Modal from '@/components/atoms/ModalOld';
 import Modal from '@/components/atoms/Modal';
+import Button from '@/components/Button';
 const Payments = () => {
   const data: IInvoiceSchema[] = [
     {
@@ -91,18 +93,17 @@ const Payments = () => {
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
       <Modal>
-        <Modal.Trigger><Button onClick={()=> setOpenModal(true)} variant="destructive" className="flex gap-2">
-          <Plus size={20} /> <span>Add Payment</span>
-        </Button>
+        <Modal.Trigger className='button flex gap-2 justify-center items-center'>
+            <Plus size={20}/> Add Payment
         </Modal.Trigger>
         <Modal.Content title='Add Payment' description='Fill all the fields to add a payment' >
          <CreatePayment />
         </Modal.Content>
       </Modal>
-        <Button variant="destructive" className="flex gap-2">
+        <Button isProgress={false} className=" button-secondary flex gap-2 text-blue-500">
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button variant="outline" className="flex gap-2">
+        <Button isProgress={false} className="flex gap-2 ">
           <FileInput /> <span>Export</span>
         </Button>
       </div>

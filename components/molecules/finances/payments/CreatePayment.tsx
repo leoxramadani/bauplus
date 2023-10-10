@@ -206,8 +206,8 @@ const form = useForm<IPayment>({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[250px] p-0">
-                  <Command>
+                <PopoverContent className="w-[250px] p-0 ">
+                  <Command className='relative'>
                     <CommandInput placeholder="Search invoice..." />
                     <CommandEmpty>No invoice found.</CommandEmpty>
                     <CommandGroup>
