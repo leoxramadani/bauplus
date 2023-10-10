@@ -105,8 +105,8 @@ const BankAccounts = () => {
         </Modal.Content>
       </Modal>
        
-        <Button  className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white ">
-          <FileInput /> <span>Export</span>
+        <Button  className=" button-secondary flex gap-1 justify-center items-center ">
+          <FileInput size={20} /> <span>Export</span>
         </Button>
       </div>
         <DataTable data={data} columns={financeColumnDef} />
