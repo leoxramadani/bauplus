@@ -28,7 +28,11 @@ const Expenses = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        <DataTable data={expensesData} columns={expensesDef} />
+        <DataTable
+          data={expensesData}
+          columns={expensesDef}
+          searchVal="itemName"
+        />
       </section>
 
       <RightModal
