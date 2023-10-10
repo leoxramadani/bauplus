@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import  Btn from '@/components/Button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -216,9 +217,9 @@ const Bank = () => {
         />
       </div>
 
-      <Button className="w-max" type="submit">
+      <Btn className="button w-max" type="submit">
         Submit
-      </Button>
+      </Btn>
     </form>
   </Form>
   )

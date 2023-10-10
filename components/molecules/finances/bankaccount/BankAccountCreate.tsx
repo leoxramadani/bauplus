@@ -63,15 +63,7 @@ const BankAccountCreate = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full ">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Bank Account
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-          Add a bank account
-        </h3>
-      </div>
+    <div className=" flex flex-col gap-4 w-full ">
       <div>
         <RadioGroup
           className="flex flex-row gap-4"
@@ -80,7 +72,7 @@ const BankAccountCreate = () => {
         >
           <div className="flex items-center flex-row gap-1">
             <RadioGroupItem
-              className="accent-pink-300 md:accent-pink-500 "
+              className=" justify-center items-center "
               value="Bank"
               id="Bank"
               onClick={() => setAccountType('Bank')}

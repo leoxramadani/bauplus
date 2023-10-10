@@ -87,23 +87,24 @@ const Payments = () => {
     },
   ];
 
-  const [openModal, setOpenModal] = useState(false);
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="z-0 flex flex-col gap-5">
       <div className="flex flex-row gap-2">
       <Modal>
-        <Modal.Trigger className='button flex gap-2 justify-center items-center'>
+        <Modal.Trigger asChild>
+        <Button className='button flex gap-1 justify-center items-center' >
             <Plus size={20}/> Add Payment
+          </Button>
         </Modal.Trigger>
         <Modal.Content title='Add Payment' description='Fill all the fields to add a payment' >
          <CreatePayment />
         </Modal.Content>
       </Modal>
-        <Button isProgress={false} className=" button-secondary flex gap-2 text-blue-500">
+        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white">
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button isProgress={false} className="flex gap-2 ">
+        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white ">
           <FileInput /> <span>Export</span>
         </Button>
       </div>
