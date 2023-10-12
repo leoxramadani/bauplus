@@ -9,6 +9,7 @@ import {
   employeeSchema,
   EmployeeType,
 } from '@/lib/schema/employee/employee';
+import axios from 'axios';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -32,28 +33,39 @@ const Employees = () => {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch(GET_ALL_EMPLOYEES, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            console.log('error->', response);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setEmployeeData(data);
-          console.log('employeeData->', data);
+      // const response = await fetch(GET_ALL_EMPLOYEES, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // })
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       console.log('error->', response);
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((data) => {
+      //     setEmployeeData(data);
+      //     console.log('employeeData->', data);
+      //   })
+      //   .catch((error) => {
+      //     console.log('error in fetch funx->', error);
+      //   });
+
+      // return response;
+
+      await axios
+        .get(GET_ALL_EMPLOYEES)
+        .then((res) => {
+          console.log('response -->', res);
+          setEmployeeData(res.data);
         })
         .catch((error) => {
-          console.log('error in fetch funx->', error);
+          console.log('error fetching employees->', error);
         });
-
-      return response;
     }
+
     getData();
   }, []);
 

@@ -14,7 +14,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 export const employeeSchema = z.object({
-  employeeId: z.string(),
+  employeeId: z.string().optional(),
   companyId: z.string(),
   firstName: z.string(),
   lastName: z.string(),
