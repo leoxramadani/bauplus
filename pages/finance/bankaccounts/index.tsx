@@ -91,11 +91,14 @@ const BankAccounts = () => {
   ];
 
   const [open, setOpen] = useState(false)
+
+
   return (
     <>
       <section className="flex flex-col gap-5">
       <div className="relative flex flex-row gap-2">
-      <Modal>
+
+      <Modal open={open} onOpenChange={setOpen}>
         <Modal.Trigger asChild>
           <Button variant="destructive" className='flex gap-1 justify-center items-center' >
             <Plus size={20}/> Add Bank Account
