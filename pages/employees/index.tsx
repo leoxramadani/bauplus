@@ -1,4 +1,5 @@
-import Modal from '@/components/atoms/Modal';
+import Modal from '@/components/Modal';
+import EmployeesCreate from '@/components/molecules/employees/EmployeesCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
@@ -8,11 +9,12 @@ import {
   employeeSchema,
   EmployeeType,
 } from '@/lib/schema/employee/employee';
-import { useQuery } from '@tanstack/react-query';
 import { FileInput, Plus } from 'lucide-react';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const Employees = () => {
+  const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -55,6 +57,13 @@ const Employees = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (router.query.id) {
+      setIsCreateModalOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query]);
+
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -88,13 +97,13 @@ const Employees = () => {
       >
         <EstimatesCreate />
       </Modal>
-
+    */}
       <Modal
-        openModalOutside={isEditModalOpen}
-        setOpenModalOutside={setIsEditModalOpen}
+        openModalOutside={isCreateModalOpen}
+        setOpenModalOutside={setIsCreateModalOpen}
       >
-        a
-      </Modal> */}
+        <EmployeesCreate />
+      </Modal>
     </>
   );
 };

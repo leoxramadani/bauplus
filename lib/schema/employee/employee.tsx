@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 export const employeeSchema = z.object({
   employeeId: z.string(),
@@ -23,6 +24,8 @@ export const employeeSchema = z.object({
 });
 
 export type EmployeeType = z.infer<typeof employeeSchema>;
+
+const router = useRouter();
 
 export const employeeDef: ColumnDef<EmployeeType>[] = [
   {
@@ -88,6 +91,17 @@ export const employeeDef: ColumnDef<EmployeeType>[] = [
     cell: ({ row }) => {
       const expenses = row.original;
       // const editId = expenses.id!;
+
+      const handleEdit = (id: string) => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+            id: id,
+          },
+        });
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -109,7 +123,9 @@ export const employeeDef: ColumnDef<EmployeeType>[] = [
               Copy item id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => null}>
+            <DropdownMenuItem
+              onClick={() => handleEdit(expenses.employeeId)}
+            >
               Edit row
             </DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>

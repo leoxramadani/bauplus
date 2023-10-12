@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import useTranslation from "@/lib/hooks/useTranslation";
+import React, { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import useTranslation from '@/lib/hooks/useTranslation';
 type ModalProps = {
   children: React.ReactNode;
   ButtonText?: string;
@@ -16,8 +16,8 @@ type ModalProps = {
 
 const Modal: React.FC<ModalProps> = ({
   children,
-  ButtonText = "",
-  iconStyle = "",
+  ButtonText = '',
+  iconStyle = '',
   modalStyle,
   openModalOutside = false,
   setOpenModalOutside,
@@ -50,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({
           type="button"
           onClick={() => setOpen(true)}
           value={value ?? ButtonText}
-          className={className ?? "button"}
+          className={className ?? 'button'}
         />
       )}
 
@@ -65,14 +65,14 @@ const Modal: React.FC<ModalProps> = ({
             <div
               className={
                 modalStyle ??
-                "relative mx-auto min-w-[70%] overflow-y-scroll pb-20 bg-white z-50 p-10 my-10 rounded-3xl"
+                'relative mx-auto min-w-[70%] overflow-y-scroll pb-20 bg-white z-50 p-10 my-10 rounded-3xl'
               }
             >
               {children}
               <input
                 type="button"
                 onClick={handleClose}
-                value={done ?? t("Done")}
+                value={done ?? t('Done')}
                 className="absolute bottom-4 right-8 text-white  bg-blue-600 hover:bg-blue-500 transition ease-linear shadow-none hover:shadow-md py-2 px-4 capitalize text-sm flex flex-row gap-2 items-center justify-center font-medium rounded-full"
               />
             </div>
