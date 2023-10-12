@@ -71,12 +71,14 @@ const Employees = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {employeeData && (
+        {employeeData ? (
           <DataTable
             data={employeeData}
             columns={employeeDef}
             searchVal="firstName"
           />
+        ) : (
+          <>No data.</>
         )}
       </section>
 
