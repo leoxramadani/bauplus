@@ -12,12 +12,14 @@ interface IModal {
   title?: string;
   children: ReactNode;
   description?: string;
+  open?: boolean
+  onOpenChange?(open: boolean): void;
 }
 
 
-const Modal = ({children} : IModal) => {
+const Modal = ({children, open, onOpenChange} : IModal) => {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
   {children}
 </Dialog>
   )
@@ -27,7 +29,7 @@ const Modal = ({children} : IModal) => {
 const ModalContent = ({title, children, description, className}: IModal) => {
 
     return (
-      <DialogContent className={cn('h-screen sm:h-auto sm:overflow-y-none overflow-y-scroll', className)}>
+      <DialogContent className={cn('max-sm:h-screen max-sm:overflow-y-scroll', className)}>
     <DialogHeader>
       <DialogTitle className="font-bold text-lg">{title}</DialogTitle>
       {description && (<DialogDescription>
