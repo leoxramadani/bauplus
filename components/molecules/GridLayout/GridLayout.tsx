@@ -347,31 +347,35 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
   });
 
   const handleLayoutChange = (layout: Layout[], layouts: Layouts) => {
-    localStorage.setItem('grid-layout', JSON.stringify(layouts));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('grid-layout', JSON.stringify(layouts));
+    }
   };
 
   const onRemoveItem = (keyToRemove: string) => {
-    setLayouts((prevLayouts) => {
-      const updatedLayouts = { ...prevLayouts };
-      updatedLayouts[currentBreakpoint] = updatedLayouts[
-        currentBreakpoint
-      ].filter((item) => item.i !== keyToRemove);
-      return updatedLayouts;
-    });
+    if (typeof window !== 'undefined') {
+      setLayouts((prevLayouts) => {
+        const updatedLayouts = { ...prevLayouts };
+        updatedLayouts[currentBreakpoint] = updatedLayouts[
+          currentBreakpoint
+        ].filter((item) => item.i !== keyToRemove);
+        return updatedLayouts;
+      });
 
-    setItems((prevItems) =>
-      prevItems.filter((item) => item.key !== keyToRemove)
-    );
+      setItems((prevItems) =>
+        prevItems.filter((item) => item.key !== keyToRemove)
+      );
 
-    const updatedLayoutsToSave = {
-      ...layouts,
-      [currentBreakpoint]: layouts[currentBreakpoint],
-    };
-    localStorage.setItem(
-      'grid-layout',
-      JSON.stringify(updatedLayoutsToSave)
-    );
-    localStorage.setItem('grid-items', JSON.stringify(items));
+      const updatedLayoutsToSave = {
+        ...layouts,
+        [currentBreakpoint]: layouts[currentBreakpoint],
+      };
+      localStorage.setItem(
+        'grid-layout',
+        JSON.stringify(updatedLayoutsToSave)
+      );
+      localStorage.setItem('grid-items', JSON.stringify(items));
+    }
   };
 
   const onBreakpointChange = (breakpoint: any) => {
@@ -390,34 +394,36 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
   };
 
   const onAddChart = (chartKey: string) => {
-    const newLayouts = { ...layouts };
-    newLayouts[currentBreakpoint].push({
-      x: 0, // Set the default x position
-      y: 0, // Set the default y position
-      w: 6, // Set the default width
-      h: 3, // Set the default height
-      minW: 6,
-      minH: 3,
-      i: chartKey,
-      static: false,
-    });
-    const newItems = [
-      ...items,
-      ...originalItems.filter((item) => item.key === chartKey),
-    ];
+    if (typeof window !== 'undefined') {
+      const newLayouts = { ...layouts };
+      newLayouts[currentBreakpoint].push({
+        x: 0,
+        y: 0,
+        w: 6,
+        h: 3,
+        minW: 6,
+        minH: 3,
+        i: chartKey,
+        static: false,
+      });
+      const newItems = [
+        ...items,
+        ...originalItems.filter((item) => item.key === chartKey),
+      ];
 
-    setLayouts(newLayouts);
-    setItems(newItems);
+      setLayouts(newLayouts);
+      setItems(newItems);
 
-    const newLayoutsToSave = {
-      ...layouts,
-      [currentBreakpoint]: newLayouts[currentBreakpoint],
-    };
-    localStorage.setItem(
-      'grid-layout',
-      JSON.stringify(newLayoutsToSave)
-    );
-    localStorage.setItem('grid-items', JSON.stringify(newItems));
+      const newLayoutsToSave = {
+        ...layouts,
+        [currentBreakpoint]: newLayouts[currentBreakpoint],
+      };
+      localStorage.setItem(
+        'grid-layout',
+        JSON.stringify(newLayoutsToSave)
+      );
+      localStorage.setItem('grid-items', JSON.stringify(newItems));
+    }
   };
 
   const onLayoutChange = (layout: any, layouts: any) => {
