@@ -3,7 +3,7 @@ import {
   EmployeeType,
   employeeDef,
   employeeSchema,
-} from '@/lib/schema/employee/employee';
+} from '@/lib/schema/hr/employee/employee';
 import {
   Form,
   FormControl,
@@ -74,13 +74,13 @@ const EmployeesCreate = ({
         console.log('data=======>', data);
         await axios
           .put(UPDATE_EMPLOYEES, {
-            employeeId: employeeData.employeeId,
             ...data,
+            // employeeId: employeeData.employeeId,
             // dateOfBirth: new Date(data.dateOfBirth).toISOString(),
           })
           .then((res) => {
             console.log('UPDATED employee->', res);
-            router.replace('/employees', undefined, {
+            router.replace('/hr/employees', undefined, {
               shallow: true,
             });
           })
