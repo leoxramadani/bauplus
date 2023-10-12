@@ -23,37 +23,46 @@ const BankAccounts = () => {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch(GET_ALL_BANKACCOUNTS, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            console.log('error->', response);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setMyData(data.data);
-          console.log('employeeData->', data);
+      // const response = await fetch(GET_ALL_BANKACCOUNTS, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // })
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       console.log('error->', response);
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((data) => {
+      //     setMyData(data.data);
+      //     console.log('employeeData->', data);
+      //   })
+      //   .catch((error) => {
+      //     console.log('error in fetch funx->', error);
+      //   });
+
+      // return response;
+      await axios
+        .get(GET_ALL_BANKACCOUNTS)
+        .then((res) => {
+          setMyData(res.data);
         })
         .catch((error) => {
-          console.log('error in fetch funx->', error);
+          console.log('error fetching employees->', error);
         });
-
-      return response;
     }
     getData();
   }, []);
 
+  console.log('myData=', myData);
   const [open, setOpen] = useState(false);
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
                 variant="destructive"
@@ -66,7 +75,7 @@ const BankAccounts = () => {
               title="Add Bank Account"
               description="Fill all the fields to add a bank account"
             >
-              <BankAccountCreate />
+              <BankAccountCreate setModal={setOpen} />
             </Modal.Content>
           </Modal>
           <Button
@@ -76,8 +85,10 @@ const BankAccounts = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {myData && (
+        {myData ? (
           <DataTable data={myData} columns={financeColumnDef} />
+        ) : (
+          <p> Loading...</p>
         )}
       </section>
     </>

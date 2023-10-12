@@ -4,11 +4,17 @@ import { ColumnDef } from '@tanstack/react-table';
 export const invoiceSchema = z.object({
   accountName: z.string(),
   accountNumber: z.string(),
-  statusName: z.string(),
-  bankAccountTypeName: z.string(),
+  bankAccountStatus: z.object({
+    statusName: z.string(),
+  }),
+  bankAccountType: z.object({
+    bankAccountTypeName: z.string(),
+  }),
   bankName: z.string(),
-  currencyCode: z.string(),
-  currencyName: z.string(),
+  currency: z.object({
+    currencyCode: z.string(),
+    currencyName: z.string(),
+  }),
   balance: z.number(),
 });
 
@@ -24,11 +30,11 @@ export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
     header: 'Account number',
   },
   {
-    accessorKey: 'statusName',
+    accessorKey: 'bankAccountStatus.statusName',
     header: 'Status',
   },
   {
-    accessorKey: 'bankAccountTypeName',
+    accessorKey: 'bankAccountType.bankAccountTypeName',
     header: 'Bank account type',
   },
   {
@@ -36,11 +42,11 @@ export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
     header: 'Bank name',
   },
   {
-    accessorKey: 'currencyCode',
+    accessorKey: 'currency.currencyCode',
     header: 'Currency code',
   },
   {
-    accessorKey: 'currencyName',
+    accessorKey: 'currency.currencyName',
     header: 'Currency name',
   },
   {

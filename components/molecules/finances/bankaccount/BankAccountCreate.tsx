@@ -51,12 +51,14 @@ import Bank from './type/Bank';
 import Cash from './type/Cash';
 // import { toast } from "@/components/ui/use-toast"
 
-const BankAccountCreate = () => {
-  
- 
-  const [accountType, setAccountType] = useState<'Bank' | 'Cash'>('Bank');
+export interface IBankAccountCreate {
+  setModal(open: boolean): void;
+}
 
- 
+const BankAccountCreate = ({ setModal }: IBankAccountCreate) => {
+  const [accountType, setAccountType] = useState<'Bank' | 'Cash'>(
+    'Bank'
+  );
 
   function onSubmitCash(data: IBankAccountCash) {
     console.log('test');
@@ -68,7 +70,6 @@ const BankAccountCreate = () => {
         <RadioGroup
           className="flex flex-row gap-4"
           defaultValue={accountType}
-        
         >
           <div className="flex items-center flex-row gap-1">
             <RadioGroupItem
@@ -80,15 +81,19 @@ const BankAccountCreate = () => {
             <Label htmlFor="Bank">Bank</Label>
           </div>
           <div className="flex items-center flex-row gap-1">
-            <RadioGroupItem value="Cash" id="Cash" onClick={() => setAccountType('Cash')}/>
+            <RadioGroupItem
+              value="Cash"
+              id="Cash"
+              onClick={() => setAccountType('Cash')}
+            />
             <Label htmlFor="Cash">Cash</Label>
           </div>
         </RadioGroup>
       </div>
 
       {accountType == 'Bank' ? (
-        <Bank />
-      ): (
+        <Bank setModal={setModal} />
+      ) : (
         <Cash />
       )}
     </div>
