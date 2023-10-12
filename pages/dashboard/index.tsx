@@ -2,9 +2,11 @@ import GridLayout from '@/components/molecules/GridLayout/GridLayout';
 import React from 'react';
 
 const Dashboard = () => {
-  return (
-    <GridLayout data={["1", "2", "3"]}   />
-  )
+  if (typeof window !== 'undefined') {
+    // Code that uses localStorage
+    const someValue = localStorage.getItem('someKey');
+  }
+  return <GridLayout data={['1', '2', '3']} />;
 };
 
 export default Dashboard;
