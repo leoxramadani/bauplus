@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   EmployeeType,
   employeeDef,
@@ -26,24 +26,83 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import axios from 'axios';
-import { CREATE_EMPLOYEES } from '@/lib/constants/endpoints/employee';
-const EmployeesCreate = () => {
+import {
+  CREATE_EMPLOYEES,
+  GET_BY_ID_EMPLOYEE,
+  UPDATE_EMPLOYEES,
+} from '@/lib/constants/endpoints/employee';
+import { useRouter } from 'next/router';
+const EmployeesCreate = ({
+  setIsCreateModalOpen,
+  employeeId,
+}: {
+  setIsCreateModalOpen: any;
+  employeeId?: string;
+}) => {
+  const router = useRouter();
+  const [employeeData, setEmployeeData] = useState<any>();
+
+  useEffect(() => {
+    async function getData(Id: string) {
+      await axios
+        .get(GET_BY_ID_EMPLOYEE + `?employeeId=${Id}`)
+        .then((res) => {
+          console.log('setting employee data -->', res);
+          setEmployeeData(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching employees->', error);
+        });
+    }
+
+    if (employeeId) {
+      getData(employeeId);
+    }
+  }, [employeeId]);
+
   const form = useForm<EmployeeType>({
     resolver: zodResolver(employeeSchema),
+    values: { ...employeeData },
   });
 
-  const onSubmit = useCallback(async (data: EmployeeType) => {
-    axios
-      .post(CREATE_EMPLOYEES, {
-        ...data,
-      })
-      .then((res) => {
-        console.log('Successfully created employee->', res);
-      })
-      .catch((error) => {
-        console.log('Error creating employee:', error);
-      });
-  }, []);
+  const onSubmit = useCallback(
+    async (data: EmployeeType) => {
+      console.log('Employee data', employeeData);
+
+      if (employeeData) {
+        console.log('employeeData=>', employeeData);
+        console.log('data=======>', data);
+        await axios
+          .put(UPDATE_EMPLOYEES, {
+            employeeId: employeeData.employeeId,
+            ...data,
+            // dateOfBirth: new Date(data.dateOfBirth).toISOString(),
+          })
+          .then((res) => {
+            console.log('UPDATED employee->', res);
+            router.replace('/employees', undefined, {
+              shallow: true,
+            });
+          })
+          .catch((error) => {
+            console.log('Error UPDATING employee:', error);
+          });
+      } else {
+        console.log('No employee data');
+        await axios
+          .post(CREATE_EMPLOYEES, { ...data })
+          .then((res) => {
+            console.log('Successfully created employee->', res);
+          })
+          .catch((error) => {
+            console.log('Error creating employee:', error);
+          });
+      }
+
+      setIsCreateModalOpen(false);
+    },
+    [employeeData]
+  );
 
   const onError = (error: any) => {
     console.log('Please check your input fields!->', error);
@@ -180,7 +239,7 @@ const EmployeesCreate = () => {
                           )}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}

@@ -1,9 +1,8 @@
-import Modal from '@/components/Modal';
+import Modal from '@/components/atoms/Modal';
 import EmployeesCreate from '@/components/molecules/employees/EmployeesCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
-import useData from '@/lib/hooks/useData';
 import {
   employeeDef,
   employeeSchema,
@@ -33,28 +32,6 @@ const Employees = () => {
 
   useEffect(() => {
     async function getData() {
-      // const response = await fetch(GET_ALL_EMPLOYEES, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // })
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       console.log('error->', response);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     setEmployeeData(data);
-      //     console.log('employeeData->', data);
-      //   })
-      //   .catch((error) => {
-      //     console.log('error in fetch funx->', error);
-      //   });
-
-      // return response;
-
       await axios
         .get(GET_ALL_EMPLOYEES)
         .then((res) => {
@@ -74,19 +51,34 @@ const Employees = () => {
       setIsCreateModalOpen(true);
     }
     console.log('router==', router);
-  }, [router.query]);
+  }, [router.query.id]);
 
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Button
-            variant="destructive"
-            className="flex gap-2"
-            onClick={() => setIsCreateModalOpen(true)}
+          <Modal
+            open={isCreateModalOpen}
+            onOpenChange={setIsCreateModalOpen}
           >
-            <Plus size={20} /> <span>Add employee</span>
-          </Button>
+            <Modal.Trigger asChild>
+              <Button
+                variant="destructive"
+                className="flex gap-2"
+                // onClick={() => setIsCreateModalOpen(true)}
+              >
+                <Plus size={20} /> <span>Add employee</span>
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content>
+              <EmployeesCreate
+                setIsCreateModalOpen={setIsCreateModalOpen}
+                employeeId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+              />
+            </Modal.Content>
+          </Modal>
 
           <Button variant="outline" className="flex gap-2">
             <FileInput /> <span>Export</span>
@@ -110,12 +102,6 @@ const Employees = () => {
         <EstimatesCreate />
       </Modal>
     */}
-      <Modal
-        openModalOutside={isCreateModalOpen}
-        setOpenModalOutside={setIsCreateModalOpen}
-      >
-        <EmployeesCreate />
-      </Modal>
     </>
   );
 };
