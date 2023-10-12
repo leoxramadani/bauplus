@@ -19,7 +19,7 @@ export const employeeSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
-  dateOfBirth: z.date(),
+  dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
 });
 
