@@ -7,7 +7,7 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import {
   financeColumnDef,
   IInvoiceSchema,
-} from '@/lib/schema/Finance/finance';
+} from '@/lib/schema/Finance/bankaccounts';
 import RightModal from '@/components/atoms/RightModal';
 // import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
