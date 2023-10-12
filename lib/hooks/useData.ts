@@ -5,7 +5,7 @@ import { useEffect } from 'react';
  * Fetcher function for react-query. Nothing complicated, just a wrapper for the native fetch() API.
  * @param url the URL to be fetched from.
  * @param options additional options or overrides to fetcher function, may include HTTP method or headers.
- * @returns 
+ * @returns
  */
 export const fetcher = (url: string, options: any) =>
   fetch(url, {
@@ -13,7 +13,7 @@ export const fetcher = (url: string, options: any) =>
     headers: {
       'Content-Type': 'application/json',
     },
-    ...options
+    ...options,
   })
     .then((res) => res.json())
     .then((data) => data.result);
