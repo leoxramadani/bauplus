@@ -137,11 +137,11 @@ const Sidebar = ({
               alert={true}
               href="/dashboard"
             />
-            <SidebarItem
+            {/* <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Employees"
               href="/employees"
-            />
+            /> */}
             <SidebarItem
               icon={<Calculator size={20} strokeWidth={1.5} />}
               text="Finance"
