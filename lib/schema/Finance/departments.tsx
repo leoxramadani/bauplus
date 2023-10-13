@@ -13,17 +13,14 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 
-export const employeeSchema = z.object({
-  employeeId: z.string().optional(),
-  companyId: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  dateOfBirth: z.coerce.date(),
-  departmentId: z.string(),
+export const DepartmentSchema = z.object({
+  departmentId:z.string().optional(),
+  departmentName :z.string(),
+  companyId :z.string(),
+  parentDepartmentId:z.string().optional().nullable(),
 });
 
-export type EmployeeType = z.infer<typeof employeeSchema>;
+export type DepartmentType = z.infer<typeof DepartmentSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -53,14 +50,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() =>
-            navigator.clipboard.writeText(item.employeeId)
+            navigator.clipboard.writeText(item.departmentId)
           }
         >
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => handleEdit(item.employeeId)}
+          onClick={() => handleEdit(item.departmentId)}
         >
           Edit row
         </DropdownMenuItem>
@@ -70,7 +67,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   );
 };
 
-export const employeeDef: ColumnDef<EmployeeType>[] = [
+export const DepartmentDef: ColumnDef<DepartmentType>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -96,38 +93,20 @@ export const employeeDef: ColumnDef<EmployeeType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'employeeId',
-    header: 'Employee ID',
+    accessorKey: 'departmentId',
+    header: 'Department Id',
+  },
+  {
+    accessorKey: 'departmentName',
+    header: 'Department Name',
   },
   {
     accessorKey: 'companyId',
     header: 'Company ID',
   },
   {
-    accessorKey: 'firstName',
-    header: 'First Name',
-  },
-  {
-    accessorKey: 'lastName',
-    header: 'Last Name',
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-  },
-  {
-    accessorKey: 'dateOfBirth',
-    header: 'Date of Birth',
-    cell({ row }) {
-      const formattedDate = new Date(
-        row.getValue('dateOfBirth')
-      ).toLocaleDateString('en-US');
-      return <div>{formattedDate}</div>;
-    },
-  },
-  {
-    accessorKey: 'departmentId',
-    header: 'Department ID',
+    accessorKey: 'parentDepartmentId',
+    header: 'Parent Department Id',
   },
   {
     id: 'actions',
