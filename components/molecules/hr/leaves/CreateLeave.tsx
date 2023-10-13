@@ -93,7 +93,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
     isDragAccept,
     isDragReject
   } = useDropzone({
-    accept: {'image/*': []},
+    accept: {'image/*':[], 'application/pdf': []},
     multiple: false,
     onDrop // Allow only one file
   });
@@ -433,8 +433,8 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
         </p>
       </div>)}
       {selectedFile && (
+selectedFile.type.startsWith('image/') ? (
         <div className='group relative sm:max-w-[200px] sm:max-h-[200px] border border-gray-100 w-full h-full flex justify-center items-center'>
-          
             <img
               className='aspect-[4/3] h-full w-full object-cover'
               src={URL.createObjectURL(selectedFile)}
@@ -443,7 +443,14 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             
             <X className='absolute bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1 lg:opacity-0 group-hover:opacity-100 transition-all cursor-pointer' onClick={() => setSelectedFile(null)} />
         </div>
-      )}
+      ):
+      (
+        <div className='flex flex-row gap-2'>
+          <p>{selectedFile.name}</p>
+          <X className=' bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1  cursor-pointer' onClick={() => setSelectedFile(null)} />
+
+        </div>
+      ))}
 
 
   
