@@ -331,17 +331,33 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
   const [currentBreakpoint, setCurrentBreakpoint] =
     useState<string>('lg');
   const [items, setItems] = useState(originalItems);
-  const [layouts, setLayouts] = useState<{ [index: string]: any[] }>(
-    () => {
+  const [layouts, setLayouts] = useState(() => {
+    if (typeof window !== 'undefined') {
       const savedLayouts = localStorage.getItem('grid-layout');
       if (savedLayouts) {
         return JSON.parse(savedLayouts);
       }
-      return {
-        lg: [],
-      };
     }
-  );
+    return {
+      lg: [],
+    };
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLayouts = localStorage.getItem('grid-layout');
+      if (savedLayouts) {
+        setLayouts(JSON.parse(savedLayouts));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('grid-layout', JSON.stringify(layouts));
+    }
+  }, [layouts]);
+
   const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
     lg: [],
   });
@@ -354,11 +370,11 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
 
   const onRemoveItem = (keyToRemove: string) => {
     if (typeof window !== 'undefined') {
-      setLayouts((prevLayouts) => {
+      setLayouts((prevLayouts: any) => {
         const updatedLayouts = { ...prevLayouts };
         updatedLayouts[currentBreakpoint] = updatedLayouts[
           currentBreakpoint
-        ].filter((item) => item.i !== keyToRemove);
+        ].filter((item: any) => item.i !== keyToRemove);
         return updatedLayouts;
       });
 
@@ -471,7 +487,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
         // autoSize={true}
         allowOverlap={false}
       >
-        {layouts[currentBreakpoint].map((layoutItem) => {
+        {layouts[currentBreakpoint].map((layoutItem: any) => {
           const item = items.find((i) => i.key === layoutItem.i);
           return (
             <GridItem
@@ -513,7 +529,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
           {items
             .filter((item) => {
               return layouts[currentBreakpoint].every(
-                (layoutItem) => layoutItem.i !== item.key
+                (layoutItem: any) => layoutItem.i !== item.key
               );
             })
             .map((item) => (
