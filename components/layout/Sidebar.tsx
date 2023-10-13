@@ -137,6 +137,12 @@ const Sidebar = ({
               alert={true}
               href="/dashboard"
             />
+            <SidebarItem
+              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
+              text="PDF Renderer"
+              alert={true}
+              href="/pdfrenderer"
+            />
             {/* <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Employees"
