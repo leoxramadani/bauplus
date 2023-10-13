@@ -89,13 +89,13 @@ const [open, setOpen] = useState(false)
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal  open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
           <Button variant="destructive" className="flex gap-2">
           <Plus size={20} /> <span>New Leave</span>
         </Button>
           </Modal.Trigger>
-          <Modal.Content>
+          <Modal.Content title='New Leave' description='Assign Leave'>
             <CreateLeave setCloseModal={setOpen} />
           </Modal.Content>
         </Modal>
