@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
     Form,
     FormControl,
@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { IPayment, paymentSchema } from '@/lib/schema/Finance/payment';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -28,7 +28,7 @@ import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {useDropzone} from 'react-dropzone';
+import {DropzoneInputProps, FileRejection, useDropzone} from 'react-dropzone';
 
 
 interface ICreateLeave {
@@ -67,13 +67,37 @@ const rejectStyle = {
 
 
 const CreateLeave = ({setCloseModal} : ICreateLeave) => {
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      if (acceptedFiles.length > 0) {
+        // Take only the first accepted file
+        const file = acceptedFiles[0];
+        setSelectedFile(file);
+      }
+
+      // Handle rejected files if needed
+      if (fileRejections.length > 0) {
+        console.log('Rejected files:', fileRejections);
+      }
+    },
+    []
+  );
+
   const {
     getRootProps,
     getInputProps,
     isFocused,
     isDragAccept,
     isDragReject
-  } = useDropzone({accept: {'image/*': []}});
+  } = useDropzone({
+    accept: {'image/*': []},
+    multiple: false,
+    onDrop // Allow only one file
+  });
+
 
   const style = useMemo(() => ({
     ...baseStyle,
@@ -173,13 +197,13 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
 
       <Form {...form} >
             <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            <div className="flex flex-col  sm:grid sm:grid-cols-2  justify-center items-center gap-4">
             {/* project */}
             <FormField
           control={form.control}
           name="member"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="w-full flex flex-col">
               <FormLabel>Choose Member</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -241,7 +265,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="leaveType"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='w-full'>
               <FormLabel>Leave Type</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -267,7 +291,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="status"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='w-full'>
               <FormLabel>Status</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -295,7 +319,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="duration"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-6 justify-start">
+            <FormItem className="w-full flex flex-col gap-6 justify-start">
               <FormLabel>Select Duration</FormLabel>
               <FormControl>
                 <RadioGroup
@@ -332,7 +356,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             control={form.control}
             name="date"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className='w-full'>
                 <FormLabel>Date</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -380,7 +404,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             control={form.control}
             name="reason"
             render={({ field }) => (
-              <FormItem className=' col-span-2'>
+              <FormItem className='w-full sm:col-span-2'>
                 <FormLabel>Reason for absence</FormLabel>
                 <FormControl className="relative">
                   <Textarea placeholder="Reason for absence..." rows={5} {...field} />
@@ -390,10 +414,36 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             )}
           />
 
-<div {...getRootProps({style})} className=' col-span-2 h-24 items-center flex-col flex justify-center'>
+{/* <div {...getRootProps({style})} className=' col-span-2 h-24 items-center flex-col flex justify-center'>
         <input {...getInputProps()} />
         <p>Drag and drop some files here, or click to select files</p>
-      </div>
+      </div> */}
+
+{!selectedFile && (
+      <div {...getRootProps({style})} className='w-full sm:col-span-2 h-24 items-center flex-col flex justify-center'>
+        <input {...getInputProps()} />
+        <p>
+          {isFocused
+            ? isDragAccept
+              ? 'Drop the file here'
+              : isDragReject
+              ? 'File type not accepted, please drop an image or PDF'
+              : 'Drag and drop an image '
+            : 'Drag and drop an image or click to select a file'}
+        </p>
+      </div>)}
+      {selectedFile && (
+        <div className='group relative sm:max-w-[200px] sm:max-h-[200px] border border-gray-100 w-full h-full flex justify-center items-center'>
+          
+            <img
+              className='aspect-[4/3] h-full w-full object-cover'
+              src={URL.createObjectURL(selectedFile)}
+              alt={selectedFile.name}
+            />
+            
+            <X className='absolute bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1 lg:opacity-0 group-hover:opacity-100 transition-all cursor-pointer' onClick={() => setSelectedFile(null)} />
+        </div>
+      )}
 
 
   
