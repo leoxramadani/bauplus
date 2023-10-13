@@ -105,7 +105,7 @@ const EmployeesCreate = ({
   );
 
   const onError = (error: any) => {
-    console.log('Please check your input fields!->', error);
+    console.log('Please check your input fields! ', error);
   };
 
   return (
