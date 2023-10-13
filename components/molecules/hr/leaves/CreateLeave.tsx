@@ -29,6 +29,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {DropzoneInputProps, FileRejection, useDropzone} from 'react-dropzone';
+import Drop from '@/components/atoms/Drop';
 
 
 interface ICreateLeave {
@@ -37,99 +38,11 @@ interface ICreateLeave {
 }
 
 
-const baseStyle = {
-  flex: 1,
-  display: 'flex',
-  // flexDirection: 'column',
-  alignItems: 'center',
-  padding: '20px',
-  borderWidth: 2,
-  borderRadius: 2,
-  borderColor: '#eeeeee',
-  borderStyle: 'dashed',
-  backgroundColor: '#fafafa',
-  color: '#bdbdbd',
-  outline: 'none',
-  transition: 'border .24s ease-in-out'
-};
-
-const focusedStyle = {
-  borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-  borderColor: '#00e676'
-};
-
-const rejectStyle = {
-  borderColor: '#ff1744'
-};
-
-
 const CreateLeave = ({setCloseModal} : ICreateLeave) => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      if (acceptedFiles.length > 0) {
-        // Take only the first accepted file
-        const file = acceptedFiles[0];
-        setSelectedFile(file);
-      }
 
-      // Handle rejected files if needed
-      if (fileRejections.length > 0) {
-        console.log('Rejected files:', fileRejections);
-      }
-    },
-    []
-  );
-
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({
-    accept: {'image/*': []},
-    multiple: false,
-    onDrop // Allow only one file
-  });
-
-
-  const style = useMemo(() => ({
-    ...baseStyle,
-    ...(isFocused ? focusedStyle : {}),
-    ...(isDragAccept ? acceptStyle : {}),
-    ...(isDragReject ? rejectStyle : {})
-  }), [
-    isFocused,
-    isDragAccept,
-    isDragReject
-  ]);
-
-
-
-
-
-    const projects = [
-        { label: "Thor1", value: "thor" },
-        { label: "Thor Website", value: "thorWebsite" },
-        { label: "Arkiva", value: "arkiva" },
-        { label: "ProWork", value: "prowork" },
-        { label: "Miniera", value: "miniera" }
-      ] as const
-    
-      const invoice = [
-        { label: "INV#001", value: "001" },
-        { label: "INV#002", value: "002" },
-        { label: "INV#003", value: "003" },
-        { label: "INV#004", value: "004" },
-        { label: "INV#005", value: "005" }
-      ] as const
-    
       const members = [
         { label: "Besir Kurtishi ", value: "001" },
         { label: "Besir Bossi ", value: "002" },
@@ -142,21 +55,6 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
         { label: "Casual", value: "casual" },
         { label: "Sick", value: "sick" },
         { label: "Earned", value: "earned" },
-      ] as const
-
-      const bankAccs = [
-        { label: "Besir Kurtishi ", value: "001" },
-        { label: "Besir Bossi ", value: "002" },
-        { label: "Besir ronaldo Acc3", value: "003" },
-        { label: "Besir Messi Acc4", value: "004" },
-        { label: "Besir leo Acc5", value: "005" }
-      ] as const
-    
-      const currency = [
-        { label: "Ден.", value: "mkd" },
-        { label: "$USD", value: "usd" },
-        { label: "Eur", value: "eur" },
-       
       ] as const
     
       const status = [
@@ -186,14 +84,6 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
 
   return (
     <div className="z-0 flex flex-col gap-4 w-full  ">
-      {/* <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-            Add Payment
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-            Payment Details
-        </h3>
-      </div> */}
 
       <Form {...form} >
             <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
@@ -414,39 +304,9 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             )}
           />
 
-{/* <div {...getRootProps({style})} className=' col-span-2 h-24 items-center flex-col flex justify-center'>
-        <input {...getInputProps()} />
-        <p>Drag and drop some files here, or click to select files</p>
-      </div> */}
-
-{!selectedFile && (
-      <div {...getRootProps({style})} className='w-full sm:col-span-2 h-24 items-center flex-col flex justify-center'>
-        <input {...getInputProps()} />
-        <p>
-          {isFocused
-            ? isDragAccept
-              ? 'Drop the file here'
-              : isDragReject
-              ? 'File type not accepted, please drop an image or PDF'
-              : 'Drag and drop an image '
-            : 'Drag and drop an image or click to select a file'}
-        </p>
-      </div>)}
-      {selectedFile && (
-        <div className='group relative sm:max-w-[200px] sm:max-h-[200px] border border-gray-100 w-full h-full flex justify-center items-center'>
-          
-            <img
-              className='aspect-[4/3] h-full w-full object-cover'
-              src={URL.createObjectURL(selectedFile)}
-              alt={selectedFile.name}
-            />
-            
-            <X className='absolute bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1 lg:opacity-0 group-hover:opacity-100 transition-all cursor-pointer' onClick={() => setSelectedFile(null)} />
-        </div>
-      )}
 
 
-  
+     <Drop selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
             </div>
 
             <Button className="w-max" type="submit">
