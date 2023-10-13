@@ -5,6 +5,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Calculator,
+  ClipboardList,
 } from 'lucide-react';
 import {
   useContext,
@@ -284,6 +285,13 @@ const Sidebar = ({
                 href="/finance/bankaccounts"
               />
             </SidebarItem>
+
+            <SidebarItem
+              icon={<ClipboardList size={20} strokeWidth={1.5} />}
+              text="Notice Board"
+              alert
+              href="/notices"
+            ></SidebarItem>
 
             {!isWindowSmall && (
               <>
