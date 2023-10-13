@@ -91,11 +91,8 @@ const Notices = () => {
   ];
 
   const renderedNotices = noticedata.map((item, index) => (
-    <div>
-      <Card
-        key={index}
-        className="max-w-xs mx-auto gap-4 flex flex-col p-0 overflow-hidden shadow-xl ring-0 rounded-2xl min-h-[400px]"
-      >
+    <div key={index}>
+      <Card className="max-w-xs mx-auto gap-4 flex flex-col p-0 overflow-hidden shadow-xl ring-0 rounded-2xl min-h-[400px]">
         <div className="flex items-center justify-center">
           <Image src={item.Image} alt={'test'} />{' '}
         </div>
