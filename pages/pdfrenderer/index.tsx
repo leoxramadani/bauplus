@@ -13,6 +13,7 @@ import {
   Svg,
   Path,
 } from '@react-pdf/renderer';
+import { custom } from 'zod';
 
 Font.register({
   family: 'Roboto',
@@ -137,6 +138,235 @@ const stylesEverest = StyleSheet.create({
     fontSize: 10,
     padding: 5,
     margin: 5,
+  },
+});
+
+const customTable = StyleSheet.create({
+  page: {
+    backgroundColor: '#ffffff',
+    padding: '50pt 50pt 70pt', // Adjusted padding to leave space for page number
+    fontFamily: 'Roboto',
+    flexDirection: 'column',
+    alignItems: 'center', // Center the table horizontally
+    justifyContent: 'center',
+  },
+  pageNumber: {
+    position: 'absolute',
+    fontSize: 10,
+    bottom: 35,
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+  },
+  table: {
+    display: 'flex',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    width: '100%',
+    textAlign: 'center',
+    textOverflow: 'ellipsis',
+  },
+  tableRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 'auto',
+    width: '100%',
+    wordWrap: 'break-word',
+    minHeight: 35, // Adjust the value as needed
+    textOverflow: 'ellipsis',
+    height: 'auto',
+  },
+  tableCol: {
+    width: '10%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    flexDirection: 'column',
+    wordWrap: 'break-word', // Add this line to break long words
+    textAlign: 'center',
+    justifyContent: 'center',
+    objectFit: 'contain',
+    textOverflow: 'ellipsis',
+  },
+  tableCell: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+  },
+  widerTableCol: {
+    width: '12%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    flexDirection: 'column',
+    wordWrap: 'break-word', // Add this line to break long words
+    textAlign: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    objectFit: 'contain',
+    textOverflow: 'ellipsis',
+  },
+  tableCellArkiva: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+    borderTop: 1,
+  },
+  tableCellArkivaFirst: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  tableCellArkivaEnd: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+    borderLeft: 1,
+    justifyContent: 'center',
+  },
+  tableCellArkivaEndFirst: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+    justifyContent: 'center',
+  },
+  tableCellArkivaEndFirstDate: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+    width: '90%',
+  },
+  tableCellArkivaEndData: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 5,
+    paddingLeft: 5,
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    overflow: 'hidden',
+    borderLeft: 1,
+    justifyContent: 'center',
+    width: '97%',
+  },
+  tableColEnd: {
+    display: 'flex',
+    width: '15%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    flexDirection: 'column',
+    wordWrap: 'break-word', // Add this line to break long words
+    textAlign: 'center',
+    justifyContent: 'center',
+    objectFit: 'contain',
+    textOverflow: 'ellipsis',
+  },
+  tableRowEnd: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 'auto',
+    width: '100%',
+    wordWrap: 'break-word',
+    minHeight: 35, // Adjust the value as needed
+    textOverflow: 'ellipsis',
+    height: 'auto',
+    justifyContent: 'center',
+    borderTop: 1,
+  },
+  tableRowEndData: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 'auto',
+    width: '100%',
+    wordWrap: 'break-word',
+    minHeight: 25, // Adjust the value as needed
+    textOverflow: 'ellipsis',
+    height: 'auto',
+    justifyContent: 'center',
+  },
+  tableColImePrezime: {
+    width: '25%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    flexDirection: 'column',
+    wordWrap: 'break-word', // Add this line to break long words
+    textAlign: 'center',
+    justifyContent: 'center',
+    objectFit: 'contain',
+    textOverflow: 'ellipsis',
+  },
+  tableCellArkivaWPadding: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: 10,
+    flexWrap: 'wrap',
+    wordBreak: 'break-word', // Add this line to break long words
+    wordWrap: 'break-word',
+    textAlign: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  tableRowWPadding: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 'auto',
+    width: '100%',
+    wordWrap: 'break-word',
+    minHeight: 25, // Adjust the value as needed
+    textOverflow: 'ellipsis',
   },
 });
 
@@ -292,6 +522,15 @@ const PDFRenderer = () => {
     const logoId = event.target.value;
     setSelectedLogo(logoId);
   };
+
+  function separateTextIntoLines(
+    text: any,
+    charactersPerLine: number
+  ): string[] {
+    const textString = String(text);
+    const regex = new RegExp(`.{1,${charactersPerLine}}`, 'g');
+    return textString.match(regex) || [];
+  }
 
   const generatePDF = () => {
     if (input1 || input2 || input3 !== '') {
@@ -540,30 +779,160 @@ const PDFRenderer = () => {
                     </View>
                   ))}
                 </View>
+                <View style={stylesEverest.tableRow}>
+                  <View style={stylesEverest.tableCell}>
+                    <View
+                      style={[
+                        stylesEverest.tableRow,
+                        { borderBottom: 1, borderBottomWidth: 1 },
+                      ]}
+                    >
+                      <Text style={stylesEverest.tableCellText}>
+                        1
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={stylesEverest.tableCellText}>
+                        1
+                      </Text>
+                      <Text style={stylesEverest.tableCellText}>
+                        1
+                      </Text>
 
-                {/* Data rows */}
-                {tableData2.slice(1).map((row, rowIndex) => (
-                  <View style={stylesEverest.tableRow} key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
                       <View
-                        style={
-                          cellIndex === 1
-                            ? {
-                                ...stylesEverest.tableCell,
-                              }
-                            : stylesEverest.tableCell
-                        }
-                        key={cellIndex}
+                        style={[
+                          stylesEverest.tableRow,
+                          { borderTopWidth: 1 },
+                        ]}
                       >
-                        <Text style={stylesEverest.tableCellText}>
-                          {cell}
-                        </Text>
+                        <View style={stylesEverest.tableCell}>
+                          <Text style={stylesEverest.tableCellText}>
+                            1
+                          </Text>
+                        </View>
+                        <View style={stylesEverest.tableCell}>
+                          <Text style={stylesEverest.tableCellText}>
+                            1
+                          </Text>
+                        </View>
                       </View>
-                    ))}
+                    </View>
                   </View>
-                ))}
+                </View>
               </View>
             </View>
+            <View></View>
+          </Page>
+        </Document>
+      );
+
+      const customPDF = (
+        <Document>
+          <Page orientation="landscape" style={customTable.page}>
+            <View style={customTable.table} wrap>
+              <View
+                style={[customTable.tableRow, { borderTop: 1 }]}
+                fixed
+              >
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Основен Број', 5)}
+                  </Text>
+                  <Text
+                    style={[
+                      customTable.tableCell,
+                      { borderTop: 1, borderTopWidth: 1 },
+                    ]}
+                    break
+                    wrap
+                  >
+                    {separateTextIntoLines('Пренос', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Предмет', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Под Броеви', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Датум на прием', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableColImePrezime}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Испрачаќ', 6)}
+                  </Text>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines(
+                      'Презиме и име, односно назив на место',
+                      6
+                    )}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Број', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Датум', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableCol}>
+                  <Text style={customTable.tableCell} break wrap>
+                    {separateTextIntoLines('Органи.Единица', 6)}
+                  </Text>
+                </View>
+
+                <View style={customTable.tableColEnd}>
+                  <Text
+                    style={customTable.tableCellArkivaFirst}
+                    break
+                    wrap
+                  >
+                    {separateTextIntoLines('Развој', 6)}
+                  </Text>
+                  <View style={customTable.tableRowEnd}>
+                    <Text
+                      style={customTable.tableCellArkivaEndFirst}
+                      break
+                      wrap
+                    >
+                      {separateTextIntoLines('Датум', 6)}
+                    </Text>
+                    <Text
+                      style={customTable.tableCellArkivaEnd}
+                      break
+                      wrap
+                    >
+                      {separateTextIntoLines('Oзнака', 6)}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={customTable.pageNumber}
+              key="pages"
+              render={({ pageNumber, totalPages }) =>
+                `${pageNumber} / ${totalPages}`
+              }
+              fixed
+            />
           </Page>
         </Document>
       );
