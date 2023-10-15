@@ -44,13 +44,6 @@ const Estimates = () => {
       >
         <EstimatesCreate />
       </RightModal>
-
-      <Modal
-        openModalOutside={isEditModalOpen}
-        setOpenModalOutside={setIsEditModalOpen}
-      >
-        a
-      </Modal>
     </>
   );
 };

@@ -1,10 +1,12 @@
 import {
-  ChevronDown,
   Users,
   Square,
   ChevronsLeft,
   ChevronsRight,
   Calculator,
+  Wallet,
+  ChevronUp,
+  ChevronRight,
 } from 'lucide-react';
 import {
   useContext,
@@ -64,7 +66,7 @@ const Sidebar = ({
   expanded,
 }: Sidebar) => {
   const { data: session, status } = useSession();
-
+  const router = useRouter();
   return (
     <aside
       className={`fixed z-50 w-full top-0 left-0 h-full group/sidebar ${
@@ -224,7 +226,7 @@ const Sidebar = ({
                   href="/hr/designation"
                 />
                 <SidebarItem
-                  text="Department"
+                  text="Departments"
                   alert={false}
                   href="/hr/departments"
                 />
@@ -235,57 +237,31 @@ const Sidebar = ({
                 />
               </>
             </SidebarItem>
-
+            <SidebarItem
+              icon={<Wallet size={20} strokeWidth={1.5} />}
+              text="Payroll"
+              alert
+              asDropdown
+            >
+              <SidebarItem
+                text="Payroll"
+                alert={false}
+                href="/payroll"
+              />
+              <SidebarItem
+                text="Employee salary"
+                alert={false}
+                href="/payroll/employee-salary"
+              />
+            </SidebarItem>
             <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Users"
               alert={false}
               href="/users"
             />
-            <SidebarItem
-              icon={<Package size={20} strokeWidth={1.5} />}
-              text="Payroll"
-              alert
-              href="/payroll"
-            >
-              <SidebarItem
-                text="Proposal"
-                alert={false}
-                href="/finance/proposal"
-              />
-              <SidebarItem
-                text="Estimates"
-                alert={false}
-                href="/finance/estimates"
-              />
-              <SidebarItem
-                text="Invoices"
-                alert={false}
-                href="/finance/invoice"
-              />
-              <SidebarItem
-                text="Payments"
-                alert={false}
-                href="/finance/payments"
-              />
-              <SidebarItem
-                text="Credit Note"
-                alert={false}
-                href="/finance/creditnote"
-              />
-              <SidebarItem
-                text="Expenses"
-                alert={false}
-                href="/finance/expenses"
-              />
-              <SidebarItem
-                text="Bank Account"
-                alert={false}
-                href="/finance/bankaccounts"
-              />
-            </SidebarItem>
 
-            {!isWindowSmall && (
+            {/* {!isWindowSmall && (
               <>
                 <hr className="my-3 border-slate-600" />
                 <SidebarItem
@@ -295,7 +271,7 @@ const Sidebar = ({
                   href="/settings"
                 />
               </>
-            )}
+            )} */}
           </ul>
         </SidebarContext.Provider>
         <div className="border-t border-slate-600 absolute bottom-0 left-0 w-full h-max bg-inherit">
@@ -313,11 +289,12 @@ const Sidebar = ({
               />
               <div
                 className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${
-                expanded ? 'w-full ml-3' : 'w-0'
-              }
-          `}
+                  flex justify-between items-center
+                  overflow-hidden transition-all ${
+                    expanded ? 'w-full ml-3' : 'w-0'
+                  }
+                `}
+                onClick={() => router.push('/account')}
               >
                 <div className="leading-4 ">
                   <h4 className="font-semibold ">
@@ -372,18 +349,37 @@ export function SidebarItem({
           !isWindowSmall ? `my-2` : `my-1.5`
         } rounded-[0.6rem] cursor-pointer transition-colors group 
         ${
-          router.pathname.startsWith(href) || (asDropdown && isOpen)
+          router.pathname.startsWith(href)
             ? 'bg-slate-700 text-white'
             : 'hover:bg-slate-800 text-white'
         }`}
       >
         {asDropdown && expanded && (
-          <span className="absolute right-2 h-full flex items-center">
-            <ChevronDown size={20} strokeWidth={2} />
+          <span
+            className={`absolute right-2 h-full flex items-center`}
+          >
+            <ChevronRight
+              size={20}
+              strokeWidth={2}
+              className={`transition-all ${isOpen && '-rotate-90'}`}
+            />
           </span>
         )}
-        {icon && <div className="ml-1">{icon}</div>}
-
+        {icon && <div className="ml-1 w-[20px]">{icon}</div>}
+        {alert && (
+          <div
+            className={`absolute flex justify-end w-full pr-3 
+            ${
+              !expanded
+                ? `top-1 left-2`
+                : asDropdown
+                ? `-left-6`
+                : `left-0`
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full bg-red-500`} />
+          </div>
+        )}
         <span
           className={`overflow-hidden ml-1 text-left transition-all ${
             icon && `ml-3`
@@ -393,15 +389,7 @@ export function SidebarItem({
         >
           {text}
         </span>
-        {alert && (
-          <div
-            className={`absolute flex justify-end w-full pr-3 ${
-              !expanded ? `top-1 left-2` : `left-0`
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full bg-red-500`} />
-          </div>
-        )}
+
         {!expanded && (
           <div
             className={`
@@ -413,7 +401,12 @@ export function SidebarItem({
           </div>
         )}
       </button>
-      {asDropdown && isOpen && <div>{children}</div>}
+      {asDropdown && isOpen && (
+        <div className="flex gap-2 pl-[20px]">
+          <div className="h-full w-[3px]  rounded-full"></div>
+          <div className="w-full">{children}</div>
+        </div>
+      )}
     </>
   );
 }

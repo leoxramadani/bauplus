@@ -22,7 +22,7 @@ export default function useTranslation() {
 
   function t(key: any) {
     if (!strings[locale][key]) {
-      console.error(`No string '${key}' for locale '${locale}'`);
+      //console.error(`No string '${key}' for locale '${locale}'`);
     }
 
     return strings[locale][key] || strings[defaultLocale][key] || key;

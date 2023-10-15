@@ -3,48 +3,24 @@ import EmployeesCreate from '@/components/molecules/hr/employees/EmployeesCreate
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
+import useData from '@/lib/hooks/useData';
 import {
-  employeeDef,
-  employeeSchema,
-  EmployeeType,
+  employeeColumnDef,
+  IEmployee,
 } from '@/lib/schema/hr/employee/employee';
-import axios from 'axios';
+
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const Employees = () => {
   const router = useRouter();
-  const [employeeData, setEmployeeData] = useState<any>();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // const { data, isLoading, isError, error }: any = useData(
-  //   ['employees'],
-  //   GET_ALL_EMPLOYEES
-  // );
-  // useEffect(() => {
-  //   console.log('Employees-a->\n', data);
-
-  //   if (isError) {
-  //     console.log('Error from query:', isError);
-  //   }
-  // }, [data]);
-
-  useEffect(() => {
-    async function getData() {
-      await axios
-        .get(GET_ALL_EMPLOYEES)
-        .then((res) => {
-          console.log('response -->', res);
-          setEmployeeData(res.data);
-        })
-        .catch((error) => {
-          console.log('error fetching employees->', error);
-        });
-    }
-
-    getData();
-  }, []);
+  const { data } = useData<IEmployee[]>(
+    ['employees'],
+    GET_ALL_EMPLOYEES
+  );
 
   useEffect(() => {
     if (router.query.id) {
@@ -90,10 +66,10 @@ const Employees = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {employeeData ? (
+        {data ? (
           <DataTable
-            data={employeeData}
-            columns={employeeDef}
+            data={data}
+            columns={employeeColumnDef}
             searchVal="firstName"
           />
         ) : (

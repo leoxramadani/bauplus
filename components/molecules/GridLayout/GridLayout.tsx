@@ -1,16 +1,21 @@
-"use client"
+'use client';
 
 import React, { useEffect, useState } from 'react';
-import  { Responsive, WidthProvider, Layout, ReactGridLayoutProps, Layouts } from 'react-grid-layout';
+import {
+  Responsive,
+  WidthProvider,
+  Layout,
+  ReactGridLayoutProps,
+  Layouts,
+} from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { Title } from '@tremor/react';
 const ResponsiveGridLayout = WidthProvider(Responsive);
-import _ from "lodash";
+import _ from 'lodash';
 import KpiCard from '@/components/atoms/KpiCard';
 import GridItem from './GridItem';
 import GraphBlock from './GraphBlock';
-
 
 interface GridLayoutProps {
   data: string[];
@@ -46,34 +51,34 @@ const cities = [
 
 const chartdata = [
   {
-    date: "Jan 22",
+    date: 'Jan 22',
     SemiAnalysis: 2890,
-    "The Pragmatic Engineer": 2338,
+    'The Pragmatic Engineer': 2338,
   },
   {
-    date: "Feb 22",
+    date: 'Feb 22',
     SemiAnalysis: 2756,
-    "The Pragmatic Engineer": 2103,
+    'The Pragmatic Engineer': 2103,
   },
   {
-    date: "Mar 22",
+    date: 'Mar 22',
     SemiAnalysis: 3322,
-    "The Pragmatic Engineer": 2194,
+    'The Pragmatic Engineer': 2194,
   },
   {
-    date: "Apr 22",
+    date: 'Apr 22',
     SemiAnalysis: 3470,
-    "The Pragmatic Engineer": 2108,
+    'The Pragmatic Engineer': 2108,
   },
   {
-    date: "May 22",
+    date: 'May 22',
     SemiAnalysis: 3475,
-    "The Pragmatic Engineer": 1812,
+    'The Pragmatic Engineer': 1812,
   },
   {
-    date: "Jun 22",
+    date: 'Jun 22',
     SemiAnalysis: 3129,
-    "The Pragmatic Engineer": 1726,
+    'The Pragmatic Engineer': 1726,
   },
 ];
 
@@ -82,30 +87,45 @@ const graph1: Layout = {
   h: 3,
   x: 0,
   y: 0,
-  i: "graph1",
+  i: 'graph1',
   isResizable: false,
-}
+};
 
 const graph2: Layout = {
   w: 3,
   h: 3,
   x: 7,
   y: 2,
-  i: "graph2",
+  i: 'graph2',
   minW: 3,
   maxW: 4,
   minH: 2,
-  maxH: 3
-}
+  maxH: 3,
+};
 
 const originalItems = [
-  { name: 'b', key: 'graph1', data: chartdata, type: 'area', index: 'date', layout: graph1 },
-  { name: 'a', key: 'graph2', data: cities, type: 'pie', index: 'name', layout: graph2 },
+  {
+    name: 'b',
+    key: 'graph1',
+    data: chartdata,
+    type: 'area',
+    index: 'date',
+    layout: graph1,
+  },
+  {
+    name: 'a',
+    key: 'graph2',
+    data: cities,
+    type: 'pie',
+    index: 'name',
+    layout: graph2,
+  },
   // Add more items as needed
 ];
 
 const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
-  const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("lg");
+  const [currentBreakpoint, setCurrentBreakpoint] =
+    useState<string>('lg');
   const [items, setItems] = useState(originalItems);
   const [layouts, setLayouts] = useState<{ [index: string]: any[] }>({
     lg: _.map(_.range(0, 25), function (item, i) {
@@ -116,44 +136,43 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
         w: 2,
         h: y,
         i: i.toString(),
-        static: Math.random() < 0.05
+        static: Math.random() < 0.05,
       };
-    })
+    }),
   });
   const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
-    lg: []
+    lg: [],
   });
 
-
-  const handleLayoutChange = (layout: Layout[], layouts: Layouts ) => {
-    localStorage.setItem("grid-layout", JSON.stringify(layouts));
+  const handleLayoutChange = (layout: Layout[], layouts: Layouts) => {
+    localStorage.setItem('grid-layout', JSON.stringify(layouts));
   };
-  
 
   const onRemoveItem = (keyToRemove: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.key !== keyToRemove));
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.key !== keyToRemove)
+    );
   };
 
   const onBreakpointChange = (breakpoint: any) => {
     setCurrentBreakpoint(breakpoint);
     setToolbox({
       ...toolbox,
-      [breakpoint]: toolbox[breakpoint] || toolbox[currentBreakpoint] || []
+      [breakpoint]:
+        toolbox[breakpoint] || toolbox[currentBreakpoint] || [],
     });
   };
 
- 
-
   const onLayoutChange = (layout: any, layouts: any) => {
     setLayouts({ ...layouts });
-    console.log("test layout")
+    console.log('test layout');
   };
 
   const generateDOM = () => {
     return _.map(layouts.lg, function (l, i) {
       return (
         <GridItem key={i}>
-          <GraphBlock data={cities} type='pie' index='name' />
+          <GraphBlock data={cities} type="pie" index="name" />
         </GridItem>
       );
     });
@@ -169,8 +188,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
       cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
       autoSize={true}
     >
-                {generateDOM()}
-
+      {generateDOM()}
     </ResponsiveGridLayout>
   );
 };
