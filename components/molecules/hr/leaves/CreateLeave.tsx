@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
     Form,
     FormControl,
@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { IPayment, paymentSchema } from '@/lib/schema/Finance/payment';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -28,7 +28,8 @@ import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {useDropzone} from 'react-dropzone';
+import {DropzoneInputProps, FileRejection, useDropzone} from 'react-dropzone';
+import Drop from '@/components/atoms/Drop';
 
 
 interface ICreateLeave {
@@ -37,75 +38,11 @@ interface ICreateLeave {
 }
 
 
-const baseStyle = {
-  flex: 1,
-  display: 'flex',
-  // flexDirection: 'column',
-  alignItems: 'center',
-  padding: '20px',
-  borderWidth: 2,
-  borderRadius: 2,
-  borderColor: '#eeeeee',
-  borderStyle: 'dashed',
-  backgroundColor: '#fafafa',
-  color: '#bdbdbd',
-  outline: 'none',
-  transition: 'border .24s ease-in-out'
-};
-
-const focusedStyle = {
-  borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-  borderColor: '#00e676'
-};
-
-const rejectStyle = {
-  borderColor: '#ff1744'
-};
-
-
 const CreateLeave = ({setCloseModal} : ICreateLeave) => {
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({accept: {'image/*': []}});
 
-  const style = useMemo(() => ({
-    ...baseStyle,
-    ...(isFocused ? focusedStyle : {}),
-    ...(isDragAccept ? acceptStyle : {}),
-    ...(isDragReject ? rejectStyle : {})
-  }), [
-    isFocused,
-    isDragAccept,
-    isDragReject
-  ]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 
-
-
-
-    const projects = [
-        { label: "Thor1", value: "thor" },
-        { label: "Thor Website", value: "thorWebsite" },
-        { label: "Arkiva", value: "arkiva" },
-        { label: "ProWork", value: "prowork" },
-        { label: "Miniera", value: "miniera" }
-      ] as const
-    
-      const invoice = [
-        { label: "INV#001", value: "001" },
-        { label: "INV#002", value: "002" },
-        { label: "INV#003", value: "003" },
-        { label: "INV#004", value: "004" },
-        { label: "INV#005", value: "005" }
-      ] as const
-    
       const members = [
         { label: "Besir Kurtishi ", value: "001" },
         { label: "Besir Bossi ", value: "002" },
@@ -118,21 +55,6 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
         { label: "Casual", value: "casual" },
         { label: "Sick", value: "sick" },
         { label: "Earned", value: "earned" },
-      ] as const
-
-      const bankAccs = [
-        { label: "Besir Kurtishi ", value: "001" },
-        { label: "Besir Bossi ", value: "002" },
-        { label: "Besir ronaldo Acc3", value: "003" },
-        { label: "Besir Messi Acc4", value: "004" },
-        { label: "Besir leo Acc5", value: "005" }
-      ] as const
-    
-      const currency = [
-        { label: "Ден.", value: "mkd" },
-        { label: "$USD", value: "usd" },
-        { label: "Eur", value: "eur" },
-       
       ] as const
     
       const status = [
@@ -162,24 +84,16 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
 
   return (
     <div className="z-0 flex flex-col gap-4 w-full  ">
-      {/* <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-            Add Payment
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-            Payment Details
-        </h3>
-      </div> */}
 
       <Form {...form} >
             <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            <div className="flex flex-col  sm:grid sm:grid-cols-2  justify-center items-center gap-4">
             {/* project */}
             <FormField
           control={form.control}
           name="member"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="w-full flex flex-col">
               <FormLabel>Choose Member</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -241,7 +155,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="leaveType"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='w-full'>
               <FormLabel>Leave Type</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -267,7 +181,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="status"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='w-full'>
               <FormLabel>Status</FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -295,7 +209,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
           control={form.control}
           name="duration"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-6 justify-start">
+            <FormItem className="w-full flex flex-col gap-6 justify-start">
               <FormLabel>Select Duration</FormLabel>
               <FormControl>
                 <RadioGroup
@@ -332,7 +246,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             control={form.control}
             name="date"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className='w-full'>
                 <FormLabel>Date</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -380,7 +294,7 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             control={form.control}
             name="reason"
             render={({ field }) => (
-              <FormItem className=' col-span-2'>
+              <FormItem className='w-full sm:col-span-2'>
                 <FormLabel>Reason for absence</FormLabel>
                 <FormControl className="relative">
                   <Textarea placeholder="Reason for absence..." rows={5} {...field} />
@@ -390,13 +304,9 @@ const CreateLeave = ({setCloseModal} : ICreateLeave) => {
             )}
           />
 
-<div {...getRootProps({style})} className=' col-span-2 h-24 items-center flex-col flex justify-center'>
-        <input {...getInputProps()} />
-        <p>Drag and drop some files here, or click to select files</p>
-      </div>
 
 
-  
+     <Drop selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
             </div>
 
             <Button className="w-max" type="submit">
