@@ -15,11 +15,10 @@ const Users = () => {
 
   return (
     <>
-      <h1 className="title">{t('Users')}</h1>
       {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}
-      {data && <DataTable columns={columns} data={data}></DataTable>}
+      {data && <DataTable columns={columns} data={data.result}></DataTable>}
     </>
   );
 };

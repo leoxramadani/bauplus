@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Breadcrumbs from '../ui/breadcrumbs';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
@@ -76,14 +77,15 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`mt-2 sm:mt-4 p-4 transition-all duration-[250ms] ${
+          className={`p-4 transition-all duration-[250ms] ${
             !isWindowSmall &&
             (expanded
               ? `ml-[15rem] transition-all duration-[250ms]`
               : `md:ml-[4.5rem] transition-all duration-[250ms]`)
           }`}
         >
-          {children}
+          <Breadcrumbs />
+          <div className='mt-4'>{children}</div>
         </main>
       </div>
     </>

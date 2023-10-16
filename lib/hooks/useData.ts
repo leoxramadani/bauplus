@@ -16,7 +16,7 @@ export const fetcher = (url: string, options: any) =>
     ...options,
   })
     .then((res) => res.json())
-    .then((data) => data.result);
+    .then((data) => data);
 
 /**
  * Custom hook for fetching data with Tanstack's useQuery:
@@ -25,19 +25,23 @@ export const fetcher = (url: string, options: any) =>
  * @param options additional or overrides to fetch options, such as HTTP method or Headers.
  * @returns the result object from useQuery.
  */
-export default function useData(
+export default function useData<TData>(
   keys: any[],
   url: string,
+  enabled: boolean = true,
   options?: any
-): UseQueryResult {
+): UseQueryResult<TData> {
   const result = useQuery({
     queryKey: keys,
     queryFn: () => fetcher(url, options),
+    enabled: enabled
   });
 
   useEffect(() => {
     return;
-  }, [keys, url, result.data]);
+  }, [keys, url, result]);
 
-  return result;
+  console.log(result)
+
+  return result!;
 }

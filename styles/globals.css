@@ -83,7 +83,6 @@
 }
 
 @layer components {
-
   .button {
     @apply cursor-pointer rounded-sm bg-red-500
      
@@ -95,7 +94,7 @@
             focus:ring-red-500/50 active:bg-red-500
             
             disabled:bg-slate-400;
-  } 
+  }
 
   .button-secondary {
     @apply cursor-pointer rounded-sm border-2 border-red-500 bg-transparent
@@ -120,7 +119,7 @@
 
 .sidebar {
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
 /* Define scrollbar styles for Webkit browsers (Chrome, Safari, etc.) */
@@ -152,4 +151,24 @@
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+}
+
+
+/* Style the progressbar in route change */
+#nprogress {
+  pointer-events: none;
+  z-index: 1100;
+  position: fixed
+}
+
+#nprogress .bar {
+  @apply bg-blue-600;
+
+  position: fixed;
+  z-index: 1100;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
 }
