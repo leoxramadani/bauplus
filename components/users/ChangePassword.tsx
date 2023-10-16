@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Modal from "../Modal";
-import Button from "../Button";
 import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
@@ -11,6 +10,8 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { IChangePassword, changePasswordSchema } from "@/lib/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const ChangePassword = ({ username }: { username?: string }) => {
   const router = useRouter();
@@ -79,11 +80,12 @@ const ChangePassword = ({ username }: { username?: string }) => {
         className="flex flex-col gap-3 max-w-xl mx-auto"
       >
         <div className="flex flex-col">
-          <label htmlFor="current">{t("Current password")}</label>
-          <input
+          <label className="sr-only" htmlFor="current">{t("Current password")}</label>
+          <Input
             id="current"
             type="password"
             className="input"
+            placeholder="Current password"
             {...registerChangePassword("currentPassword")}
           />
           {!username && (
@@ -96,11 +98,12 @@ const ChangePassword = ({ username }: { username?: string }) => {
           </p>
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="new">{t("New password")}</label>
-          <input
+          <label className="sr-only" htmlFor="new">{t("New password")}</label>
+          <Input
             id="new"
             type="password"
             className="input"
+            placeholder="New password"
             data-error={changePasswordErrors.newPassword}
             {...registerChangePassword("newPassword")}
           />
@@ -109,11 +112,12 @@ const ChangePassword = ({ username }: { username?: string }) => {
           </p>
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="confirm">{t("Confirm new password")}</label>
-          <input
+          <label className="sr-only" htmlFor="confirm">{t("Confirm new password")}</label>
+          <Input
             id="confirm"
             type="password"
             className="input"
+            placeholder="Confirm new password"
             data-error={changePasswordErrors.confirmNewPassword}
             {...registerChangePassword("confirmNewPassword")}
           />
@@ -122,8 +126,8 @@ const ChangePassword = ({ username }: { username?: string }) => {
           </p>
         </div>
         <div>
-          <Button isProgress={loading} className="button">
-            {t("Save")}
+          <Button>
+            Save
           </Button>
         </div>
       </form>

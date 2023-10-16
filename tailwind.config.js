@@ -39,6 +39,9 @@ module.exports = {
             DEFAULT: '#ffffff', // white
             emphasis: '#374151', // gray-700
           },
+          popover: {
+            DEFAULT: 'black'
+          },
           border: {
             DEFAULT: '#e5e7eb', // gray-200
           },

@@ -25,6 +25,22 @@ import { Input } from '@/components/ui/input';
 
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableViewOptions } from './DataTableViewOptions';
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from '@radix-ui/react-context-menu';
+import { ContextMenuShortcut } from '@/components/ui/context-menu';
+import { DataTableColumnHeader } from './DataTableColumnHeader';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -97,12 +113,7 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      <DataTableColumnHeader column={header.column} title={header.column.columnDef.header as string} />
                     </TableHead>
                   );
                 })}
@@ -112,19 +123,32 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <ContextMenu key={row.id}>
+                  <ContextMenuTrigger asChild>
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent className="p-1 bg-white text-slate-900 rounded-lg border shadow-md shadow-slate-300/30">
+                    <ContextMenuItem className="flex justify-between items-center transition-colors duration-75 hover:bg-slate-200 cursor-pointer py-2 w-60 rounded-md px-3">
+                      Copy ID
+                      <ContextMenuShortcut>
+                        &#8984;C
+                      </ContextMenuShortcut>
+                    </ContextMenuItem>
+                    <ContextMenuSeparator />
+                  </ContextMenuContent>
+                </ContextMenu>
               ))
             ) : (
               <TableRow>

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  EmployeeType,
-  employeeDef,
+  IEmployee,
+  employeeColumnDef,
   employeeSchema,
 } from '@/lib/schema/hr/employee/employee';
 import {
@@ -60,13 +60,13 @@ const EmployeesCreate = ({
     }
   }, [employeeId]);
 
-  const form = useForm<EmployeeType>({
+  const form = useForm<IEmployee>({
     resolver: zodResolver(employeeSchema),
     values: { ...employeeData },
   });
 
   const onSubmit = useCallback(
-    async (data: EmployeeType) => {
+    async (data: IEmployee) => {
       console.log('Employee data', employeeData);
 
       if (employeeData) {

@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import useTranslation from '@/lib/hooks/useTranslation';
+import { Button } from './ui/button';
 type ModalProps = {
   children: React.ReactNode;
   ButtonText?: string;
@@ -14,7 +15,7 @@ type ModalProps = {
   handleButton?: () => void;
 };
 
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   children,
   ButtonText = '',
   iconStyle = '',
@@ -27,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({
   handleButton = () => {
     return;
   },
-}) => {
+}: ModalProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const handleClose = () => {
@@ -46,12 +47,13 @@ const Modal: React.FC<ModalProps> = ({
           onClick={() => setOpen(true)}
         ></i>
       ) : (
-        <input
+        <Button
           type="button"
+          variant={'outline'}
           onClick={() => setOpen(true)}
-          value={value ?? ButtonText}
-          className={className ?? 'button'}
-        />
+        >
+          {value}
+        </Button>
       )}
 
       <Transition.Root show={open || openModalOutside} as={Fragment}>
@@ -69,12 +71,10 @@ const Modal: React.FC<ModalProps> = ({
               }
             >
               {children}
-              <input
-                type="button"
-                onClick={handleClose}
-                value={done ?? t('Done')}
-                className="absolute bottom-4 right-8 text-white  bg-blue-600 hover:bg-blue-500 transition ease-linear shadow-none hover:shadow-md py-2 px-4 capitalize text-sm flex flex-row gap-2 items-center justify-center font-medium rounded-full"
-              />
+              <Button variant={'secondary'} onClick={handleClose} className=''>
+                {done ?? t('Done')}
+              </Button>
+              
             </div>
           </div>
         </Dialog>
