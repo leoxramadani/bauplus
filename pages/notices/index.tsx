@@ -123,7 +123,7 @@ const Notices = () => {
           <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex gap-1 justify-center items-center"
               >
                 Add Notice

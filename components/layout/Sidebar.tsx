@@ -262,6 +262,13 @@ const Sidebar = ({
               href="/users"
             />
 
+            <SidebarItem
+              icon={<ClipboardList size={20} strokeWidth={1.5} />}
+              text="Notice Board"
+              alert
+              href="/notices"
+            ></SidebarItem>
+
             {/* {!isWindowSmall && (
               <>
                 <hr className="my-3 border-slate-600" />

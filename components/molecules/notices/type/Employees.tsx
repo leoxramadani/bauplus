@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import {
   INoticeSchema,
   noticeSchema,
@@ -100,6 +101,20 @@ const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="noticeTitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notice Details</FormLabel>
+
+              <FormControl className="relative">
+                <Textarea />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Btn
           isProgress={test}
