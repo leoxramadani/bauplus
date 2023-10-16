@@ -10,14 +10,25 @@ import {
   departmentColumnDef,
 } from '@/lib/schema/hr/department';
 import { FileInput, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 const Departments = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { data } = useData<IDepartment[]>(
+  const { data, isError, isLoading } = useData<IDepartment[]>(
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
+
+  useEffect(() => {
+    if (!open) {
+      router.replace('/hr/employees', undefined, {
+        shallow: true,
+      });
+    }
+  }, [open]);
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
@@ -39,8 +50,10 @@ const Departments = () => {
           <FileInput /> <span>Export</span>
         </Button>
       </div>
-      {data && (
+      {data && !isLoading ? (
         <DataTable data={data} columns={departmentColumnDef} />
+      ) : (
+        <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
       )}
     </section>
   );

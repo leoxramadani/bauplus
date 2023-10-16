@@ -32,15 +32,32 @@ import {
   UPDATE_EMPLOYEES,
 } from '@/lib/constants/endpoints/employee';
 import { useRouter } from 'next/router';
-const EmployeesCreate = ({
-  setIsCreateModalOpen,
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
+import useData from '@/lib/hooks/useData';
+const EmployeesForm = ({
+  setIsModalOpen,
   employeeId,
 }: {
-  setIsCreateModalOpen: any;
+  setIsModalOpen: any;
   employeeId?: string;
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
+  // const [departments, setDepartments] = useState<any>();
+
+  const {
+    data: departments,
+    isLoading,
+    isError,
+  } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -59,6 +76,23 @@ const EmployeesCreate = ({
       getData(employeeId);
     }
   }, [employeeId]);
+
+  // useEffect(() => {
+  //   async function getDepartments() {
+  //     await axios
+  //       .get(GET_ALL_DEPARTMENTS)
+  //       .then((res) => {
+  //         setDepartments(res.data);
+
+  //         console.log('Departments:', res.data);
+  //       })
+  //       .catch((error) => {
+  //         console.log('error=', error);
+  //       });
+  //   }
+
+  //   getDepartments();
+  // }, []);
 
   const form = useForm<IEmployee>({
     resolver: zodResolver(employeeSchema),
@@ -99,7 +133,7 @@ const EmployeesCreate = ({
           });
       }
 
-      setIsCreateModalOpen(false);
+      setIsModalOpen(false);
     },
     [employeeData]
   );
@@ -124,21 +158,6 @@ const EmployeesCreate = ({
           className="flex flex-col gap-4 w-full"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
-            {/* <FormField
-              control={form.control}
-              name="employeeId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Employee Id<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Employee Id" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="companyId"
@@ -154,18 +173,41 @@ const EmployeesCreate = ({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="departmentId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="departmentId" {...field} />
-                  </FormControl>
+                  <FormLabel>Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter department" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {departments ? (
+                        <>
+                          {departments.map((dep: any) => (
+                            <SelectItem
+                              key={dep.departmentId}
+                              value={dep.departmentId}
+                            >
+                              {dep.departmentName}
+                            </SelectItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -286,4 +328,4 @@ const EmployeesCreate = ({
   );
 };
 
-export default EmployeesCreate;
+export default EmployeesForm;
