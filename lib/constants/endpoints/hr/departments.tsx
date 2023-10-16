@@ -1,5 +1,4 @@
 import { BASE_URL } from '..';
-import { BASE_URL } from '..';
 
 export const GET_ALL_DEPARTMENTS =
   BASE_URL + `/api/Department/GetAllDepartments`;
