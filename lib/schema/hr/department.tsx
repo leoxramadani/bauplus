@@ -14,10 +14,16 @@ export const departmentColumnDef: ColumnDef<IDepartment>[] = [
   {
     accessorKey: 'departmentId',
     header: 'Department ID',
+    enableColumnFilter: true,
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: 'departmentName',
     header: 'Department Name',
+    enableGlobalFilter: true,
+    enableHiding: true,
+    enableColumnFilter: true,
   },
   {
     accessorKey: 'companyId',

@@ -3,6 +3,7 @@ import {
   Home,
   LayoutDashboard,
   SettingsIcon,
+  UserCircle,
   Users,
   Wallet,
 } from 'lucide-react';
@@ -40,6 +41,11 @@ export default [
   {
     path: 'payroll',
     title: 'Payroll',
-    icon: <Wallet size={18} />
-  }
+    icon: <Wallet size={18} />,
+  },
+  {
+    path: 'users',
+    title: 'Users',
+    icon: <UserCircle size={18} />,
+  },
 ];

@@ -93,8 +93,8 @@ const Sidebar = ({
                 !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
               } hover:cursor-pointer`}
             /> */}
-              <h1 className="text-white text-3xl font-bold flex gap-2 items-center">
-                <Square strokeWidth={10} size={36} radius={0} />
+              <h1 className="text-white text-xl font-bold flex gap-2 items-center w-full justify-center ml-2">
+                <Square strokeWidth={10} size={18} radius={0} />
                 Arkiva
               </h1>
             </Link>
