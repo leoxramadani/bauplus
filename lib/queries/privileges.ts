@@ -1,5 +1,4 @@
-import { gql } from "@apollo/client";
-
+import { gql } from '@apollo/client';
 
 //* the mutation takes an argument for the entity input object & returns long description
 const CREATE_PRIVILEGES_QUERY = gql`
@@ -33,7 +32,6 @@ const CREATE_PRIVILEGES_QUERY = gql`
 //     console.error(error);
 //     // handle error
 //   });
-
 
 const GET_ALL_PRIVILEGES_QUERY = gql`
   query {
@@ -88,27 +86,26 @@ export type AllPrivilegesQueryData = {
 //     </div>
 //   );
 
-
 const UPDATE_PRIVILEGES_QUERY = gql`
   mutation updatePrivileges(
-    $privilegeID: Int!,
-    $created: String!,
-    $createdBy: String!,
-    $long_Description: String!,
-    $short_Description: String!,
-    $modifiedBy: String!,
+    $privilegeID: Int!
+    $created: String!
+    $createdBy: String!
+    $long_Description: String!
+    $short_Description: String!
+    $modifiedBy: String!
     $modified: String!
   ) {
     updatePrivileges(
-      privilegeID: $privilegeID,
-      created: $created,
-      createdBy: $createdBy,
-      long_Description: $long_Description,
-      short_Description: $short_Description,
-      modifiedBy: $modifiedBy,
+      privilegeID: $privilegeID
+      created: $created
+      createdBy: $createdBy
+      long_Description: $long_Description
+      short_Description: $short_Description
+      modifiedBy: $modifiedBy
       modified: $modified
     ) {
-      long_Description,
+      long_Description
       modifiedBy
     }
   }
@@ -118,7 +115,7 @@ const UPDATE_PRIVILEGES_QUERY = gql`
 // const [updatePrivileges, { data, loading, error }] = useMutation(UPDATE_PRIVILEGES_QUERY);
 
 // const variables = {
-//   privilegeID: 98, 
+//   privilegeID: 98,
 //   created: "04/24/2023",
 //   createdBy: "Ardrin",
 //   long_Description: "MODIFIED LONG description for the Privileges",
@@ -136,7 +133,6 @@ const UPDATE_PRIVILEGES_QUERY = gql`
 //     console.error(error);
 //     // handle error
 //   });
-
 
 const REMOVE_PRIVILEGES_QUERY = gql`
   mutation removePrivileges($pid: Int!) {
@@ -156,7 +152,6 @@ const REMOVE_PRIVILEGES_QUERY = gql`
 //     console.error(error);
 //     // handle error
 //   });
-
 
 const SPECIFIC_PRIVILEGES_QUERY = gql`
   query specificPrivileges($privilegeID: Int!) {
@@ -178,4 +173,3 @@ const SPECIFIC_PRIVILEGES_QUERY = gql`
 // if (error) return `Error! ${error.message}`;
 
 // console.log(data.specificPrivileges);
-

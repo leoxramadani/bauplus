@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const CREATE_NEW_ORGAN_EDINICA_QUERY = gql`
   mutation createNewOrganEdinica(
@@ -10,15 +10,17 @@ const CREATE_NEW_ORGAN_EDINICA_QUERY = gql`
     $modified: String!
     $isDeleted: Boolean!
   ) {
-    createNewOrganEdinica(entity: {
-      organEdinica_ID: $organEdinica_ID
-      pershkrim: $pershkrim
-      createdBy: $createdBy
-      created: $created
-      modifiedBy: $modifiedBy
-      modified: $modified
-      isDeleted: $isDeleted
-    }) {
+    createNewOrganEdinica(
+      entity: {
+        organEdinica_ID: $organEdinica_ID
+        pershkrim: $pershkrim
+        createdBy: $createdBy
+        created: $created
+        modifiedBy: $modifiedBy
+        modified: $modified
+        isDeleted: $isDeleted
+      }
+    ) {
       pershkrim
     }
   }
@@ -38,7 +40,6 @@ const CREATE_NEW_ORGAN_EDINICA_QUERY = gql`
 // };
 
 // createNewOrganEdinica({ variables });
-
 
 const GET_ALL_ORGAN_EDINICA_QUERY = gql`
   query allOrganEdinica {
@@ -60,16 +61,13 @@ const GET_ALL_ORGAN_EDINICA_QUERY = gql`
 // const organizationUnits = data.allOrganEdinica;
 // render the list of organization units
 
-
-
 //! the query in the backend doesnt have a response so this is just an example
-// TODO: Change the response 
-
+// TODO: Change the response
 
 const REMOVE_ORGAN_EDINICA_QUERY = gql`
   mutation removeOrganEdinica($cid: String!) {
     removeOrganEdinica(cid: $cid) {
-      success 
+      success
       message
     }
   }
@@ -89,8 +87,6 @@ const REMOVE_ORGAN_EDINICA_QUERY = gql`
 //     // handle error
 //   });
 
-
-
 //* UPDATE ORGAN EDINICA
 
 const UPDATE_ORGAN_EDINICA_QUERY = gql`
@@ -103,19 +99,19 @@ const UPDATE_ORGAN_EDINICA_QUERY = gql`
     $modified: String!
   ) {
     updateOrganEdinica(
-      organEdinica_ID: $organEdinica_ID,
-      pershkrim: $pershkrim,
-      createdBy: $createdBy,
-      created: $created,
-      modifiedBy: $modifiedBy,
-      modified: $modified,
+      organEdinica_ID: $organEdinica_ID
+      pershkrim: $pershkrim
+      createdBy: $createdBy
+      created: $created
+      modifiedBy: $modifiedBy
+      modified: $modified
     ) {
-      organEdinica_ID,
-      pershkrim,
-      createdBy,
-      created,
-      modifiedBy,
-      modified,
+      organEdinica_ID
+      pershkrim
+      createdBy
+      created
+      modifiedBy
+      modified
       isDeleted
     }
   }
@@ -136,7 +132,6 @@ const UPDATE_ORGAN_EDINICA_QUERY = gql`
 
 // updateOrganEdinica({ variables });
 
-
 //* This is a query for retrieving the createdBy property of a specific organizational unit.
 
 const GET_SPECIFIC_ORGAN_EDINICA_QUERY = gql`
@@ -152,9 +147,9 @@ const GET_SPECIFIC_ORGAN_EDINICA_QUERY = gql`
 // const { loading, error, data } = useQuery(GET_SPECIFIC_ORGAN_EDINICA_QUERY, {
 //     variables: { organEdinicaID: "s" },
 //   });
-  
+
 //   if (loading) return <p>Loading...</p>;
 //   if (error) return <p>Error: {error.message}</p>;
-  
+
 //   const createdBy = data.specificOrganEdinica.createdBy;
-  // render the createdBy property
+// render the createdBy property

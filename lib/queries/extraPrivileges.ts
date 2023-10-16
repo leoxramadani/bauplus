@@ -1,19 +1,17 @@
-
-import { gql } from "@apollo/client";
-
+import { gql } from '@apollo/client';
 
 const CREATE_EXTRA_PRIVILEGES_QUERY = gql`
   mutation createNewExtraPrivileges($entity: ExtraPrivilegesInput!) {
     createNewExtra_Privileges(entity: $entity) {
-      userName,
+      userName
       privileges {
-        short_Description,
+        short_Description
         createdBy
-      },
+      }
       kompanite {
-        adresa,
+        adresa
         zhiroLlogaria1
-      },
+      }
       createdBy
     }
   }
@@ -64,7 +62,6 @@ const GET_ALL_EXTRA_PRIVILEGES_QUERY = gql`
 
 // console.log(data.allExtra_Privileges);
 
-
 const REMOVE_EXTRA_PRIVILEGES_QUERY = gql`
   mutation removeExtraPrivileges($epid: Int!) {
     removeExtra_Privileges(epid: $epid)
@@ -87,7 +84,7 @@ const REMOVE_EXTRA_PRIVILEGES_QUERY = gql`
 const GET_EXTRA_PRIVILEGES_BY_ID = gql`
   query specificExtra_Privileges($privilege_ID: Int!) {
     specificExtra_Privileges(privilege_ID: $privilege_ID) {
-      privilege_ID,
+      privilege_ID
       userName
     }
   }
@@ -103,14 +100,31 @@ const GET_EXTRA_PRIVILEGES_BY_ID = gql`
 
 // console.log(data.specificExtra_Privileges); // handle data
 
-
 const UPDATE_EXTRA_PRIVILEGES_MUTATION = gql`
-  mutation updateExtraPrivileges($privilege_ID: Int!, $userName: String!, $modifiedBy: String!, $grant: Boolean!, $createdBy: String!, $company_ID: Int!, $created: String!, $modified: String!) {
-    updateExtra_Privileges(privilege_ID: $privilege_ID, userName: $userName, modifiedBy: $modifiedBy, grant: $grant, createdBy: $createdBy, company_ID: $company_ID, created: $created, modified: $modified) {
-      grant,
-      userName,
-      privilege_ID,
-      modifiedBy,
+  mutation updateExtraPrivileges(
+    $privilege_ID: Int!
+    $userName: String!
+    $modifiedBy: String!
+    $grant: Boolean!
+    $createdBy: String!
+    $company_ID: Int!
+    $created: String!
+    $modified: String!
+  ) {
+    updateExtra_Privileges(
+      privilege_ID: $privilege_ID
+      userName: $userName
+      modifiedBy: $modifiedBy
+      grant: $grant
+      createdBy: $createdBy
+      company_ID: $company_ID
+      created: $created
+      modified: $modified
+    ) {
+      grant
+      userName
+      privilege_ID
+      modifiedBy
       created
     }
   }
@@ -139,4 +153,3 @@ const UPDATE_EXTRA_PRIVILEGES_MUTATION = gql`
 //     console.error(error);
 //     // handle error
 //   });
-

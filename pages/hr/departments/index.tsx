@@ -30,9 +30,7 @@ const Departments = () => {
               <Plus size={20} /> Add Department
             </Button>
           </Modal.Trigger>
-          <Modal.Content
-            title="Add another department"
-          >
+          <Modal.Content title="Add another department">
             <DepartmentCreate />
           </Modal.Content>
         </Modal>

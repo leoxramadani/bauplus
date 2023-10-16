@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const GET_ALL_ARCHIVE_QUERY = gql`
   query {
@@ -16,7 +16,6 @@ export const GET_ALL_ARCHIVE_QUERY = gql`
       organEdinica_ID
       razvodDatum
       oznaka_ID
-
     }
   }
 `;
@@ -49,15 +48,39 @@ export const SPECIFIC_ARKIVA_QUERY = gql`
 `;
 
 export const UPDATE_ARKIVA_QUERY = gql`
-mutation($NrArk:Int!,$broj:String!,$datum:DateTime!,$datumPriem:DateTime!,
-  $ImageArk:String!, $ispracac:String!, $organEdinica_ID:String!,$oznaka_ID:String!,$predmet:String!,
-  $razvodDatum:DateTime!,$podBroevi:Byte!,$nrLHD:Int!,$FileBase64:String!,$IsUploaded:Boolean!,$osnovenBr:Int!)
-  {
-    updateArkiva2 (nrArk: $NrArk,broj: $broj,datum: $datum,datumPriem: $datumPriem,
-    imageArk:$ImageArk, ispracac: $ispracac,
-    organEdinica_ID: $organEdinica_ID,oznaka_ID: $oznaka_ID,predmet: $predmet ,razvodDatum: $razvodDatum,
-    podBroevi: $podBroevi,nrLHD: $nrLHD,
-    fileBase64: $FileBase64,isUploaded: $IsUploaded,osnovenBr: $osnovenBr
+  mutation (
+    $NrArk: Int!
+    $broj: String!
+    $datum: DateTime!
+    $datumPriem: DateTime!
+    $ImageArk: String!
+    $ispracac: String!
+    $organEdinica_ID: String!
+    $oznaka_ID: String!
+    $predmet: String!
+    $razvodDatum: DateTime!
+    $podBroevi: Byte!
+    $nrLHD: Int!
+    $FileBase64: String!
+    $IsUploaded: Boolean!
+    $osnovenBr: Int!
+  ) {
+    updateArkiva2(
+      nrArk: $NrArk
+      broj: $broj
+      datum: $datum
+      datumPriem: $datumPriem
+      imageArk: $ImageArk
+      ispracac: $ispracac
+      organEdinica_ID: $organEdinica_ID
+      oznaka_ID: $oznaka_ID
+      predmet: $predmet
+      razvodDatum: $razvodDatum
+      podBroevi: $podBroevi
+      nrLHD: $nrLHD
+      fileBase64: $FileBase64
+      isUploaded: $IsUploaded
+      osnovenBr: $osnovenBr
     ) {
       nr
       osnovenBr

@@ -23,7 +23,7 @@ import {
   createBankAccountSchema,
 } from '@/lib/schema/Finance/finance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import {
@@ -36,6 +36,13 @@ import {
 import { watch } from 'fs';
 import { toast } from 'react-toastify';
 import { IBankAccountCreate } from '../BankAccountCreate';
+import useData from '@/lib/hooks/useData';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
+
 const Bank = ({ setModal }: IBankAccountCreate) => {
   const form = useForm<IcreateBankAccountSchema>({
     resolver: zodResolver(createBankAccountSchema),
@@ -43,7 +50,7 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
     // defaultValues: {
     //   bankName: '',
     //   employeeId: '',
-    //   currencyId: '',
+    //   currencyId: '',s
     //   bankAccountTypeId: '',
     //   bankAccountStatusId: '',
     //   accountName: '',
@@ -51,6 +58,16 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
     //   openingBalance: 0,
     // },
   });
+
+  interface IEmployee {
+    employeeId?: string;
+    companyId?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    dateOfBirth?: string;
+    departmentId: string;
+  }
 
   const onSubmit = useCallback(
     async (data: IcreateBankAccountSchema) => {
@@ -61,6 +78,7 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
         .then((res: any) => {
           toast.success('Successfully created new bank account!');
           setModal(false);
+          console.log("res:",res)
         })
         .catch((error) => {
           console.log('error=', error);
@@ -69,32 +87,39 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
     []
   );
 
-  const [allCurrencies, setAllCurrencies] = useState<any>();
-  const [allAccountTypes, setAllAccountTypes] = useState<any>();
-  const [allAccountStatuses, setAllAccountStatuses] = useState<any>();
-  const [allEmployeesNames, setAllEmployeesNames] = useState<any>();
-  useEffect(() => {
-    async function getCurrencies() {
-      await axios
-        .get(GET_ALL_CURRENCIES)
-        .then((res) => {
-          setAllCurrencies(res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
-    async function getAccountTypes() {
-      await axios
-        .get(GET_ALL_ACCOUNT_TYPES)
-        .then((res) => {
-          setAllAccountTypes(res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
+  const {
+    data: currencies,
+    isError: currenciesIsError,
+    isLoading: currenciesIsLoading,
+    error: currenciesError,
+  } = useData<Array<{ [key: string]: any }>>(
+    ['currencies'],
+    GET_ALL_CURRENCIES
+  );
 
+  const {
+    data: accountTypes,
+    isError: accountTypesIsError,
+    isLoading: accountTypesIsLoading,
+    error: accountTypesError,
+  } = useData<Array<{ [key: string]: any }>>(
+    ['account_types'],
+    GET_ALL_ACCOUNT_TYPES
+  );
+
+  const {
+    data: employees,
+    isError: employeesIsError,
+    isLoading: employeesIsLoading,
+    error: employeesError,
+  } = useData<Array<{ [key: string]: any }>>(
+    ['employees'],
+    GET_ALL_EMPLOYEES
+  );
+
+  console.log(form.watch('employeeId'));
+  const [allAccountStatuses, setAllAccountStatuses] = useState<any>();
+  useEffect(() => {
     async function getAccountStatuses() {
       await axios
         .get(GET_ALL_ACCOUNT_STATUSES)
@@ -106,21 +131,7 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
         });
     }
 
-    async function getEmployeeName() {
-      await axios
-        .get(GET_MY_EMPLOYEE_NAMES)
-        .then((res) => {
-          setAllEmployeesNames(res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
-
-    getCurrencies();
-    getAccountTypes();
     getAccountStatuses();
-    getEmployeeName();
   }, []);
 
   const onError = (error: any) => {
@@ -150,29 +161,7 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="accountName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Account Name</FormLabel>
-
-                <FormControl className="relative">
-                  <Input
-                    placeholder="Enter account number"
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    type="input"
-                    autoComplete="off"
-                    {...field}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
+          {/* <FormField
             control={form.control}
             name="employeeId"
             render={({ field }) => (
@@ -210,7 +199,81 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
                 <FormMessage />
               </FormItem>
             )}
+          /> */}
+
+          <FormField
+            control={form.control}
+            name="employeeId"
+            render={({ field }) => (
+              <FormItem className="w-full flex flex-col">
+                <FormLabel>Account Holder Name</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          'w-full flex items-center gap-1 justify-between',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value
+                          ? employees?.find(
+                              (employee) =>
+                                employee.employeeId === field.value
+                            )?.firstName +
+                            ' ' +
+                            employees?.find(
+                              (employee) =>
+                                employee.employeeId === field.value
+                            )?.lastName
+                          : 'Choose member'}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search language..." />
+                      <CommandEmpty>No member found.</CommandEmpty>
+                      <CommandGroup className="flex flex-col gap-4">
+                        {employees
+                          ?.slice(0, 5)
+                          .map((employee, i: Key) => (
+                            <CommandItem
+                              value={employee.firstName + ' ' + employee.lastName}
+                              className="flex items-center"
+                              key={i}
+                              onSelect={() => {
+                                form.setValue(
+                                  'employeeId',
+                                  employee.employeeId
+                                );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4 transition-all',
+                                  employee.employeeId === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {`${employee.firstName} ${employee.lastName}`}
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                <FormMessage />
+              </FormItem>
+            )}
           />
+
+          
 
           <FormField
             control={form.control}
@@ -249,9 +312,9 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {allAccountTypes ? (
+                    {accountTypes ? (
                       <>
-                        {allAccountTypes.map((x: any) => {
+                        {accountTypes.map((x: any) => {
                           return (
                             <SelectItem
                               value={x.bankAccountTypeId}
@@ -288,9 +351,9 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {allCurrencies ? (
+                    {currencies && !currenciesIsLoading ? (
                       <>
-                        {allCurrencies.map((x: any) => {
+                        {currencies.map((x: any) => {
                           return (
                             <SelectItem
                               key={x.currencyID}

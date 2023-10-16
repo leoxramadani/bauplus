@@ -1,7 +1,7 @@
-import * as z from "zod";
-import { MRT_ColumnDef } from "material-react-table";
-import { formatDate } from "../helper/helper";
-import useTranslation from "../hooks/useTranslation";
+import * as z from 'zod';
+import { MRT_ColumnDef } from 'material-react-table';
+import { formatDate } from '../helper/helper';
+import useTranslation from '../hooks/useTranslation';
 
 //#region  columns
 export const fiscalSchema = z.object({
@@ -21,8 +21,8 @@ export type fiscalColumns = z.infer<typeof fiscalSchema>;
 
 export const fiscalColumns: MRT_ColumnDef<fiscalColumns>[] = [
   {
-    accessorKey: "nr",
-    header: "Number",
+    accessorKey: 'nr',
+    header: 'Number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
@@ -30,24 +30,24 @@ export const fiscalColumns: MRT_ColumnDef<fiscalColumns>[] = [
   },
 
   {
-    accessorKey: "nrExtern",
-    header: "Extern number",
+    accessorKey: 'nrExtern',
+    header: 'Extern number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "companyName",
-    header: "Company name",
+    accessorKey: 'companyName',
+    header: 'Company name',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "userName",
-    header: "Username",
+    accessorKey: 'userName',
+    header: 'Username',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
@@ -55,14 +55,14 @@ export const fiscalColumns: MRT_ColumnDef<fiscalColumns>[] = [
   },
 
   {
-    accessorKey: "dataNeDokument",
-    header: "Date in document",
+    accessorKey: 'dataNeDokument',
+    header: 'Date in document',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
-    sortingFn: "date",
+    sortingFn: 'date',
     // Filter: ({ column }) => {
     //   console.log("inside column: \n", column.getCanFilter());
     //   return (
@@ -88,32 +88,32 @@ export const fiscalColumns: MRT_ColumnDef<fiscalColumns>[] = [
     // },
   },
   {
-    accessorKey: "shumaPaTVSH",
-    header: "Sum without TAX",
+    accessorKey: 'shumaPaTVSH',
+    header: 'Sum without TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "vleraTVSH",
-    header: "Value of TAX",
+    accessorKey: 'vleraTVSH',
+    header: 'Value of TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaTVSH",
-    header: "Sum with TAX",
+    accessorKey: 'shumaTVSH',
+    header: 'Sum with TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "dataKohaRec",
-    header: "Reg. date",
+    accessorKey: 'dataKohaRec',
+    header: 'Reg. date',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
@@ -123,9 +123,9 @@ export const fiscalColumns: MRT_ColumnDef<fiscalColumns>[] = [
 ];
 
 export const fiscalInputSchema = z.object({
-  nrExtern: z
-    .string()
-    .length(4, { message: "The extern field must have exactly 4 digits" }),
+  nrExtern: z.string().length(4, {
+    message: 'The extern field must have exactly 4 digits',
+  }),
   komitentID: z.number(),
   shumaTVSH: z.string().transform((str) => Number(str)),
   vleraTVSH: z.string().transform((str) => Number(str)),
@@ -136,9 +136,9 @@ export const fiscalInputSchema = z.object({
 export type fiscalInputColumns = z.infer<typeof fiscalInputSchema>;
 
 export const fiscalEditSchema = z.object({
-  nrExtern: z
-    .string()
-    .length(4, { message: "The extern field must have exactly 4 digits" }),
+  nrExtern: z.string().length(4, {
+    message: 'The extern field must have exactly 4 digits',
+  }),
   komitentID: z.number(),
   shumaPaTVSH: z.number(),
   shumaTVSH: z.number(),

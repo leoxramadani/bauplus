@@ -14,10 +14,10 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 export const DepartmentSchema = z.object({
-  departmentId:z.string().optional(),
-  departmentName :z.string(),
-  companyId :z.string(),
-  parentDepartmentId:z.string().optional().nullable(),
+  departmentId: z.string().optional(),
+  departmentName: z.string(),
+  companyId: z.string(),
+  parentDepartmentId: z.string().optional().nullable(),
 });
 
 export type DepartmentType = z.infer<typeof DepartmentSchema>;

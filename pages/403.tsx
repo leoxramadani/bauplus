@@ -1,9 +1,5 @@
 const Forbidden = () => {
- return (
-    <div>
-        Not allowed
-    </div>
- )
-}
+  return <div>Not allowed</div>;
+};
 
 export default Forbidden;

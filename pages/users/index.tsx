@@ -18,7 +18,9 @@ const Users = () => {
       {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}
-      {data && <DataTable columns={columns} data={data.result}></DataTable>}
+      {data && (
+        <DataTable columns={columns} data={data.result}></DataTable>
+      )}
     </>
   );
 };

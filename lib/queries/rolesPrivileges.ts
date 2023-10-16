@@ -1,7 +1,9 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const CREATE_ROLES_PRIVILEGES_QUERY = gql`
-  mutation createNewRoles_Privileges($entity: Roles_PrivilegesInput!) {
+  mutation createNewRoles_Privileges(
+    $entity: Roles_PrivilegesInput!
+  ) {
     createNewRoles_Privileges(entity: $entity) {
       role_ID
       privilege_ID

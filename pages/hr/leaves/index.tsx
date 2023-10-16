@@ -2,12 +2,14 @@ import Modal from '@/components/atoms/Modal';
 import CreateLeave from '@/components/molecules/hr/leaves/CreateLeave';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
-import { IInvoiceSchema, financeColumnDef } from '@/lib/schema/Finance/finance';
+import {
+  IInvoiceSchema,
+  financeColumnDef,
+} from '@/lib/schema/Finance/finance';
 import { FileInput, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
 const Leaves = () => {
-
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -79,27 +81,23 @@ const Leaves = () => {
       shippingAddress: '123 Redwood St, City, Country',
       generatedBy: 'User 5',
     },
-];
+  ];
 
-
-
-const [open, setOpen] = useState(false)
-
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Modal  open={open} onOpenChange={setOpen}>
+        <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-          <Button variant="destructive" className="flex gap-2">
-          <Plus size={20} /> <span>New Leave</span>
-        </Button>
+            <Button variant="destructive" className="flex gap-2">
+              <Plus size={20} /> <span>New Leave</span>
+            </Button>
           </Modal.Trigger>
-          <Modal.Content title='New Leave' description='Assign Leave'>
+          <Modal.Content title="New Leave" description="Assign Leave">
             <CreateLeave setCloseModal={setOpen} />
           </Modal.Content>
         </Modal>
-        
 
         <Button variant="outline" className="flex gap-2">
           <FileInput /> <span>Export</span>

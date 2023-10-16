@@ -153,12 +153,11 @@
   animation: rotation 1s linear infinite;
 }
 
-
 /* Style the progressbar in route change */
 #nprogress {
   pointer-events: none;
   z-index: 1100;
-  position: fixed
+  position: fixed;
 }
 
 #nprogress .bar {

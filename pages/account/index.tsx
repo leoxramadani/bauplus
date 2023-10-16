@@ -33,7 +33,8 @@ const Settings = () => {
           </div>
           <div className="flex flex-col justify-center h-full">
             <p>
-              {data?.result?.user?.firstName} {data?.result?.user?.lastName}
+              {data?.result?.user?.firstName}{' '}
+              {data?.result?.user?.lastName}
             </p>
             <p className="text-base">@{session?.user.username}</p>
           </div>
