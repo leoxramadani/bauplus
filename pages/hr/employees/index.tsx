@@ -16,7 +16,6 @@ import React, { useEffect, useState } from 'react';
 const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { data, isLoading, isError, refetch } = useData<IEmployee[]>(
     ['employees'],
     GET_ALL_EMPLOYEES

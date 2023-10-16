@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  IEmployee,
+  ICreateEmployee,
   employeeColumnDef,
-  employeeSchema,
+  createEmployeeSchema,
 } from '@/lib/schema/hr/employee/employee';
 import {
   Form,
@@ -94,13 +94,13 @@ const EmployeesForm = ({
   //   getDepartments();
   // }, []);
 
-  const form = useForm<IEmployee>({
-    resolver: zodResolver(employeeSchema),
+  const form = useForm<ICreateEmployee>({
+    resolver: zodResolver(createEmployeeSchema),
     values: { ...employeeData },
   });
 
   const onSubmit = useCallback(
-    async (data: IEmployee) => {
+    async (data: ICreateEmployee) => {
       console.log('Employee data', employeeData);
 
       if (employeeData) {
@@ -160,6 +160,38 @@ const EmployeesForm = ({
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
             <FormField
               control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    First Name<span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="First Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Last Name<span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Last Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            <FormField
+              control={form.control}
               name="companyId"
               render={({ field }) => (
                 <FormItem>
@@ -213,38 +245,7 @@ const EmployeesForm = ({
               )}
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    First Name<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="First Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Last Name<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Last Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
             <FormField
               control={form.control}

@@ -21,9 +21,11 @@ export const employeeSchema = z.object({
   email: z.string(),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
-  department: z.object({
-    departmentName: z.string(),
-  }),
+  department: z
+    .object({
+      departmentName: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type IEmployee = z.infer<typeof employeeSchema>;
@@ -135,3 +137,15 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
+
+export const createEmployeeSchema = z.object({
+  employeeId: z.string().optional(),
+  companyId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  dateOfBirth: z.coerce.date(),
+  departmentId: z.string(),
+});
+
+export type ICreateEmployee = z.infer<typeof createEmployeeSchema>;

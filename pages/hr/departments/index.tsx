@@ -22,6 +22,13 @@ const Departments = () => {
   );
 
   useEffect(() => {
+    if (router.query.id) {
+      setOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
+
+  useEffect(() => {
     if (!open) {
       router.replace('/hr/employees', undefined, {
         shallow: true,
