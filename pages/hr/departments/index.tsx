@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 
 const Departments = () => {
   const [open, setOpen] = useState(false);
-  const { data } = useData<IDepartment[]>(
+  const { data, isError, isLoading } = useData<IDepartment[]>(
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
@@ -30,9 +30,7 @@ const Departments = () => {
               <Plus size={20} /> Add Department
             </Button>
           </Modal.Trigger>
-          <Modal.Content
-            title="Add another department"
-          >
+          <Modal.Content title="Add another department">
             <DepartmentCreate />
           </Modal.Content>
         </Modal>
@@ -41,8 +39,10 @@ const Departments = () => {
           <FileInput /> <span>Export</span>
         </Button>
       </div>
-      {data && (
+      {data && !isLoading ? (
         <DataTable data={data} columns={departmentColumnDef} />
+      ) : (
+        <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
       )}
     </section>
   );

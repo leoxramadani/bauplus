@@ -59,9 +59,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleEdit(item.employeeId)}
-        >
+        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
           Edit row
         </DropdownMenuItem>
         <DropdownMenuItem>View payment details</DropdownMenuItem>

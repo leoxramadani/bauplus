@@ -41,16 +41,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
-const EmployeesCreate = ({
-  setIsCreateModalOpen,
+import useData from '@/lib/hooks/useData';
+const EmployeesForm = ({
+  setIsModalOpen,
   employeeId,
 }: {
-  setIsCreateModalOpen: any;
+  setIsModalOpen: any;
   employeeId?: string;
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
-  const [departments, setDepartments] = useState<any>();
+  // const [departments, setDepartments] = useState<any>();
+
+  const {
+    data: departments,
+    isLoading,
+    isError,
+  } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -70,39 +77,22 @@ const EmployeesCreate = ({
     }
   }, [employeeId]);
 
-  useEffect(() => {
-    async function getDepartments() {
-      await axios
-        .get(GET_ALL_DEPARTMENTS)
-        .then((res) => {
-          setDepartments(res.data);
+  // useEffect(() => {
+  //   async function getDepartments() {
+  //     await axios
+  //       .get(GET_ALL_DEPARTMENTS)
+  //       .then((res) => {
+  //         setDepartments(res.data);
 
-          console.log('Departments:', res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
+  //         console.log('Departments:', res.data);
+  //       })
+  //       .catch((error) => {
+  //         console.log('error=', error);
+  //       });
+  //   }
 
-    getDepartments();
-  }, []);
-
-  useEffect(() => {
-    async function getDepartments() {
-      await axios
-        .get(GET_ALL_DEPARTMENTS)
-        .then((res) => {
-          setDepartments(res.data);
-
-          console.log('Departments:', res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
-
-    getDepartments();
-  }, []);
+  //   getDepartments();
+  // }, []);
 
   const form = useForm<IEmployee>({
     resolver: zodResolver(employeeSchema),
@@ -143,7 +133,7 @@ const EmployeesCreate = ({
           });
       }
 
-      setIsCreateModalOpen(false);
+      setIsModalOpen(false);
     },
     [employeeData]
   );
@@ -183,22 +173,7 @@ const EmployeesCreate = ({
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="departmentId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="departmentId" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
+
             <FormField
               control={form.control}
               name="departmentId"
@@ -208,6 +183,7 @@ const EmployeesCreate = ({
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -352,4 +328,4 @@ const EmployeesCreate = ({
   );
 };
 
-export default EmployeesCreate;
+export default EmployeesForm;
