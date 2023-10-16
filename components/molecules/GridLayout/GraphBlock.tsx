@@ -1,77 +1,131 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement } from 'react';
 import {
   DonutChart,
   LineChart,
   BarChart,
   AreaChart,
   Color,
-} from "@tremor/react";
-import { dataFormatter } from "@/lib/helper/helperFunctions";
-
+  ScatterChart,
+} from '@tremor/react';
+import { dataFormatter } from '@/lib/helper/helperFunctions';
 
 interface GraphBlockProps {
-  type: "pie" | "line" | "bar" | "area";
+  type: 'pie' | 'line' | 'bar' | 'area' | 'scatter' | 'donut';
   data: any;
   colors?: Color[];
   className?: string;
   index: string;
- 
 }
 
 const GraphBlock: React.FC<GraphBlockProps> = ({
   type,
   data,
   colors,
-  index
- 
+  index,
 }) => {
   const renderGraphComponent = () => {
-    const categories = Object.keys(data[0]).filter(key => !['year', 'date', 'time'].includes(key));
+    if (!data || data.length === 0) {
+      // Handle the case where data is empty or undefined
+      return null;
+    }
+
+    const categories = Object.keys(data[0]).filter(
+      (key) => !['year', 'date', 'time'].includes(key)
+    );
+
     switch (type) {
-      case "pie":
+      case 'pie':
         return (
           <DonutChart
-            className="mt-6"
+            className="p-6 h-full w-full"
             data={data}
             index={index}
             category="sales"
             valueFormatter={dataFormatter}
-            colors={colors}
+            colors={[
+              'slate',
+              'violet',
+              'indigo',
+              'rose',
+              'cyan',
+              'amber',
+            ]}
+            variant="pie"
           />
         );
-      case "line":
+      case 'donut':
+        return (
+          <DonutChart
+            className="p-6 h-full w-full"
+            data={data}
+            index={index}
+            category="sales"
+            valueFormatter={dataFormatter}
+            colors={[
+              'slate',
+              'violet',
+              'indigo',
+              'rose',
+              'cyan',
+              'amber',
+            ]}
+            variant="donut"
+          />
+        );
+      case 'line':
         return (
           <LineChart
-            className="mt-6"
+            className="p-6 h-full min-h-[300px] min-w-[500px]"
             data={data}
             index={index}
             categories={categories}
-            colors={colors}
+            colors={['indigo', 'red']}
             valueFormatter={dataFormatter}
             yAxisWidth={40}
           />
         );
-      case "bar":
+      case 'bar':
         return (
           <BarChart
-            className="mt-6"
+            className="p-6 h-full min-h-[300px] min-w-[500px]"
             data={data}
             index="name"
             categories={categories}
-            colors={colors}
+            colors={['amber', 'rose', 'blue']}
             valueFormatter={dataFormatter}
-            yAxisWidth={48}
+            // yAxisWidth={48}
           />
         );
-      case "area":
+      case 'area':
         return (
           <AreaChart
-            className="h-72 mt-4"
+            className="p-6 h-full min-h-[300px] min-w-[500px]"
             data={data}
             index="date"
             categories={categories}
-            colors={colors}
+            colors={['amber', 'rose', 'blue']}
             valueFormatter={dataFormatter}
+          />
+        );
+      case 'scatter':
+        return (
+          <ScatterChart
+            className=""
+            yAxisWidth={50}
+            data={data}
+            category="Country"
+            x="GDP"
+            y="Life_expectancy"
+            size="Population"
+            showOpacity={true}
+            minYValue={60}
+            valueFormatter={{
+              x: (amount) => `$${(amount / 1000).toFixed(1)}K`,
+              y: (lifeExp) => `${lifeExp} yrs`,
+              size: (population) =>
+                `${(population / 1000000).toFixed(1)}M people`,
+            }}
+            showLegend={true}
           />
         );
       default:
@@ -85,9 +139,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
     return null;
   }
 
-  return (
-      <>{graphComponent}</>
-  );
+  return <>{graphComponent}</>;
 };
 
 export default GraphBlock;

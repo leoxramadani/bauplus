@@ -7,6 +7,7 @@ import {
   Wallet,
   ChevronUp,
   ChevronRight,
+  ClipboardList,
 } from 'lucide-react';
 import {
   useContext,
