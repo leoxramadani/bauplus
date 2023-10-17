@@ -15,4 +15,4 @@ export const noticeSchema = z.object({
   departmentId: z.string(),
 });
 
-export type INoticeSchema = z.infer<typeof noticeSchema>;
+export type InoticeSchema = z.infer<typeof noticeSchema>;
