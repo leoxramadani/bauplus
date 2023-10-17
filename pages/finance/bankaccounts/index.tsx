@@ -17,8 +17,7 @@ const BankAccounts = () => {
     GET_ALL_BANKACCOUNTS
   );
 
-  if (error)
-    console.error(error)
+  if (error) console.error(error);
 
   const [open, setOpen] = useState(false);
   return (
@@ -48,12 +47,8 @@ const BankAccounts = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && (
-          <DataTable data={data} columns={financeColumnDef} />
-        )}
-        {isLoading && (
-          <p> Loading...</p>
-        )}
+        {data && <DataTable data={data} columns={financeColumnDef} />}
+        {isLoading && <p> Loading...</p>}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}

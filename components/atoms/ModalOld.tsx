@@ -4,7 +4,6 @@ import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
-
 type ModalProps = {
   children: React.ReactNode;
   className?: string;
@@ -62,7 +61,6 @@ const ModalOld = ({
 
   return (
     <>
-
       {ButtonText ? (
         <input
           type="button"
@@ -79,7 +77,6 @@ const ModalOld = ({
           onClick={() => setOpen(true)}
         />
       )}
-
 
       <MotionConfig
         transition={{

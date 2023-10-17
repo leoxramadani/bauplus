@@ -113,7 +113,12 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <DataTableColumnHeader column={header.column} title={header.column.columnDef.header as string} />
+                      <DataTableColumnHeader
+                        column={header.column}
+                        title={
+                          header.column.columnDef.header as string
+                        }
+                      />
                     </TableHead>
                   );
                 })}

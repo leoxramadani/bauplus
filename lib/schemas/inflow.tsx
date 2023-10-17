@@ -1,8 +1,8 @@
-import * as z from "zod";
-import { MRT_ColumnDef } from "material-react-table";
-import { Box } from "@mui/material";
-import { formatDate } from "../helper/helper";
-import useTranslation from "../hooks/useTranslation";
+import * as z from 'zod';
+import { MRT_ColumnDef } from 'material-react-table';
+import { Box } from '@mui/material';
+import { formatDate } from '../helper/helper';
+import useTranslation from '../hooks/useTranslation';
 export const inflowSchema = z.object({
   nr: z.number(),
   userName: z.string(),
@@ -22,64 +22,64 @@ export type inflowColumns = z.infer<typeof inflowSchema>;
 
 export const inflowColumns: MRT_ColumnDef<inflowColumns>[] = [
   {
-    accessorKey: "nr",
-    header: "Number",
+    accessorKey: 'nr',
+    header: 'Number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "nrFatures",
-    header: "Invoice number",
+    accessorKey: 'nrFatures',
+    header: 'Invoice number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "companyName",
-    header: "Company name",
+    accessorKey: 'companyName',
+    header: 'Company name',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "userName",
-    header: "Username",
+    accessorKey: 'userName',
+    header: 'Username',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaPaTVSH",
-    header: "Sum without TAX",
+    accessorKey: 'shumaPaTVSH',
+    header: 'Sum without TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "vleraTVSH",
-    header: "Value of TAX",
+    accessorKey: 'vleraTVSH',
+    header: 'Value of TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaTVSH",
-    header: "Sum with TAX",
+    accessorKey: 'shumaTVSH',
+    header: 'Sum with TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "afatiPageses",
-    header: "Payment deadline",
+    accessorKey: 'afatiPageses',
+    header: 'Payment deadline',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
@@ -87,8 +87,8 @@ export const inflowColumns: MRT_ColumnDef<inflowColumns>[] = [
     },
   },
   {
-    accessorKey: "statusiPageses",
-    header: "Payment status",
+    accessorKey: 'statusiPageses',
+    header: 'Payment status',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
@@ -98,22 +98,22 @@ export const inflowColumns: MRT_ColumnDef<inflowColumns>[] = [
         component="span"
         sx={(theme) => ({
           backgroundColor:
-            cell.getValue<string>() == "unpaid"
+            cell.getValue<string>() == 'unpaid'
               ? theme.palette.error.light
-              : cell.getValue<string>() == "semi-paid"
+              : cell.getValue<string>() == 'semi-paid'
               ? theme.palette.warning.light
-              : cell.getValue<string>() == "paid"
+              : cell.getValue<string>() == 'paid'
               ? theme.palette.success.light
               : theme.palette.warning.light,
-          borderRadius: "0.25rem",
-          color: "#fff",
-          maxWidth: "9ch",
-          p: "0.25rem",
+          borderRadius: '0.25rem',
+          color: '#fff',
+          maxWidth: '9ch',
+          p: '0.25rem',
         })}
       >
-        {cell.getValue<number>()?.toLocaleString?.("en-US", {
-          style: "currency",
-          currency: "USD",
+        {cell.getValue<number>()?.toLocaleString?.('en-US', {
+          style: 'currency',
+          currency: 'USD',
           minimumFractionDigits: 0,
           maximumFractionDigits: 0,
         })}
@@ -124,9 +124,9 @@ export const inflowColumns: MRT_ColumnDef<inflowColumns>[] = [
 
 //* This is completed
 export enum status {
-  paid = "paid",
-  unpaid = "unpaid",
-  semi = "semi-paid",
+  paid = 'paid',
+  unpaid = 'unpaid',
+  semi = 'semi-paid',
 }
 
 export const inflowInputSchema = z
@@ -135,10 +135,11 @@ export const inflowInputSchema = z
       .string()
       .max(20, {
         message:
-          "The length of your invoice number must not exceeded 20 digits",
+          'The length of your invoice number must not exceeded 20 digits',
       })
       .min(1, {
-        message: "You must have at least a digit for your invoice number",
+        message:
+          'You must have at least a digit for your invoice number',
       }),
 
     komitentID: z.number(),
@@ -149,10 +150,11 @@ export const inflowInputSchema = z
     afatiPageses: z.string().transform((str) => new Date(str)),
     statusiPagese: z.nativeEnum(status),
     dosja: z.string().max(20, {
-      message: "The length of dosja must be 20 characters or shorter",
+      message: 'The length of dosja must be 20 characters or shorter',
     }),
     shenim: z.string().max(150, {
-      message: "The length of 'shenim' must be 150 characters or shorter",
+      message:
+        "The length of 'shenim' must be 150 characters or shorter",
     }),
   })
   .refine(
@@ -164,7 +166,7 @@ export const inflowInputSchema = z
     {
       message:
         "The 'Date in document' date must not be after the 'Payment deadline' date",
-      path: ["dataNeDokument"],
+      path: ['dataNeDokument'],
     }
   );
 
@@ -176,10 +178,11 @@ export const inflowEditSchema = z
       .string()
       .max(20, {
         message:
-          "The length of your invoice number must not exceeded 20 digits",
+          'The length of your invoice number must not exceeded 20 digits',
       })
       .min(1, {
-        message: "You must have at least a digit for your invoice number",
+        message:
+          'You must have at least a digit for your invoice number',
       }),
     komitentiID: z.number(),
     dataNeDokument: z.string().transform((str) => new Date(str)),
@@ -189,10 +192,11 @@ export const inflowEditSchema = z
     afatiPageses: z.string().transform((str) => new Date(str)),
     statusiPageses: z.string(),
     dosja: z.string().max(20, {
-      message: "The length of dosja must be 20 characters or shorter",
+      message: 'The length of dosja must be 20 characters or shorter',
     }),
     shenim: z.string().max(150, {
-      message: "The length of 'shenim' must be 150 characters or shorter",
+      message:
+        "The length of 'shenim' must be 150 characters or shorter",
     }),
   })
   .refine(
@@ -204,7 +208,7 @@ export const inflowEditSchema = z
     {
       message:
         "The 'Date in document' date must not be after the 'Payment deadline' date",
-      path: ["dataNeDokument"],
+      path: ['dataNeDokument'],
     }
   );
 

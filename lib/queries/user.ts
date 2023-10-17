@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import { z } from "zod";
+import { gql } from '@apollo/client';
+import { z } from 'zod';
 
 export const REGISTER_USER_QUERY = gql`
   mutation Register($entity: RegisterModelInput!) {
@@ -42,7 +42,11 @@ export const PASSWORD_RESET_REQUEST_EMAIL_QUERY = gql`
 `;
 
 export const PASSWORD_RESET_SUBMIT_RESET_QUERY = gql`
-  mutation resetPassword($email: String!, $code: String!, $password: String!) {
+  mutation resetPassword(
+    $email: String!
+    $code: String!
+    $password: String!
+  ) {
     resetPassword(email: $email, code: $code, password: $password) {
       status
       message

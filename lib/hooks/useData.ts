@@ -34,14 +34,14 @@ export default function useData<TData>(
   const result = useQuery({
     queryKey: keys,
     queryFn: () => fetcher(url, options),
-    enabled: enabled
+    enabled: enabled,
   });
 
   useEffect(() => {
     return;
   }, [keys, url, result]);
 
-  console.log(result)
+  console.log(result);
 
   return result!;
 }

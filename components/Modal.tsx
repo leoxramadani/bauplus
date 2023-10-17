@@ -71,10 +71,13 @@ const Modal = ({
               }
             >
               {children}
-              <Button variant={'secondary'} onClick={handleClose} className=''>
+              <Button
+                variant={'secondary'}
+                onClick={handleClose}
+                className=""
+              >
                 {done ?? t('Done')}
               </Button>
-              
             </div>
           </div>
         </Dialog>

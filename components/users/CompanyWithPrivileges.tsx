@@ -1,10 +1,10 @@
-import { useQuery } from "@apollo/client";
-import { Key, useEffect, useState } from "react";
-import { GET_ALL_PRIVILEGES_SMALL_QUERY } from "@/lib/queries/privileges";
-import { GET_ALL_ROLES_PRIVILEGES } from "@/lib/queries/rolesPrivileges";
-import Modal from "../Modal";
-import useTranslation from "@/lib/hooks/useTranslation";
-import { GET_ALL_ROLES } from "@/lib/queries/roles";
+import { useQuery } from '@apollo/client';
+import { Key, useEffect, useState } from 'react';
+import { GET_ALL_PRIVILEGES_SMALL_QUERY } from '@/lib/queries/privileges';
+import { GET_ALL_ROLES_PRIVILEGES } from '@/lib/queries/rolesPrivileges';
+import Modal from '../Modal';
+import useTranslation from '@/lib/hooks/useTranslation';
+import { GET_ALL_ROLES } from '@/lib/queries/roles';
 
 export interface CompanyWithRoleAndPrivileges {
   companyId: number;
@@ -33,7 +33,9 @@ const CompanyPrivileges = ({
   privilegesInit,
 }: any) => {
   const [isChecked, setIsChecked] = useState(isCheckedInit);
-  const { data: privilegesData } = useQuery(GET_ALL_PRIVILEGES_SMALL_QUERY);
+  const { data: privilegesData } = useQuery(
+    GET_ALL_PRIVILEGES_SMALL_QUERY
+  );
   const { data: rolesData } = useQuery(GET_ALL_ROLES);
   const { data: rolePrivileges } = useQuery(GET_ALL_ROLES_PRIVILEGES);
 
@@ -41,9 +43,12 @@ const CompanyPrivileges = ({
   const { t } = useTranslation();
   const [role, setRole] = useState(roleInit ?? {});
 
-  const [defaultPrivileges, setDefaultPrivileges] = useState<Privileges>();
+  const [defaultPrivileges, setDefaultPrivileges] =
+    useState<Privileges>();
   const [privileges, setPrivileges] = useState<any>(
-    privilegesInit ? privilegesInit.map((p: any) => p.privilege_ID) : []
+    privilegesInit
+      ? privilegesInit.map((p: any) => p.privilege_ID)
+      : []
   );
 
   // 1. Set roles
@@ -61,7 +66,9 @@ const CompanyPrivileges = ({
   // 2. Set initial role to "Viewer"
   useEffect(() => {
     if (!roleInit && rolesData) {
-      setRole(rolesData.allRoles.find((role: any) => role.name === "Viewer"));
+      setRole(
+        rolesData.allRoles.find((role: any) => role.name === 'Viewer')
+      );
     }
   }, [rolesData]);
 
@@ -70,7 +77,6 @@ const CompanyPrivileges = ({
     if (rolePrivileges) {
       const updatedDefaults: Privileges = {};
 
-      
       rolePrivileges.allRoles_Privileges.forEach((obj: any) => {
         const { privilege_ID, roles } = obj;
         if (updatedDefaults[roles.name]) {
@@ -80,13 +86,13 @@ const CompanyPrivileges = ({
         }
         setDefaultPrivileges(updatedDefaults);
       });
-      
     }
   }, [rolePrivileges]);
 
   // 4. Set privileges to defaults of chosen role.
   useEffect(() => {
-    if (defaultPrivileges && role) setPrivileges(defaultPrivileges[role.name]);
+    if (defaultPrivileges && role)
+      setPrivileges(defaultPrivileges[role.name]);
   }, [role]);
 
   // 5. Set the current privileges to defaultPrivileges initially if no data is provided for initial privileges.
@@ -184,7 +190,7 @@ const CompanyPrivileges = ({
         </div>
         {isChecked && (
           <Modal
-            value={t("Edit privileges")}
+            value={t('Edit privileges')}
             className="underline text-blue-600 underline-offset-4 cursor-pointer"
           >
             <h1 className="title">{company.company_Name}</h1>
@@ -227,44 +233,53 @@ const CompanyPrivileges = ({
                 <div className="flex flex-col gap-2 h-full overflow-scroll scrollbar ">
                   {defaultPrivileges &&
                     privileges &&
-                    privilegesData?.allPrivileges.map((privilege: any) => (
-                      <div
-                        className="flex justify-start items-center gap-4  "
-                        key={privilege.privilege_ID}
-                      >
-                        <label
-                          className="relative flex cursor-pointer"
-                          htmlFor={privilege.long_Description}
+                    privilegesData?.allPrivileges.map(
+                      (privilege: any) => (
+                        <div
+                          className="flex justify-start items-center gap-4  "
+                          key={privilege.privilege_ID}
                         >
-                          <div className="inline-flex">
-                            <input
-                              type="checkbox"
-                              id={privilege.long_Description}
-                              className="sr-only peer"
-                              onChange={() => {
-                                setPrivileges(
-                                  privileges.some(
-                                    (p: any) => p === privilege.privilege_ID
-                                  )
-                                    ? privileges.filter(
-                                        (p: any) => p !== privilege.privilege_ID
-                                      )
-                                    : [...privileges, privilege.privilege_ID]
-                                );
-                              }}
-                              checked={privileges.some(
-                                (p: any) => p === privilege.privilege_ID
-                              )}
-                              name="required"
-                            />
-                            <div className="w-11 h-6 peer-focus:outline-none peer-focus:ring-offset-4 peer-focus:ring-blue-800 rounded-full peer bg-slate-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                          </div>
-                          <span className="mx-2">
-                            {privilege.long_Description}
-                          </span>
-                        </label>
-                      </div>
-                    ))}
+                          <label
+                            className="relative flex cursor-pointer"
+                            htmlFor={privilege.long_Description}
+                          >
+                            <div className="inline-flex">
+                              <input
+                                type="checkbox"
+                                id={privilege.long_Description}
+                                className="sr-only peer"
+                                onChange={() => {
+                                  setPrivileges(
+                                    privileges.some(
+                                      (p: any) =>
+                                        p === privilege.privilege_ID
+                                    )
+                                      ? privileges.filter(
+                                          (p: any) =>
+                                            p !==
+                                            privilege.privilege_ID
+                                        )
+                                      : [
+                                          ...privileges,
+                                          privilege.privilege_ID,
+                                        ]
+                                  );
+                                }}
+                                checked={privileges.some(
+                                  (p: any) =>
+                                    p === privilege.privilege_ID
+                                )}
+                                name="required"
+                              />
+                              <div className="w-11 h-6 peer-focus:outline-none peer-focus:ring-offset-4 peer-focus:ring-blue-800 rounded-full peer bg-slate-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </div>
+                            <span className="mx-2">
+                              {privilege.long_Description}
+                            </span>
+                          </label>
+                        </div>
+                      )
+                    )}
                   {!privileges && <div>Loading...</div>}
                 </div>
               </div>

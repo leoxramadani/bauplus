@@ -3,7 +3,7 @@ import { capitalize, divide } from 'lodash';
 import { ChevronRight, Slash } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { PropsWithChildren, useMemo } from 'react';
+import { Key, PropsWithChildren, useMemo } from 'react';
 
 const Crumb = ({
   children,
@@ -58,7 +58,7 @@ const Breadcrumbs = () => {
     <nav className="flex" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-3">
         <li className="inline-flex items-center">
-          {breadcrumbs.map((crumb, i) => {
+          {breadcrumbs.map((crumb, i: Key) => {
             const isLast = i === breadcrumbs.length - 1;
 
             return (

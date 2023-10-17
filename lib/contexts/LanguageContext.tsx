@@ -5,14 +5,14 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
-} from "react";
+} from 'react';
 
-export const defaultLocale = "en";
-export type locales = "en" | "mk" | "al";
+export const defaultLocale = 'en';
+export type locales = 'en' | 'mk' | 'al';
 
 export type LanguageContext = [
   locale: locales,
-  setLocale: Dispatch<SetStateAction<locales>>
+  setLocale: Dispatch<SetStateAction<locales>>,
 ];
 
 export const LanguageContext = createContext<LanguageContext>([
@@ -23,12 +23,12 @@ export const LanguageContext = createContext<LanguageContext>([
 export const LanguageProvider = ({ children }: PropsWithChildren) => {
   const [locale, setLocale] = useState<locales>(defaultLocale);
   useEffect(() => {
-    const value = localStorage.getItem("locale");
+    const value = localStorage.getItem('locale');
     if (value) {
       //@ts-ignore
       setLocale(value);
     } else {
-      localStorage.setItem("locale", defaultLocale);
+      localStorage.setItem('locale', defaultLocale);
       setLocale(defaultLocale);
     }
   }, []);

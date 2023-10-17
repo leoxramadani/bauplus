@@ -59,7 +59,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                 }}
                 className="fixed inset-0 w-full bg-black bg-opacity-25 -z-10 "
                 onClick={() => {
-                  console.log("Overlay Clicked!");
+                  console.log('Overlay Clicked!');
                   setIsModalOpen(false);
                 }}
               />
@@ -85,7 +85,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   <X
                     className="absolute right-8 top-4 hover:cursor-pointer w-max"
                     onClick={() => {
-                      console.log("Overlay Clicked!");
+                      console.log('Overlay Clicked!');
                       setIsModalOpen(false);
                     }}
                   />

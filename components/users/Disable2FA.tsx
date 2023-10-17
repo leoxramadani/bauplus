@@ -1,16 +1,20 @@
-import { useState } from "react";
-import Modal from "../Modal";
-import Button from "../Button";
-import { useMutation, useQuery } from "@apollo/client";
-import { DISABLE_2FA_QUERY, GET_SPECIFIC_USER_QUERY } from "@/lib/queries/user";
-import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import Modal from '../Modal';
+import Button from '../Button';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  DISABLE_2FA_QUERY,
+  GET_SPECIFIC_USER_QUERY,
+} from '@/lib/queries/user';
+import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 const Disable2FA = () => {
-  const [password, setPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>('');
   const { data: session } = useSession();
 
-  const [disable, { loading: loadingDisable }] = useMutation(DISABLE_2FA_QUERY);
+  const [disable, { loading: loadingDisable }] =
+    useMutation(DISABLE_2FA_QUERY);
 
   const { refetch } = useQuery(GET_SPECIFIC_USER_QUERY);
 
@@ -21,11 +25,14 @@ const Disable2FA = () => {
       },
     }).then((data) => {
       if (data.data.disableTwoFactor.status === 200) {
-        toast.success("Two-factor authentication disabled for your account.");
+        toast.success(
+          'Two-factor authentication disabled for your account.'
+        );
         refetch({ username: session?.user.username });
       } else {
         toast.error(
-          "Couldn't disable two-factor authentication. " + data.data.disableTwoFactor.message
+          "Couldn't disable two-factor authentication. " +
+            data.data.disableTwoFactor.message
         );
       }
     });

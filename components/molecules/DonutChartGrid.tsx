@@ -1,42 +1,38 @@
-import { Card, DonutChart, Title } from '@tremor/react'
-import React from 'react'
+import { Card, DonutChart, Title } from '@tremor/react';
+import React from 'react';
 
 const DonutChartGrid = () => {
-  return (
-    <div className='bg-red-400'>
-      hello worlds
-    </div>
-  )
-}
+  return <div className="bg-red-400">hello worlds</div>;
+};
 
 const cities = [
   {
-    name: "New York",
+    name: 'New York',
     sales: 9800,
   },
   {
-    name: "London",
+    name: 'London',
     sales: 4567,
   },
   {
-    name: "Hong Kong",
+    name: 'Hong Kong',
     sales: 3908,
   },
   {
-    name: "San Francisco",
+    name: 'San Francisco',
     sales: 2400,
   },
   {
-    name: "Singapore",
+    name: 'Singapore',
     sales: 1908,
   },
   {
-    name: "Zurich",
+    name: 'Zurich',
     sales: 1398,
   },
 ];
 
-const valueFormatter = (number: number) => `$ ${Intl.NumberFormat("us").format(number).toString()}`;
+const valueFormatter = (number: number) =>
+  `$ ${Intl.NumberFormat('us').format(number).toString()}`;
 
-
-export default DonutChartGrid
+export default DonutChartGrid;

@@ -10,9 +10,12 @@ export const DELETE_DEPARTMENT =
 export const UPDATE_DEPARTMENT =
   BASE_URL + `/api/Department/UpdateDepartment`;
 export const GET_SPECIFIC_DEPARTMENT =
-  BASE_URL + `/api/Department/GetSpecificDepartment`;
+  BASE_URL +
+  `/api/DepartmentController/Department/GetSpecificDepartment`;
 
 export const GET_ALL_DEPATRMENTS_OF_COMAPNY =
-  BASE_URL + `/api/Department/GetAllDepartmentsOfCompany`;
+  BASE_URL +
+  `/api/DepartmentController/Department/GetAllDepartmentsOfCompany`;
 export const GET_ALL_SUBDEPARTMENTS =
-  BASE_URL + `/api/Department/GetAllSubDepartments`;
+  BASE_URL +
+  `/api/DepartmentController/Department/GetAllSubDepartments`;
