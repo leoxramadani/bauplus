@@ -6,9 +6,16 @@ import { FileInput } from 'lucide-react';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import Logo from '@/public/card-notice.png';
 import Image from 'next/image';
-import { GET_ALL_NOTICES } from '@/lib/constants/endpoints/notices';
+import {
+  CREATE_NOTICE,
+  GET_ALL_NOTICES,
+  UPDATE_NOTICE,
+} from '@/lib/constants/endpoints/notices';
 import axios from 'axios';
-import NoticeCreate from '@/components/molecules/notices/NoticeCreate';
+import NoticeCreate, {
+  INoticeCreate,
+} from '@/components/molecules/notices/NoticeCreate';
+import { useMutation } from '@tanstack/react-query';
 
 interface Notice {
   noticeId: string;
@@ -107,7 +114,22 @@ const Notices = () => {
             </div>
             <div className="flex flex-row items-center flex-none">
               <p className="flex font-medium text-xs">
-                {item.isRead ? 'Marked as read' : 'Mark as unread'}
+                <Modal open={open} onOpenChange={setOpen}>
+                  <Modal.Trigger asChild>
+                    <Button
+                      variant="default"
+                      className="flex gap-1 justify-center items-center"
+                    >
+                      Edit
+                    </Button>
+                  </Modal.Trigger>
+                  <Modal.Content
+                    title="Edit Notice"
+                    description="Notice Details"
+                  >
+                    <NoticeCreate setModal={setOpen} />
+                  </Modal.Content>
+                </Modal>
               </p>
             </div>
           </div>
@@ -144,7 +166,7 @@ const Notices = () => {
           </Button>
         </div>
         {myData.length > 0 ? (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 gap-y-16 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {renderedNotices}
           </div>
         ) : (

@@ -33,14 +33,20 @@ import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-export interface EmployeesProps {
+export interface EditNoticeProps {
   setModal(open: boolean): void;
   onSubmit: (data: INoticeSchema) => void;
+  initialData: INoticeSchema;
 }
 
-const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
+const EditNotice = ({
+  setModal,
+  onSubmit,
+  initialData,
+}: EditNoticeProps) => {
   const form = useForm<INoticeSchema>({
     resolver: zodResolver(noticeSchema),
+    defaultValues: initialData,
   });
 
   const {
@@ -74,17 +80,16 @@ const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
         onSubmit={form.handleSubmit(onSubmitNotice, onError)}
         className="flex flex-col gap-4 w-full"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 justify-center items-center gap-4">
           <FormField
             control={form.control}
             name="noticeTitle"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Notice Heading</FormLabel>
-
                 <FormControl className="relative">
                   <Input
-                    placeholder="e.g. New year celebrations at office."
+                    placeholder="e.g. New year celebrations at the office."
                     {...field}
                   />
                 </FormControl>
@@ -93,6 +98,7 @@ const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
             )}
           />
 
+          {/* Set the initial value for the department field */}
           <FormField
             control={form.control}
             name="departmentId"
@@ -130,13 +136,14 @@ const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
             )}
           />
         </div>
+
+        {/* Set the initial value for the noticeText field */}
         <FormField
           control={form.control}
           name="noticeText"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Notice Details</FormLabel>
-
               <FormControl className="relative">
                 <Textarea {...field} />
               </FormControl>
@@ -153,4 +160,4 @@ const Employees = ({ setModal, onSubmit }: EmployeesProps) => {
   );
 };
 
-export default Employees;
+export default EditNotice;

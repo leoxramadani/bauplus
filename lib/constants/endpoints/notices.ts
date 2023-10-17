@@ -2,3 +2,9 @@ export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const GET_ALL_NOTICES =
   BASE_URL + `/api/NoticeBoard/GetAllNotices`;
+
+export const CREATE_NOTICE =
+  BASE_URL + `/api/NoticeBoard/CreateNewNotice`;
+
+export const UPDATE_NOTICE =
+  BASE_URL + `/api/NoticeBoard/UpdateNotice`;
