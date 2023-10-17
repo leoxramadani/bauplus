@@ -3,6 +3,7 @@ import {
   ICreateEmployee,
   employeeColumnDef,
   createEmployeeSchema,
+  IEmployee,
 } from '@/lib/schema/hr/employee/employee';
 import {
   Form,
@@ -40,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 const EmployeesForm = ({
   setIsModalOpen,
@@ -55,9 +56,19 @@ const EmployeesForm = ({
 
   const {
     data: departments,
-    isLoading,
-    isError,
+    isLoading: departmentsLoading,
+    isError: departmentsError,
   } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
+
+  //TODO: handle null when there isn't an employee id
+  // const {
+  //   data: employeeData,
+  //   isLoading: employeeLoading,
+  //   isError: employeeError,
+  // } = useData<any>(
+  //   ['employee'],
+  //   GET_BY_ID_EMPLOYEE + `?employeeId=${employeeId}`
+  // );
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -77,23 +88,6 @@ const EmployeesForm = ({
     }
   }, [employeeId]);
 
-  // useEffect(() => {
-  //   async function getDepartments() {
-  //     await axios
-  //       .get(GET_ALL_DEPARTMENTS)
-  //       .then((res) => {
-  //         setDepartments(res.data);
-
-  //         console.log('Departments:', res.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log('error=', error);
-  //       });
-  //   }
-
-  //   getDepartments();
-  // }, []);
-
   const form = useForm<ICreateEmployee>({
     resolver: zodResolver(createEmployeeSchema),
     values: { ...employeeData },
@@ -101,7 +95,7 @@ const EmployeesForm = ({
 
   const onSubmit = useCallback(
     async (data: ICreateEmployee) => {
-      console.log('Employee data', employeeData);
+      console.log('Employee data->', employeeData);
 
       if (employeeData) {
         console.log('employeeData=>', employeeData);
@@ -122,7 +116,7 @@ const EmployeesForm = ({
             console.log('Error UPDATING employee:', error);
           });
       } else {
-        console.log('No employee data');
+        console.log('No employee data ****');
         await axios
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {

@@ -9,6 +9,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   CREATE_DEPARTMENT,
   GET_SPECIFIC_DEPARTMENT,
   UPDATE_DEPARTMENT,
@@ -170,7 +177,7 @@ const DepartmentsForm = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="parentDepartmentId"
               render={({ field }) => (
@@ -180,13 +187,50 @@ const DepartmentsForm = ({
                     <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl className="relative">
-                    {/* 
-// @ts-ignore */}
+
                     <Input
                       placeholder="Parent Department Id"
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name="departmentId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter department" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {parentDepartments ? (
+                        <>
+                          {parentDepartments.map((dep: any) => (
+                            <SelectItem
+                              key={dep.departmentId}
+                              value={dep.departmentId}
+                            >
+                              {dep.departmentName}
+                            </SelectItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
