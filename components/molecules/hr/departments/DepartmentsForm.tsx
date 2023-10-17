@@ -12,7 +12,9 @@ import {
   CREATE_DEPARTMENT,
   GET_SPECIFIC_DEPARTMENT,
   UPDATE_DEPARTMENT,
-} from '@/lib/constants/endpoints/department';
+} from '@/lib/constants/endpoints/hr/departments';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
+import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
   DepartmentType,
@@ -34,6 +36,12 @@ const DepartmentsForm = ({
 }: DepartmentsFormProps) => {
   const router = useRouter();
   const [departmentData, setDepartmentData] = useState<any>();
+
+  const {
+    data: parentDepartments,
+    isLoading,
+    isError,
+  } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -105,14 +113,6 @@ const DepartmentsForm = ({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Departments
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-          Add a department
-        </h3>
-      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}

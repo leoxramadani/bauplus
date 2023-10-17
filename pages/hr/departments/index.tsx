@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
 import DepartmentCreate from '@/components/molecules/hr/departments/modals/DepartmentCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ const Departments = () => {
 
   useEffect(() => {
     if (!open) {
-      router.replace('/hr/employees', undefined, {
+      router.replace('/hr/departments', undefined, {
         shallow: true,
       });
     }
@@ -50,7 +51,13 @@ const Departments = () => {
             </Button>
           </Modal.Trigger>
           <Modal.Content title="Add another department">
-            <DepartmentCreate />
+            {/* <DepartmentCreate /> */}
+            <DepartmentsForm
+              setIsModalOpen={setOpen}
+              departmentId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+            />
           </Modal.Content>
         </Modal>
 
