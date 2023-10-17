@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import {
   CREATE_NOTICE,
   DELETE_NOTICE,
