@@ -64,16 +64,7 @@ const NoticeCreate = ({ setModal }: INoticeCreate) => {
           </div>
         </RadioGroup>
       </div>
-      {isEditing ? (
-        // Render the edit modal here
-        <EditNotice
-          // Pass the necessary props for editing
-          setModal={setModal}
-          onSubmit={onSubmitNotice}
-          initialData={initialData}
-          // You may need to pass additional props specific to editing
-        />
-      ) : noticeType === 'Employees' ? (
+      {noticeType === 'Employees' ? (
         // Render the create modal for 'Employees'
         <Employees setModal={setModal} onSubmit={onSubmitNotice} />
       ) : (
