@@ -45,7 +45,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="data-[state=open]:bg-accent flex items-center justify-between -ml-2 pl-2 pl-2 w-full"
           >
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
@@ -57,7 +57,7 @@ export function DataTableColumnHeader<TData, TValue>({
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent align="start" className='shadow-md shadow-slate-300/30 border'>
           <DropdownMenuItem
             onClick={() => column.toggleSorting(false)}
           >

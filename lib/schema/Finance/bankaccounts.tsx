@@ -18,9 +18,9 @@ export const invoiceSchema = z.object({
   balance: z.number(),
 });
 
-export type IInvoiceSchema = z.infer<typeof invoiceSchema>;
+export type IInvoice = z.infer<typeof invoiceSchema>;
 
-export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
+export const financeColumnDef: ColumnDef<IInvoice>[] = [
   {
     accessorKey: 'accountName',
     header: 'Account name',

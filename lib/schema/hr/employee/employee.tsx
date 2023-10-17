@@ -23,7 +23,7 @@ export const employeeSchema = z.object({
   departmentId: z.string(),
 });
 
-export type EmployeeType = z.infer<typeof employeeSchema>;
+export type IEmployee = z.infer<typeof employeeSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -70,7 +70,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   );
 };
 
-export const employeeDef: ColumnDef<EmployeeType>[] = [
+export const employeeColumnDef: ColumnDef<IEmployee>[] = [
   {
     id: 'select',
     header: ({ table }) => (

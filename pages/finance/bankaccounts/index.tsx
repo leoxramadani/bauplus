@@ -1,62 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { FileInput, Plus } from 'lucide-react';
 import { DataTable } from '@/components/molecules/table/DataTable';
-import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import {
   financeColumnDef,
-  IInvoiceSchema,
+  IInvoice,
 } from '@/lib/schema/Finance/bankaccounts';
-import RightModal from '@/components/atoms/RightModal';
-// import { Button } from '@/components/ui/button';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import Modal from '@/components/atoms/Modal';
-// import Button from '@/components/Button';
-import ModalOld from '@/components/atoms/ModalOld';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
-// import Modal from '@/components/atoms/ModalOld';
+import useData from '@/lib/hooks/useData';
+
 const BankAccounts = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [myData, setMyData] = useState<any>();
+  const { data, isError, isLoading, error } = useData<IInvoice[]>(
+    ['bank_accounts'],
+    GET_ALL_BANKACCOUNTS
+  );
 
-  useEffect(() => {
-    async function getData() {
-      // const response = await fetch(GET_ALL_BANKACCOUNTS, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // })
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       console.log('error->', response);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     setMyData(data.data);
-      //     console.log('employeeData->', data);
-      //   })
-      //   .catch((error) => {
-      //     console.log('error in fetch funx->', error);
-      //   });
+  if (error)
+    console.error(error)
 
-      // return response;
-      await axios
-        .get(GET_ALL_BANKACCOUNTS)
-        .then((res) => {
-          setMyData(res.data);
-        })
-        .catch((error) => {
-          console.log('error fetching employees->', error);
-        });
-    }
-    getData();
-  }, []);
-
-  console.log('myData=', myData);
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -85,10 +48,14 @@ const BankAccounts = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {myData ? (
-          <DataTable data={myData} columns={financeColumnDef} />
-        ) : (
+        {data && (
+          <DataTable data={data} columns={financeColumnDef} />
+        )}
+        {isLoading && (
           <p> Loading...</p>
+        )}
+        {isError && (
+          <p> There was something wrong, please try again later.</p>
         )}
       </section>
     </>
