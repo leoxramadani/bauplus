@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FileInput, Plus } from 'lucide-react';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import {
@@ -10,21 +10,36 @@ import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
+import { useRouter } from 'next/router';
 
 const BankAccounts = () => {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data, isError, isLoading, error } = useData<IInvoice[]>(
     ['bank_accounts'],
     GET_ALL_BANKACCOUNTS
   );
 
-  if (error) console.error(error);
+  useEffect(() => {
+    if (router.query.id) {
+      setIsOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
 
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!isOpen) {
+      router.replace('/finance/bankaccounts', undefined, {
+        shallow: true,
+      });
+    }
+  }, [isOpen]);
+
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal open={open} onOpenChange={setOpen}>
+          <Modal open={isOpen} onOpenChange={setIsOpen}>
             <Modal.Trigger asChild>
               <Button
                 variant="destructive"
@@ -37,7 +52,12 @@ const BankAccounts = () => {
               title="Add Bank Account"
               description="Fill all the fields to add a bank account"
             >
-              <BankAccountCreate setModal={setOpen} />
+              <BankAccountCreate
+                bankAccountId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+                setModal={setIsOpen}
+              />
             </Modal.Content>
           </Modal>
           <Button
