@@ -61,7 +61,7 @@ const Departments = () => {
       {data && !isLoading ? (
         <DataTable data={data} columns={departmentColumnDef} />
       ) : (
-        <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
+        <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
       )}
     </section>
   );
