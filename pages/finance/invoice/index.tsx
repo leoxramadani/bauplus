@@ -8,8 +8,8 @@ import { FileInput, Plus, RotateCw } from 'lucide-react';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import Modal from '@/components/atoms/Modal';
 import CreateInvoice from '@/components/molecules/finances/invoice/CreateInvoice';
-const  Invoice = () => {
-  const [open, setOpen] = useState(false)
+const Invoice = () => {
+  const [open, setOpen] = useState(false);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -86,18 +86,24 @@ const  Invoice = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row gap-2">
-      <Modal>
-        <Modal.Trigger asChild>
-        <Button variant="destructive" className='flex flex-row gap-2' >
-            <Plus size={20}/> Add Invoice
-          </Button>
-        </Modal.Trigger>
-        <Modal.Content title='Add Invoice' description='Fill all the fields to add an invoice' >
-         <CreateInvoice setCloseModal={setOpen} />
-        </Modal.Content>
-      </Modal>
+        <Modal>
+          <Modal.Trigger asChild>
+            <Button
+              variant="destructive"
+              className="flex flex-row gap-2"
+            >
+              <Plus size={20} /> Add Invoice
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Add Invoice"
+            description="Fill all the fields to add an invoice"
+          >
+            <CreateInvoice setCloseModal={setOpen} />
+          </Modal.Content>
+        </Modal>
         <Button variant="outline" className="flex gap-2">
-        <RotateCw /> <span>Recurring Invoice</span>
+          <RotateCw /> <span>Recurring Invoice</span>
         </Button>
         <Button variant="outline" className="flex gap-2">
           <Plus size={20} /> <span>Create Time Log Invoice</span>

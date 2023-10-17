@@ -1,11 +1,14 @@
-import Modal from "../Modal";
-import UsersForm from "./Form";
-import { GET_SPECIFIC_USER_QUERY, UPDATE_USER_QUERY } from "@/lib/queries/user";
-import { useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import useTranslation from "@/lib/hooks/useTranslation";
+import Modal from '../Modal';
+import UsersForm from './Form';
+import {
+  GET_SPECIFIC_USER_QUERY,
+  UPDATE_USER_QUERY,
+} from '@/lib/queries/user';
+import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import useTranslation from '@/lib/hooks/useTranslation';
 const EditProfile = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -32,7 +35,7 @@ const EditProfile = () => {
   }, [data]);
 
   return (
-    <Modal value={t("Edit profile")} className="button">
+    <Modal value={t('Edit profile')} className="button">
       {dataLoading && <p>Loading...</p>}
       {!dataLoading && !dataError && (
         <div className="flex justify-center">
@@ -44,7 +47,9 @@ const EditProfile = () => {
           />
         </div>
       )}
-      {dataError && <p className="text-red-600">{t(dataError.message)}</p>}
+      {dataError && (
+        <p className="text-red-600">{t(dataError.message)}</p>
+      )}
     </Modal>
   );
 };

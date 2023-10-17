@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const LOGIN_QUERY = gql`
   query login($username: String!, $password: String!) {
@@ -28,7 +28,7 @@ export const LOGIN_WITH_2FA_QUERY = gql`
     login2Factor(code: $code, username: $username) {
       status
       message
-      result 
+      result
     }
   }
 `;

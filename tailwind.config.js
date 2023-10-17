@@ -40,7 +40,7 @@ module.exports = {
             emphasis: '#374151', // gray-700
           },
           popover: {
-            DEFAULT: 'black'
+            DEFAULT: 'black',
           },
           border: {
             DEFAULT: '#e5e7eb', // gray-200

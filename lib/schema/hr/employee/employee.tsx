@@ -21,6 +21,11 @@ export const employeeSchema = z.object({
   email: z.string(),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
+  department: z
+    .object({
+      departmentName: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type IEmployee = z.infer<typeof employeeSchema>;
@@ -59,9 +64,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleEdit(item.employeeId)}
-        >
+        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
           Edit row
         </DropdownMenuItem>
         <DropdownMenuItem>View payment details</DropdownMenuItem>
@@ -96,20 +99,20 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'employeeId',
-    header: 'Employee ID',
-  },
-  {
-    accessorKey: 'companyId',
-    header: 'Company ID',
-  },
-  {
     accessorKey: 'firstName',
     header: 'First Name',
   },
   {
     accessorKey: 'lastName',
     header: 'Last Name',
+  },
+  // {
+  //   accessorKey: 'employeeId',
+  //   header: 'Employee ID',
+  // },
+  {
+    accessorKey: 'companyId',
+    header: 'Company ID',
   },
   {
     accessorKey: 'email',
@@ -126,11 +129,23 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     },
   },
   {
-    accessorKey: 'departmentId',
-    header: 'Department ID',
+    accessorKey: 'department.departmentName',
+    header: 'Department',
   },
   {
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
+
+export const createEmployeeSchema = z.object({
+  employeeId: z.string().optional(),
+  companyId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  dateOfBirth: z.coerce.date(),
+  departmentId: z.string(),
+});
+
+export type ICreateEmployee = z.infer<typeof createEmployeeSchema>;

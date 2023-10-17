@@ -1,4 +1,4 @@
-"use client"
+'use client';
 // import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
 import React, { useState } from 'react';
@@ -87,24 +87,32 @@ const Payments = () => {
     },
   ];
 
-
   return (
     <section className="z-0 flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-      <Modal>
-        <Modal.Trigger asChild>
-        <Button className='button flex gap-1 justify-center items-center' >
-            <Plus size={20}/> Add Payment
-          </Button>
-        </Modal.Trigger>
-        <Modal.Content title='Add Payment' description='Fill all the fields to add a payment' >
-         <CreatePayment />
-        </Modal.Content>
-      </Modal>
-        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white">
+        <Modal>
+          <Modal.Trigger asChild>
+            <Button className="button flex gap-1 justify-center items-center">
+              <Plus size={20} /> Add Payment
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Add Payment"
+            description="Fill all the fields to add a payment"
+          >
+            <CreatePayment />
+          </Modal.Content>
+        </Modal>
+        <Button
+          isProgress={false}
+          className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white"
+        >
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button isProgress={false} className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white ">
+        <Button
+          isProgress={false}
+          className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white "
+        >
           <FileInput /> <span>Export</span>
         </Button>
       </div>
@@ -118,7 +126,6 @@ const Payments = () => {
         <CreatePayment />
         <p>hello</p>
       </Modal> */}
-
     </section>
   );
 };

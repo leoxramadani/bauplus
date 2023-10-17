@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import { CompanyContext } from "../contexts/CompanyContext";
-import nProgress from "nprogress";
-import { ICompany } from "next-auth";
+import { CompanyContext } from '../contexts/CompanyContext';
+import nProgress from 'nprogress';
+import { ICompany } from 'next-auth';
 
 {
   /**
@@ -16,7 +16,7 @@ export const useCompany = () => {
   const setCompany = (company: ICompany) => {
     if (!window) return;
     nProgress.start();
-    localStorage.setItem("company", JSON.stringify(company));
+    localStorage.setItem('company', JSON.stringify(company));
     setContextCompany(company);
     nProgress.done();
   };

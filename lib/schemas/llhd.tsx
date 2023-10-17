@@ -1,7 +1,7 @@
-import * as z from "zod";
-import { MRT_ColumnDef } from "material-react-table";
-import { formatDate } from "../helper/helper";
-import useTranslation from "../hooks/useTranslation";
+import * as z from 'zod';
+import { MRT_ColumnDef } from 'material-react-table';
+import { formatDate } from '../helper/helper';
+import useTranslation from '../hooks/useTranslation';
 
 const columnSchema_filtered = z.object({
   nr: z.number(),
@@ -17,56 +17,56 @@ export type llhd_filtered = z.infer<typeof columnSchema_filtered>;
 
 export const llhd_filtered: MRT_ColumnDef<llhd_filtered>[] = [
   {
-    accessorKey: "nr",
-    header: "Number",
+    accessorKey: 'nr',
+    header: 'Number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "companyName",
-    header: "Company name",
+    accessorKey: 'companyName',
+    header: 'Company name',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "tipi",
-    header: "Transaction type",
+    accessorKey: 'tipi',
+    header: 'Transaction type',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaPaTVSH",
-    header: "Sum without TAX",
+    accessorKey: 'shumaPaTVSH',
+    header: 'Sum without TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "vleraTVSH",
-    header: "Value of TAX",
+    accessorKey: 'vleraTVSH',
+    header: 'Value of TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaTVSH",
-    header: "Sum with TAX",
+    accessorKey: 'shumaTVSH',
+    header: 'Sum with TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "dataNeDokument",
-    header: "Date in document",
+    accessorKey: 'dataNeDokument',
+    header: 'Date in document',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();

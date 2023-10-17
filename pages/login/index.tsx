@@ -147,7 +147,7 @@ const Login = () => {
           <div className="relative z-20 flex items-center gap-3 text-3xl font-bold">
             <Square strokeWidth={10} size={40} />
             <div className="h-full flex items-center pb-1">
-              Arkiva
+              Mimiro
             </div>
           </div>
         </div>

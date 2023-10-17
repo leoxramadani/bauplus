@@ -2,7 +2,7 @@ import Layout from '@/components/layout';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
 import { ApolloProvider } from '@apollo/client';
-import Client from "../lib/apollo/client";
+import Client from '../lib/apollo/client';
 import {
   QueryClient,
   QueryClientProvider,
@@ -10,21 +10,21 @@ import {
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import type { AppType } from 'next/app';
-import NProgress from "nprogress";
-import Router from "next/router";
+import NProgress from 'nprogress';
+import Router from 'next/router';
 
 const client = new QueryClient();
 
 NProgress.configure({ speed: 500 });
-Router.events.on("routeChangeStart", () => {
+Router.events.on('routeChangeStart', () => {
   NProgress.start();
 });
 
-Router.events.on("routeChangeComplete", () => {
+Router.events.on('routeChangeComplete', () => {
   NProgress.done();
 });
 
-Router.events.on("routeChangeError", () => {
+Router.events.on('routeChangeError', () => {
   NProgress.done();
   NProgress.configure({ speed: 1000 });
 });

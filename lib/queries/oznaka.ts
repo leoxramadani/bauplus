@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 //* Create new Oznaka
 const CREATE_NEW_OZNAKA_QUERY = gql`
@@ -13,14 +13,14 @@ const CREATE_NEW_OZNAKA_QUERY = gql`
     $isDeleted: Boolean!
   ) {
     createNewOznaka(
-      oznaka_ID: $oznaka_ID,
-      organEdinica_ID: $organEdinica_ID,
-      pershkrim: $pershkrim,
-      createdBy: $createdBy,
-      created: $created,
-      modifiedBy: $modifiedBy,
-      modified: $modified,
-      isDeleted: $isDeleted,
+      oznaka_ID: $oznaka_ID
+      organEdinica_ID: $organEdinica_ID
+      pershkrim: $pershkrim
+      createdBy: $createdBy
+      created: $created
+      modifiedBy: $modifiedBy
+      modified: $modified
+      isDeleted: $isDeleted
     ) {
       pershkrim
     }
@@ -52,8 +52,6 @@ const CREATE_NEW_OZNAKA_QUERY = gql`
 //     // handle error
 //   });
 
-
-
 const GET_ALL_OZNAKA_QUERY = gql`
   query allOznaka {
     allOznaka {
@@ -68,7 +66,6 @@ const GET_ALL_OZNAKA_QUERY = gql`
     }
   }
 `;
-
 
 // In your component code, you can call the query like this:
 // const { loading, error, data } = useQuery(GET_ALL_OZNAKA_QUERY);
@@ -106,26 +103,26 @@ const REMOVE_OZNAKA_QUERY = gql`
 
 const UPDATE_OZNAKA_QUERY = gql`
   mutation updateOznaka(
-    $oznaka_ID: String!,
-    $organEdinica_ID: String!,
-    $pershkrim: String!,
-    $createdBy: String!,
-    $created: String!,
-    $modifiedBy: String!,
-    $modified: String!,
+    $oznaka_ID: String!
+    $organEdinica_ID: String!
+    $pershkrim: String!
+    $createdBy: String!
+    $created: String!
+    $modifiedBy: String!
+    $modified: String!
   ) {
     updateOznaka(
-      oznaka_ID: $oznaka_ID,
-      organEdinica_ID: $organEdinica_ID,
-      pershkrim: $pershkrim,
-      createdBy: $createdBy,
-      created: $created,
-      modifiedBy: $modifiedBy,
-      modified: $modified,
+      oznaka_ID: $oznaka_ID
+      organEdinica_ID: $organEdinica_ID
+      pershkrim: $pershkrim
+      createdBy: $createdBy
+      created: $created
+      modifiedBy: $modifiedBy
+      modified: $modified
     ) {
-      oznaka_ID,
-      organEdinica_ID,
-      pershkrim,
+      oznaka_ID
+      organEdinica_ID
+      pershkrim
     }
   }
 `;
@@ -152,7 +149,6 @@ const UPDATE_OZNAKA_QUERY = gql`
 //     console.error(error);
 //     // handle error
 //   });
-
 
 const GET_OZNAKA_QUERY = gql`
   query specificOznaka($oznakaID: String!) {

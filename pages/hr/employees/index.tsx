@@ -1,5 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import EmployeesCreate from '@/components/molecules/hr/employees/EmployeesCreate';
+import EmployeesCreate from '@/components/molecules/hr/employees/EmployeesForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
@@ -15,28 +15,32 @@ import React, { useEffect, useState } from 'react';
 
 const Employees = () => {
   const router = useRouter();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-  const { data } = useData<IEmployee[]>(
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data, isLoading, isError, refetch } = useData<IEmployee[]>(
     ['employees'],
     GET_ALL_EMPLOYEES
   );
 
   useEffect(() => {
     if (router.query.id) {
-      setIsCreateModalOpen(true);
+      setIsModalOpen(true);
     }
     console.log('router==', router);
   }, [router.query.id]);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      router.replace('/hr/employees', undefined, {
+        shallow: true,
+      });
+    }
+  }, [isModalOpen]);
 
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Modal
-            open={isCreateModalOpen}
-            onOpenChange={setIsCreateModalOpen}
-          >
+          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
               <Button
                 variant="destructive"
@@ -48,7 +52,7 @@ const Employees = () => {
             </Modal.Trigger>
             <Modal.Content>
               <EmployeesCreate
-                setIsCreateModalOpen={setIsCreateModalOpen}
+                setIsModalOpen={setIsModalOpen}
                 employeeId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
@@ -66,14 +70,14 @@ const Employees = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {data ? (
+        {data && !isLoading ? (
           <DataTable
             data={data}
             columns={employeeColumnDef}
             searchVal="firstName"
           />
         ) : (
-          <>No data.</>
+          <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
         )}
       </section>
 

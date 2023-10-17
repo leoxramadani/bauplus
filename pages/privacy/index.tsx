@@ -1,9 +1,5 @@
 const Privacy = () => {
-    return (
-        <>
-            Privacy
-        </>
-    )
-}
+  return <>Privacy</>;
+};
 
-export default Privacy
+export default Privacy;

@@ -57,7 +57,10 @@ export function DataTableColumnHeader<TData, TValue>({
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className='shadow-md shadow-slate-300/30 border'>
+        <DropdownMenuContent
+          align="start"
+          className="shadow-md shadow-slate-300/30 border"
+        >
           <DropdownMenuItem
             onClick={() => column.toggleSorting(false)}
           >

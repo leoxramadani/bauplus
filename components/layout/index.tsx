@@ -85,7 +85,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           }`}
         >
           <Breadcrumbs />
-          <div className='mt-4'>{children}</div>
+          <div className="mt-4">{children}</div>
         </main>
       </div>
     </>
