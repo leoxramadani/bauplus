@@ -24,7 +24,7 @@ import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
-  DepartmentType,
+  IDepartment,
 } from '@/lib/schema/hr/departments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -69,13 +69,13 @@ const DepartmentsForm = ({
     }
   }, [departmentId]);
 
-  const form = useForm<DepartmentType>({
+  const form = useForm<IDepartment>({
     resolver: zodResolver(DepartmentSchema),
     values: { ...departmentData },
   });
 
   const onSubmit = useCallback(
-    async (data: DepartmentType) => {
+    async (data: IDepartment) => {
       console.log('form data ->', data);
 
       if (departmentData) {
