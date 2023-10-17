@@ -25,7 +25,7 @@ import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
   DepartmentType,
-} from '@/lib/schema/Finance/departments';
+} from '@/lib/schema/hr/departments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -51,6 +51,7 @@ const DepartmentsForm = ({
   } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
+    console.log('inside getData');
     async function getData(Id: string) {
       await axios
         .get(GET_SPECIFIC_DEPARTMENT + `?Id=${Id}`)
@@ -86,13 +87,13 @@ const DepartmentsForm = ({
             parentDepartmentId: data.parentDepartmentId,
           })
           .then((res) => {
-            console.log('UPDATED employee->', res);
+            console.log('update department->', res);
             router.replace('/hr/departments', undefined, {
               shallow: true,
             });
           })
           .catch((error) => {
-            console.log('Error UPDATING employee:', error);
+            console.log('Error UPDATING department:', error);
           });
       } else {
         await axios
@@ -100,13 +101,13 @@ const DepartmentsForm = ({
             departmentName: data.departmentName,
             companyId: data.companyId,
             // departmentId: data.departmentId,
-            // parentDepartmentId:data.parentDepartmentId,
+            parentDepartmentId: data.parentDepartmentId,
           })
           .then((res) => {
-            console.log('Successfully created employee->', res);
+            console.log('Successfully created department->', res);
           })
           .catch((error) => {
-            console.log('Error creating employee:', error);
+            console.log('Error creating department:', error);
           });
       }
       setIsModalOpen(false);

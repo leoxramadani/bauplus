@@ -72,6 +72,7 @@ const EmployeesForm = ({
 
   useEffect(() => {
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_BY_ID_EMPLOYEE + `?employeeId=${Id}`)
         .then((res) => {

@@ -18,9 +18,14 @@ export const DepartmentSchema = z.object({
   departmentName: z.string(),
   companyId: z.string(),
   parentDepartmentId: z.string().optional().nullable(),
+  company: z
+    .object({
+      companyName: z.string().optional(),
+    })
+    .optional(),
 });
 
-export type DepartmentType = z.infer<typeof DepartmentSchema>;
+export type IDepartment = z.infer<typeof DepartmentSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -67,7 +72,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   );
 };
 
-export const DepartmentDef: ColumnDef<DepartmentType>[] = [
+export const departmentColumnDef: ColumnDef<IDepartment>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -101,8 +106,8 @@ export const DepartmentDef: ColumnDef<DepartmentType>[] = [
     header: 'Department Name',
   },
   {
-    accessorKey: 'companyId',
-    header: 'Company ID',
+    accessorKey: 'company.companyName',
+    header: 'Company Name',
   },
   {
     accessorKey: 'parentDepartmentId',

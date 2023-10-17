@@ -9,7 +9,7 @@ import useData from '@/lib/hooks/useData';
 import {
   IDepartment,
   departmentColumnDef,
-} from '@/lib/schema/hr/department';
+} from '@/lib/schema/hr/departments';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ const Departments = () => {
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
+  console.log('All departments:', data);
 
   useEffect(() => {
     if (router.query.id) {
@@ -66,7 +67,11 @@ const Departments = () => {
         </Button>
       </div>
       {data && !isLoading ? (
-        <DataTable data={data} columns={departmentColumnDef} />
+        <DataTable
+          data={data}
+          columns={departmentColumnDef}
+          searchVal="departmentName"
+        />
       ) : (
         <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
       )}
