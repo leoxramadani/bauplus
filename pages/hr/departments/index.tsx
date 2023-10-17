@@ -45,7 +45,8 @@ const Departments = () => {
               variant="destructive"
               className="flex gap-1 justify-center items-center"
             >
-              <Plus size={20} /> Add Department
+              <Plus size={20} />
+              Add Department
             </Button>
           </Modal.Trigger>
           <Modal.Content title="Add another department">
