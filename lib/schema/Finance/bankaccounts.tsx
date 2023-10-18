@@ -45,6 +45,21 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
+  
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(DELETE_BANK_ACCOUNT, {
+        params: {
+          bankAccountId: id,
+        },
+      });
+      alert('success')
+    } catch (error) {
+      console.log(error)
+    }
+   
+  };
+  
 
   return (
     <DropdownMenu>
@@ -71,6 +86,11 @@ const ActionsColumn = ({ item }: { item: any }) => {
           onClick={() => handleEdit(item.bankAccountId)}
         >
           Edit row
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => handleDelete(item.bankAccountId)}
+        >
+          Delete
         </DropdownMenuItem>
         <DropdownMenuItem>View payment details</DropdownMenuItem>
       </DropdownMenuContent>
