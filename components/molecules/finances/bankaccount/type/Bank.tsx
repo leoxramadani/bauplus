@@ -17,9 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  IBankAccount,
   IcreateBankAccountSchema,
-  bankAccountSchema,
   createBankAccountSchema,
 } from '@/lib/schema/Finance/finance';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +30,8 @@ import {
   GET_ALL_ACCOUNT_TYPES,
   GET_ALL_CURRENCIES,
   GET_MY_EMPLOYEE_NAMES,
+  GET_ONE_BANKACCOUNT,
+  UPDATE_BANK_ACCOUNT,
 } from '@/lib/constants/endpoints/finance';
 import { watch } from 'fs';
 import { toast } from 'react-toastify';
@@ -40,52 +40,61 @@ import useData from '@/lib/hooks/useData';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import { useRouter } from 'next/router';
 
-const Bank = ({ setModal }: IBankAccountCreate) => {
-  const form = useForm<IcreateBankAccountSchema>({
-    resolver: zodResolver(createBankAccountSchema),
+interface IEmployee {
+  employeeId?: string;
+  companyId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  dateOfBirth?: string;
+  departmentId: string;
+}
 
-    // defaultValues: {
-    //   bankName: '',
-    //   employeeId: '',
-    //   currencyId: '',s
-    //   bankAccountTypeId: '',
-    //   bankAccountStatusId: '',
-    //   accountName: '',
-    //   accountNumber: '',
-    //   openingBalance: 0,
-    // },
-  });
+const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bankAccount, setBankAccount] = useState<any>();
+  // const {
+  //   data: bankAccount,
+  //   isError: bankAccountIsError,
+  //   isLoading: bankAccountIsLoading,
+  //   error: bankAccountError,
+  // } = useData<any>(
+  //   ['bankAccountId'],
+  //   GET_ONE_BANKACCOUNT + `?BankAccountId=${bankAccountId}`
+  // );
 
-  interface IEmployee {
-    employeeId?: string;
-    companyId?: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    dateOfBirth?: string;
-    departmentId: string;
-  }
-
-  const onSubmit = useCallback(
-    async (data: IcreateBankAccountSchema) => {
-      axios
-        .post(CREATE_BANK_ACCOUNT, {
-          ...data,
-        })
-        .then((res: any) => {
-          toast.success('Successfully created new bank account!');
-          setModal(false);
-          console.log("res:",res)
+  useEffect(() => {
+    async function getData(Id: string) {
+      await axios
+        .get(GET_ONE_BANKACCOUNT + `?BankAccountId=${Id}`)
+        .then((res) => {
+          console.log('setting employee data -->', res);
+          setBankAccount(res.data);
         })
         .catch((error) => {
-          console.log('error=', error);
+          console.log('error fetching employees->', error);
         });
-    },
-    []
-  );
+    }
+
+    if (bankAccountId) {
+      getData(bankAccountId);
+    }
+  }, [bankAccountId]);
 
   const {
     data: currencies,
@@ -112,144 +121,152 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
     isError: employeesIsError,
     isLoading: employeesIsLoading,
     error: employeesError,
-  } = useData<Array<{ [key: string]: any }>>(
-    ['employees'],
-    GET_ALL_EMPLOYEES
+  } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
+
+  const {
+    data: status,
+    isError: statusIsError,
+    isLoading: statusIsLoading,
+    error: statusError,
+  } = useData<any>(['status'], GET_ALL_ACCOUNT_STATUSES);
+
+  const form = useForm<IcreateBankAccountSchema>({
+    resolver: zodResolver(createBankAccountSchema),
+    values: { ...bankAccount },
+  });
+
+  const onSubmit = useCallback(
+    async (data: IcreateBankAccountSchema) => {
+      setIsSubmitting(true);
+      try {
+        data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
+        console.log('submit:', data);
+        if (bankAccount && router.query.id) {
+          // Bank account data exists, perform update
+          const res = await axios.put(UPDATE_BANK_ACCOUNT, {
+            ...data,
+            bankAccountId: bankAccountId,
+          });
+          console.log('Update response:', res);
+          toast.success('Successfully updated bank account!');
+          setIsSubmitting(true);
+          setModal(false);
+        } else {
+          // Bank account data is empty, perform create
+          const res = await axios.post(CREATE_BANK_ACCOUNT, {
+            ...data,
+            companyId: '145D8D93-7FF7-4A24-A184-AA4E010E7F37',
+          });
+          console.log('Create response:', res);
+          toast.success('Successfully created new bank account!');
+          setIsSubmitting(true);
+          setModal(false);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setIsSubmitting(true);
+      }
+    },
+    [bankAccount]
   );
 
-  console.log(form.watch('employeeId'));
-  const [allAccountStatuses, setAllAccountStatuses] = useState<any>();
-  useEffect(() => {
-    async function getAccountStatuses() {
-      await axios
-        .get(GET_ALL_ACCOUNT_STATUSES)
-        .then((res) => {
-          setAllAccountStatuses(res.data);
-        })
-        .catch((error) => {
-          console.log('error=', error);
-        });
-    }
-
-    getAccountStatuses();
-  }, []);
-
   const onError = (error: any) => {
-    console.log('error====>', error);
+    console.log('error====> sadasda', error);
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit, onError)}
-        className="flex flex-col gap-4 w-full"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
-          {/* invoice number  */}
-          <FormField
-            control={form.control}
-            name="bankName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bank Name</FormLabel>
-
-                <FormControl className="relative">
-                  <Input placeholder="Bank Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* <FormField
-            control={form.control}
-            name="employeeId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Account Holder Name</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Enter account holder name" />
-                    </SelectTrigger>
+    !statusIsLoading &&
+    !employeesIsLoading &&
+    !currenciesIsLoading &&
+    !accountTypesIsLoading && (
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit, onError)}
+          className="flex flex-col gap-4 w-full"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* invoice number  */}
+            <FormField
+              control={form.control}
+              name="bankName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Name</FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Bank Name" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    {allEmployeesNames ? (
-                      <>
-                        {allEmployeesNames.map((x: any) => {
-                          return (
-                            <SelectItem
-                              key={x.employeeId}
-                              value={x.employeeId}
-                            >
-                              {x.firstName}
-                              {''} {x.lastName}
-                            </SelectItem>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <p>Loading...</p>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="employeeId"
-            render={({ field }) => (
-              <FormItem className="w-full flex flex-col">
-                <FormLabel>Account Holder Name</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          'w-full flex items-center gap-1 justify-between',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value
-                          ? employees?.find(
-                              (employee) =>
-                                employee.employeeId === field.value
-                            )?.firstName +
-                            ' ' +
-                            employees?.find(
-                              (employee) =>
-                                employee.employeeId === field.value
-                            )?.lastName
-                          : 'Choose member'}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command>
-                      <CommandInput placeholder="Search language..." />
-                      <CommandEmpty>No member found.</CommandEmpty>
-                      <CommandGroup className="flex flex-col gap-4">
-                        {employees
-                          ?.slice(0, 5)
-                          .map((employee, i: Key) => (
+            <FormField
+              control={form.control}
+              name="accountName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Name</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input placeholder="Bank Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="employeeId"
+              render={({ field }) => (
+                <FormItem className="w-full flex flex-col">
+                  <FormLabel>Account Holder Name</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'w-full flex items-center gap-1 justify-between',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value
+                            ? employees?.find(
+                                (employee) =>
+                                  employee.employeeId === field.value
+                              )?.firstName +
+                              ' ' +
+                              employees?.find(
+                                (employee) =>
+                                  employee.employeeId === field.value
+                              )?.lastName
+                            : 'Choose member'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search language..." />
+                        <CommandEmpty>No member found.</CommandEmpty>
+                        <CommandGroup className="flex flex-col gap-4 max-h-[200px] h-full overflow-y-auto">
+                          {employees?.map((employee, i: Key) => (
                             <CommandItem
-                              value={employee.firstName + ' ' + employee.lastName}
+                              value={
+                                employee.firstName +
+                                ' ' +
+                                employee.lastName
+                              }
                               className="flex items-center"
                               key={i}
                               onSelect={() => {
-                                form.setValue(
-                                  'employeeId',
-                                  employee.employeeId
-                                );
+                                employee.employeeId &&
+                                  form.setValue(
+                                    'employeeId',
+                                    employee?.employeeId
+                                  );
                               }}
                             >
                               <Check
@@ -263,117 +280,116 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
                               {`${employee.firstName} ${employee.lastName}`}
                             </CommandItem>
                           ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          
+            <FormField
+              control={form.control}
+              name="accountNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Number</FormLabel>
 
-          <FormField
-            control={form.control}
-            name="accountNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Account Number</FormLabel>
-
-                <FormControl className="relative">
-                  <Input
-                    placeholder="Enter account number"
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    type="number"
-                    autoComplete="off"
-                    {...field}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="bankAccountTypeId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Account Type</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select account type" />
-                    </SelectTrigger>
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Enter account number"
+                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      type="number"
+                      autoComplete="off"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {accountTypes ? (
-                      <>
-                        {accountTypes.map((x: any) => {
-                          return (
-                            <SelectItem
-                              value={x.bankAccountTypeId}
-                              key={x.bankAccountTypeId}
-                            >
-                              {x.bankAccountTypeName}
-                            </SelectItem>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <p>Loading...</p>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
-          <FormField
-            control={form.control}
-            name="currencyId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Currency</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a Currency" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {currencies && !currenciesIsLoading ? (
-                      <>
-                        {currencies.map((x: any) => {
-                          return (
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="bankAccountTypeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select account type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {accountTypes ? (
+                        <>
+                          {accountTypes.map((x: any) => {
+                            return (
+                              <SelectItem
+                                value={x.bankAccountTypeId}
+                                key={x.bankAccountTypeId}
+                              >
+                                {x.bankAccountTypeName}
+                              </SelectItem>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="currencyId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Currency</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a Currency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {currencies && !currenciesIsLoading ? (
+                        <>
+                          {currencies.map((x: any) => (
                             <SelectItem
                               key={x.currencyID}
                               value={x.currencyID}
                             >
                               {x.currencyName}
                             </SelectItem>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <p>Loading...</p>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* 
+                          ))}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* 
           <FormField
             control={form.control}
             name="contactNumber"
@@ -396,72 +412,78 @@ const Bank = ({ setModal }: IBankAccountCreate) => {
             )}
           /> */}
 
-          <FormField
-            control={form.control}
-            name="balance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Opening Balance</FormLabel>
+            <FormField
+              control={form.control}
+              name="balance"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Opening Balance</FormLabel>
 
-                <FormControl className="relative">
-                  <Input
-                    placeholder="Enter opening balance"
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    type="number"
-                    autoComplete="off"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="bankAccountStatusId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Enter Status" />
-                    </SelectTrigger>
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Enter opening balance"
+                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      type="number"
+                      autoComplete="off"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {allAccountStatuses ? (
-                      <>
-                        {allAccountStatuses.map((x: any) => {
-                          return (
-                            <SelectItem
-                              value={x.bankAccountStatusId}
-                              key={x.bankAccountStatusId}
-                            >
-                              {x.statusName}
-                            </SelectItem>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <p>Loading...</p>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <Btn className="button w-max" type="submit">
-          Submit
-        </Btn>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="bankAccountStatusId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter Status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {status && !statusIsLoading ? (
+                        <>
+                          {status.map((x: any) => {
+                            return (
+                              <SelectItem
+                                value={x.bankAccountStatusId}
+                                key={x.bankAccountStatusId}
+                              >
+                                {x.statusName}
+                              </SelectItem>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <Button
+            variant="destructive"
+            loading={isSubmitting}
+            className="w-max"
+          >
+            Submit
+          </Button>
+        </form>
+      </Form>
+    )
   );
 };
 

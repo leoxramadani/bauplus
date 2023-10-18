@@ -24,10 +24,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import {
-  IBankAccount,
   IBankAccountCash,
   IInvoiceSchema,
-  bankAccountSchema,
   bankAccountSchemaCash,
   invoiceSchema,
 } from '@/lib/schema/Finance/finance';

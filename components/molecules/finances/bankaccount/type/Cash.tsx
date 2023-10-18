@@ -17,9 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  IBankAccount,
   IBankAccountCash,
-  bankAccountSchema,
   bankAccountSchemaCash,
 } from '@/lib/schema/Finance/finance';
 import { zodResolver } from '@hookform/resolvers/zod';

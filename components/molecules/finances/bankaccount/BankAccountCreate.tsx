@@ -23,14 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-  IBankAccount,
-  IBankAccountCash,
-  IInvoiceSchema,
-  bankAccountSchema,
-  bankAccountSchemaCash,
-  invoiceSchema,
-} from '@/lib/schema/Finance/finance';
+import { IBankAccountCash } from '@/lib/schema/Finance/finance';
 import { Input } from '@/components/ui/input';
 import { watch } from 'fs';
 import {
@@ -53,9 +46,13 @@ import Cash from './type/Cash';
 
 export interface IBankAccountCreate {
   setModal(open: boolean): void;
+  bankAccountId?: string;
 }
 
-const BankAccountCreate = ({ setModal }: IBankAccountCreate) => {
+const BankAccountCreate = ({
+  setModal,
+  bankAccountId,
+}: IBankAccountCreate) => {
   const [accountType, setAccountType] = useState<'Bank' | 'Cash'>(
     'Bank'
   );
@@ -80,19 +77,28 @@ const BankAccountCreate = ({ setModal }: IBankAccountCreate) => {
             />
             <Label htmlFor="Bank">Bank</Label>
           </div>
-          <div className="flex items-center flex-row gap-1">
+          <div className="flex items-center flex-row gap-1 disabled:text-gray-400 cursor-not-allowed">
             <RadioGroupItem
               value="Cash"
               id="Cash"
               onClick={() => setAccountType('Cash')}
+              disabled
             />
-            <Label htmlFor="Cash">Cash</Label>
+            <Label
+              htmlFor="Cash"
+              className="text-gray-400 cursor-not-allowed"
+            >
+              Cash
+            </Label>
           </div>
         </RadioGroup>
       </div>
 
       {accountType == 'Bank' ? (
-        <Bank setModal={setModal} />
+        <Bank
+          bankAccountId={bankAccountId ? bankAccountId : ''}
+          setModal={setModal}
+        />
       ) : (
         <Cash />
       )}

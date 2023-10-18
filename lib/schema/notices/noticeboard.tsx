@@ -1,24 +1,18 @@
 import * as z from 'zod';
-import { ColumnDef } from '@tanstack/react-table';
 
-export const createClientsSchema = z.object({
-  companyId: z.string().optional(),
-  clientId: z.string(),
+export const noticeSchema = z.object({
+  noticeId: z.string().optional(),
+  // dateCreated: z.string(),
   noticeTitle: z.string(),
-  Department: z.string(),
-  NoticeDetails: z.string(),
+  noticeText: z.string(),
+  isRead: z.boolean().default(false),
+  employeeId: z
+    .string()
+    .default('758BB06E-DE5A-4FAD-B084-03FB2A283FD8'),
+  companyId: z
+    .string()
+    .default('145D8D93-7FF7-4A24-A184-AA4E010E7F37'),
+  departmentId: z.string(),
 });
-export type IcreateClientsSchema = z.infer<
-  typeof createClientsSchema
->;
 
-export const createEmployeesSchema = z.object({
-  companyId: z.string().optional(),
-  employeeId: z.string(),
-  noticeTitle: z.string(),
-  Department: z.string(),
-  NoticeDetails: z.string(),
-});
-export type IcreateEmployeesSchema = z.infer<
-  typeof createEmployeesSchema
->;
+export type InoticeSchema = z.infer<typeof noticeSchema>;
