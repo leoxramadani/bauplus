@@ -522,7 +522,7 @@ const SoraviaLogo = () => {
       id="Layer_1"
       data-name="Layer 1"
       viewBox="0 0 139.8 254.41"
-      width="110"
+      width="50"
     >
       <Defs>
         <LinearGradient
@@ -1258,12 +1258,87 @@ const PDFRenderer = () => {
                   </View>
                 </View>
               </View>
+              <View style={{ borderTop: 1.5 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 10 }}>ДБ:</Text>
+                    <Text style={{ marginLeft: 55, fontSize: 10 }}>
+                      MK4080020593677
+                    </Text>
+                  </View>
+
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 10 }}>Вкупно</Text>
+                    <Text style={{ marginLeft: 85, fontSize: 10 }}>
+                      1000000
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 10,
+                  }}
+                >
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 10 }}>
+                      Со зборови девет илјади четиристотини триесет и
+                      девет EUR 05/100
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '29%',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text style={{ fontSize: 10 }}>ДДВ</Text>
+                    <Text style={{ marginLeft: 85, fontSize: 10 }}>
+                      18%
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '71%',
+                    }}
+                  ></View>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '29%',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text style={{ fontSize: 10 }}>За плаќање</Text>
+                    <Text style={{ fontSize: 10 }}>МКД</Text>
+                    <Text style={{ fontSize: 10 }}>1880000</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </Page>
         </Document>
       );
 
-      setPdfData(albArchitectInvoice);
+      setPdfData(everestInvoice);
     } else {
       alert('Please fill in all three inputs.');
     }
