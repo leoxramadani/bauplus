@@ -1,16 +1,10 @@
-import { Card } from '@tremor/react'
-import React from 'react'
+import { Card } from '@tremor/react';
+import React from 'react';
 
-interface IGridItemContainer {
-
-}
+interface IGridItemContainer {}
 
 const GridItemContainer = () => {
-  return (
-    <Card className=''>
-        
-    </Card>
-  )
-}
+  return <Card className=""></Card>;
+};
 
-export default GridItemContainer
+export default GridItemContainer;

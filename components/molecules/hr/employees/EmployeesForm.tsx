@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  IEmployee,
+  ICreateEmployee,
   employeeColumnDef,
-  employeeSchema,
+  createEmployeeSchema,
+  IEmployee,
 } from '@/lib/schema/hr/employee/employee';
 import {
   Form,
@@ -32,18 +33,53 @@ import {
   UPDATE_EMPLOYEES,
 } from '@/lib/constants/endpoints/employee';
 import { useRouter } from 'next/router';
-const EmployeesCreate = ({
-  setIsCreateModalOpen,
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  GET_ALL_DEPARTMENTS,
+  GET_ALL_DEPATRMENTS_OF_COMAPNY,
+} from '@/lib/constants/endpoints/hr/departments';
+import useData from '@/lib/hooks/useData';
+const EmployeesForm = ({
+  setIsModalOpen,
   employeeId,
 }: {
-  setIsCreateModalOpen: any;
+  setIsModalOpen: any;
   employeeId?: string;
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
+  // const [departments, setDepartments] = useState<any>();
+
+  const {
+    data: departments,
+    isLoading: departmentsLoading,
+    isError: departmentsError,
+  } = useData<any>(
+    ['departments'],
+    GET_ALL_DEPATRMENTS_OF_COMAPNY +
+      `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
+  );
+
+  //TODO: handle null when there isn't an employee id
+  // const {
+  //   data: employeeData,
+  //   isLoading: employeeLoading,
+  //   isError: employeeError,
+  // } = useData<any>(
+  //   ['employee'],
+  //   GET_BY_ID_EMPLOYEE + `?employeeId=${employeeId}`
+  // );
 
   useEffect(() => {
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_BY_ID_EMPLOYEE + `?employeeId=${Id}`)
         .then((res) => {
@@ -60,18 +96,17 @@ const EmployeesCreate = ({
     }
   }, [employeeId]);
 
-  const form = useForm<IEmployee>({
-    resolver: zodResolver(employeeSchema),
+  const form = useForm<ICreateEmployee>({
+    resolver: zodResolver(createEmployeeSchema),
     values: { ...employeeData },
   });
 
   const onSubmit = useCallback(
-    async (data: IEmployee) => {
-      console.log('Employee data', employeeData);
+    async (data: ICreateEmployee) => {
+      console.log('form data->', data);
 
       if (employeeData) {
-        console.log('employeeData=>', employeeData);
-        console.log('data=======>', data);
+        console.log('Updating employee');
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
@@ -88,7 +123,7 @@ const EmployeesCreate = ({
             console.log('Error UPDATING employee:', error);
           });
       } else {
-        console.log('No employee data');
+        console.log('Creating employee');
         await axios
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {
@@ -99,7 +134,7 @@ const EmployeesCreate = ({
           });
       }
 
-      setIsCreateModalOpen(false);
+      setIsModalOpen(false);
     },
     [employeeData]
   );
@@ -124,54 +159,7 @@ const EmployeesCreate = ({
           className="flex flex-col gap-4 w-full"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
-            {/* <FormField
-              control={form.control}
-              name="employeeId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Employee Id<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Employee Id" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-            <FormField
-              control={form.control}
-              name="companyId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Company Id<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Company Id" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="departmentId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="departmentId" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* First name */}
             <FormField
               control={form.control}
               name="firstName"
@@ -187,6 +175,7 @@ const EmployeesCreate = ({
                 </FormItem>
               )}
             />
+            {/* Last name */}
             <FormField
               control={form.control}
               name="lastName"
@@ -203,7 +192,68 @@ const EmployeesCreate = ({
               )}
             />
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Company Id */}
+            <FormField
+              control={form.control}
+              name="companyId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Company Id<span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Company Id" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Department Id */}
+            <FormField
+              control={form.control}
+              name="departmentId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter department" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {departments ? (
+                        <>
+                          {departments.map((dep: any) => (
+                            <SelectItem
+                              key={dep.departmentId}
+                              value={dep.departmentId}
+                            >
+                              {dep.departmentName}
+                            </SelectItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -219,6 +269,8 @@ const EmployeesCreate = ({
                 </FormItem>
               )}
             />
+
+            {/* Date of birth */}
             <FormField
               control={form.control}
               name="dateOfBirth"
@@ -286,4 +338,4 @@ const EmployeesCreate = ({
   );
 };
 
-export default EmployeesCreate;
+export default EmployeesForm;

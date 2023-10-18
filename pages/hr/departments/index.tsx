@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
 import DepartmentCreate from '@/components/molecules/hr/departments/modals/DepartmentCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -8,16 +9,35 @@ import useData from '@/lib/hooks/useData';
 import {
   IDepartment,
   departmentColumnDef,
-} from '@/lib/schema/hr/department';
+} from '@/lib/schema/hr/departments';
 import { FileInput, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 const Departments = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { data } = useData<IDepartment[]>(
+  const { data, isError, isLoading } = useData<IDepartment[]>(
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
+  console.log('All departments:', data);
+
+  useEffect(() => {
+    if (router.query.id) {
+      setOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
+
+  useEffect(() => {
+    if (!open) {
+      router.replace('/hr/departments', undefined, {
+        shallow: true,
+      });
+    }
+  }, [open]);
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
@@ -27,13 +47,18 @@ const Departments = () => {
               variant="destructive"
               className="flex gap-1 justify-center items-center"
             >
-              <Plus size={20} /> Add Department
+              <Plus size={20} />
+              Add Department
             </Button>
           </Modal.Trigger>
-          <Modal.Content
-            title="Add another department"
-          >
-            <DepartmentCreate />
+          <Modal.Content title="Add another department">
+            {/* <DepartmentCreate /> */}
+            <DepartmentsForm
+              setIsModalOpen={setOpen}
+              departmentId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+            />
           </Modal.Content>
         </Modal>
 
@@ -41,8 +66,14 @@ const Departments = () => {
           <FileInput /> <span>Export</span>
         </Button>
       </div>
-      {data && (
-        <DataTable data={data} columns={departmentColumnDef} />
+      {data && !isLoading ? (
+        <DataTable
+          data={data}
+          columns={departmentColumnDef}
+          searchVal="departmentName"
+        />
+      ) : (
+        <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
       )}
     </section>
   );

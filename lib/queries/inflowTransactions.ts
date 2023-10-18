@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 //* This is fully functional
 export const GET_ALL_INFLOW_TRANSACTIONS_QUERY = gql`

@@ -12,15 +12,24 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import { DELETE_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 
 export const employeeSchema = z.object({
   employeeId: z.string().optional(),
-  companyId: z.string(),
+  companies: z.object({
+    companyName: z.string().optional(),
+  }),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
+  department: z
+    .object({
+      departmentName: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type IEmployee = z.infer<typeof employeeSchema>;
@@ -36,6 +45,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
         id: id,
       },
     });
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this invoice?'
+    );
+    if (confirmDelete) {
+      console.log('Delete row with id:', id);
+
+      await axios
+        .delete(DELETE_EMPLOYEES + `?employeeId=${id}`)
+        .then((res) => {
+          console.log('response after delete success =>', res);
+        })
+        .catch((error) => {
+          console.log('Response after error:', error);
+        });
+    }
   };
 
   return (
@@ -59,12 +86,15 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleEdit(item.employeeId)}
-        >
+        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
           Edit row
         </DropdownMenuItem>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => handleDelete(item.employeeId)}
+        >
+          Delete Row
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -96,20 +126,20 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'employeeId',
-    header: 'Employee ID',
-  },
-  {
-    accessorKey: 'companyId',
-    header: 'Company ID',
-  },
-  {
     accessorKey: 'firstName',
     header: 'First Name',
   },
   {
     accessorKey: 'lastName',
     header: 'Last Name',
+  },
+  // {
+  //   accessorKey: 'employeeId',
+  //   header: 'Employee ID',
+  // },
+  {
+    accessorKey: 'companies.companyName',
+    header: 'Company Name',
   },
   {
     accessorKey: 'email',
@@ -126,11 +156,23 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     },
   },
   {
-    accessorKey: 'departmentId',
-    header: 'Department ID',
+    accessorKey: 'department.departmentName',
+    header: 'Department',
   },
   {
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
+
+export const createEmployeeSchema = z.object({
+  employeeId: z.string().optional(),
+  companyId: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  dateOfBirth: z.coerce.date(),
+  departmentId: z.string(),
+});
+
+export type ICreateEmployee = z.infer<typeof createEmployeeSchema>;

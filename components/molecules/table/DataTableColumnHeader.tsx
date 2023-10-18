@@ -1,9 +1,3 @@
-// import {
-//   ArrowDownIcon,
-//   ArrowUpIcon,
-//   CaretSortIcon,
-//   EyeNoneIcon,
-// } from '@radix-ui/react-icons';
 
 import {
   ArrowDown,
@@ -34,18 +28,19 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
-  }
+  
 
   return (
-    <div className={cn('flex items-center space-x-2', className)}>
+    column.getCanSort() ? (
+      <div className={cn(className)}>{title}</div>
+    ) : (
+      <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="sm"
-            className="data-[state=open]:bg-accent flex items-center justify-between -ml-2 pl-2 pl-2 w-full"
+            className="data-[state=open]:bg-accent flex items-center justify-between -ml-2 pl-2 w-full"
           >
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
@@ -57,7 +52,10 @@ export function DataTableColumnHeader<TData, TValue>({
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className='shadow-md shadow-slate-300/30 border'>
+        <DropdownMenuContent
+          align="start"
+          className="shadow-md shadow-slate-300/30 border"
+        >
           <DropdownMenuItem
             onClick={() => column.toggleSorting(false)}
           >
@@ -80,5 +78,7 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+    )
+   
   );
 }

@@ -29,7 +29,6 @@ export function DataTableViewOptions<TData>({
           size="sm"
           className="flex gap-2 p-2 w-24"
         >
-          
           <div className="flex items-center">
             <SlidersHorizontal className="h-4 w-4" />
           </div>

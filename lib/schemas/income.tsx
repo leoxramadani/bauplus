@@ -1,8 +1,8 @@
-import * as z from "zod";
-import { MRT_ColumnDef } from "material-react-table";
-import { formatDate } from "../helper/helper";
-import useTranslation from "../hooks/useTranslation";
-import { Box } from "@mui/material";
+import * as z from 'zod';
+import { MRT_ColumnDef } from 'material-react-table';
+import { formatDate } from '../helper/helper';
+import useTranslation from '../hooks/useTranslation';
+import { Box } from '@mui/material';
 
 const columnsSchema = z.object({
   nr: z.number(),
@@ -22,40 +22,40 @@ export type incomeColumns = z.infer<typeof columnsSchema>;
 
 export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
   {
-    accessorKey: "nr",
-    header: "Number",
+    accessorKey: 'nr',
+    header: 'Number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "nrExtern",
-    header: "Extern number",
+    accessorKey: 'nrExtern',
+    header: 'Extern number',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "companyName",
-    header: "Company name",
+    accessorKey: 'companyName',
+    header: 'Company name',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "userName",
-    header: "Username",
+    accessorKey: 'userName',
+    header: 'Username',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "dataNeDokument",
-    header: "Date in document",
+    accessorKey: 'dataNeDokument',
+    header: 'Date in document',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
@@ -63,8 +63,8 @@ export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
     },
   },
   {
-    accessorKey: "afatiPageses",
-    header: "Payment deadline",
+    accessorKey: 'afatiPageses',
+    header: 'Payment deadline',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
@@ -72,8 +72,8 @@ export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
     },
   },
   {
-    accessorKey: "statusiPageses",
-    header: "Payment status",
+    accessorKey: 'statusiPageses',
+    header: 'Payment status',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
@@ -83,22 +83,22 @@ export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
         component="span"
         sx={(theme) => ({
           backgroundColor:
-            cell.getValue<string>() == "unpaid"
+            cell.getValue<string>() == 'unpaid'
               ? theme.palette.error.light
-              : cell.getValue<string>() == "semi-paid"
+              : cell.getValue<string>() == 'semi-paid'
               ? theme.palette.warning.light
-              : cell.getValue<string>() == "paid"
+              : cell.getValue<string>() == 'paid'
               ? theme.palette.success.light
               : theme.palette.warning.light,
-          borderRadius: "0.25rem",
-          color: "#fff",
-          maxWidth: "9ch",
-          p: "0.25rem",
+          borderRadius: '0.25rem',
+          color: '#fff',
+          maxWidth: '9ch',
+          p: '0.25rem',
         })}
       >
-        {cell.getValue<number>()?.toLocaleString?.("en-US", {
-          style: "currency",
-          currency: "USD",
+        {cell.getValue<number>()?.toLocaleString?.('en-US', {
+          style: 'currency',
+          currency: 'USD',
           minimumFractionDigits: 0,
           maximumFractionDigits: 0,
         })}
@@ -106,32 +106,32 @@ export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
     ),
   },
   {
-    accessorKey: "shumaPaTVSH",
-    header: "Sum without TAX",
+    accessorKey: 'shumaPaTVSH',
+    header: 'Sum without TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "vleraTVSH",
-    header: "Value of TAX",
+    accessorKey: 'vleraTVSH',
+    header: 'Value of TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "shumaTVSH",
-    header: "Sum with TAX",
+    accessorKey: 'shumaTVSH',
+    header: 'Sum with TAX',
     Header: ({ header }) => {
       const { t } = useTranslation();
       return <p>{t(header.column.columnDef.header)}</p>;
     },
   },
   {
-    accessorKey: "dataKohaRec",
-    header: "Reg. date",
+    accessorKey: 'dataKohaRec',
+    header: 'Reg. date',
     Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     Header: ({ header }) => {
       const { t } = useTranslation();
@@ -142,9 +142,9 @@ export const incomeColumns: MRT_ColumnDef<incomeColumns>[] = [
 
 //* This is completed
 export enum status {
-  paid = "paid",
-  unpaid = "unpaid",
-  semi = "semi-paid",
+  paid = 'paid',
+  unpaid = 'unpaid',
+  semi = 'semi-paid',
 }
 
 //* for the input form
@@ -153,10 +153,12 @@ export const incomeInputSchema = z
     nrExtern: z
       .string()
       .max(20, {
-        message: "The length of your extern number must not exceeded 20 digits",
+        message:
+          'The length of your extern number must not exceeded 20 digits',
       })
       .min(1, {
-        message: "You must have at least one digit for your extern number",
+        message:
+          'You must have at least one digit for your extern number',
       }),
     komitentID: z.number(),
     dataNeDokument: z.string().transform((str) => new Date(str)),
@@ -166,10 +168,12 @@ export const incomeInputSchema = z
     statusiPagese: z.string(),
     afatiPageses: z.string().transform((str) => new Date(str)),
     dosja: z.string().max(20, {
-      message: "The length of 'dosja' must be 20 characters or shorter",
+      message:
+        "The length of 'dosja' must be 20 characters or shorter",
     }),
     shenim: z.string().max(150, {
-      message: "The length of 'shenim' must be 150 characters or shorter",
+      message:
+        "The length of 'shenim' must be 150 characters or shorter",
     }),
   })
   .refine(
@@ -181,7 +185,7 @@ export const incomeInputSchema = z
     {
       message:
         "The 'Date in document' date must not be after the 'Payment deadline' date",
-      path: ["dataNeDokument"],
+      path: ['dataNeDokument'],
     }
   );
 
@@ -193,10 +197,12 @@ export const incomeEditSchema = z
     nrExtern: z
       .string()
       .max(20, {
-        message: "The length of your extern number must not exceeded 20 digits",
+        message:
+          'The length of your extern number must not exceeded 20 digits',
       })
       .min(1, {
-        message: "You must have at least one digit for your extern number",
+        message:
+          'You must have at least one digit for your extern number',
       }),
     komitentID: z.number(),
     dataNeDokument: z.string().transform((str) => new Date(str)),
@@ -211,10 +217,12 @@ export const incomeEditSchema = z
     imageName: z.string(),
     myFile: z.string(),
     dosja: z.string().max(20, {
-      message: "The length of 'dosja' must be 20 characters or shorter",
+      message:
+        "The length of 'dosja' must be 20 characters or shorter",
     }),
     shenim: z.string().max(150, {
-      message: "The length of 'shenim' must be 150 characters or shorter",
+      message:
+        "The length of 'shenim' must be 150 characters or shorter",
     }),
   })
   .refine(
@@ -226,7 +234,7 @@ export const incomeEditSchema = z
     {
       message:
         "The 'Date in document' date must not be after the 'Payment deadline' date",
-      path: ["dataNeDokument"],
+      path: ['dataNeDokument'],
     }
   );
 

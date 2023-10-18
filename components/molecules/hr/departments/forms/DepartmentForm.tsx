@@ -76,9 +76,7 @@ const DepartmentForm = ({
             name="departmentId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Department Id
-                </FormLabel>
+                <FormLabel>Department Id</FormLabel>
                 <FormControl className="relative">
                   <Input placeholder="Department ID" {...field} />
                 </FormControl>
@@ -106,9 +104,7 @@ const DepartmentForm = ({
             name="companyId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Company Id
-                </FormLabel>
+                <FormLabel>Company Id</FormLabel>
                 <FormControl className="relative">
                   <Input placeholder="Company Id" {...field} />
                 </FormControl>
@@ -121,9 +117,7 @@ const DepartmentForm = ({
             name="parentDepartmentId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Parent department Id{' '}
-                </FormLabel>
+                <FormLabel>Parent department Id </FormLabel>
                 <FormControl className="relative">
                   <Input placeholder="" {...field} />
                 </FormControl>
@@ -133,10 +127,7 @@ const DepartmentForm = ({
           />
         </div>
 
-        <Button
-          className="w-max flex flex-none"
-          type="submit"
-        >
+        <Button className="w-max flex flex-none" type="submit">
           Submit
         </Button>
       </form>
