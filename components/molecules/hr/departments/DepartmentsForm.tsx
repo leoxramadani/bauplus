@@ -51,8 +51,8 @@ const DepartmentsForm = ({
   } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
-    console.log('inside getData');
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_SPECIFIC_DEPARTMENT + `?Id=${Id}`)
         .then((res) => {
@@ -79,12 +79,14 @@ const DepartmentsForm = ({
       console.log('form data ->', data);
 
       if (departmentData) {
+        console.log('Updating department');
         await axios
           .put(UPDATE_DEPARTMENT, {
+            departmentId: departmentId,
+            parentDepartmentId: data.departmentId,
             departmentName: data.departmentName,
             companyId: data.companyId,
-            departmentId: data.departmentId,
-            parentDepartmentId: data.parentDepartmentId,
+            // ...data,
           })
           .then((res) => {
             console.log('update department->', res);
@@ -96,12 +98,14 @@ const DepartmentsForm = ({
             console.log('Error UPDATING department:', error);
           });
       } else {
+        console.log('Creating department');
         await axios
           .post(CREATE_DEPARTMENT, {
-            departmentName: data.departmentName,
-            companyId: data.companyId,
-            // departmentId: data.departmentId,
-            parentDepartmentId: data.parentDepartmentId,
+            // departmentName: data.departmentName,
+            // companyId: data.companyId,
+            // // departmentId: data.departmentId,
+            // parentDepartmentId: data.parentDepartmentId,
+            ...data,
           })
           .then((res) => {
             console.log('Successfully created department->', res);
@@ -126,24 +130,7 @@ const DepartmentsForm = ({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4 w-full"
         >
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4"> */}
-          {/* <FormField
-                control={form.control}
-                name="departmentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                    Department Id<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl className="relative">
-                      <Input placeholder="Department Id" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
-          {/* </div> */}
+          {/* Department name */}
           <FormField
             control={form.control}
             name="departmentName"
@@ -162,6 +149,7 @@ const DepartmentsForm = ({
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Company Id --Like this for now! */}
             <FormField
               control={form.control}
               name="companyId"
@@ -178,29 +166,10 @@ const DepartmentsForm = ({
               )}
             />
 
-            {/* <FormField
-              control={form.control}
-              name="parentDepartmentId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Parent Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-
-                    <Input
-                      placeholder="Parent Department Id"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
+            {/* Department Id */}
             <FormField
               control={form.control}
-              name="departmentId"
+              name="parentDepartmentId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Department</FormLabel>
