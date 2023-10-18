@@ -12,7 +12,7 @@ const Crumb = ({
 }: PropsWithChildren<any>) => {
   if (last)
     return (
-      <a className="text-sm font-medium mx-1 my-1">{children}</a>
+      <a className="text-sm font-medium mx-1 my-1 inline-flex py-0.5 px-1">{children}</a>
     );
   return (
     <Link
@@ -48,33 +48,32 @@ const Breadcrumbs = () => {
 
         return { ...route, href };
       });
-      // Add in a default "Home" crumb for the top-level
-      return [...crumblist];
+      return crumblist;
     },
     [router.asPath]
   );
 
   return (
-    <nav className="flex" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center space-x-1 md:space-x-3">
-        <li className="inline-flex items-center">
+    <nav className="flex w-full" aria-label="Breadcrumb">
+      <div className="inline-flex w-full items-center space-x-1 md:space-x-3">
+        <div className="inline-flex w-full items-center justify-start">
           {breadcrumbs.map((crumb, i: Key) => {
             const isLast = i === breadcrumbs.length - 1;
 
             return (
-              <>
+              <div key={`breadcrumb-` + i} className=" flex gap-1 items-center justify-start">
                 <Crumb {...crumb} key={i} last={isLast}>
-                  <div className="flex gap-1 items-center">
+                  <div className="flex gap-1 items-center justify-start">
                     {crumb?.icon && crumb.icon}
                     {crumb?.title}
                   </div>
                 </Crumb>
                 {!isLast && <span className="mx-1">/</span>}
-              </>
+              </div>
             );
           })}
-        </li>
-      </ol>
+        </div>
+      </div>
     </nav>
   );
 };

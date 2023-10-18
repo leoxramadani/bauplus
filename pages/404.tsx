@@ -1,5 +1,5 @@
 import Error from 'next/error';
 
-export default function Page() {
+export default function NotFound() {
   return <Error statusCode={404} withDarkMode={false} />;
 }

@@ -8,6 +8,7 @@ import {
   ChevronUp,
   ChevronRight,
   ClipboardList,
+  LogInIcon,
 } from 'lucide-react';
 import {
   useContext,
@@ -33,6 +34,7 @@ import Link from 'next/link';
 import Logo from '@/public/logo-arkiva.svg';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import { Button } from '../ui/button';
 
 interface SidebarItem {
   icon?: React.JSX.Element;
@@ -131,7 +133,7 @@ const Sidebar = ({
 
         <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
           <ul
-            className="sidebar flex flex-col sm:flex-1 px-3 overflow-y-auto mb-20"
+            className="sidebar flex flex-col sm:flex-1 px-3 overflow-y-auto mb-16"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
@@ -282,7 +284,7 @@ const Sidebar = ({
             )} */}
           </ul>
         </SidebarContext.Provider>
-        <div className="border-t border-slate-600 absolute bottom-0 left-0 w-full h-max bg-inherit">
+        <div className="border-t-2 border-slate-600 absolute bottom-0 left-0 w-full h-16 bg-inherit">
           {!isWindowSmall && status === 'authenticated' ? (
             <div className="hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer">
               <Image
@@ -316,11 +318,14 @@ const Sidebar = ({
               </div>
             </div>
           ) : (
-            <>
-              <Link href={'/login'} className="p-3">
+            <div className="relative w-full h-full flex items-center justify-center">
+              <Link
+                href={'/login'}
+                className="hover hover:bg-slate-800 transition-all w-full mx-3 py-2 rounded-lg text-white px-2 flex gap-1 items-center"
+              >
                 Login
               </Link>
-            </>
+            </div>
           )}{' '}
         </div>
       </nav>
