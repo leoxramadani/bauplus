@@ -12,20 +12,70 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { DELETE_DEPARTMENT } from '@/lib/constants/endpoints/hr/departments';
+import axios from 'axios';
 
 export const DepartmentSchema = z.object({
   departmentId: z.string().optional(),
   departmentName: z.string(),
   companyId: z.string(),
-  parentDepartmentId: z.string().optional().nullable(),
+  parentDepartmentId: z.string(),
   company: z
     .object({
       companyName: z.string().optional(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 export type IDepartment = z.infer<typeof DepartmentSchema>;
+
+export const departmentColumnDef: ColumnDef<IDepartment>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: boolean) =>
+          row.toggleSelected(!!value)
+        }
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  // {
+  //   id: 'departmentId',
+  //   header: 'Department Id',
+  // },
+  {
+    accessorKey: 'departmentName',
+    header: 'Department Name',
+  },
+  {
+    accessorKey: 'company.companyName',
+    header: 'Company Name',
+  },
+  {
+    accessorKey: 'parentDepartmentId',
+    header: 'Parent Department Id',
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <ActionsColumn item={row.original} />,
+  },
+];
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -38,6 +88,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
         id: id,
       },
     });
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this invoice?'
+    );
+    if (confirmDelete) {
+      console.log('Delete row with id:', id);
+
+      await axios
+        .delete(DELETE_DEPARTMENT + `?Id=${id}`)
+        .then((res) => {
+          console.log('response after delete success =>', res);
+        })
+        .catch((error) => {
+          console.log('Response after error:', error);
+        });
+    }
   };
 
   return (
@@ -66,55 +134,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
         >
           Edit row
         </DropdownMenuItem>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => handleDelete(item.departmentId)}
+        >
+          Delete Row
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
-
-export const departmentColumnDef: ColumnDef<IDepartment>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value: boolean) =>
-          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
-          table.toggleAllRowsSelected(!!value)
-        }
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value: boolean) =>
-          row.toggleSelected(!!value)
-        }
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'departmentId',
-    header: 'Department Id',
-  },
-  {
-    accessorKey: 'departmentName',
-    header: 'Department Name',
-  },
-  {
-    accessorKey: 'company.companyName',
-    header: 'Company Name',
-  },
-  {
-    accessorKey: 'parentDepartmentId',
-    header: 'Parent Department Id',
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => <ActionsColumn item={row.original} />,
-  },
-];

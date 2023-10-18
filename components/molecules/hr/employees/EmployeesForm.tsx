@@ -41,7 +41,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
+import {
+  GET_ALL_DEPARTMENTS,
+  GET_ALL_DEPATRMENTS_OF_COMAPNY,
+} from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 const EmployeesForm = ({
   setIsModalOpen,
@@ -58,7 +61,11 @@ const EmployeesForm = ({
     data: departments,
     isLoading: departmentsLoading,
     isError: departmentsError,
-  } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
+  } = useData<any>(
+    ['departments'],
+    GET_ALL_DEPATRMENTS_OF_COMAPNY +
+      `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
+  );
 
   //TODO: handle null when there isn't an employee id
   // const {
@@ -96,11 +103,10 @@ const EmployeesForm = ({
 
   const onSubmit = useCallback(
     async (data: ICreateEmployee) => {
-      console.log('Employee data->', employeeData);
+      console.log('form data->', data);
 
       if (employeeData) {
-        console.log('employeeData=>', employeeData);
-        console.log('data=======>', data);
+        console.log('Updating employee');
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
@@ -117,7 +123,7 @@ const EmployeesForm = ({
             console.log('Error UPDATING employee:', error);
           });
       } else {
-        console.log('No employee data ****');
+        console.log('Creating employee');
         await axios
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {
@@ -153,6 +159,7 @@ const EmployeesForm = ({
           className="flex flex-col gap-4 w-full"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* First name */}
             <FormField
               control={form.control}
               name="firstName"
@@ -168,6 +175,7 @@ const EmployeesForm = ({
                 </FormItem>
               )}
             />
+            {/* Last name */}
             <FormField
               control={form.control}
               name="lastName"
@@ -184,7 +192,9 @@ const EmployeesForm = ({
               )}
             />
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Company Id */}
             <FormField
               control={form.control}
               name="companyId"
@@ -201,6 +211,7 @@ const EmployeesForm = ({
               )}
             />
 
+            {/* Department Id */}
             <FormField
               control={form.control}
               name="departmentId"
@@ -242,6 +253,7 @@ const EmployeesForm = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -257,6 +269,8 @@ const EmployeesForm = ({
                 </FormItem>
               )}
             />
+
+            {/* Date of birth */}
             <FormField
               control={form.control}
               name="dateOfBirth"
