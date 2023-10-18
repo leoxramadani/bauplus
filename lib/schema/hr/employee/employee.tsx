@@ -12,10 +12,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import { DELETE_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 
 export const employeeSchema = z.object({
   employeeId: z.string().optional(),
-  companyId: z.string(),
+  companies: z.object({
+    companyName: z.string().optional(),
+  }),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
@@ -43,6 +47,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
     });
   };
 
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this invoice?'
+    );
+    if (confirmDelete) {
+      console.log('Delete row with id:', id);
+
+      await axios
+        .delete(DELETE_EMPLOYEES + `?employeeId=${id}`)
+        .then((res) => {
+          console.log('response after delete success =>', res);
+        })
+        .catch((error) => {
+          console.log('Response after error:', error);
+        });
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -67,7 +89,12 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
           Edit row
         </DropdownMenuItem>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => handleDelete(item.employeeId)}
+        >
+          Delete Row
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -111,8 +138,8 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
   //   header: 'Employee ID',
   // },
   {
-    accessorKey: 'companyId',
-    header: 'Company ID',
+    accessorKey: 'companies.companyName',
+    header: 'Company Name',
   },
   {
     accessorKey: 'email',
