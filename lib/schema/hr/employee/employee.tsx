@@ -15,7 +15,9 @@ import { useRouter } from 'next/router';
 
 export const employeeSchema = z.object({
   employeeId: z.string().optional(),
-  companyId: z.string(),
+  companies: z.object({
+    companyName: z.string().optional(),
+  }),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
@@ -111,8 +113,8 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
   //   header: 'Employee ID',
   // },
   {
-    accessorKey: 'companyId',
-    header: 'Company ID',
+    accessorKey: 'companies.companyName',
+    header: 'Company Name',
   },
   {
     accessorKey: 'email',

@@ -21,6 +21,7 @@ const Employees = () => {
     GET_ALL_EMPLOYEES
   );
 
+  console.log('data=', data);
   useEffect(() => {
     if (router.query.id) {
       setIsModalOpen(true);
