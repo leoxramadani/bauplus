@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { z } from 'zod';
 
 export const REGISTER_USER_QUERY = gql`
   mutation Register($entity: RegisterModelInput!) {

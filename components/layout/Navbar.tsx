@@ -1,7 +1,12 @@
+import { LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
-import { PropsWithChildren, ReactNode, useState } from 'react';
-import { SetStateAction, Dispatch } from 'react';
-import { User, Settings, LogOut } from 'lucide-react';
+import {
+  Dispatch,
+  PropsWithChildren,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from 'react';
 interface NavbarProps {
   isOpen?: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -19,7 +24,7 @@ const Dropdown = ({
   return (
     <div
       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      className={`relative rounded-xl px-2 border py-1 cursor-pointer bg-slate-800 text-white items-center align-middle`}
+      className={`relative cursor-pointer items-center rounded-xl border bg-slate-800 px-2 py-1 align-middle text-white`}
     >
       {children}
       {isDropdownOpen && content}
@@ -35,29 +40,29 @@ const Navbar = ({
 }: NavbarProps) => {
   return (
     <nav
-      className={`bg-[#1A202E] p-2 py-2.5 flex flex-row justify-between`}
+      className={`flex flex-row justify-between bg-[#1A202E] p-2 py-2.5`}
     >
       <button
-        className="flex flex-col border py-4 px-[18px] bg-white rounded-[0.35rem] gap-1.5"
+        className="flex flex-col gap-1.5 rounded-[0.35rem] border bg-white px-[18px] py-4"
         onClick={() => setIsOpen(true)}
       >
-        <div className="w-9 h-[0.15rem] py-[0.12rem] bg-black mx-0"></div>
-        <div className="w-9 h-[0.15rem] py-[0.12rem] bg-black mx-0"></div>
-        <div className="w-9 h-[0.15rem] py-[0.12rem] bg-black mx-0"></div>
+        <div className="mx-0 h-[0.15rem] w-9 bg-black py-[0.12rem]"></div>
+        <div className="mx-0 h-[0.15rem] w-9 bg-black py-[0.12rem]"></div>
+        <div className="mx-0 h-[0.15rem] w-9 bg-black py-[0.12rem]"></div>
       </button>
 
       <Dropdown
         content={
-          <div className="absolute right-0 border p-0.5 rounded-[0.5rem] mt-3.5 bg-slate-800 text-white font-medium">
+          <div className="absolute right-0 mt-3.5 rounded-[0.5rem] border bg-slate-800 p-0.5 font-medium text-white">
             <div className="flex flex-col">
               <Link
                 href="/settings"
-                className="hover:bg-slate-500 px-4 py-3 no-underline rounded-lg flex gap-1.5"
+                className="flex gap-1.5 rounded-lg px-4 py-3 no-underline hover:bg-slate-500"
               >
                 <Settings width={20} />
                 <span className="">Settings</span>
               </Link>
-              <button className="hover:bg-slate-500 px-4 py-3 no-underline rounded-lg flex gap-1.5">
+              <button className="flex gap-1.5 rounded-lg px-4 py-3 no-underline hover:bg-slate-500">
                 <LogOut width={20} />
                 <span className="">Sign out</span>
               </button>
@@ -65,9 +70,9 @@ const Navbar = ({
           </div>
         }
       >
-        <div className="flex flex-row gap-1 items-center py-[0.435rem] mt-0.5 text-sm justify-center align-middle leading-none text-white">
+        <div className="mt-0.5 flex flex-row items-center justify-center gap-1 py-[0.435rem] align-middle text-sm leading-none text-white">
           <User width={20} />
-          <p className="leading-none mt-0.5">ArdrinRexhepi</p>
+          <p className="mt-0.5 leading-none">ArdrinRexhepi</p>
         </div>
       </Dropdown>
     </nav>

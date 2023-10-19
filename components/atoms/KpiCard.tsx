@@ -1,13 +1,5 @@
-import {
-  BadgeDelta,
-  Card,
-  Flex,
-  Metric,
-  ProgressBar,
-  Text,
-} from '@tremor/react';
+import { BadgeDelta, Card, Flex, Metric, Text } from '@tremor/react';
 import { TrendingUp } from 'lucide-react';
-import React from 'react';
 
 interface IKpiCard {
   title: string;
@@ -18,7 +10,7 @@ interface IKpiCard {
 
 const KpiCard = ({ title, metric, delta, percentage }: IKpiCard) => {
   return (
-    <Card className="max-w-sm mx-auto">
+    <Card className="mx-auto max-w-sm">
       <Flex alignItems="start">
         <div>
           <Text>{title}</Text>
@@ -27,7 +19,7 @@ const KpiCard = ({ title, metric, delta, percentage }: IKpiCard) => {
             {percentage}%
           </BadgeDelta>
         </div>
-        <div className="bg-[#6E71F1] p-3 rounded-full">
+        <div className="rounded-full bg-[#6E71F1] p-3">
           <TrendingUp color="#fff" size={32} />
         </div>
       </Flex>

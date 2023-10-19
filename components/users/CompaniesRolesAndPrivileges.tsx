@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/client';
+import useTranslation from '@/lib/hooks/useTranslation';
 import { GET_ALL_COMPANIES_QUERY } from '@/lib/queries/company';
+import { useQuery } from '@apollo/client';
 import { Key } from 'react';
 import CompanyPrivileges from './CompanyWithPrivileges';
-import useTranslation from '@/lib/hooks/useTranslation';
 const CompaniesRolesAndPrivileges = ({
   companiesWithPrivileges,
   setCompaniesWithPrivileges,
@@ -13,7 +13,7 @@ const CompaniesRolesAndPrivileges = ({
   return (
     <div className="flex flex-col">
       {t('Companies')}
-      <div className="border-b my-2"></div>
+      <div className="my-2 border-b"></div>
       <div className="flex flex-col flex-wrap gap-6">
         {companies?.allCompanies.map((c: any, i: Key) => {
           return (

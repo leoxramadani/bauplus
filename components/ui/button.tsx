@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -53,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading === true && (
-          <Loader2 className="animate-spin mr-1" size={18} />
+          <Loader2 className="mr-1 animate-spin" size={18} />
         )}
         <span className={className}>{children}</span>
       </button>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { GET_TOTAL_OUTCOME } from '../../queries/dashboard';
 import { useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { GET_TOTAL_OUTCOME } from '../../queries/dashboard';
 
 export const TotalSumOutcome = () => {
   const { loading, error, data } = useQuery(GET_TOTAL_OUTCOME);

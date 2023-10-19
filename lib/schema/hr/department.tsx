@@ -68,7 +68,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-8 w-8 p-0 flex items-center justify-center"
+          className="flex h-8 w-8 items-center justify-center p-0"
         >
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />

@@ -1,8 +1,8 @@
 import {
   ApolloClient,
-  from,
-  createHttpLink,
   InMemoryCache,
+  createHttpLink,
+  from,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getSession } from 'next-auth/react';

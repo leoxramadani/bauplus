@@ -1,11 +1,10 @@
-import { Button } from '@/components/ui/button';
-import { FileInput, Plus } from 'lucide-react';
-import React from 'react';
-import {
-  financeColumnDef,
-  IInvoiceSchema,
-} from '@/lib/schema/Finance/finance';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { Button } from '@/components/ui/button';
+import {
+  IInvoiceSchema,
+  financeColumnDef,
+} from '@/lib/schema/Finance/finance';
+import { FileInput } from 'lucide-react';
 const CreditNote = () => {
   const data: IInvoiceSchema[] = [
     {

@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import Btn from '@/components/Button';
 import {
   Form,
@@ -21,7 +20,7 @@ import {
   bankAccountSchemaCash,
 } from '@/lib/schema/Finance/finance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Cash = () => {
@@ -41,9 +40,9 @@ const Cash = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmitCash)}
-        className="flex flex-col gap-4 w-full"
+        className="flex w-full flex-col gap-4"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+        <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
           {/* holder name  */}
 
           <FormField
@@ -100,7 +99,7 @@ const Cash = () => {
                 <FormControl className="relative">
                   <Input
                     placeholder="Enter contact number"
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     type="number"
                     autoComplete="off"
                     {...field}
@@ -122,7 +121,7 @@ const Cash = () => {
                 <FormControl className="relative">
                   <Input
                     placeholder="Enter opening balance"
-                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     type="number"
                     autoComplete="off"
                     {...field}

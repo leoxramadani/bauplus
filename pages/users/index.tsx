@@ -1,9 +1,8 @@
-import { useSession } from 'next-auth/react';
-import useTranslation from '@/lib/hooks/useTranslation';
 import { DataTable } from '@/components/molecules/table/DataTable';
-import { columns } from '@/lib/schemas/user';
-import useData from '@/lib/hooks/useData';
 import { GET_ALL_USERS } from '@/lib/constants/endpoints/users';
+import useData from '@/lib/hooks/useData';
+import useTranslation from '@/lib/hooks/useTranslation';
+import { columns } from '@/lib/schemas/user';
 
 const Users = () => {
   const { t } = useTranslation();

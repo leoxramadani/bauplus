@@ -1,10 +1,8 @@
 'use client';
-import React from 'react';
+import { Card, LineChart, Metric, Text } from '@tremor/react';
 import ReactGridLayout from 'react-grid-layout';
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
-import { Card, Text, Metric, LineChart } from '@tremor/react';
-import AreaChartt from './AreaChartt';
 
 const chartdata = [
   {
@@ -65,7 +63,7 @@ const GridLayout = () => {
     >
       <Card
         key="a"
-        className="w-full h-full flex justify-center items-center flex-col gap-2 "
+        className="flex h-full w-full flex-col items-center justify-center gap-2 "
       >
         <Text>Sales</Text>
         <Metric>34,743</Metric>

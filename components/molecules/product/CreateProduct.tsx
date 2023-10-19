@@ -1,23 +1,5 @@
-import React, { useCallback, SetStateAction, useState } from 'react';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import Drop from '@/components/atoms/Drop';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -25,36 +7,35 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  FileRejection,
-  useDropzone,
-} from 'react-dropzone';
-import Drop from '@/components/atoms/Drop';
-import {
-  IInvoice,
-  invoiceSchema,
-} from '@/lib/schema/Finance/invoice';
-import {  IProduct, product } from '@/lib/schema/product/product';
+import { IProduct, product } from '@/lib/schema/product/product';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import React, { SetStateAction, useCallback, useState } from 'react';
+import { FileRejection } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
 
 interface ICreateProduct {
-    setCloseModal: React.Dispatch<SetStateAction<boolean>>
+  setCloseModal: React.Dispatch<SetStateAction<boolean>>;
 }
 
-
-
-const CreateProduct = ({setCloseModal} : ICreateProduct) => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -72,14 +53,12 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
     []
   );
 
-
-
   const companies = [
-    { label: 'Thor', value: "123" },
-    { label: 'Thor Website', value: "1234" },
-    { label: 'Arkiva', value: "12345" },
-    { label: 'ProWork', value: "123456" },
-    { label: 'Miniera', value: "1111" },
+    { label: 'Thor', value: '123' },
+    { label: 'Thor Website', value: '1234' },
+    { label: 'Arkiva', value: '12345' },
+    { label: 'ProWork', value: '123456' },
+    { label: 'Miniera', value: '1111' },
   ] as const;
 
   const invoice = [
@@ -90,24 +69,17 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
     { label: 'INV#005', value: '005' },
   ] as const;
 
-
-
   const taxValue = [
     { label: '18%', value: '18' },
     { label: '15%', value: '15' },
     { label: '10%', value: '10' },
   ] as const;
 
- 
-
- 
-
   const status = [
     { label: 'Paid', value: 'paid' },
     { label: 'Unpaid', value: 'unpaid' },
     { label: 'Semi-paid', value: 'semipaid' },
   ] as const;
-
 
   const form = useForm<IProduct>({
     resolver: zodResolver(product),
@@ -118,15 +90,15 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
   }
 
   return (
-    <div className="z-0 flex flex-col gap-4 w-full  ">
+    <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="flex flex-col  sm:grid sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
             {/* project */}
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
+            <div className="col-span-2 flex w-full grid-cols-3 flex-col gap-4 sm:grid ">
               <FormField
                 control={form.control}
                 name="productName"
@@ -137,27 +109,22 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
-                      <Input
-                        placeholder="Product Name"
-                        {...field}
-                      />
+                      <Input placeholder="Product Name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-        <FormField
+              <FormField
                 control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Price{' '}
-                    </FormLabel>
+                    <FormLabel>Price </FormLabel>
                     <FormControl className="relative">
                       <Input
-                      type='number'
+                        type="number"
                         placeholder="Price"
                         {...field}
                       />
@@ -171,7 +138,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 control={form.control}
                 name="productCategory"
                 render={({ field }) => (
-                  <FormItem className="w-full flex flex-col">
+                  <FormItem className="flex w-full flex-col">
                     <FormLabel>Product Category</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -180,7 +147,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              'w-full flex items-center gap-1 justify-between',
+                              'flex w-full items-center justify-between gap-1',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -233,11 +200,11 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="productSubCategory"
                 render={({ field }) => (
-                  <FormItem className="w-full flex flex-col">
+                  <FormItem className="flex w-full flex-col">
                     <FormLabel>Product Sub Category</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -246,7 +213,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              'w-full flex items-center gap-1 justify-between',
+                              'flex w-full items-center justify-between gap-1',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -299,17 +266,15 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="tax"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Tax{' '}
-                    </FormLabel>
+                    <FormLabel>Tax </FormLabel>
                     <FormControl className="relative">
                       <Input
-                      type='number'
+                        type="number"
                         placeholder="Tax"
                         {...field}
                       />
@@ -319,7 +284,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="hsnSac"
                 render={({ field }) => (
@@ -329,21 +294,18 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
-                      <Input
-                        placeholder="Hsn/Sac"
-                        {...field}
-                      />
+                      <Input placeholder="Hsn/Sac" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="unitType"
                 render={({ field }) => (
-                  <FormItem className="w-full flex flex-col">
+                  <FormItem className="flex w-full flex-col">
                     <FormLabel>Unit Type</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -352,7 +314,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              'w-full flex items-center gap-1 justify-between',
+                              'flex w-full items-center justify-between gap-1',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -403,10 +365,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                   </FormItem>
                 )}
               />
-
             </div>
-
-        
 
             <FormField
               control={form.control}
@@ -426,7 +385,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
               )}
             />
 
-            <div className="flex flex-col col-span-2 w-full gap-2">
+            <div className="col-span-2 flex w-full flex-col gap-2">
               <FormLabel>File</FormLabel>
               <Drop
                 selectedFile={selectedFile}
@@ -442,6 +401,6 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
       </Form>
     </div>
   );
-}
+};
 
-export default CreateProduct
+export default CreateProduct;

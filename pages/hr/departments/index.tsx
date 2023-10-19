@@ -1,7 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
-import DepartmentCreate from '@/components/molecules/hr/departments/modals/DepartmentCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
@@ -12,7 +10,7 @@ import {
 } from '@/lib/schema/hr/departments';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Departments = () => {
   const router = useRouter();
@@ -45,7 +43,7 @@ const Departments = () => {
           <Modal.Trigger asChild>
             <Button
               variant="destructive"
-              className="flex gap-1 justify-center items-center"
+              className="flex items-center justify-center gap-1"
             >
               <Plus size={20} />
               Add Department

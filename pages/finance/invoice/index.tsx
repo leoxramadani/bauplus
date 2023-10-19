@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import Modal from '@/components/atoms/Modal';
+import CreateInvoice from '@/components/molecules/finances/invoice/CreateInvoice';
+import { DataTable } from '@/components/molecules/table/DataTable';
+import { Button } from '@/components/ui/button';
 import {
   financeColumnDef,
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
-import { Button } from '@/components/ui/button';
 import { FileInput, Plus, RotateCw } from 'lucide-react';
-import { DataTable } from '@/components/molecules/table/DataTable';
-import Modal from '@/components/atoms/Modal';
-import CreateInvoice from '@/components/molecules/finances/invoice/CreateInvoice';
+import { useState } from 'react';
 const Invoice = () => {
   const [open, setOpen] = useState(false);
   const data: IInvoiceSchema[] = [
@@ -85,7 +85,7 @@ const Invoice = () => {
 
   return (
     <section className="flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <Modal>
           <Modal.Trigger asChild>
             <Button

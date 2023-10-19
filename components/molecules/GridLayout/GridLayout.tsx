@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import React, { useEffect, useState } from 'react';
 import {
   Responsive,
   WidthProvider,
@@ -10,6 +10,7 @@ import {
 } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import { Title } from '@tremor/react';
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import GridItem from './GridItem';
 import GraphBlock from './GraphBlock';

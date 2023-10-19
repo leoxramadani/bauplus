@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import Btn from '@/components/Button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
 import {
   Form,
   FormControl,
@@ -10,49 +16,40 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  IcreateBankAccountSchema,
-  createBankAccountSchema,
-} from '@/lib/schema/Finance/finance';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { Key, useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 import {
   CREATE_BANK_ACCOUNT,
   GET_ALL_ACCOUNT_STATUSES,
   GET_ALL_ACCOUNT_TYPES,
   GET_ALL_CURRENCIES,
-  GET_MY_EMPLOYEE_NAMES,
   GET_ONE_BANKACCOUNT,
   UPDATE_BANK_ACCOUNT,
 } from '@/lib/constants/endpoints/finance';
-import { watch } from 'fs';
+import useData from '@/lib/hooks/useData';
+import {
+  IcreateBankAccountSchema,
+  createBankAccountSchema,
+} from '@/lib/schema/Finance/finance';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { Key, useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { IBankAccountCreate } from '../BankAccountCreate';
-import useData from '@/lib/hooks/useData';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
-import { useRouter } from 'next/router';
 
 interface IEmployee {
   employeeId?: string;
@@ -182,9 +179,9 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* invoice number  */}
             <FormField
               control={form.control}
@@ -219,7 +216,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
               control={form.control}
               name="employeeId"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
+                <FormItem className="flex w-full flex-col">
                   <FormLabel>Account Holder Name</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -228,7 +225,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -251,7 +248,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                       <Command>
                         <CommandInput placeholder="Search language..." />
                         <CommandEmpty>No member found.</CommandEmpty>
-                        <CommandGroup className="flex flex-col gap-4 max-h-[200px] h-full overflow-y-auto">
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (
                             <CommandItem
                               value={
@@ -300,7 +297,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter account number"
-                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}
@@ -422,7 +419,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter opening balance"
-                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}

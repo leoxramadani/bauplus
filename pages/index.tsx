@@ -1,17 +1,7 @@
 'use client';
-import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css';
-import { Button } from '@/components/ui/button';
-import { Card, Title } from '@tremor/react';
-import GraphBlock from '@/components/molecules/GridLayout/GraphBlock';
-import GridLayout from '@/components/molecules/GridLayout/GridLayout';
-import layoutConfig from '@/lib/helper/layoutConfig';
-import React, { useState } from 'react';
-import { randomUUID } from 'crypto';
-import Duration from '@/components/atoms/Duration';
 import KpiCard from '@/components/atoms/KpiCard';
+import Head from 'next/head';
+import { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -62,8 +52,8 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-full flex flex-col gap-4 mt-24">
-        <div className="w-full bg-[#6E71F1] p-8 flex flex-col lg:flex-row gap-4">
+      <main className="mt-24 flex h-screen w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 bg-[#6E71F1] p-8 lg:flex-row">
           <KpiCard
             title="Total Income"
             metric="317,000"
@@ -90,7 +80,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="h-max p-8 border w-full">
+        <div className="h-max w-full border p-8">
           <NoSSR />
         </div>
       </main>

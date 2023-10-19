@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { FileInput, Plus } from 'lucide-react';
-import { DataTable } from '@/components/molecules/table/DataTable';
-import {
-  financeColumnDef,
-  IInvoice,
-} from '@/lib/schema/Finance/bankaccounts';
-import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import Modal from '@/components/atoms/Modal';
+import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
+import {
+  IInvoice,
+  financeColumnDef,
+} from '@/lib/schema/Finance/bankaccounts';
+import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const BankAccounts = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const BankAccounts = () => {
             <Modal.Trigger asChild>
               <Button
                 variant="destructive"
-                className="flex gap-1 justify-center items-center"
+                className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add Bank Account
               </Button>
@@ -62,7 +62,7 @@ const BankAccounts = () => {
           </Modal>
           <Button
             variant="outline"
-            className="flex gap-1 justify-center items-center "
+            className="flex items-center justify-center gap-1 "
           >
             <FileInput size={20} /> <span>Export</span>
           </Button>

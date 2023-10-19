@@ -1,13 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { FileInput, Plus, RefreshCcw } from 'lucide-react';
-import React, { useState } from 'react';
-import {
-  expensesType,
-  expensesDef,
-} from '@/lib/schema/Finance/expenses';
-import { DataTable } from '@/components/molecules/table/DataTable';
-import ExpensesCreate from '@/components/molecules/finances/expenses/ExpensesCreate';
 import RightModal from '@/components/atoms/RightModal';
+import ExpensesCreate from '@/components/molecules/finances/expenses/ExpensesCreate';
+import { DataTable } from '@/components/molecules/table/DataTable';
+import { Button } from '@/components/ui/button';
+import {
+  expensesDef,
+  expensesType,
+} from '@/lib/schema/Finance/expenses';
+import { FileInput, Plus, RefreshCcw } from 'lucide-react';
+import { useState } from 'react';
 const Expenses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (

@@ -1,13 +1,13 @@
-import React, { ReactElement } from 'react';
+import { dataFormatter } from '@/lib/helper/helperFunctions';
 import {
+  AreaChart,
+  BarChart,
+  Color,
   DonutChart,
   LineChart,
-  BarChart,
-  AreaChart,
-  Color,
   ScatterChart,
 } from '@tremor/react';
-import { dataFormatter } from '@/lib/helper/helperFunctions';
+import React from 'react';
 
 interface GraphBlockProps {
   type: 'pie' | 'line' | 'bar' | 'area' | 'scatter' | 'donut';
@@ -37,7 +37,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'pie':
         return (
           <DonutChart
-            className="p-6 h-full w-full"
+            className="h-full w-full p-6"
             data={data}
             index={index}
             category="sales"
@@ -56,7 +56,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'donut':
         return (
           <DonutChart
-            className="p-6 h-full w-full"
+            className="h-full w-full p-6"
             data={data}
             index={index}
             category="sales"
@@ -75,7 +75,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'line':
         return (
           <LineChart
-            className="p-6 h-full min-h-[300px] min-w-[500px]"
+            className="h-full min-h-[300px] min-w-[500px] p-6"
             data={data}
             index={index}
             categories={categories}
@@ -87,7 +87,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'bar':
         return (
           <BarChart
-            className="p-6 h-full min-h-[300px] min-w-[500px]"
+            className="h-full min-h-[300px] min-w-[500px] p-6"
             data={data}
             index="name"
             categories={categories}
@@ -99,7 +99,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'area':
         return (
           <AreaChart
-            className="p-6 h-full min-h-[300px] min-w-[500px]"
+            className="h-full min-h-[300px] min-w-[500px] p-6"
             data={data}
             index="date"
             categories={categories}

@@ -1,10 +1,10 @@
 import {
-  PropsWithChildren,
-  createContext,
-  useState,
   Dispatch,
+  PropsWithChildren,
   SetStateAction,
+  createContext,
   useEffect,
+  useState,
 } from 'react';
 
 export const defaultLocale = 'en';

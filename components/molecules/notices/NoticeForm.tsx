@@ -1,7 +1,4 @@
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
+
 import { Label } from '@/components/ui/label';
 import {
   Form,
@@ -34,7 +31,8 @@ import {
 } from '@/lib/schema/notices/noticeboard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button';
@@ -119,15 +117,15 @@ const NoticeForm = ({
   console.log('showConfirmationModal', showConfirmationModal);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <div>
         <RadioGroup
           className="flex flex-row gap-4"
           defaultValue={noticeType}
         >
-          <div className="flex items-center flex-row gap-1">
+          <div className="flex flex-row items-center gap-1">
             <RadioGroupItem
-              className="justify-center items-center"
+              className="items-center justify-center"
               value="Employees"
               id="Employees"
               onClick={() => setNoticeType('Employees')}
@@ -139,9 +137,9 @@ const NoticeForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmitNotice, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             <FormField
               control={form.control}
               name="noticeTitle"

@@ -1,14 +1,14 @@
-import Modal from '../Modal';
-import UsersForm from './Form';
+import useTranslation from '@/lib/hooks/useTranslation';
 import {
   GET_SPECIFIC_USER_QUERY,
   UPDATE_USER_QUERY,
 } from '@/lib/queries/user';
 import { useQuery } from '@apollo/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import useTranslation from '@/lib/hooks/useTranslation';
+import Modal from '../Modal';
+import UsersForm from './Form';
 const EditProfile = () => {
   const { t } = useTranslation();
   const router = useRouter();

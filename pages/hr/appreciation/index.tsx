@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
-import React from 'react';
 
 const Appreciation = () => {
   return (

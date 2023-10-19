@@ -1,10 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ICreateEmployee,
-  employeeColumnDef,
-  createEmployeeSchema,
-  IEmployee,
-} from '@/lib/schema/hr/employee/employee';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -13,39 +8,38 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import axios from 'axios';
-import {
-  CREATE_EMPLOYEES,
-  GET_BY_ID_EMPLOYEE,
-  UPDATE_EMPLOYEES,
-} from '@/lib/constants/endpoints/employee';
-import { useRouter } from 'next/router';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import {
-  GET_ALL_DEPARTMENTS,
-  GET_ALL_DEPATRMENTS_OF_COMAPNY,
-} from '@/lib/constants/endpoints/hr/departments';
+  CREATE_EMPLOYEES,
+  GET_BY_ID_EMPLOYEE,
+  UPDATE_EMPLOYEES,
+} from '@/lib/constants/endpoints/employee';
+import { GET_ALL_DEPATRMENTS_OF_COMAPNY } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
+import {
+  ICreateEmployee,
+  createEmployeeSchema,
+} from '@/lib/schema/hr/employee/employee';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
@@ -144,21 +138,21 @@ const EmployeesForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <div>
         <h2 className="text-3xl font-bold text-blue-500">
           Employees
         </h2>
-        <h3 className="font-normal text-lg text-gray-900">
+        <h3 className="text-lg font-normal text-gray-900">
           Add an employee
         </h3>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* First name */}
             <FormField
               control={form.control}
@@ -193,7 +187,7 @@ const EmployeesForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Company Id */}
             <FormField
               control={form.control}
@@ -252,7 +246,7 @@ const EmployeesForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Email */}
             <FormField
               control={form.control}
@@ -286,7 +280,7 @@ const EmployeesForm = ({
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -326,7 +320,7 @@ const EmployeesForm = ({
 
           <hr />
           <Button
-            className="w-max flex flex-none"
+            className="flex w-max flex-none"
             variant="outline"
             type="submit"
           >

@@ -1,5 +1,4 @@
 import GridLayout from '@/components/molecules/GridLayout/GridLayout';
-import React from 'react';
 
 const Dashboard = () => {
   return (

@@ -1,18 +1,17 @@
 'use client';
 // import { Button } from '@/components/ui/button';
 import { FileInput, Plus } from 'lucide-react';
-import React, { useState } from 'react';
-import RightModal from '@/components/atoms/RightModal';
 
+import CreatePayment from '@/components/molecules/finances/payments/CreatePayment';
+import { DataTable } from '@/components/molecules/table/DataTable';
 import {
   financeColumnDef,
   IInvoiceSchema,
 } from '@/lib/schema/Finance/finance';
-import { DataTable } from '@/components/molecules/table/DataTable';
-import CreatePayment from '@/components/molecules/finances/payments/CreatePayment';
 // import Modal from '@/components/atoms/ModalOld';
 import Modal from '@/components/atoms/Modal';
-import Button from '@/components/Button';
+import { Button } from '@/components/ui/button';
+// import Button from '@/components/Button';
 const Payments = () => {
   const data: IInvoiceSchema[] = [
     {
@@ -92,27 +91,24 @@ const Payments = () => {
       <div className="flex flex-row gap-2">
         <Modal>
           <Modal.Trigger asChild>
-            <Button className="button flex gap-1 justify-center items-center">
+            <Button
+              variant="destructive"
+              className=" flex items-center justify-center gap-1"
+            >
               <Plus size={20} /> Add Payment
             </Button>
           </Modal.Trigger>
           <Modal.Content
             title="Add Payment"
-            description="Fill all the fields to add a payment"
+            description="Fill all the fields to add a paymentss"
           >
             <CreatePayment />
           </Modal.Content>
         </Modal>
-        <Button
-          isProgress={false}
-          className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white"
-        >
+        <Button className=" button-secondary flex items-center justify-center gap-1 text-blue-500 hover:text-white">
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button
-          isProgress={false}
-          className=" button-secondary flex gap-1 justify-center items-center text-blue-500 hover:text-white "
-        >
+        <Button className=" button-secondary flex items-center justify-center gap-1 text-blue-500 hover:text-white ">
           <FileInput /> <span>Export</span>
         </Button>
       </div>
