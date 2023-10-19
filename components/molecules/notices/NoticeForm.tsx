@@ -38,6 +38,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button';
 import NoticeDelete from './NoticeDelete';
 import Modal from '@/components/atoms/Modal';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const NoticeForm = ({
   setIsModalOpen,
