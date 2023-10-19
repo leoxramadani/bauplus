@@ -40,6 +40,7 @@ import { CalendarIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
@@ -49,6 +50,8 @@ const EmployeesForm = ({
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   // const [departments, setDepartments] = useState<any>();
 
   const {
@@ -97,6 +100,7 @@ const EmployeesForm = ({
 
   const onSubmit = useCallback(
     async (data: ICreateEmployee) => {
+      setIsLoading(true);
       console.log('form data->', data);
 
       if (employeeData) {
@@ -112,9 +116,14 @@ const EmployeesForm = ({
             router.replace('/hr/employees', undefined, {
               shallow: true,
             });
+            setIsModalOpen(false);
+            toast.success('Successfully updated employee');
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
+            toast.error(
+              'There was an issue updating employee! Please try again.'
+            );
           });
       } else {
         console.log('Creating employee');
@@ -122,13 +131,17 @@ const EmployeesForm = ({
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {
             console.log('Successfully created employee->', res);
+            toast.success('Successfully added employee');
+            setIsModalOpen(false);
           })
           .catch((error) => {
-            console.log('Error creating employee:', error);
+            console.error('Error creating employee:', error);
+            toast.error(
+              'There was an issue adding employee! Please try again.'
+            );
           });
       }
-
-      setIsModalOpen(false);
+      setIsLoading(false);
     },
     [employeeData]
   );
@@ -139,14 +152,6 @@ const EmployeesForm = ({
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Employees
-        </h2>
-        <h3 className="text-lg font-normal text-gray-900">
-          Add an employee
-        </h3>
-      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -159,11 +164,13 @@ const EmployeesForm = ({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    First Name<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="First Name" {...field} />
+                    <Input
+                      placeholder="First Name"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -175,11 +182,13 @@ const EmployeesForm = ({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Last Name<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Last Name" {...field} />
+                    <Input
+                      placeholder="Last Name"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,11 +203,13 @@ const EmployeesForm = ({
               name="companyId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Company Id<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Company Id</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Company Id" {...field} />
+                    <Input
+                      placeholder="Company Id"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,6 +227,7 @@ const EmployeesForm = ({
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     value={field.value}
+                    disabled={isLoading}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -253,11 +265,14 @@ const EmployeesForm = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Email <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Email@email.com" {...field} />
+                    <Input
+                      placeholder="Email@email.com"
+                      {...field}
+                      type="email"
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -270,26 +285,24 @@ const EmployeesForm = ({
               name="dateOfBirth"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>
-                    Date of birth{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Date of birth </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between gap-1',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
                             format(new Date(field.value), 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -317,11 +330,10 @@ const EmployeesForm = ({
               )}
             />
           </div>
-
-          <hr />
           <Button
-            className="flex w-max flex-none"
-            variant="outline"
+            className="flex w-max flex-none items-center justify-center"
+            // variant="outline"
+            loading={isLoading}
             type="submit"
           >
             Submit

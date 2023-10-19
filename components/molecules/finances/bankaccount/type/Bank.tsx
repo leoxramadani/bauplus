@@ -65,15 +65,6 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bankAccount, setBankAccount] = useState<any>();
-  // const {
-  //   data: bankAccount,
-  //   isError: bankAccountIsError,
-  //   isLoading: bankAccountIsLoading,
-  //   error: bankAccountError,
-  // } = useData<any>(
-  //   ['bankAccountId'],
-  //   GET_ONE_BANKACCOUNT + `?BankAccountId=${bankAccountId}`
-  // );
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -146,7 +137,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
           });
           console.log('Update response:', res);
           toast.success('Successfully updated bank account!');
-          setIsSubmitting(true);
+          setIsSubmitting(false);
           setModal(false);
         } else {
           // Bank account data is empty, perform create
@@ -156,12 +147,13 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
           });
           console.log('Create response:', res);
           toast.success('Successfully created new bank account!');
-          setIsSubmitting(true);
+          setIsSubmitting(false);
           setModal(false);
         }
       } catch (error) {
         console.error('Error:', error);
-        setIsSubmitting(true);
+        toast.error('There was an issue! Please try again.');
+        setIsSubmitting(false);
       }
     },
     [bankAccount]
@@ -190,7 +182,11 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                 <FormItem>
                   <FormLabel>Bank Name</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Bank Name" {...field} />
+                    <Input
+                      placeholder="Bank Name"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -205,7 +201,11 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                   <FormLabel>Account Name</FormLabel>
 
                   <FormControl className="relative">
-                    <Input placeholder="Bank Name" {...field} />
+                    <Input
+                      placeholder="Bank Name"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -228,6 +228,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                             'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isSubmitting}
                         >
                           {field.value
                             ? employees?.find(
@@ -300,6 +301,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                       className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
+                      disabled={isSubmitting}
                       {...field}
                     />
                   </FormControl>
@@ -318,6 +320,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     value={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -358,6 +361,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     value={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -422,6 +426,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                       className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
+                      disabled={isSubmitting}
                       {...field}
                     />
                   </FormControl>
@@ -440,6 +445,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     value={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
