@@ -3,6 +3,7 @@ import {
   ICreateEmployee,
   employeeColumnDef,
   createEmployeeSchema,
+  IEmployee,
 } from '@/lib/schema/hr/employee/employee';
 import {
   Form,
@@ -40,7 +41,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
+import {
+  GET_ALL_DEPARTMENTS,
+  GET_ALL_DEPATRMENTS_OF_COMAPNY,
+} from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 const EmployeesForm = ({
   setIsModalOpen,
@@ -55,12 +59,27 @@ const EmployeesForm = ({
 
   const {
     data: departments,
-    isLoading,
-    isError,
-  } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
+    isLoading: departmentsLoading,
+    isError: departmentsError,
+  } = useData<any>(
+    ['departments'],
+    GET_ALL_DEPATRMENTS_OF_COMAPNY +
+      `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
+  );
+
+  //TODO: handle null when there isn't an employee id
+  // const {
+  //   data: employeeData,
+  //   isLoading: employeeLoading,
+  //   isError: employeeError,
+  // } = useData<any>(
+  //   ['employee'],
+  //   GET_BY_ID_EMPLOYEE + `?employeeId=${employeeId}`
+  // );
 
   useEffect(() => {
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_BY_ID_EMPLOYEE + `?employeeId=${Id}`)
         .then((res) => {
@@ -77,23 +96,6 @@ const EmployeesForm = ({
     }
   }, [employeeId]);
 
-  // useEffect(() => {
-  //   async function getDepartments() {
-  //     await axios
-  //       .get(GET_ALL_DEPARTMENTS)
-  //       .then((res) => {
-  //         setDepartments(res.data);
-
-  //         console.log('Departments:', res.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log('error=', error);
-  //       });
-  //   }
-
-  //   getDepartments();
-  // }, []);
-
   const form = useForm<ICreateEmployee>({
     resolver: zodResolver(createEmployeeSchema),
     values: { ...employeeData },
@@ -101,11 +103,10 @@ const EmployeesForm = ({
 
   const onSubmit = useCallback(
     async (data: ICreateEmployee) => {
-      console.log('Employee data', employeeData);
+      console.log('form data->', data);
 
       if (employeeData) {
-        console.log('employeeData=>', employeeData);
-        console.log('data=======>', data);
+        console.log('Updating employee');
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
@@ -122,7 +123,7 @@ const EmployeesForm = ({
             console.log('Error UPDATING employee:', error);
           });
       } else {
-        console.log('No employee data');
+        console.log('Creating employee');
         await axios
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {
@@ -158,6 +159,7 @@ const EmployeesForm = ({
           className="flex flex-col gap-4 w-full"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* First name */}
             <FormField
               control={form.control}
               name="firstName"
@@ -173,6 +175,7 @@ const EmployeesForm = ({
                 </FormItem>
               )}
             />
+            {/* Last name */}
             <FormField
               control={form.control}
               name="lastName"
@@ -189,7 +192,9 @@ const EmployeesForm = ({
               )}
             />
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Company Id */}
             <FormField
               control={form.control}
               name="companyId"
@@ -206,6 +211,7 @@ const EmployeesForm = ({
               )}
             />
 
+            {/* Department Id */}
             <FormField
               control={form.control}
               name="departmentId"
@@ -247,6 +253,7 @@ const EmployeesForm = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -262,6 +269,8 @@ const EmployeesForm = ({
                 </FormItem>
               )}
             />
+
+            {/* Date of birth */}
             <FormField
               control={form.control}
               name="dateOfBirth"

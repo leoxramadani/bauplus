@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
+import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
 import DepartmentCreate from '@/components/molecules/hr/departments/modals/DepartmentCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import useData from '@/lib/hooks/useData';
 import {
   IDepartment,
   departmentColumnDef,
-} from '@/lib/schema/hr/department';
+} from '@/lib/schema/hr/departments';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +21,7 @@ const Departments = () => {
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
+  console.log('All departments:', data);
 
   useEffect(() => {
     if (router.query.id) {
@@ -30,7 +32,7 @@ const Departments = () => {
 
   useEffect(() => {
     if (!open) {
-      router.replace('/hr/employees', undefined, {
+      router.replace('/hr/departments', undefined, {
         shallow: true,
       });
     }
@@ -50,7 +52,13 @@ const Departments = () => {
             </Button>
           </Modal.Trigger>
           <Modal.Content title="Add another department">
-            <DepartmentCreate />
+            {/* <DepartmentCreate /> */}
+            <DepartmentsForm
+              setIsModalOpen={setOpen}
+              departmentId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+            />
           </Modal.Content>
         </Modal>
 
@@ -59,9 +67,13 @@ const Departments = () => {
         </Button>
       </div>
       {data && !isLoading ? (
-        <DataTable data={data} columns={departmentColumnDef} />
+        <DataTable
+          data={data}
+          columns={departmentColumnDef}
+          searchVal="departmentName"
+        />
       ) : (
-        <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
+        <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
       )}
     </section>
   );

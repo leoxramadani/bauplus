@@ -9,14 +9,23 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   CREATE_DEPARTMENT,
   GET_SPECIFIC_DEPARTMENT,
   UPDATE_DEPARTMENT,
-} from '@/lib/constants/endpoints/department';
+} from '@/lib/constants/endpoints/hr/departments';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
+import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
-  DepartmentType,
-} from '@/lib/schema/Finance/departments';
+  IDepartment,
+} from '@/lib/schema/hr/departments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -35,8 +44,15 @@ const DepartmentsForm = ({
   const router = useRouter();
   const [departmentData, setDepartmentData] = useState<any>();
 
+  const {
+    data: parentDepartments,
+    isLoading,
+    isError,
+  } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
+
   useEffect(() => {
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_SPECIFIC_DEPARTMENT + `?Id=${Id}`)
         .then((res) => {
@@ -53,45 +69,49 @@ const DepartmentsForm = ({
     }
   }, [departmentId]);
 
-  const form = useForm<DepartmentType>({
+  const form = useForm<IDepartment>({
     resolver: zodResolver(DepartmentSchema),
     values: { ...departmentData },
   });
 
   const onSubmit = useCallback(
-    async (data: DepartmentType) => {
+    async (data: IDepartment) => {
       console.log('form data ->', data);
 
       if (departmentData) {
+        console.log('Updating department');
         await axios
           .put(UPDATE_DEPARTMENT, {
+            departmentId: departmentId,
+            parentDepartmentId: data.departmentId,
             departmentName: data.departmentName,
             companyId: data.companyId,
-            departmentId: data.departmentId,
-            parentDepartmentId: data.parentDepartmentId,
+            // ...data,
           })
           .then((res) => {
-            console.log('UPDATED employee->', res);
+            console.log('update department->', res);
             router.replace('/hr/departments', undefined, {
               shallow: true,
             });
           })
           .catch((error) => {
-            console.log('Error UPDATING employee:', error);
+            console.log('Error UPDATING department:', error);
           });
       } else {
+        console.log('Creating department');
         await axios
           .post(CREATE_DEPARTMENT, {
-            departmentName: data.departmentName,
-            companyId: data.companyId,
-            // departmentId: data.departmentId,
-            // parentDepartmentId:data.parentDepartmentId,
+            // departmentName: data.departmentName,
+            // companyId: data.companyId,
+            // // departmentId: data.departmentId,
+            // parentDepartmentId: data.parentDepartmentId,
+            ...data,
           })
           .then((res) => {
-            console.log('Successfully created employee->', res);
+            console.log('Successfully created department->', res);
           })
           .catch((error) => {
-            console.log('Error creating employee:', error);
+            console.log('Error creating department:', error);
           });
       }
       setIsModalOpen(false);
@@ -105,37 +125,12 @@ const DepartmentsForm = ({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Departments
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-          Add a department
-        </h3>
-      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4 w-full"
         >
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4"> */}
-          {/* <FormField
-                control={form.control}
-                name="departmentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                    Department Id<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl className="relative">
-                      <Input placeholder="Department Id" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
-          {/* </div> */}
+          {/* Department name */}
           <FormField
             control={form.control}
             name="departmentName"
@@ -154,6 +149,7 @@ const DepartmentsForm = ({
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+            {/* Company Id --Like this for now! */}
             <FormField
               control={form.control}
               name="companyId"
@@ -170,23 +166,41 @@ const DepartmentsForm = ({
               )}
             />
 
+            {/* Department Id */}
             <FormField
               control={form.control}
               name="parentDepartmentId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Parent Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-                    {/* 
-// @ts-ignore */}
-                    <Input
-                      placeholder="Parent Department Id"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>Department</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter department" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {parentDepartments ? (
+                        <>
+                          {parentDepartments.map((dep: any) => (
+                            <SelectItem
+                              key={dep.departmentId}
+                              value={dep.departmentId}
+                            >
+                              {dep.departmentName}
+                            </SelectItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, SetStateAction, useState } from 'react';
 import {
   Form,
   FormControl,
@@ -15,10 +15,6 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import {
-  IPayment,
-  paymentSchema,
-} from '@/lib/schema/Finance/payment';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
@@ -49,14 +45,16 @@ import {
   IInvoice,
   invoiceSchema,
 } from '@/lib/schema/Finance/invoice';
+import {  IProduct, product } from '@/lib/schema/product/product';
 
-interface ICreateInvoice {
-  setCloseModal(open: boolean): void;
+interface ICreateProduct {
+    setCloseModal: React.Dispatch<SetStateAction<boolean>>
 }
 
 
-const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+const CreateProduct = ({setCloseModal} : ICreateProduct) => {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -74,24 +72,14 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
     []
   );
 
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject,
-  } = useDropzone({
-    accept: { 'image/*': [], 'application/pdf': [] },
-    multiple: false,
-    onDrop, // Allow only one file
-  });
+
 
   const companies = [
-    { label: 'Thor', value: 123 },
-    { label: 'Thor Website', value: 1234 },
-    { label: 'Arkiva', value: 12345 },
-    { label: 'ProWork', value: 123456 },
-    { label: 'Miniera', value: 1111 },
+    { label: 'Thor', value: "123" },
+    { label: 'Thor Website', value: "1234" },
+    { label: 'Arkiva', value: "12345" },
+    { label: 'ProWork', value: "123456" },
+    { label: 'Miniera', value: "1111" },
   ] as const;
 
   const invoice = [
@@ -102,13 +90,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
     { label: 'INV#005', value: '005' },
   ] as const;
 
-  const members = [
-    { label: 'Besir Kurtishi ', value: '001' },
-    { label: 'Besir Bossi ', value: '002' },
-    { label: 'Besir ronaldo Acc3', value: '003' },
-    { label: 'Besir Messi Acc4', value: '004' },
-    { label: 'Besir leo Acc5', value: '005' },
-  ] as const;
+
 
   const taxValue = [
     { label: '18%', value: '18' },
@@ -116,19 +98,9 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
     { label: '10%', value: '10' },
   ] as const;
 
-  const bankAccs = [
-    { label: 'Besir Kurtishi ', value: '001' },
-    { label: 'Besir Bossi ', value: '002' },
-    { label: 'Besir ronaldo Acc3', value: '003' },
-    { label: 'Besir Messi Acc4', value: '004' },
-    { label: 'Besir leo Acc5', value: '005' },
-  ] as const;
+ 
 
-  const currency = [
-    { label: 'Ден.', value: 'mkd' },
-    { label: '$USD', value: 'usd' },
-    { label: 'Eur', value: 'eur' },
-  ] as const;
+ 
 
   const status = [
     { label: 'Paid', value: 'paid' },
@@ -136,18 +108,12 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
     { label: 'Semi-paid', value: 'semipaid' },
   ] as const;
 
-  const duration = [
-    { label: 'Full day', value: 'full' },
-    { label: 'Multiple', value: 'multiple' },
-    { label: 'First Half', value: 'fh' },
-    { label: 'Second Half', value: 'sh' },
-  ];
 
-  const form = useForm<IInvoice>({
-    resolver: zodResolver(invoiceSchema),
+  const form = useForm<IProduct>({
+    resolver: zodResolver(product),
   });
 
-  function onSubmit(data: IInvoice) {
+  function onSubmit(data: IProduct) {
     console.log(data);
   }
 
@@ -163,16 +129,36 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
             <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
               <FormField
                 control={form.control}
-                name="invoiceNumber"
+                name="productName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Invoice number{' '}
+                      Name{' '}
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
                       <Input
-                        placeholder="Invoice number"
+                        placeholder="Product Name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+        <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Price{' '}
+                    </FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                      type='number'
+                        placeholder="Price"
                         {...field}
                       />
                     </FormControl>
@@ -183,10 +169,10 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
 
               <FormField
                 control={form.control}
-                name="invoiceFor"
+                name="productCategory"
                 render={({ field }) => (
                   <FormItem className="w-full flex flex-col">
-                    <FormLabel>Invoice For</FormLabel>
+                    <FormLabel>Product Category</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -203,16 +189,16 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                                   (company) =>
                                     company.value === field.value
                                 )?.label
-                              : 'Choose member'}
+                              : 'Choose Category'}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-[250px] p-0">
                         <Command>
-                          <CommandInput placeholder="Search language..." />
+                          <CommandInput placeholder="Search for product category..." />
                           <CommandEmpty>
-                            No member found.
+                            No procut category found.
                           </CommandEmpty>
                           <CommandGroup>
                             {companies.map((company) => (
@@ -221,7 +207,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                                 key={company.value}
                                 onSelect={() => {
                                   form.setValue(
-                                    'invoiceFor',
+                                    'productCategory',
                                     company.value
                                   );
                                 }}
@@ -247,42 +233,64 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                 )}
               />
 
-              <FormField
+<FormField
                 control={form.control}
-                name="dateInTheDocument"
+                name="productSubCategory"
                 render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Date</FormLabel>
+                  <FormItem className="w-full flex flex-col">
+                    <FormLabel>Product Sub Category</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={'outline'}
+                            variant="outline"
+                            role="combobox"
                             className={cn(
-                              'w-full flex justify-between items-center text-left font-normal',
+                              'w-full flex items-center gap-1 justify-between',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
-                            {field.value ? (
-                              format(field.value, 'PPP')
-                            ) : (
-                              <span>Pick date on document</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            {field.value
+                              ? companies.find(
+                                  (company) =>
+                                    company.value === field.value
+                                )?.label
+                              : 'Choose Subcategory'}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto p-0"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date > new Date()}
-                          //   initialFocus
-                        />
+                      <PopoverContent className="w-[250px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search language..." />
+                          <CommandEmpty>
+                            No product sub category found.
+                          </CommandEmpty>
+                          <CommandGroup>
+                            {companies.map((company) => (
+                              <CommandItem
+                                value={company.label}
+                                key={company.value}
+                                onSelect={() => {
+                                  form.setValue(
+                                    'productSubCategory',
+                                    company.value
+                                  );
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4 transition-all',
+                                    company.value === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                                {company.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
                       </PopoverContent>
                     </Popover>
 
@@ -290,61 +298,19 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                   </FormItem>
                 )}
               />
-            </div>
 
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
-              <FormField
+<FormField
                 control={form.control}
-                name="sumWithTax"
+                name="tax"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sum with Tax </FormLabel>
-                    <FormControl className="relative">
-                      <Input placeholder="Sum with tax" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="taxValue"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Tax Value</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      // defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select tax value" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {taxValue.map((tax) => (
-                          <SelectItem
-                            value={tax.value}
-                            key={tax.value}
-                          >
-                            {tax.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="sumWithoutTax"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Sum without tax </FormLabel>
+                    <FormLabel>
+                      Tax{' '}
+                    </FormLabel>
                     <FormControl className="relative">
                       <Input
-                        placeholder="Sum without tax"
+                      type='number'
+                        placeholder="Tax"
                         {...field}
                       />
                     </FormControl>
@@ -352,99 +318,95 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                   </FormItem>
                 )}
               />
-            </div>
 
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
-              <FormField
+<FormField
                 control={form.control}
-                name="dueDate"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Due Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'w-full flex justify-between items-center text-left font-normal',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP')
-                            ) : (
-                              <span>Pick due date </span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto p-0"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date < form.getValues('dateInTheDocument')
-                          }
-                          //   initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Status</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select invoice status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {status.map((status) => (
-                          <SelectItem
-                            value={status.value}
-                            key={status.value}
-                          >
-                            {status.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="dossier"
+                name="hsnSac"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dossier</FormLabel>
+                    <FormLabel>
+                      Hsn/Sac{' '}
+                      {/* <span className="text-red-500">*</span> */}
+                    </FormLabel>
                     <FormControl className="relative">
-                      <Input placeholder="Dossier" {...field} />
+                      <Input
+                        placeholder="Hsn/Sac"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+<FormField
+                control={form.control}
+                name="unitType"
+                render={({ field }) => (
+                  <FormItem className="w-full flex flex-col">
+                    <FormLabel>Unit Type</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'w-full flex items-center gap-1 justify-between',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            {field.value
+                              ? companies.find(
+                                  (company) =>
+                                    company.value === field.value
+                                )?.label
+                              : 'Choose unit type'}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[250px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search unit type..." />
+                          <CommandEmpty>
+                            No unit type found.
+                          </CommandEmpty>
+                          <CommandGroup>
+                            {companies.map((company) => (
+                              <CommandItem
+                                value={company.label}
+                                key={company.value}
+                                onSelect={() => {
+                                  form.setValue(
+                                    'unitType',
+                                    company.value
+                                  );
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4 transition-all',
+                                    company.value === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                                {company.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
             </div>
+
+        
 
             <FormField
               control={form.control}
@@ -454,7 +416,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                   <FormLabel>Description</FormLabel>
                   <FormControl className="relative">
                     <Textarea
-                      placeholder="Invoice description..."
+                      placeholder="Product description..."
                       rows={5}
                       {...field}
                     />
@@ -480,6 +442,6 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
       </Form>
     </div>
   );
-};
+}
 
-export default CreateInvoice;
+export default CreateProduct
