@@ -24,7 +24,7 @@ interface IModal {
 
 const Modal = ({ children, open, onOpenChange }: IModal) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       {children}
     </Dialog>
   );

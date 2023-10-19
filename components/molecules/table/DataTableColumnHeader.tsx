@@ -1,4 +1,3 @@
-
 import {
   ArrowDown,
   ArrowUp,
@@ -28,13 +27,10 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  
-
-  return (
-    column.getCanSort() ? (
-      <div className={cn(className)}>{title}</div>
-    ) : (
-      <div className={cn('flex items-center space-x-2', className)}>
+  return column.getCanSort() ? (
+    <div className={cn(className)}>{title}</div>
+  ) : (
+    <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -78,7 +74,5 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-    )
-   
   );
 }

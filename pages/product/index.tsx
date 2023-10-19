@@ -95,7 +95,10 @@ const Product = () => {
               <Plus size={20} /> <span>Add New Product</span>
             </Button>
           </Modal.Trigger>
-          <Modal.Content title="New Product" description="Add a product">
+          <Modal.Content
+            title="New Product"
+            description="Add a product"
+          >
             <CreateProduct setCloseModal={setOpen} />
           </Modal.Content>
         </Modal>

@@ -45,7 +45,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
-  
+
   const handleDelete = async (id: string) => {
     try {
       await axios.delete(DELETE_BANK_ACCOUNT, {
@@ -53,13 +53,11 @@ const ActionsColumn = ({ item }: { item: any }) => {
           bankAccountId: id,
         },
       });
-      alert('success')
+      alert('success');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-   
   };
-  
 
   return (
     <DropdownMenu>

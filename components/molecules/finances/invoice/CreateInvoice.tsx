@@ -40,10 +40,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  FileRejection,
-  useDropzone,
-} from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 import Drop from '@/components/atoms/Drop';
 import {
   IInvoice,
@@ -53,7 +50,6 @@ import {
 interface ICreateInvoice {
   setCloseModal(open: boolean): void;
 }
-
 
 const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

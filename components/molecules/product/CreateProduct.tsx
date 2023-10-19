@@ -36,25 +36,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  FileRejection,
-  useDropzone,
-} from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 import Drop from '@/components/atoms/Drop';
 import {
   IInvoice,
   invoiceSchema,
 } from '@/lib/schema/Finance/invoice';
-import {  IProduct, product } from '@/lib/schema/product/product';
+import { IProduct, product } from '@/lib/schema/product/product';
 
 interface ICreateProduct {
-    setCloseModal: React.Dispatch<SetStateAction<boolean>>
+  setCloseModal: React.Dispatch<SetStateAction<boolean>>;
 }
 
-
-
-const CreateProduct = ({setCloseModal} : ICreateProduct) => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -72,14 +67,12 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
     []
   );
 
-
-
   const companies = [
-    { label: 'Thor', value: "123" },
-    { label: 'Thor Website', value: "1234" },
-    { label: 'Arkiva', value: "12345" },
-    { label: 'ProWork', value: "123456" },
-    { label: 'Miniera', value: "1111" },
+    { label: 'Thor', value: '123' },
+    { label: 'Thor Website', value: '1234' },
+    { label: 'Arkiva', value: '12345' },
+    { label: 'ProWork', value: '123456' },
+    { label: 'Miniera', value: '1111' },
   ] as const;
 
   const invoice = [
@@ -90,24 +83,17 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
     { label: 'INV#005', value: '005' },
   ] as const;
 
-
-
   const taxValue = [
     { label: '18%', value: '18' },
     { label: '15%', value: '15' },
     { label: '10%', value: '10' },
   ] as const;
 
- 
-
- 
-
   const status = [
     { label: 'Paid', value: 'paid' },
     { label: 'Unpaid', value: 'unpaid' },
     { label: 'Semi-paid', value: 'semipaid' },
   ] as const;
-
 
   const form = useForm<IProduct>({
     resolver: zodResolver(product),
@@ -137,27 +123,22 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
-                      <Input
-                        placeholder="Product Name"
-                        {...field}
-                      />
+                      <Input placeholder="Product Name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-        <FormField
+              <FormField
                 control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Price{' '}
-                    </FormLabel>
+                    <FormLabel>Price </FormLabel>
                     <FormControl className="relative">
                       <Input
-                      type='number'
+                        type="number"
                         placeholder="Price"
                         {...field}
                       />
@@ -233,7 +214,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="productSubCategory"
                 render={({ field }) => (
@@ -299,17 +280,15 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="tax"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Tax{' '}
-                    </FormLabel>
+                    <FormLabel>Tax </FormLabel>
                     <FormControl className="relative">
                       <Input
-                      type='number'
+                        type="number"
                         placeholder="Tax"
                         {...field}
                       />
@@ -319,7 +298,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="hsnSac"
                 render={({ field }) => (
@@ -329,17 +308,14 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
-                      <Input
-                        placeholder="Hsn/Sac"
-                        {...field}
-                      />
+                      <Input placeholder="Hsn/Sac" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-<FormField
+              <FormField
                 control={form.control}
                 name="unitType"
                 render={({ field }) => (
@@ -403,10 +379,7 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
                   </FormItem>
                 )}
               />
-
             </div>
-
-        
 
             <FormField
               control={form.control}
@@ -442,6 +415,6 @@ const CreateProduct = ({setCloseModal} : ICreateProduct) => {
       </Form>
     </div>
   );
-}
+};
 
-export default CreateProduct
+export default CreateProduct;
