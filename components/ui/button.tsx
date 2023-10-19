@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground focus:ring-4 focus:ring-primary/50',
+          'bg-red-500 text-destructive-foreground hover:bg-red-600 active:bg-red-600 focus:ring-4 focus:ring-red-500/50',
         destructive:
-          'bg-red-500 text-destructive-foreground hover:bg-red-600 focus:ring-4 focus:ring-red-500/50',
+          'bg-red-500 text-destructive-foreground hover:bg-red-600 active:bg-red-600 focus:ring-4 focus:ring-red-500/50',
         outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200',
+          'border border-input bg-background active:bg-gray-100 hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-4 focus:ring-secondary/50',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
@@ -48,8 +48,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     return (
       <button
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          className
+        )}
         ref={ref}
+        disabled={loading}
         {...props}
       >
         {loading === true && (

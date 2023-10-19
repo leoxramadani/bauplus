@@ -12,6 +12,7 @@ import {
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Employees = () => {
   const router = useRouter();
@@ -51,7 +52,10 @@ const Employees = () => {
                 <Plus size={20} /> <span>Add employee</span>
               </Button>
             </Modal.Trigger>
-            <Modal.Content>
+            <Modal.Content
+              title="Add Employee"
+              description="Fill all the fields to add employee"
+            >
               <EmployeesCreate
                 setIsModalOpen={setIsModalOpen}
                 employeeId={
@@ -61,7 +65,11 @@ const Employees = () => {
             </Modal.Content>
           </Modal>
 
-          <Button variant="outline" className="flex gap-2">
+          <Button
+            variant="outline"
+            className="flex gap-2"
+            onClick={() => toast.success('test')}
+          >
             <Plus size={20} /> <span>Invite Employee</span>
           </Button>
           <Button variant="outline" className="flex gap-2">

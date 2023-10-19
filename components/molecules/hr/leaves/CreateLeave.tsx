@@ -33,20 +33,48 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  CREATE_BANK_ACCOUNT,
+  GET_ONE_BANKACCOUNT,
+  UPDATE_BANK_ACCOUNT,
+} from '@/lib/constants/endpoints/finance';
 import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 interface ICreateLeave {
   setCloseModal(open: boolean): void;
+  leaveId?: string;
 }
 
-const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
+const CreateLeave = ({ setCloseModal, leaveId }: ICreateLeave) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [leave, setLeave] = useState<any>();
+
+  useEffect(() => {
+    async function getData(id: string) {
+      await axios
+        .get(GET_ONE_BANKACCOUNT + `?leaveId=${id}`)
+        .then((res) => {
+          console.log('setting employee data -->', res);
+          setLeave(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching employees->', error);
+        });
+    }
+
+    if (leaveId) {
+      getData(leaveId);
+    }
+  }, [leaveId]);
 
   const members = [
     { label: 'Besir Kurtishi ', value: '001' },
@@ -76,11 +104,48 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
 
   const form = useForm<ILeaves>({
     resolver: zodResolver(leavesSchema),
+    values: { ...leave },
   });
 
-  function onSubmit(data: ILeaves) {
-    console.log(data);
-  }
+  // function onSubmit(data: ILeaves) {
+  //   console.log(data);
+  // }
+
+  const onSubmit = useCallback(
+    async (data: ILeaves) => {
+      setIsSubmitting(true);
+      try {
+        // data.leaveId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
+        console.log('submit:', data);
+        if (leave) {
+          // Bank account data exists, perform update
+          const res = await axios.put(UPDATE_BANK_ACCOUNT, {
+            ...data,
+            leaveId: leaveId,
+          });
+          console.log('Update response:', res);
+          toast.success('Successfully updated bank account!');
+          setIsSubmitting(false);
+          setCloseModal(false);
+        } else {
+          // Bank account data is empty, perform create
+          const res = await axios.post(CREATE_BANK_ACCOUNT, {
+            ...data,
+            companyId: '145D8D93-7FF7-4A24-A184-AA4E010E7F37',
+          });
+          console.log('Create response:', res);
+          toast.success('Successfully created new bank account!');
+          setIsSubmitting(false);
+          setCloseModal(false);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('There was an issue! Please try again.');
+      }
+      setIsSubmitting(false);
+    },
+    [leave]
+  );
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
@@ -107,6 +172,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                             'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isSubmitting}
                         >
                           {field.value
                             ? members.find(
@@ -161,6 +227,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -192,6 +259,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -225,6 +293,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       className="flex flex-row gap-4"
+                      disabled={isSubmitting}
                     >
                       {duration.map((s) => (
                         <FormItem
@@ -261,6 +330,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                             'flex w-full items-center justify-between text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isSubmitting}
                         >
                           {field.value ? (
                             format(field.value, 'PPP')
@@ -305,6 +375,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                       placeholder="Reason for absence..."
                       rows={5}
                       {...field}
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -318,7 +389,11 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
             />
           </div>
 
-          <Button className="w-max" type="submit">
+          <Button
+            loading={isSubmitting}
+            className="w-max"
+            type="submit"
+          >
             Submit
           </Button>
         </form>

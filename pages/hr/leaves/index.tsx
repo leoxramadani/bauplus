@@ -7,9 +7,26 @@ import {
   financeColumnDef,
 } from '@/lib/schema/Finance/finance';
 import { FileInput, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const Leaves = () => {
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (router.query.id) {
+      setIsModalOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
+  useEffect(() => {
+    if (!isModalOpen) {
+      router.replace('/hr/leaves', undefined, {
+        shallow: true,
+      });
+    }
+  }, [isModalOpen]);
   const data: IInvoiceSchema[] = [
     {
       invoiceNumber: 1,
@@ -83,19 +100,17 @@ const Leaves = () => {
     },
   ];
 
-  const [open, setOpen] = useState(false);
-
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
             <Button variant="destructive" className="flex gap-2">
               <Plus size={20} /> <span>New Leave</span>
             </Button>
           </Modal.Trigger>
           <Modal.Content title="New Leave" description="Assign Leave">
-            <CreateLeave setCloseModal={setOpen} />
+            <CreateLeave setCloseModal={setIsModalOpen} />
           </Modal.Content>
         </Modal>
 
