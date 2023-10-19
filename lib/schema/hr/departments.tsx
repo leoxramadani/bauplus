@@ -17,8 +17,12 @@ import * as z from 'zod';
 
 export const DepartmentSchema = z.object({
   departmentId: z.string().optional(),
-  departmentName: z.string(),
-  companyId: z.string(),
+  departmentName: z.string({
+    required_error: 'Department name is required',
+  }),
+  companyId: z.string({
+    required_error: 'Company Id is required',
+  }),
   parentDepartmentId: z.string(),
   company: z
     .object({
