@@ -105,10 +105,16 @@ const Payments = () => {
             <CreatePayment />
           </Modal.Content>
         </Modal>
-        <Button className=" button-secondary flex items-center justify-center gap-1 text-blue-500 hover:text-white">
+        <Button
+          variant="outline"
+          className="  flex items-center justify-center gap-1"
+        >
           <Plus size={20} /> <span>Add Bulk Payment</span>
         </Button>
-        <Button className=" button-secondary flex items-center justify-center gap-1 text-blue-500 hover:text-white ">
+        <Button
+          variant="outline"
+          className=" flex items-center justify-center gap-1"
+        >
           <FileInput /> <span>Export</span>
         </Button>
       </div>
