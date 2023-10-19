@@ -22,7 +22,7 @@ export const employeeSchema = z.object({
   }),
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
   department: z

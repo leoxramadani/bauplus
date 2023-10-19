@@ -21,9 +21,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { Input } from '@/components/ui/input';
-
 import { ContextMenuShortcut } from '@/components/ui/context-menu';
+import { Input } from '@/components/ui/input';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -78,22 +77,25 @@ export function DataTable<TData, TValue>({
   return (
     <div className="my-3 flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
-        {/* Input for filterin are here */}
-        <Input
-          placeholder="Search"
-          value={
-            (table
-              .getColumn(searchVal ?? 'id')
-              ?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table
-              .getColumn(searchVal ?? 'id')
-              ?.setFilterValue(event.target.value)
-          }
-          className="max-w-xl"
-        />
-
+        <div className="flex w-full flex-row items-center gap-2">
+          {/* Input for filterin are here */}
+          <Input
+            placeholder="Search"
+            value={
+              (table
+                .getColumn(searchVal ?? 'id')
+                ?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table
+                .getColumn(searchVal ?? 'id')
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-xl"
+          />
+          {/* dropdown view columns select */}
+          {/* <DataTableColumnSearch table={table} /> */}
+        </div>
         {/* dropdown view columns select */}
         <DataTableViewOptions table={table} />
       </div>
