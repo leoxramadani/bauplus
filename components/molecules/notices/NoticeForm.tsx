@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+
+import { Label } from '@/components/ui/label';
 import {
   Form,
   FormControl,
@@ -8,11 +9,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -39,6 +35,10 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { Button } from '@/components/ui/button';
+import NoticeDelete from './NoticeDelete';
+import Modal from '@/components/atoms/Modal';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const NoticeForm = ({
   setIsModalOpen,
@@ -47,8 +47,10 @@ const NoticeForm = ({
   setIsModalOpen: any;
   noticeId?: string;
 }) => {
-  const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [noticeData, setNoticeData] = useState<any>();
+  const [showConfirmationModal, setShowConfirmationModal] =
+    useState(false);
 
   console.log('asdasdasdasdas', noticeId);
 
@@ -112,18 +114,8 @@ const NoticeForm = ({
     console.log('Error=>', error);
   };
 
-  const deleteNotice = async () => {
-    if (noticeId) {
-      try {
-        await axios.delete(DELETE_NOTICE + `?noticeId=${noticeId}`);
-        toast.success('Successfully deleted the notice!');
-        setIsModalOpen(false);
-        window.location.reload();
-      } catch (error) {
-        console.error('Error deleting notice', error);
-      }
-    }
-  };
+  console.log('noticeId', noticeId);
+  console.log('showConfirmationModal', showConfirmationModal);
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -225,15 +217,22 @@ const NoticeForm = ({
             <Button variant="default" className="w-max" type="submit">
               Save
             </Button>
-            {noticeId && (
-              <Button
-                variant="destructive"
-                className="w-max"
-                onClick={deleteNotice}
+            <Modal open={open} onOpenChange={setOpen}>
+              <Modal.Trigger asChild>
+                <Button
+                  variant="destructive"
+                  className="flex gap-1 justify-center items-center"
+                >
+                  Delete Notice
+                </Button>
+              </Modal.Trigger>
+              <Modal.Content
+                title="Delete Notice"
+                description="Are you sure you want to delete this notice?"
               >
-                Delete notice
-              </Button>
-            )}
+                <NoticeDelete noticeId={noticeId} />
+              </Modal.Content>
+            </Modal>
           </div>
         </form>
       </Form>
