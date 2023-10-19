@@ -1,12 +1,11 @@
+import { Column } from '@tanstack/react-table';
 import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
   EyeIcon,
 } from 'lucide-react';
-import { Column } from '@tanstack/react-table';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,7 +36,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="data-[state=open]:bg-accent flex items-center justify-between -ml-2 pl-2 w-full"
+            className="-ml-2 flex w-full items-center justify-between pl-2 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
@@ -50,7 +50,7 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="start"
-          className="shadow-md shadow-slate-300/30 border"
+          className="border shadow-md shadow-slate-300/30"
         >
           <DropdownMenuItem
             onClick={() => column.toggleSorting(false)}

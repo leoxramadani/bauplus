@@ -1,22 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import React, { useEffect, useState } from 'react';
 import {
+  Layout,
+  Layouts,
   Responsive,
   WidthProvider,
-  Layout,
-  ReactGridLayoutProps,
-  Layouts,
 } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { Title } from '@tremor/react';
-const ResponsiveGridLayout = WidthProvider(Responsive);
-import _ from 'lodash';
-import KpiCard from '@/components/atoms/KpiCard';
-import GridItem from './GridItem';
 import GraphBlock from './GraphBlock';
+import GridItem from './GridItem';
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface GridLayoutProps {
   data: string[];
@@ -522,8 +518,8 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
         })}
       </ResponsiveGridLayout>
       {isAdding && (
-        <div className="flex flex-col gap-4 w-fit">
-          <h2 className="font-semibold text-xl">
+        <div className="flex w-fit flex-col gap-4">
+          <h2 className="text-xl font-semibold">
             Add Charts in your dashboard
           </h2>
           {items

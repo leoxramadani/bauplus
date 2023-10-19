@@ -1,6 +1,5 @@
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LOGIN } from '@/lib/constants/endpoints';
 import { ILogin, loginSchema } from '@/lib/schemas/auth';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -112,7 +111,7 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
         className="flex items-center"
       >
         <svg
-          className="w-4 h-4 mr-2"
+          className="mr-2 h-4 w-4"
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
           y="0px"
@@ -146,7 +145,7 @@ const Login = () => {
           <div className="absolute inset-0 bg-[#1A202E]" />
           <div className="relative z-20 flex items-center gap-3 text-3xl font-bold">
             <Square strokeWidth={10} size={40} />
-            <div className="h-full flex items-center pb-1">
+            <div className="flex h-full items-center pb-1">
               Mimiro
             </div>
           </div>

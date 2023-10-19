@@ -1,14 +1,14 @@
-import { useForm } from 'react-hook-form';
-import Button from '../Button';
+import useTranslation from '@/lib/hooks/useTranslation';
 import { IUserForm, userFormSchema } from '@/lib/schemas/user';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Key, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@apollo/client';
+import Button from '../Button';
 import CompaniesRolesAndPrivileges from './CompaniesRolesAndPrivileges';
 import { CompanyWithRoleAndPrivileges } from './CompanyWithPrivileges';
-import useTranslation from '@/lib/hooks/useTranslation';
-import { useRouter } from 'next/router';
 const UsersForm = ({
   mutation,
   values,
@@ -85,9 +85,9 @@ const UsersForm = ({
 
   return (
     <form className="add-edit-form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col sm:flex-row sm:gap-10 md:gap-32 xl:gap-32 min-[1360px]:gap-40 min-[1500px]:gap-80 my-10 sm:mx-auto">
+      <div className="my-10 flex flex-col sm:mx-auto sm:flex-row sm:gap-10 md:gap-32 xl:gap-32 min-[1360px]:gap-40 min-[1500px]:gap-80">
         {/* Inputs */}
-        <div className="flex flex-col gap-3 my-auto">
+        <div className="my-auto flex flex-col gap-3">
           {/* First and Last name */}
           <div className="doubleInput-container">
             <div className="flex flex-col gap-1">

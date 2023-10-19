@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Logo from '@/public/card-notice.png';
-import Image from 'next/image';
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
+import Logo from '@/public/card-notice.png';
 import { Card } from '@tremor/react';
+import Image from 'next/image';
+import { useState } from 'react';
 import NoticeForm from './NoticeForm';
 
 const NoticesCard = ({ cardData }: { cardData: any }) => {
@@ -23,11 +23,11 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
 
   return (
     <div>
-      <Card className="max-w-xs mx-auto gap-4 flex flex-col p-0 overflow-hidden shadow-xl ring-0 rounded-2xl min-h-[450px] max-h-[450px]">
+      <Card className="mx-auto flex max-h-[450px] min-h-[450px] max-w-xs flex-col gap-4 overflow-hidden rounded-2xl p-0 shadow-xl ring-0">
         <div className="flex items-center justify-center">
           <Image src={Logo} alt={'test'} />
         </div>
-        <div className="flex flex-col items-start px-6 gap-2">
+        <div className="flex flex-col items-start gap-2 px-6">
           <h1 className="flex-grow text-xl font-bold">
             {cardData.noticeTitle}
           </h1>
@@ -35,7 +35,7 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
             {formattedDate}
           </p>
         </div>
-        <div className="px-6 min-h-[80px] max-w-[300px]">
+        <div className="min-h-[80px] max-w-[300px] px-6">
           <span className="text-sm text-slate-700">
             {cardData.noticeText.length > maxDescriptionLength
               ? `${cardData.noticeText.substring(
@@ -45,39 +45,39 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
               : cardData.noticeText}
           </span>
           {cardData.noticeText.length > maxDescriptionLength && (
-            <span className="font-bold text-sm text-indigo-500">
+            <span className="text-sm font-bold text-indigo-500">
               See more
             </span>
           )}
         </div>
-        <div className="flex flex-row gap-10 border-t-2 border-t-indigo-500 pt-4 p-4 flex-grow">
-          <div className="flex flex-row items-center flex-grow">
+        <div className="flex flex-grow flex-row gap-10 border-t-2 border-t-indigo-500 p-4 pt-4">
+          <div className="flex flex-grow flex-row items-center">
             <div className="flex flex-initial flex-col items-center justify-center sm:flex-row sm:justify-normal xl:w-14">
               <Image
                 src={Logo}
                 alt={'test'}
-                className="h-10 w-10 cursor-pointer rounded-full object-cover flex"
+                className="flex h-10 w-10 cursor-pointer rounded-full object-cover"
               />
             </div>
             <div className="flex flex-col">
-              <h2 className="font-medium text-base">
+              <h2 className="text-base font-medium">
                 {cardData.employee
                   ? cardData.employee.employeeName
                   : ''}
               </h2>
-              <p className="font-normal text-xs">
+              <p className="text-xs font-normal">
                 {cardData.employee
                   ? cardData.employee.employeePosition
                   : ''}
               </p>
             </div>
           </div>
-          <div className="flex flex-row items-center flex-none">
+          <div className="flex flex-none flex-row items-center">
             <Modal open={open} onOpenChange={setOpen}>
               <Modal.Trigger asChild>
                 <Button
                   variant="default"
-                  className="flex gap-1 justify-center items-center"
+                  className="flex items-center justify-center gap-1"
                 >
                   Edit
                 </Button>

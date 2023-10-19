@@ -11,7 +11,7 @@ import {
 
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Employees = () => {
   const router = useRouter();

@@ -1,7 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import * as z from 'zod';
-import useTranslation from '../hooks/useTranslation';
 const PASSWORD_REGEX = new RegExp(
   '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$'
 ); // 1 uppercase, 1 lowercase, 1 number, 1 special

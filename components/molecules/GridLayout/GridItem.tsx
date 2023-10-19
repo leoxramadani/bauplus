@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
 import { Card } from '@tremor/react';
 import React, {
-  forwardRef,
   CSSProperties,
   HTMLAttributes,
+  forwardRef,
 } from 'react';
 
 interface CustomGridItemProps extends HTMLAttributes<HTMLDivElement> {
@@ -30,7 +30,7 @@ const GridItem = forwardRef<HTMLDivElement, CustomGridItemProps>(
         style={{ ...style }}
         className={cn(
           className,
-          'flex flex-col justify-center items-center'
+          'flex flex-col items-center justify-center'
         )}
         ref={ref}
         onMouseDown={onMouseDown}

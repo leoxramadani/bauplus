@@ -1,10 +1,9 @@
 import Head from 'next/head';
-import { PropsWithChildren } from 'react';
-import Sidebar from './Sidebar';
-import Navbar from './Navbar';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import Breadcrumbs from '../ui/breadcrumbs';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
@@ -44,7 +43,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>Arkiva</title>
       </Head>
       <div
-        className={`min-h-screen flex flex-col w-full scroll`}
+        className={`scroll flex min-h-screen w-full flex-col`}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (
@@ -77,11 +76,11 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`p-4 transition-all duration-[250ms] ${
+          className={`duration-[250ms] p-4 transition-all ${
             !isWindowSmall &&
             (expanded
-              ? `ml-[15rem] transition-all duration-[250ms]`
-              : `md:ml-[4.5rem] transition-all duration-[250ms]`)
+              ? `duration-[250ms] ml-[15rem] transition-all`
+              : `duration-[250ms] transition-all md:ml-[4.5rem]`)
           }`}
         >
           <Breadcrumbs />

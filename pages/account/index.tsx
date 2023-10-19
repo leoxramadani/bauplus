@@ -1,13 +1,13 @@
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import ChangePassword from '@/components/users/ChangePassword';
 import Disable2FA from '@/components/users/Disable2FA';
 import EditProfile from '@/components/users/EditProfile';
+import { GET_SPECIFIC_USER } from '@/lib/constants/endpoints/users';
+import useData from '@/lib/hooks/useData';
 import useTranslation from '@/lib/hooks/useTranslation';
 import { withAuthorization } from '@/lib/withAuthorization';
-import useData from '@/lib/hooks/useData';
-import { GET_SPECIFIC_USER } from '@/lib/constants/endpoints/users';
 import { User2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -23,15 +23,15 @@ const Settings = () => {
   console.log(data);
   return (
     <>
-      <div className="bg-[#F2F2F2] rounded-xl p-10">
+      <div className="rounded-xl bg-[#F2F2F2] p-10">
         {/* Name and username*/}
-        <div className="flex gap-4 title font-bold">
+        <div className="title flex gap-4 font-bold">
           <div className="flex flex-col justify-center">
             <div className="flex flex-col justify-center">
               <User2 />
             </div>
           </div>
-          <div className="flex flex-col justify-center h-full">
+          <div className="flex h-full flex-col justify-center">
             <p>
               {data?.result?.user?.firstName}{' '}
               {data?.result?.user?.lastName}
@@ -45,13 +45,13 @@ const Settings = () => {
 
         {/* Email*/}
         <div className="my-6">
-          <h1 className="text-xl my-2">{t('Email')}</h1>
+          <h1 className="my-2 text-xl">{t('Email')}</h1>
           <div className="">
             <span>{session?.user.email ?? '-'}</span>
           </div>
         </div>
         <div className="my-6">
-          <h1 className="text-xl my-2">{t('Password')}</h1>
+          <h1 className="my-2 text-xl">{t('Password')}</h1>
           <div className="flex">
             {/* <Link href={`/forgotpassword?back=/settings`} className="button">
             Reset your password
@@ -61,7 +61,7 @@ const Settings = () => {
           </div>
         </div>
         <div className="my-6">
-          <h1 className="text-xl my-2">
+          <h1 className="my-2 text-xl">
             {t('Two factor authentication')}
           </h1>
           {data?.specificUser?.result?.user?.twoFactorEnabled ? (
@@ -69,7 +69,7 @@ const Settings = () => {
               {t(
                 'Two-factor authentication is enabled for your account.'
               )}
-              <div className="flex my-3">
+              <div className="my-3 flex">
                 <Disable2FA />
               </div>
             </div>

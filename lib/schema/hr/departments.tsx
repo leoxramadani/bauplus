@@ -1,5 +1,4 @@
-import * as z from 'zod';
-import { ColumnDef } from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -9,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
+import { DELETE_DEPARTMENT } from '@/lib/constants/endpoints/hr/departments';
+import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { DELETE_DEPARTMENT } from '@/lib/constants/endpoints/hr/departments';
-import axios from 'axios';
+import * as z from 'zod';
 
 export const DepartmentSchema = z.object({
   departmentId: z.string().optional(),
@@ -113,7 +113,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-8 w-8 p-0 flex items-center justify-center"
+          className="flex h-8 w-8 items-center justify-center p-0"
         >
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />

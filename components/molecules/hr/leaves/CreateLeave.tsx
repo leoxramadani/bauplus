@@ -1,8 +1,16 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import Drop from '@/components/atoms/Drop';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,25 +21,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import {
-  IPayment,
-  paymentSchema,
-} from '@/lib/schema/Finance/payment';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { Input } from '@/components/ui/input';
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -39,19 +32,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  DropzoneInputProps,
-  FileRejection,
-  useDropzone,
-} from 'react-dropzone';
-import Drop from '@/components/atoms/Drop';
+import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface ICreateLeave {
   setCloseModal(open: boolean): void;
@@ -95,19 +83,19 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
   }
 
   return (
-    <div className="z-0 flex flex-col gap-4 w-full  ">
+    <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="flex flex-col  sm:grid sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
             {/* project */}
             <FormField
               control={form.control}
               name="member"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
+                <FormItem className="flex w-full flex-col">
                   <FormLabel>Choose Member</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -116,7 +104,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -230,7 +218,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
               control={form.control}
               name="duration"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col gap-6 justify-start">
+                <FormItem className="flex w-full flex-col justify-start gap-6">
                   <FormLabel>Select Duration</FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -246,7 +234,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                           <FormControl>
                             <RadioGroupItem value={s.value} />
                           </FormControl>
-                          <FormLabel className="font-normal cursor-pointer">
+                          <FormLabel className="cursor-pointer font-normal">
                             {s.label}
                           </FormLabel>
                         </FormItem>
@@ -270,7 +258,7 @@ const CreateLeave = ({ setCloseModal }: ICreateLeave) => {
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full flex justify-between items-center text-left font-normal',
+                            'flex w-full items-center justify-between text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}
                         >

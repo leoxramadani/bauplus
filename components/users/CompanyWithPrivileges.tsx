@@ -1,10 +1,10 @@
-import { useQuery } from '@apollo/client';
-import { Key, useEffect, useState } from 'react';
-import { GET_ALL_PRIVILEGES_SMALL_QUERY } from '@/lib/queries/privileges';
-import { GET_ALL_ROLES_PRIVILEGES } from '@/lib/queries/rolesPrivileges';
-import Modal from '../Modal';
 import useTranslation from '@/lib/hooks/useTranslation';
+import { GET_ALL_PRIVILEGES_SMALL_QUERY } from '@/lib/queries/privileges';
 import { GET_ALL_ROLES } from '@/lib/queries/roles';
+import { GET_ALL_ROLES_PRIVILEGES } from '@/lib/queries/rolesPrivileges';
+import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import Modal from '../Modal';
 
 export interface CompanyWithRoleAndPrivileges {
   companyId: number;
@@ -173,33 +173,33 @@ const CompanyPrivileges = ({
       <div className="flex">
         <div className="flex flex-col justify-center">
           <label
-            className="relative inline-flex items-center cursor-pointer"
+            className="relative inline-flex cursor-pointer items-center"
             htmlFor={company.company_Name}
           >
             <input
               type="checkbox"
               id={company.company_Name}
-              className="sr-only peer"
+              className="peer sr-only"
               checked={isChecked}
               onChange={() => setIsChecked(!isChecked)}
               name="required"
             />
-            <div className="w-11 h-6 peer-focus:outline-none peer-focus:ring-offset-4 peer-focus:ring-blue-800 rounded-full peer bg-slate-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <div className="peer h-6 w-11 rounded-full bg-slate-300 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-blue-800 peer-focus:ring-offset-4"></div>
             <span className="mx-2">{company.company_Name}</span>
           </label>
         </div>
         {isChecked && (
           <Modal
             value={t('Edit privileges')}
-            className="underline text-blue-600 underline-offset-4 cursor-pointer"
+            className="cursor-pointer text-blue-600 underline underline-offset-4"
           >
             <h1 className="title">{company.company_Name}</h1>
-            <div className="flex gap-8 justify-start">
-              <div className="relative h-full w-1/3 flex flex-col gap-4">
+            <div className="flex justify-start gap-8">
+              <div className="relative flex h-full w-1/3 flex-col gap-4">
                 <h2 className="font-semibold">Role</h2>
                 <div
                   key={company.company_Id}
-                  className="flex flex-col h-full justify-start gap-2"
+                  className="flex h-full flex-col justify-start gap-2"
                 >
                   {roles &&
                     roles.map((r: any) => {
@@ -207,7 +207,7 @@ const CompanyPrivileges = ({
                         <label
                           key={r.roleName}
                           htmlFor={r.roleName}
-                          className="flex flex-row gap-4 cursor-pointer"
+                          className="flex cursor-pointer flex-row gap-4"
                         >
                           <input
                             type="radio"
@@ -228,15 +228,15 @@ const CompanyPrivileges = ({
                     })}
                 </div>
               </div>
-              <div className="h-full w-2/3 flex flex-col gap-4 border-l pl-6">
+              <div className="flex h-full w-2/3 flex-col gap-4 border-l pl-6">
                 <h2 className="font-semibold">Privileges</h2>
-                <div className="flex flex-col gap-2 h-full overflow-scroll scrollbar ">
+                <div className="scrollbar flex h-full flex-col gap-2 overflow-scroll ">
                   {defaultPrivileges &&
                     privileges &&
                     privilegesData?.allPrivileges.map(
                       (privilege: any) => (
                         <div
-                          className="flex justify-start items-center gap-4  "
+                          className="flex items-center justify-start gap-4  "
                           key={privilege.privilege_ID}
                         >
                           <label
@@ -247,7 +247,7 @@ const CompanyPrivileges = ({
                               <input
                                 type="checkbox"
                                 id={privilege.long_Description}
-                                className="sr-only peer"
+                                className="peer sr-only"
                                 onChange={() => {
                                   setPrivileges(
                                     privileges.some(
@@ -271,7 +271,7 @@ const CompanyPrivileges = ({
                                 )}
                                 name="required"
                               />
-                              <div className="w-11 h-6 peer-focus:outline-none peer-focus:ring-offset-4 peer-focus:ring-blue-800 rounded-full peer bg-slate-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                              <div className="peer h-6 w-11 rounded-full bg-slate-300 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-blue-800 peer-focus:ring-offset-4"></div>
                             </div>
                             <span className="mx-2">
                               {privilege.long_Description}

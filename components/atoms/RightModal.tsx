@@ -1,6 +1,6 @@
-import { X } from 'lucide-react';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
+import { X } from 'lucide-react';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 type ModalProps = {
   children: React.ReactNode;
@@ -57,7 +57,7 @@ const CandidatesModal: React.FC<ModalProps> = ({
                   closed: { opacity: 0 },
                   open: { opacity: 1 },
                 }}
-                className="fixed inset-0 w-full bg-black bg-opacity-25 -z-10 "
+                className="fixed inset-0 -z-10 w-full bg-black bg-opacity-25 "
                 onClick={() => {
                   console.log('Overlay Clicked!');
                   setIsModalOpen(false);
@@ -78,12 +78,12 @@ const CandidatesModal: React.FC<ModalProps> = ({
                     },
                   }}
                   className="relative z-50 flex  min-h-screen w-full max-w-3xl flex-col items-center justify-start gap-8 bg-white p-4 [--opacity-from:0%] [--opacity-to:100%] 
-                    sm:[--x-from:50%] sm:[--x-to:0px] max-sm:[--y-from:-50px] max-sm:[--y-to:0px] md:mt-0 md:min-h-max md:p-8"
+                    max-sm:[--y-to:0px] max-sm:[--y-from:-50px] sm:[--x-from:50%] sm:[--x-to:0px] md:mt-0 md:min-h-max md:p-8"
                 >
                   {children}
 
                   <X
-                    className="absolute right-8 top-4 hover:cursor-pointer w-max"
+                    className="absolute right-8 top-4 w-max hover:cursor-pointer"
                     onClick={() => {
                       console.log('Overlay Clicked!');
                       setIsModalOpen(false);

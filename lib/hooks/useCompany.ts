@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
-import { CompanyContext } from '../contexts/CompanyContext';
-import nProgress from 'nprogress';
 import { ICompany } from 'next-auth';
+import nProgress from 'nprogress';
+import { CompanyContext } from '../contexts/CompanyContext';
 
 {
   /**

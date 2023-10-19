@@ -7,7 +7,7 @@ import {
   financeColumnDef,
 } from '@/lib/schema/Finance/finance';
 import { FileInput, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Leaves = () => {
   const data: IInvoiceSchema[] = [

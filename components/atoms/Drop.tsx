@@ -88,7 +88,7 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
       {!selectedFile && (
         <div
           {...getRootProps({ style })}
-          className="w-full sm:col-span-2 h-24 items-center flex-col flex justify-center"
+          className="flex h-24 w-full flex-col items-center justify-center sm:col-span-2"
         >
           <input {...getInputProps()} />
           <p>
@@ -104,7 +104,7 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
       )}
       {selectedFile &&
         (selectedFile.type.startsWith('image/') ? (
-          <div className="group relative sm:max-w-[200px] sm:max-h-[200px] border border-gray-100 w-full h-full flex justify-center items-center">
+          <div className="group relative flex h-full w-full items-center justify-center border border-gray-100 sm:max-h-[200px] sm:max-w-[200px]">
             <img
               className="aspect-[4/3] h-full w-full object-cover"
               src={URL.createObjectURL(selectedFile)}
@@ -112,7 +112,7 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
             />
 
             <X
-              className="absolute bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1 lg:opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+              className="absolute right-2 top-2 cursor-pointer rounded-full bg-red-500 p-1 text-white shadow-md transition-all group-hover:opacity-100 lg:opacity-0"
               onClick={() => setSelectedFile(null)}
             />
           </div>
@@ -127,7 +127,7 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
               View PDF
             </a>
             <X
-              className=" bg-red-500 text-white shadow-md top-2 right-2 rounded-full p-1  cursor-pointer"
+              className=" right-2 top-2 cursor-pointer rounded-full bg-red-500 p-1 text-white  shadow-md"
               onClick={() => setSelectedFile(null)}
             />
           </div>

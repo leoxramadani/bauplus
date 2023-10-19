@@ -103,14 +103,14 @@
             transition-all hover:bg-red-600 hover:text-white
             
             focus:outline-none focus:ring-4
-            focus:ring-red-500/50 active:bg-red-500 active:border-transparent
+            focus:ring-red-500/50 active:border-transparent active:bg-red-500
             
             disabled:bg-slate-400;
   }
 }
 
 .error {
-  @apply text-red-600 font-medium text-sm pointer-events-none;
+  @apply pointer-events-none text-sm font-medium text-red-600;
 }
 
 .sidebar::-webkit-scrollbar {

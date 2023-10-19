@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import Modal from '../Modal';
-import Button from '../Button';
-import { useMutation, useQuery } from '@apollo/client';
 import {
   DISABLE_2FA_QUERY,
   GET_SPECIFIC_USER_QUERY,
 } from '@/lib/queries/user';
+import { useMutation, useQuery } from '@apollo/client';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import Button from '../Button';
+import Modal from '../Modal';
 
 const Disable2FA = () => {
   const [password, setPassword] = useState<string>('');
@@ -40,11 +40,11 @@ const Disable2FA = () => {
 
   return (
     <Modal value="Disable" className="button red">
-      <h1 className="title text-center my-6">
+      <h1 className="title my-6 text-center">
         Disable two-factor authentication for your account
       </h1>
-      <div className="flex max-w-xl mx-auto">
-        <div className="flex flex-col gap-1 w-full">
+      <div className="mx-auto flex max-w-xl">
+        <div className="flex w-full flex-col gap-1">
           <label htmlFor="password">
             Please type in your password to continue
           </label>
@@ -56,7 +56,7 @@ const Disable2FA = () => {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div className="flex justify-center mt-6">
+          <div className="mt-6 flex justify-center">
             <Button
               isProgress={loadingDisable}
               className="button red"

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { GET_TOTAL_INCOME } from '../../queries/dashboard';
 import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { GET_TOTAL_INCOME } from '../../queries/dashboard';
 
 export const TotalSumIncome = () => {
   const { loading, error, data } = useQuery(GET_TOTAL_INCOME);
