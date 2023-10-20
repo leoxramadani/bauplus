@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import dashboard from '@/public/Dashboard.png';
 import binance from '@/public/binance.png';
 import google from '@/public/google.png';
+import mimiro from '@/public/logo-mimiro.svg';
 import stripe from '@/public/stripe.png';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Square } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -142,10 +142,11 @@ const Login = () => {
       <div className="flex h-full w-full flex-row">
         <div className="flex h-screen w-full flex-col">
           <Link href="/" className="flex flex-row gap-4 p-8">
-            <Square strokeWidth={10} size={40} />
+            <Image src={mimiro} alt="logo" width={160} height={100} />
+            {/* <Square strokeWidth={10} size={40} />
             <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
               Mimiro
-            </h1>
+            </h1> */}
           </Link>
           <div className="flex h-screen w-full flex-col items-center justify-center">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
