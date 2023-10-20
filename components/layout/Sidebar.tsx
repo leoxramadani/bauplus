@@ -1,11 +1,11 @@
+import mimiroArrow from '@/public/Arrow-M.svg';
+import mimiro from '@/public/logo-white-mimiro.svg';
 import {
   Calculator,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight,
   ClipboardList,
   LayoutDashboard,
-  Square,
   UserCircle,
   Users,
   Wallet,
@@ -76,6 +76,7 @@ const Sidebar = ({
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }
+              className="px-3"
             >
               {/* <Image
               src={Logo}
@@ -84,16 +85,23 @@ const Sidebar = ({
                 !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
               } hover:cursor-pointer`}
             /> */}
-              <h1 className="ml-2 flex w-full items-center justify-center gap-2 text-xl font-bold text-white">
+              <Image
+                src={mimiro}
+                alt="logo"
+                width={110}
+                height={100}
+              />
+              {/* <h1 className="ml-2 flex w-full items-center justify-center gap-2 text-xl font-bold text-white">
                 <Square strokeWidth={10} size={18} radius={0} />
                 Mimiro
-              </h1>
+              </h1> */}
             </Link>
           )}
 
           <button
-            className="flex items-center justify-center rounded-full p-1 text-white opacity-0 transition-all hover:bg-slate-600 group-hover/sidebar:opacity-100"
-            // onClick={() => setExpanded((current) => !current)}
+            className={`flex items-center justify-center rounded-full p-2 text-white transition-all hover:bg-slate-800 ${
+              !isWindowSmall && !expanded ? 'w-full' : 'w-fit'
+            }`}
           >
             {isWindowSmall ? (
               <X
@@ -109,10 +117,11 @@ const Sidebar = ({
                 height={30}
               />
             ) : (
-              <ChevronsRight
-                strokeWidth={1.5}
-                width={30}
-                height={30}
+              <Image
+                alt="right-arrow-to-open-sidebar"
+                src={mimiroArrow}
+                width={19}
+                height={18}
                 onClick={() => toggleSidebar()}
               />
             )}
@@ -307,7 +316,7 @@ const Sidebar = ({
             </div>
           ) : (
             <>
-              <Link href={'/login'} className="p-3">
+              <Link href={'/login'} className="p-3 text-white">
                 Login
               </Link>
             </>

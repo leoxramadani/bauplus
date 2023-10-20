@@ -1,43 +1,14 @@
 'use client';
 import KpiCard from '@/components/atoms/KpiCard';
 import Head from 'next/head';
-import { useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
 const NoSSR = dynamic(() => import('../pages/dashboard'), {
   ssr: false,
 });
-const cities = [
-  {
-    name: 'New York',
-    sales: 9800,
-  },
-  {
-    name: 'London',
-    sales: 4567,
-  },
-  {
-    name: 'Hong Kong',
-    sales: 3908,
-  },
-  {
-    name: 'San Francisco',
-    sales: 2400,
-  },
-  {
-    name: 'Singapore',
-    sales: 1908,
-  },
-  {
-    name: 'Zurich',
-    sales: 1398,
-  },
-];
 
 export default function Home() {
-  const [breakpoint, setBreakpoint] = useState<string>('');
-
   return (
     <>
       <Head>

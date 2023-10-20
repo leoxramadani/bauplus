@@ -1,31 +1,30 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import React, { useEffect, useState } from 'react';
-import {
-  Responsive,
-  WidthProvider,
-  Layout,
-  Layouts,
-} from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import { Title } from '@tremor/react';
-const ResponsiveGridLayout = WidthProvider(Responsive);
-import GridItem from './GridItem';
-import GraphBlock from './GraphBlock';
-import Image from 'next/image';
-import PieChartImage from '@/public/PieChart.svg';
-import DonutChartImage from '@/public/DonutChart.svg';
-import BarChartImage from '@/public/BarChart.svg';
 import AreaChartImage from '@/public/AreaChart.svg';
+import BarChartImage from '@/public/BarChart.svg';
+import DonutChartImage from '@/public/DonutChart.svg';
 import LineChartImage from '@/public/LineChart.svg';
+import PieChartImage from '@/public/PieChart.svg';
 import {
   CheckCheck,
   MinusCircle,
   Pencil,
   PlusCircle,
 } from 'lucide-react';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import {
+  Layout,
+  Layouts,
+  Responsive,
+  WidthProvider,
+} from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import GraphBlock from './GraphBlock';
+import GridItem from './GridItem';
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface GridLayoutProps {
   data: string[];
@@ -384,10 +383,10 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
   return (
     <div>
       {!isAdding && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col px-2 pb-3">
           <Button
             variant="default"
-            className="flex gap-2 items-center w-fit"
+            className="flex w-fit items-center gap-2"
             onClick={() => {
               setModalOpen(true);
               toggleEditMode();
@@ -419,7 +418,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
               {isAdding && (
                 <Button
                   variant="destructive"
-                  className="flex px-1.5 py-0 w-10 h-10 items-center justify-center"
+                  className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
                   onClick={() => onRemoveItem(layoutItem.i)}
                 >
                   <MinusCircle width={18} />
@@ -446,11 +445,11 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
       {isAdding && (
         <div
           id="rightmodal"
-          className="flex flex-col gap-4 z-50 h-screen w-[500px] fixed bg-white right-0 bottom-0 shadow-2xl overflow-y-auto overflow-x-hidden pt-5"
+          className="fixed bottom-0 right-0 z-50 flex h-screen w-[500px] flex-col gap-4 overflow-y-auto overflow-x-hidden bg-white pt-5 shadow-2xl"
         >
           <Button
             variant="default"
-            className="flex flex-row items-center gap-2 mx-4"
+            className="mx-4 flex flex-row items-center gap-2"
             onClick={() => {
               setModalOpen(false);
               toggleEditMode();
@@ -458,8 +457,8 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
           >
             <CheckCheck width={16} /> Done Editing
           </Button>
-          <div className="flex flex-col gap-4 w-fit px-4">
-            <h2 className="font-semibold text-xl">
+          <div className="flex w-fit flex-col gap-4 px-4">
+            <h2 className="text-xl font-semibold">
               Add Charts in your dashboard
             </h2>
             {items
@@ -470,10 +469,10 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
               })
               .map((item) => (
                 <div
-                  className="flex flex-row gap-4 border-2 px-2 py-3 rounded-md items-center hover:bg-slate-100"
+                  className="flex flex-row items-center gap-4 rounded-md border-2 px-2 py-3 hover:bg-slate-100"
                   key={item.key}
                 >
-                  <div className="flex flex-row w-24 h-20">
+                  <div className="flex h-20 w-24 flex-row">
                     <Image
                       src={item.image}
                       alt={`ChartImage`}
@@ -484,7 +483,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
                   </div>
                   <div className="flex flex-row gap-4">
                     <div className="flex flex-col">
-                      <h1 className="text-lg text-slate-800 font-semibold flex-grow">
+                      <h1 className="flex-grow text-lg font-semibold text-slate-800">
                         {item.title}
                       </h1>
                       <p className="text-sm text-slate-600">
@@ -494,7 +493,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
                     <div className="flex items-center justify-center">
                       <Button
                         variant="default"
-                        className="flex px-1.5 py-0 w-10 h-10 items-center justify-center"
+                        className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
                         onClick={() =>
                           onAddChart(item.key, item.x ? item.x : 0)
                         }
@@ -510,10 +509,10 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
               .sort((a, b) => a.key.localeCompare(b.key))
               .map((removedChart) => (
                 <div
-                  className="flex flex-row gap-4 border-2 p-2 rounded-md items-center"
+                  className="flex flex-row items-center gap-4 rounded-md border-2 p-2"
                   key={removedChart.key}
                 >
-                  <div className="flex flex-row w-24 h-20">
+                  <div className="flex h-20 w-24 flex-row">
                     <Image
                       src={removedChart.image}
                       alt={`ChartImage`}
@@ -524,12 +523,12 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
                   </div>
                   <div className="flex flex-col">
                     <div className="flex flex-row gap-4">
-                      <h1 className="text-lg text-slate-800 font-semibold flex-grow">
+                      <h1 className="flex-grow text-lg font-semibold text-slate-800">
                         {removedChart.title}
                       </h1>
                       <Button
                         variant="default"
-                        className="flex px-1.5 py-0 w-10 h-10 items-center justify-center"
+                        className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
                         onClick={() =>
                           onAddChart(
                             removedChart.key,

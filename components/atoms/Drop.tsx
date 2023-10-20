@@ -5,7 +5,6 @@ import { FileRejection, useDropzone } from 'react-dropzone';
 const baseStyle = {
   flex: 1,
   display: 'flex',
-  // flexDirection: 'column',
   alignItems: 'center',
   padding: '20px',
   borderWidth: 2,
@@ -73,14 +72,18 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
     }),
     [isFocused, isDragAccept, isDragReject]
   );
-
   const generatePdfUrl = () => {
-    // Your logic to generate a PDF or retrieve the PDF URL
-    // For example, if you have a Blob representing the PDF content:
-    const pdfBlob = new Blob(['PDF content here'], {
-      type: 'application/pdf',
-    });
-    return URL.createObjectURL(pdfBlob);
+    if (selectedFile) {
+      // Ensure selectedFile is not null
+      const pdfBlob = new Blob([selectedFile], {
+        type: 'application/pdf',
+      });
+      return URL.createObjectURL(pdfBlob);
+    } else {
+      // Handle the case where selectedFile is null (optional)
+      console.error('No PDF file selected');
+      return '#'; // or null, or any other default value
+    }
   };
 
   return (
@@ -123,6 +126,7 @@ const Drop = ({ selectedFile, setSelectedFile }: IDrop) => {
               href={generatePdfUrl()}
               target="_blank"
               rel="noopener noreferrer"
+              className="text-primary underline-offset-4 hover:underline"
             >
               View PDF
             </a>
