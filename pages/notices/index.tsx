@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { GET_ALL_NOTICES } from '@/lib/constants/endpoints/notices';
 import useData from '@/lib/hooks/useData';
 import { FileInput } from 'lucide-react';
-import { useState } from 'react';
-
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 interface Notice {
   noticeId: string;
   dateCreated: string;
@@ -20,11 +20,10 @@ interface Notice {
     employeePosition: string;
   } | null;
 }
-
 const Notices = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   // const [myData, setMyData] = useState<Notice[]>([]);
-
   // useEffect(() => {
   //   async function getData() {
   //     try {
@@ -36,12 +35,16 @@ const Notices = () => {
   //   }
   //   getData();
   // }, []);
-
   const { data: noticesData } = useData<Notice[]>(
     ['notices'],
     GET_ALL_NOTICES
   );
-
+  useEffect(() => {
+    if (router.query.id) {
+      setOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -59,7 +62,12 @@ const Notices = () => {
               title="Add New Notice"
               description="Notice Details"
             >
-              <NoticeForm setIsModalOpen={setOpen} />
+              <NoticeForm
+                setIsModalOpen={setOpen}
+                noticeId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+              />
             </Modal.Content>
           </Modal>
           <Button
@@ -79,5 +87,4 @@ const Notices = () => {
     </>
   );
 };
-
 export default Notices;
