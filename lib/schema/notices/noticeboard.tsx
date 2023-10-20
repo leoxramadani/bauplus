@@ -8,7 +8,7 @@ export const noticeSchema = z.object({
   isRead: z.boolean().default(false),
   employeeId: z
     .string()
-    .default('758BB06E-DE5A-4FAD-B084-03FB2A283FD8'),
+    .default('f760cd7b-5cf0-4440-aea5-1f6d488876e8'),
   companyId: z
     .string()
     .default('145D8D93-7FF7-4A24-A184-AA4E010E7F37'),
