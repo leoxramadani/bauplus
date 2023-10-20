@@ -26,8 +26,7 @@ import { IProduct, product } from '@/lib/schema/product/product';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import React, { SetStateAction, useCallback, useState } from 'react';
-import { FileRejection } from 'react-dropzone';
+import React, { SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface ICreateProduct {
@@ -36,22 +35,6 @@ interface ICreateProduct {
 
 const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      if (acceptedFiles.length > 0) {
-        // Take only the first accepted file
-        const file = acceptedFiles[0];
-        setSelectedFile(file);
-      }
-
-      // Handle rejected files if needed
-      if (fileRejections.length > 0) {
-        console.log('Rejected files:', fileRejections);
-      }
-    },
-    []
-  );
 
   const companies = [
     { label: 'Thor', value: '123' },
