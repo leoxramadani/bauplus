@@ -17,10 +17,10 @@ import {
 } from '@/components/ui/select';
 import {
   CREATE_DEPARTMENT,
+  GET_ALL_DEPARTMENTS,
   GET_SPECIFIC_DEPARTMENT,
   UPDATE_DEPARTMENT,
 } from '@/lib/constants/endpoints/hr/departments';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
@@ -29,7 +29,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface DepartmentsFormProps {
@@ -83,7 +83,7 @@ const DepartmentsForm = ({
         await axios
           .put(UPDATE_DEPARTMENT, {
             departmentId: departmentId,
-            parentDepartmentId: data.departmentId,
+            parentDepartmentId: data.parentDepartmentId,
             departmentName: data.departmentName,
             companyId: data.companyId,
             // ...data,
@@ -124,11 +124,11 @@ const DepartmentsForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
           {/* Department name */}
           <FormField
@@ -148,7 +148,7 @@ const DepartmentsForm = ({
             )}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Company Id --Like this for now! */}
             <FormField
               control={form.control}
@@ -208,7 +208,7 @@ const DepartmentsForm = ({
           </div>
           <hr />
           <Button
-            className="w-max flex flex-none"
+            className="flex w-max flex-none"
             variant="outline"
             type="submit"
           >

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,6 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useState } from 'react';
 
 import {
   Table,
@@ -21,26 +21,18 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+import { ContextMenuShortcut } from '@/components/ui/context-menu';
 import { Input } from '@/components/ui/input';
-
-import { DataTablePagination } from './DataTablePagination';
-import { DataTableViewOptions } from './DataTableViewOptions';
 import {
   ContextMenu,
-  ContextMenuCheckboxItem,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuRadioGroup,
-  ContextMenuRadioItem,
   ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@radix-ui/react-context-menu';
-import { ContextMenuShortcut } from '@/components/ui/context-menu';
 import { DataTableColumnHeader } from './DataTableColumnHeader';
+import { DataTablePagination } from './DataTablePagination';
+import { DataTableViewOptions } from './DataTableViewOptions';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -83,29 +75,32 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col gap-3 my-3">
-      <div className="flex items-center gap-3 justify-between">
-        {/* Input for filterin are here */}
-        <Input
-          placeholder="Search"
-          value={
-            (table
-              .getColumn(searchVal ?? 'id')
-              ?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table
-              .getColumn(searchVal ?? 'id')
-              ?.setFilterValue(event.target.value)
-          }
-          className="max-w-xl"
-        />
-
+    <div className="my-3 flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex w-full flex-row items-center gap-2">
+          {/* Input for filterin are here */}
+          <Input
+            placeholder="Search"
+            value={
+              (table
+                .getColumn(searchVal ?? 'id')
+                ?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table
+                .getColumn(searchVal ?? 'id')
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-xl"
+          />
+          {/* dropdown view columns select */}
+          {/* <DataTableColumnSearch table={table} /> */}
+        </div>
         {/* dropdown view columns select */}
         <DataTableViewOptions table={table} />
       </div>
       {/* The table component is here */}
-      <div className="rounded-md shadow-sm border bg-white">
+      <div className="rounded-md border bg-white shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -144,8 +139,8 @@ export function DataTable<TData, TValue>({
                       ))}
                     </TableRow>
                   </ContextMenuTrigger>
-                  <ContextMenuContent className="p-1 bg-white text-slate-900 rounded-lg border shadow-md shadow-slate-300/30">
-                    <ContextMenuItem className="flex justify-between items-center transition-colors duration-75 hover:bg-slate-200 cursor-pointer py-2 w-60 rounded-md px-3">
+                  <ContextMenuContent className="rounded-lg border bg-white p-1 text-slate-900 shadow-md shadow-slate-300/30">
+                    <ContextMenuItem className="flex w-60 cursor-pointer items-center justify-between rounded-md px-3 py-2 transition-colors duration-75 hover:bg-slate-200">
                       Copy ID
                       <ContextMenuShortcut>
                         &#8984;C

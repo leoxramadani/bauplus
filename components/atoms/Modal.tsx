@@ -1,7 +1,7 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
-import CreatePayment from '../molecules/finances/payments/CreatePayment';
 import {
   Dialog,
   DialogClose,
@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
-import { cn } from '@/lib/utils';
 
 interface IModal {
   className?: string;
@@ -24,7 +23,7 @@ interface IModal {
 
 const Modal = ({ children, open, onOpenChange }: IModal) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       {children}
     </Dialog>
   );
@@ -44,7 +43,7 @@ const ModalContent = ({
       )}
     >
       <DialogHeader>
-        <DialogTitle className="font-bold text-lg">
+        <DialogTitle className="text-lg font-bold">
           {title}
         </DialogTitle>
         {description && (

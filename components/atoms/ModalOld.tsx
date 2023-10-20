@@ -93,7 +93,7 @@ const ModalOld = ({
               animate="open"
               exit="closed"
               static
-              className="fixed inset-0 z-[50] overflow-y-scroll flex items-center justify-center "
+              className="fixed inset-0 z-[50] flex items-center justify-center overflow-y-scroll "
               onClose={() => {
                 handleCloser();
                 setOpen(false);

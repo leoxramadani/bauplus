@@ -1,22 +1,30 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import AreaChartImage from '@/public/AreaChart.svg';
+import BarChartImage from '@/public/BarChart.svg';
+import DonutChartImage from '@/public/DonutChart.svg';
+import LineChartImage from '@/public/LineChart.svg';
+import PieChartImage from '@/public/PieChart.svg';
 import {
+  CheckCheck,
+  MinusCircle,
+  Pencil,
+  PlusCircle,
+} from 'lucide-react';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import {
+  Layout,
+  Layouts,
   Responsive,
   WidthProvider,
-  Layout,
-  ReactGridLayoutProps,
-  Layouts,
 } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { Title } from '@tremor/react';
-const ResponsiveGridLayout = WidthProvider(Responsive);
-import _ from 'lodash';
-import KpiCard from '@/components/atoms/KpiCard';
-import GridItem from './GridItem';
 import GraphBlock from './GraphBlock';
+import GridItem from './GridItem';
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface GridLayoutProps {
   data: string[];
@@ -47,111 +55,6 @@ const piedata = [
   {
     name: 'LOCs/CCs',
     sales: 1898,
-  },
-];
-
-const chartdataScatter = [
-  {
-    Country: 'Brazil',
-    Life_expectancy: 74.2,
-    GDP: 10345.6789,
-    Population: 212559417,
-  },
-  {
-    Country: 'Canada',
-    Life_expectancy: 82.2,
-    GDP: 52436.987,
-    Population: 37742154,
-  },
-  {
-    Country: 'China',
-    Life_expectancy: 76.9,
-    GDP: 14342.5678,
-    Population: 1403500365,
-  },
-  {
-    Country: 'Egypt',
-    Life_expectancy: 71.4,
-    GDP: 4220.8765,
-    Population: 104258327,
-  },
-  {
-    Country: 'France',
-    Life_expectancy: 83.3,
-    GDP: 43563.219,
-    Population: 67564287,
-  },
-  {
-    Country: 'Germany',
-    Life_expectancy: 80.9,
-    GDP: 52989.123,
-    Population: 83149300,
-  },
-  {
-    Country: 'Italy',
-    Life_expectancy: 82.3,
-    GDP: 39480.654,
-    Population: 60359546,
-  },
-  {
-    Country: 'Japan',
-    Life_expectancy: 84.6,
-    GDP: 40939.876,
-    Population: 126476461,
-  },
-  {
-    Country: 'Mexico',
-    Life_expectancy: 75.1,
-    GDP: 10511.234,
-    Population: 126190788,
-  },
-  {
-    Country: 'Nigeria',
-    Life_expectancy: 54.3,
-    GDP: 1969.345,
-    Population: 206139587,
-  },
-  {
-    Country: 'Russia',
-    Life_expectancy: 71.3,
-    GDP: 11200.789,
-    Population: 145912025,
-  },
-  {
-    Country: 'South Africa',
-    Life_expectancy: 63.2,
-    GDP: 6541.987,
-    Population: 59436725,
-  },
-  {
-    Country: 'United Kingdom',
-    Life_expectancy: 80.9,
-    GDP: 42323.456,
-    Population: 68207116,
-  },
-  {
-    Country: 'United States',
-    Life_expectancy: 77.3,
-    GDP: 62545.789,
-    Population: 331002651,
-  },
-  {
-    Country: 'Australia',
-    Life_expectancy: 83.1,
-    GDP: 54798.234,
-    Population: 25499884,
-  },
-  {
-    Country: 'New Zealand',
-    Life_expectancy: 82.0,
-    GDP: 42789.654,
-    Population: 4822233,
-  },
-  {
-    Country: 'Singapore',
-    Life_expectancy: 84.8,
-    GDP: 64579.234,
-    Population: 5850342,
   },
 ];
 
@@ -259,13 +162,13 @@ const graph4: Layout = {
   i: 'graph4',
 };
 
-const graph5: Layout = {
-  w: 6,
-  h: 3,
-  x: 0,
-  y: 0,
-  i: 'graph5',
-};
+// const graph5: Layout = {
+//   w: 6,
+//   h: 3,
+//   x: 0,
+//   y: 0,
+//   i: 'graph5',
+// };
 
 const graph6: Layout = {
   w: 6,
@@ -277,56 +180,83 @@ const graph6: Layout = {
 
 const originalItems = [
   {
+    title: 'Area Chart',
+    image: AreaChartImage,
+    description:
+      'Shows data points with shaded regions, ideal for visualizing trends and cumulative effects over time.',
     name: 'b',
     key: 'graph1',
     data: chartdata,
     type: 'area',
     index: 'date',
     layout: graph1,
+    x: 0,
   },
   {
+    title: 'Pie Chart',
+    image: PieChartImage,
+    description:
+      'A circular graph divided into slices to represent data proportions. Each slices size corresponds to its percentage.',
     name: 'a',
     key: 'graph2',
     data: piedata,
     type: 'pie',
     index: 'name',
     layout: graph2,
+    x: 6,
   },
   {
+    title: 'Line Chart',
+    image: LineChartImage,
+    description:
+      'Connects data points with a line to illustrate trends and relationships between variables over time.',
     name: 'c',
     key: 'graph3',
     data: chartdataLine,
     type: 'line' as 'line',
     index: 'year',
-    layout: graph3, // Define graph3 layout
+    layout: graph3,
+    x: 0,
   },
   {
+    title: 'Bar Chart',
+    image: BarChartImage,
+    description:
+      'A bar chart is a visual representation of data using bars, where the length of each bar corresponds to the data it represents.',
     name: 'd',
     key: 'graph4',
-    data: chartdata, // Replace with the data for your BarChart
+    data: chartdata,
     type: 'bar' as 'bar',
     index: 'name',
-    layout: graph4, // Define graph4 layout
+    layout: graph4,
+    x: 6,
   },
+  // {
+  //   name: 'e',
+  //   key: 'graph5',
+  //   data: chartdataScatter,
+  //   type: 'scatter' as 'scatter',
+  //   index: 'name',
+  //   layout: graph5,
+  // },
   {
-    name: 'e',
-    key: 'graph5',
-    data: chartdataScatter,
-    type: 'scatter' as 'scatter',
-    index: 'name',
-    layout: graph5,
-  },
-  {
+    title: 'Donut Chart',
+    image: DonutChartImage,
+    description:
+      'A ring-shaped chart with a hole, similar to a pie chart. Ideal for displaying data composition.',
     name: 'f',
     key: 'graph6',
     data: piedata,
     type: 'donut' as 'donut',
     index: 'name',
     layout: graph6,
+    x: 0,
   },
 ];
 
 const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [removedCharts, setRemovedCharts] = useState<any[]>([]);
   const [isAdding, setisAdding] = useState(false);
   const [currentBreakpoint, setCurrentBreakpoint] =
     useState<string>('lg');
@@ -358,13 +288,58 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
     }
   }, [layouts]);
 
-  const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
-    lg: [],
-  });
-
   const handleLayoutChange = (layout: Layout[], layouts: Layouts) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('grid-layout', JSON.stringify(layouts));
+    }
+  };
+
+  const toggleEditMode = () => {
+    if (items.length > 0) {
+      setisAdding(!isAdding);
+    }
+  };
+
+  const onAddChart = (chartKey: string, x: number) => {
+    if (typeof window !== 'undefined') {
+      const newLayouts = { ...layouts };
+      newLayouts[currentBreakpoint].push({
+        x: x,
+        y: 0,
+        w: 6,
+        h: 3,
+        minW: 6,
+        minH: 3,
+        i: chartKey,
+        static: false,
+      });
+
+      setRemovedCharts((prevRemovedCharts) =>
+        prevRemovedCharts.filter((item) => item.key !== chartKey)
+      );
+
+      const newItems = [
+        ...items,
+        ...originalItems.filter((item) => item.key === chartKey),
+      ];
+
+      console.log('newItems', newItems);
+      console.log('newItems length', newItems.length);
+
+      setLayouts(newLayouts);
+      setItems(newItems);
+
+      const newLayoutsToSave = {
+        ...layouts,
+        [currentBreakpoint]: newLayouts[currentBreakpoint],
+      };
+
+      localStorage.setItem(
+        'grid-layout',
+        JSON.stringify(newLayoutsToSave)
+      );
+
+      localStorage.setItem('grid-items', JSON.stringify(newItems));
     }
   };
 
@@ -378,14 +353,25 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
         return updatedLayouts;
       });
 
-      setItems((prevItems) =>
-        prevItems.filter((item) => item.key !== keyToRemove)
+      setItems((prevItems: any) =>
+        prevItems.filter((item: any) => item.key !== keyToRemove)
       );
+
+      const removedChart = originalItems.find(
+        (item) => item.key === keyToRemove
+      );
+      if (removedChart) {
+        setRemovedCharts((prevRemovedCharts: any) => [
+          ...prevRemovedCharts,
+          removedChart,
+        ]);
+      }
 
       const updatedLayoutsToSave = {
         ...layouts,
         [currentBreakpoint]: layouts[currentBreakpoint],
       };
+
       localStorage.setItem(
         'grid-layout',
         JSON.stringify(updatedLayoutsToSave)
@@ -394,90 +380,24 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
     }
   };
 
-  const onBreakpointChange = (breakpoint: any) => {
-    setCurrentBreakpoint(breakpoint);
-    setToolbox({
-      ...toolbox,
-      [breakpoint]:
-        toolbox[breakpoint] || toolbox[currentBreakpoint] || [],
-    });
-  };
-
-  const toggleEditMode = () => {
-    if (items.length > 0) {
-      setisAdding(!isAdding);
-    }
-  };
-
-  const onAddChart = (chartKey: string) => {
-    if (typeof window !== 'undefined') {
-      const newLayouts = { ...layouts };
-      newLayouts[currentBreakpoint].push({
-        x: 0,
-        y: 0,
-        w: 6,
-        h: 3,
-        minW: 6,
-        minH: 3,
-        i: chartKey,
-        static: false,
-      });
-      const newItems = [
-        ...items,
-        ...originalItems.filter((item) => item.key === chartKey),
-      ];
-
-      setLayouts(newLayouts);
-      setItems(newItems);
-
-      const newLayoutsToSave = {
-        ...layouts,
-        [currentBreakpoint]: newLayouts[currentBreakpoint],
-      };
-      localStorage.setItem(
-        'grid-layout',
-        JSON.stringify(newLayoutsToSave)
-      );
-      localStorage.setItem('grid-items', JSON.stringify(newItems));
-    }
-  };
-
-  const onLayoutChange = (layout: any, layouts: any) => {
-    setLayouts({ ...layouts });
-    console.log('test layout');
-  };
-
-  const generateDOM = () => {
-    return items.map((item) => (
-      <div key={item.key}>
-        <GridItem>
-          <GraphBlock
-            data={item.data}
-            type={
-              item?.type as
-                | 'area'
-                | 'pie'
-                | 'line'
-                | 'bar'
-                | 'scatter'
-                | 'donut'
-            }
-            index={item.index}
-          />
-        </GridItem>
-      </div>
-    ));
-  };
-
   return (
     <div>
-      <Button
-        variant="default"
-        className="flex gap-2"
-        onClick={toggleEditMode}
-      >
-        {items.length > 0 ? (isAdding ? 'Done' : 'Edit') : 'Add'}
-      </Button>
+      {!isAdding && (
+        <div className="flex flex-col px-2 pb-3">
+          <Button
+            variant="default"
+            className="flex w-fit items-center gap-2"
+            onClick={() => {
+              setModalOpen(true);
+              toggleEditMode();
+            }}
+          >
+            <Pencil width={16} />
+            Edit
+          </Button>
+        </div>
+      )}
+
       <ResponsiveGridLayout
         className="layout"
         layouts={layouts}
@@ -498,10 +418,10 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
               {isAdding && (
                 <Button
                   variant="destructive"
-                  className="flex gap-2"
+                  className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
                   onClick={() => onRemoveItem(layoutItem.i)}
                 >
-                  Remove
+                  <MinusCircle width={18} />
                 </Button>
               )}
               <GraphBlock
@@ -521,28 +441,111 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
           );
         })}
       </ResponsiveGridLayout>
+
       {isAdding && (
-        <div className="flex flex-col gap-4 w-fit">
-          <h2 className="font-semibold text-xl">
-            Add Charts in your dashboard
-          </h2>
-          {items
-            .filter((item) => {
-              return layouts[currentBreakpoint].every(
-                (layoutItem: any) => layoutItem.i !== item.key
-              );
-            })
-            .map((item) => (
-              <div className="flex flex-col gap-4" key={item.key}>
-                <Button
-                  variant="default"
-                  className="flex gap-2"
-                  onClick={() => onAddChart(item.key)}
+        <div
+          id="rightmodal"
+          className="fixed bottom-0 right-0 z-50 flex h-screen w-[500px] flex-col gap-4 overflow-y-auto overflow-x-hidden bg-white pt-5 shadow-2xl"
+        >
+          <Button
+            variant="default"
+            className="mx-4 flex flex-row items-center gap-2"
+            onClick={() => {
+              setModalOpen(false);
+              toggleEditMode();
+            }}
+          >
+            <CheckCheck width={16} /> Done Editing
+          </Button>
+          <div className="flex w-fit flex-col gap-4 px-4">
+            <h2 className="text-xl font-semibold">
+              Add Charts in your dashboard
+            </h2>
+            {items
+              .filter((item) => {
+                return layouts[currentBreakpoint].every(
+                  (layoutItem: any) => layoutItem.i !== item.key
+                );
+              })
+              .map((item) => (
+                <div
+                  className="flex flex-row items-center gap-4 rounded-md border-2 px-2 py-3 hover:bg-slate-100"
+                  key={item.key}
                 >
-                  Add {item.key}
-                </Button>
-              </div>
-            ))}
+                  <div className="flex h-20 w-24 flex-row">
+                    <Image
+                      src={item.image}
+                      alt={`ChartImage`}
+                      width={96}
+                      height={80}
+                      className="max-w-xs"
+                    />
+                  </div>
+                  <div className="flex flex-row gap-4">
+                    <div className="flex flex-col">
+                      <h1 className="flex-grow text-lg font-semibold text-slate-800">
+                        {item.title}
+                      </h1>
+                      <p className="text-sm text-slate-600">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <Button
+                        variant="default"
+                        className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
+                        onClick={() =>
+                          onAddChart(item.key, item.x ? item.x : 0)
+                        }
+                      >
+                        <PlusCircle width={18} />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            {removedCharts
+              .sort((a, b) => a.key.localeCompare(b.key))
+              .map((removedChart) => (
+                <div
+                  className="flex flex-row items-center gap-4 rounded-md border-2 p-2"
+                  key={removedChart.key}
+                >
+                  <div className="flex h-20 w-24 flex-row">
+                    <Image
+                      src={removedChart.image}
+                      alt={`ChartImage`}
+                      width={96}
+                      height={80}
+                      className="max-w-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row gap-4">
+                      <h1 className="flex-grow text-lg font-semibold text-slate-800">
+                        {removedChart.title}
+                      </h1>
+                      <Button
+                        variant="default"
+                        className="flex h-10 w-10 items-center justify-center px-1.5 py-0"
+                        onClick={() =>
+                          onAddChart(
+                            removedChart.key,
+                            removedChart.x ? removedChart.x : 0
+                          )
+                        }
+                      >
+                        <PlusCircle width={18} />
+                      </Button>
+                    </div>
+                    <p className="text-sm text-slate-600">
+                      {removedChart.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       )}
     </div>

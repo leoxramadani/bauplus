@@ -1,32 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import {
-  estimatesSchema,
-  estimatesType,
-} from '@/lib/schema/Finance/estimates';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import {
   Command,
   CommandEmpty,
@@ -35,11 +8,37 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  estimatesSchema,
+  estimatesType,
+} from '@/lib/schema/Finance/estimates';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 const clients = [
   { label: 'John Cena', value: 'John Cena' },
   { label: 'avast anivirus', value: 'avagial asdkaslk' },
@@ -74,21 +73,21 @@ const EstimatesCreate = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <div>
         <h2 className="text-3xl font-bold text-blue-500">
           Estimates
         </h2>
-        <h3 className="font-normal text-lg text-gray-900">
+        <h3 className="text-lg font-normal text-gray-900">
           Add an estimate
         </h3>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Estimate number */}
             <FormField
               control={form.control}
@@ -119,7 +118,7 @@ const EstimatesCreate = () => {
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -202,7 +201,7 @@ const EstimatesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -269,7 +268,7 @@ const EstimatesCreate = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -338,7 +337,7 @@ const EstimatesCreate = () => {
           />
           <hr />
           <Button
-            className="w-max flex flex-none"
+            className="flex w-max flex-none"
             variant="outline"
             type="submit"
           >

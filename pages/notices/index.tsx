@@ -1,21 +1,12 @@
-import { Card, Text } from '@tremor/react';
 import Modal from '@/components/atoms/Modal';
-import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
-import { FileInput } from 'lucide-react';
-import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
-import Logo from '@/public/card-notice.png';
-import Image from 'next/image';
-import {
-  CREATE_NOTICE,
-  GET_ALL_NOTICES,
-  UPDATE_NOTICE,
-} from '@/lib/constants/endpoints/notices';
-import axios from 'axios';
 import NoticeForm from '@/components/molecules/notices/NoticeForm';
-import useData from '@/lib/hooks/useData';
 import NoticesCard from '@/components/molecules/notices/NoticesCard';
-
+import { Button } from '@/components/ui/button';
+import { GET_ALL_NOTICES } from '@/lib/constants/endpoints/notices';
+import useData from '@/lib/hooks/useData';
+import { FileInput } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 interface Notice {
   noticeId: string;
   dateCreated: string;
@@ -29,11 +20,10 @@ interface Notice {
     employeePosition: string;
   } | null;
 }
-
 const Notices = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   // const [myData, setMyData] = useState<Notice[]>([]);
-
   // useEffect(() => {
   //   async function getData() {
   //     try {
@@ -45,12 +35,16 @@ const Notices = () => {
   //   }
   //   getData();
   // }, []);
-
   const { data: noticesData } = useData<Notice[]>(
     ['notices'],
     GET_ALL_NOTICES
   );
-
+  useEffect(() => {
+    if (router.query.id) {
+      setOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -59,7 +53,7 @@ const Notices = () => {
             <Modal.Trigger asChild>
               <Button
                 variant="default"
-                className="flex gap-1 justify-center items-center"
+                className="flex items-center justify-center gap-1"
               >
                 Add Notice
               </Button>
@@ -68,12 +62,17 @@ const Notices = () => {
               title="Add New Notice"
               description="Notice Details"
             >
-              <NoticeForm setIsModalOpen={setOpen} />
+              <NoticeForm
+                setIsModalOpen={setOpen}
+                noticeId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+              />
             </Modal.Content>
           </Modal>
           <Button
             variant="outline"
-            className="flex gap-1 justify-center items-center"
+            className="flex items-center justify-center gap-1"
           >
             <FileInput size={20} /> <span>Export</span>
           </Button>
@@ -88,5 +87,4 @@ const Notices = () => {
     </>
   );
 };
-
 export default Notices;

@@ -1,18 +1,18 @@
-import NextAuth from 'next-auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { type GetServerSidePropsContext } from 'next';
-import { getServerSession, type NextAuthOptions } from 'next-auth';
+import NextAuth, {
+  getServerSession,
+  type NextAuthOptions,
+} from 'next-auth';
 
-import Credentials from 'next-auth/providers/credentials';
+import { LOGIN } from '@/lib/constants/endpoints';
 import { loginSchema } from '@/lib/schemas/auth';
 import {
   ApolloClient,
   InMemoryCache,
   createHttpLink,
-  gql,
 } from '@apollo/client';
-import { LOGIN_QUERY } from '@/lib/queries/auth';
-import { LOGIN } from '@/lib/constants/endpoints';
+import Credentials from 'next-auth/providers/credentials';
 
 const client = new ApolloClient({
   ssrMode: true,

@@ -1,20 +1,20 @@
-import Link from 'next/link';
-import Modal from '../Modal';
-import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
-import { useForm } from 'react-hook-form';
-import { CHANGE_PASSWORD_QUERY } from '@/lib/queries/user';
-import { useCallback, useState } from 'react';
 import useTranslation from '@/lib/hooks/useTranslation';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { CHANGE_PASSWORD_QUERY } from '@/lib/queries/user';
 import {
   IChangePassword,
   changePasswordSchema,
 } from '@/lib/schemas/user';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '../ui/input';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import Modal from '../Modal';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 const ChangePassword = ({ username }: { username?: string }) => {
   const router = useRouter();
@@ -78,14 +78,14 @@ const ChangePassword = ({ username }: { username?: string }) => {
       value={t('Change password')}
       done={t('Close')}
     >
-      <h2 className="mt-10 mb-6 font-medium text-xl text-center">
+      <h2 className="mb-6 mt-10 text-center text-xl font-medium">
         {username
           ? `${t('Change password for')} @${username}`
           : t('Change your password')}
       </h2>
       <form
         onSubmit={handleChangePassword(onSubmit, onError)}
-        className="flex flex-col gap-3 max-w-xl mx-auto"
+        className="mx-auto flex max-w-xl flex-col gap-3"
       >
         <div className="flex flex-col">
           <label className="sr-only" htmlFor="current">

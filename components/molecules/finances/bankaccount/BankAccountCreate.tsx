@@ -1,44 +1,11 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { IBankAccountCash } from '@/lib/schema/Finance/finance';
-import { Input } from '@/components/ui/input';
-import { watch } from 'fs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import Link from 'next/link';
+import { Label } from '@/components/ui/label';
 import {
   RadioGroup,
   RadioGroupItem,
 } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { IBankAccountCash } from '@/lib/schema/Finance/finance';
 import { useState } from 'react';
 import Bank from './type/Bank';
 import Cash from './type/Cash';
@@ -62,22 +29,22 @@ const BankAccountCreate = ({
   }
 
   return (
-    <div className=" flex flex-col gap-4 w-full ">
+    <div className=" flex w-full flex-col gap-4 ">
       <div>
         <RadioGroup
           className="flex flex-row gap-4"
           defaultValue={accountType}
         >
-          <div className="flex items-center flex-row gap-1">
+          <div className="flex flex-row items-center gap-1">
             <RadioGroupItem
-              className=" justify-center items-center "
+              className=" items-center justify-center "
               value="Bank"
               id="Bank"
               onClick={() => setAccountType('Bank')}
             />
             <Label htmlFor="Bank">Bank</Label>
           </div>
-          <div className="flex items-center flex-row gap-1 disabled:text-gray-400 cursor-not-allowed">
+          <div className="flex cursor-not-allowed flex-row items-center gap-1 disabled:text-gray-400">
             <RadioGroupItem
               value="Cash"
               id="Cash"
@@ -86,7 +53,7 @@ const BankAccountCreate = ({
             />
             <Label
               htmlFor="Cash"
-              className="text-gray-400 cursor-not-allowed"
+              className="cursor-not-allowed text-gray-400"
             >
               Cash
             </Label>

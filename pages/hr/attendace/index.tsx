@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { FileInput, FileUp, Plus } from 'lucide-react';
-import React from 'react';
 
 const Attendance = () => {
   return (

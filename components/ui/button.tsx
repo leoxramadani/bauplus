@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -10,13 +10,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground focus:ring-4 focus:ring-primary/50',
+          'bg-primary text-destructive-foreground hover:bg-[#6265F9] active:bg-[#6265F9] focus:ring-4 focus:ring-[#6E71F1]/50',
         destructive:
-          'bg-red-500 text-destructive-foreground hover:bg-red-600 focus:ring-4 focus:ring-red-500/50',
+          'bg-primary text-destructive-foreground hover:bg-[#6265F9] active:bg-[#6265F9] focus:ring-4 focus:ring-[#6E71F1]/50',
         outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200',
+          'border border-input bg-background active:bg-gray-100 hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-4 focus:ring-secondary/50',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-4 focus:ring-secondary/50 border-primary text-primary hover:bg-primary hover:text-white',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
@@ -48,12 +48,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     return (
       <button
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          className
+        )}
         ref={ref}
+        disabled={loading}
         {...props}
       >
         {loading === true && (
-          <Loader2 className="animate-spin mr-1" size={18} />
+          <Loader2 className="mr-1 animate-spin" size={18} />
         )}
         <span className={className}>{children}</span>
       </button>

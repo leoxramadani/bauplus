@@ -1,5 +1,4 @@
 import Modal from '@/components/atoms/Modal';
-import CreateLeave from '@/components/molecules/hr/leaves/CreateLeave';
 import CreateProduct from '@/components/molecules/product/CreateProduct';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import {
   financeColumnDef,
 } from '@/lib/schema/Finance/finance';
 import { FileInput, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Product = () => {
   const data: IInvoiceSchema[] = [
@@ -95,7 +94,10 @@ const Product = () => {
               <Plus size={20} /> <span>Add New Product</span>
             </Button>
           </Modal.Trigger>
-          <Modal.Content title="New Product" description="Add a product">
+          <Modal.Content
+            title="New Product"
+            description="Add a product"
+          >
             <CreateProduct setCloseModal={setOpen} />
           </Modal.Content>
         </Modal>
