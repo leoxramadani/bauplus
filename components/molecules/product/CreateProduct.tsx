@@ -1,4 +1,5 @@
 import Drop from '@/components/atoms/Drop';
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -28,6 +29,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import React, { SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import CreateCategory from './category/CreateCategory';
+import CreateSubCategory from './subcategory/CreateSubCategory';
 
 interface ICreateProduct {
   setCloseModal: React.Dispatch<SetStateAction<boolean>>;
@@ -35,6 +38,9 @@ interface ICreateProduct {
 
 const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [categoryModal, setCategoryModal] = useState<boolean>(false);
+  const [subCategoryModal, setSubCategoryModal] =
+    useState<boolean>(false);
 
   const companies = [
     { label: 'Thor', value: '123' },
@@ -101,24 +107,6 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
 
               <FormField
                 control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price </FormLabel>
-                    <FormControl className="relative">
-                      <Input
-                        type="number"
-                        placeholder="Price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="productCategory"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col">
@@ -148,7 +136,7 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
                         <Command>
                           <CommandInput placeholder="Search for product category..." />
                           <CommandEmpty>
-                            No procut category found.
+                            No product category found.
                           </CommandEmpty>
                           <CommandGroup>
                             {companies.map((company) => (
@@ -178,6 +166,16 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
                       </PopoverContent>
                     </Popover>
 
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="flex w-max items-center justify-center "
+                      onClick={() => setCategoryModal(true)}
+                    >
+                      Add Category
+                    </Button>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -189,6 +187,7 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col">
                     <FormLabel>Product Sub Category</FormLabel>
+
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -243,7 +242,34 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
                         </Command>
                       </PopoverContent>
                     </Popover>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="flex w-max items-center justify-center "
+                      onClick={() => setSubCategoryModal(true)}
+                    >
+                      Add Subcategory
+                    </Button>
 
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price </FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        type="number"
+                        placeholder="Price"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -382,6 +408,21 @@ const CreateProduct = ({ setCloseModal }: ICreateProduct) => {
           </Button>
         </form>
       </Form>
+
+      <Modal open={categoryModal} onOpenChange={setCategoryModal}>
+        <Modal.Content className="w-full max-w-xl">
+          <CreateCategory setCloseModal={setCategoryModal} />
+        </Modal.Content>
+      </Modal>
+
+      <Modal
+        open={subCategoryModal}
+        onOpenChange={setSubCategoryModal}
+      >
+        <Modal.Content className="w-full max-w-xl">
+          <CreateSubCategory setCloseModal={setSubCategoryModal} />
+        </Modal.Content>
+      </Modal>
     </div>
   );
 };
