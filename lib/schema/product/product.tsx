@@ -12,3 +12,16 @@ export const product = z.object({
 });
 
 export type IProduct = z.infer<typeof product>;
+
+export const category = z.object({
+  categoryName: z.string(),
+});
+
+export type ICategory = z.infer<typeof category>;
+
+export const subcategory = z.object({
+  subCategoryName: z.string(),
+  parentCategory: z.string(),
+});
+
+export type ISubCategory = z.infer<typeof subcategory>;
