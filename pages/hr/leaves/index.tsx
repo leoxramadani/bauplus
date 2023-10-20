@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import LeaveForm from '@/components/molecules/hr/leaves/LeaveForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_LEAVES } from '@/lib/constants/endpoints/hr/leaves';
@@ -34,6 +35,10 @@ const Leaves = () => {
     }
   }, [isModalOpen]);
 
+
+  console.log("Data;",data);
+  
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
@@ -44,8 +49,9 @@ const Leaves = () => {
             </Button>
           </Modal.Trigger>
           <Modal.Content title="New Leave" description="Assign Leave">
-            {/* <CreateLeave setCloseModal={setIsModalOpen} /> */}
-            <p>asdasd</p>
+            <LeaveForm setIsModalOpen={setIsModalOpen} leaveId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }/>
           </Modal.Content>
         </Modal>
 
@@ -57,7 +63,7 @@ const Leaves = () => {
         <DataTable
           data={data}
           columns={leavesColumnDef}
-          searchVal="departmentName"
+          searchVal="employee.firstName"
         />
       ) : (
         <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
