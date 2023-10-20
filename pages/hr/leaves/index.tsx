@@ -1,11 +1,12 @@
 import Modal from '@/components/atoms/Modal';
-import CreateLeave from '@/components/molecules/hr/leaves/CreateLeave';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
+import { GET_ALL_LEAVES } from '@/lib/constants/endpoints/hr/leaves';
+import useData from '@/lib/hooks/useData';
 import {
-  IInvoiceSchema,
-  financeColumnDef,
-} from '@/lib/schema/Finance/finance';
+  ILeaves,
+  leavesColumnDef,
+} from '@/lib/schema/hr/leaves/leaves';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,11 @@ import { useEffect, useState } from 'react';
 const Leaves = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data, isError, isLoading } = useData<ILeaves[]>(
+    ['leaves'],
+    GET_ALL_LEAVES
+  );
 
   useEffect(() => {
     if (router.query.id) {
@@ -27,78 +33,6 @@ const Leaves = () => {
       });
     }
   }, [isModalOpen]);
-  const data: IInvoiceSchema[] = [
-    {
-      invoiceNumber: 1,
-      invoiceDate: new Date('2023-01-15'),
-      dueDate: new Date('2023-02-15'),
-      currency: 'USD',
-      exchangeRate: '1.25',
-      client: 'Client A',
-      project: 'Project X',
-      calculateTax: 'Yes',
-      bankAccount: 'Account 12345',
-      billingAddress: '123 Main St, City, Country',
-      shippingAddress: '456 Elm St, City, Country',
-      generatedBy: 'User 1',
-    },
-    {
-      invoiceNumber: 2,
-      invoiceDate: new Date('2023-02-20'),
-      dueDate: new Date('2023-03-20'),
-      currency: 'EUR',
-      exchangeRate: '0.95',
-      client: 'Client B',
-      project: 'Project Y',
-      calculateTax: 'No',
-      bankAccount: 'Account 67890',
-      billingAddress: '789 Oak St, City, Country',
-      shippingAddress: '101 Pine St, City, Country',
-      generatedBy: 'User 2',
-    },
-    {
-      invoiceNumber: 3,
-      invoiceDate: new Date('2023-03-10'),
-      dueDate: new Date('2023-04-10'),
-      currency: 'GBP',
-      exchangeRate: '0.80',
-      client: 'Client C',
-      project: 'Project Z',
-      calculateTax: 'Yes',
-      bankAccount: 'Account 54321',
-      billingAddress: '321 Elm St, City, Country',
-      shippingAddress: '789 Oak St, City, Country',
-      generatedBy: 'User 3',
-    },
-    {
-      invoiceNumber: 4,
-      invoiceDate: new Date('2023-04-05'),
-      dueDate: new Date('2023-05-05'),
-      currency: 'CAD',
-      exchangeRate: '1.10',
-      client: 'Client D',
-      project: 'Project W',
-      calculateTax: 'No',
-      bankAccount: 'Account 98765',
-      billingAddress: '567 Maple St, City, Country',
-      shippingAddress: '789 Birch St, City, Country',
-      generatedBy: 'User 4',
-    },
-    {
-      invoiceNumber: 5,
-      invoiceDate: new Date('2023-05-20'),
-      dueDate: new Date('2023-06-20'),
-      currency: 'AUD',
-      exchangeRate: '0.70',
-      client: 'Client E',
-      project: 'Project V',
-      calculateTax: 'Yes',
-      bankAccount: 'Account 24680',
-      billingAddress: '901 Cedar St, City, Country',
-      shippingAddress: '123 Redwood St, City, Country',
-      generatedBy: 'User 5',
-    },
-  ];
 
   return (
     <section className="flex flex-col gap-5">
@@ -110,7 +44,8 @@ const Leaves = () => {
             </Button>
           </Modal.Trigger>
           <Modal.Content title="New Leave" description="Assign Leave">
-            <CreateLeave setCloseModal={setIsModalOpen} />
+            {/* <CreateLeave setCloseModal={setIsModalOpen} /> */}
+            <p>asdasd</p>
           </Modal.Content>
         </Modal>
 
@@ -118,7 +53,15 @@ const Leaves = () => {
           <FileInput /> <span>Export</span>
         </Button>
       </div>
-      <DataTable data={data} columns={financeColumnDef} />
+      {data && !isLoading ? (
+        <DataTable
+          data={data}
+          columns={leavesColumnDef}
+          searchVal="departmentName"
+        />
+      ) : (
+        <>{isError ? <div>No data. </div> : <div>Loading...</div>}</>
+      )}
     </section>
   );
 };
