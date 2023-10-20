@@ -180,7 +180,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       console.log('Delete row with id:', id);
 
       await axios
-        .delete(DELETE_LEAVE+ `?LeaveI  d=${id}`)
+        .delete(DELETE_LEAVE+ `?LeaveId=${id}`)
         .then((res) => {
           console.log('response after delete success =>', res);
         })
