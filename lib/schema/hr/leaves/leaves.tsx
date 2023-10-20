@@ -8,10 +8,33 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { DELETE_LEAVE } from '@/lib/constants/endpoints/hr/leaves';
 import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import * as z from 'zod';
+
+
+const MAX_FILE_SIZE = 2000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+export enum leaveType {
+  casual = "Casual",
+  sick = "Sick",
+  earned = "Earned",
+}
+export enum leaveStatus{
+  pending="Pending",
+  approved="Approved"
+}
+
+export enum duration{
+  full="Full day",
+  multiple="Multiple days",
+  fh="First Half",
+  sh="Second Half" 
+}
 
 export const leavesSchema = z.object({
   // member: z.string(),
@@ -21,17 +44,31 @@ export const leavesSchema = z.object({
   // date: z.date(),
   // reason: z.string(),
   // // file: z.instanceof(File)
-  leaveId: z.string(),
-  date: z.string(),
-  employeeId: z.string(),
+  leaveId: z.string().optional(),
+  date: z.coerce.date(),
+  employeeId: z.string({required_error:"An employee is required to create a leave!"}),
+  employee:z.object({
+    firstName: z.string(),
+    lastName:z.string(),
+  }).optional(),
   leaveType: z.string(),
-  leaveStatus: z.string(),
+  leaveStatus:z.string(),
   duration: z.string(),
   reason: z.string(),
-  filePath: z.string(),
-  companyId: z.string(),
-  isDeleted: z.string(),
-  fileAttached: z.string(),
+  filePath: z.string().optional(),
+  companyId:z.string().optional(),
+  company:z.object({
+    companyId: z.string(),
+    companyName:z.string(),
+  }).optional(),
+  fileAttached: z.string().optional(),
+  // file: z
+  // .any()
+  // .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 20MB.`)
+  // .refine(
+  //   (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+  //   "Only .jpg, .jpeg, .png and .webp formats are supported."
+  // ).optional(),
 });
 export type ILeaves = z.infer<typeof leavesSchema>;
 
@@ -65,13 +102,25 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: 'employee.firstName',
+    header: 'First Name',
+  },
+  {
+    accessorKey: 'employee.lastName',
+    header: 'Last Name',
+  },
+  {
+    accessorKey: 'company.companyName',
+    header: 'Company name',
+  },
+  {
     accessorKey: 'date',
     header: 'Date',
   },
-  {
-    accessorKey: 'employeeId',
-    header: 'Employee ID',
-  },
+  // {
+  //   accessorKey: 'employeeId',
+  //   header: 'Employee ID',
+  // },
   {
     accessorKey: 'leaveType',
     header: 'Leave Type',
@@ -88,22 +137,22 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
     accessorKey: 'reason',
     header: 'Reason',
   },
-  {
-    accessorKey: 'filePath',
-    header: 'File Path',
-  },
-  {
-    accessorKey: 'companyId',
-    header: 'Company ID',
-  },
-  {
-    accessorKey: 'isDeleted',
-    header: 'Is Deleted',
-  },
-  {
-    accessorKey: 'fileAttached',
-    header: 'File Attached',
-  },
+  // {
+  //   accessorKey: 'filePath',
+  //   header: 'File Path',
+  // },
+  // {
+  //   accessorKey: 'companyId',
+  //   header: 'Company ID',
+  // },
+  // {
+  //   accessorKey: 'isDeleted',
+  //   header: 'Is Deleted',
+  // },
+  // {
+  //   accessorKey: 'fileAttached',
+  //   header: 'File Attached',
+  // },
   {
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
@@ -127,18 +176,18 @@ const ActionsColumn = ({ item }: { item: any }) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this invoice?'
     );
-    // if (confirmDelete) {
-    //   console.log('Delete row with id:', id);
+    if (confirmDelete) {
+      console.log('Delete row with id:', id);
 
-    //   await axios
-    //     .delete(DELETE_DEPARTMENT + `?Id=${id}`)
-    //     .then((res) => {
-    //       console.log('response after delete success =>', res);
-    //     })
-    //     .catch((error) => {
-    //       console.log('Response after error:', error);
-    //     });
-    // }
+      await axios
+        .delete(DELETE_LEAVE+ `?LeaveI  d=${id}`)
+        .then((res) => {
+          console.log('response after delete success =>', res);
+        })
+        .catch((error) => {
+          console.log('Response after error:', error);
+        });
+    }
   };
 
   return (
@@ -156,20 +205,20 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() =>
-            navigator.clipboard.writeText(item.departmentId)
+            navigator.clipboard.writeText(item.leaveId)
           }
         >
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => handleEdit(item.departmentId)}
+          onClick={() => handleEdit(item.leaveId)}
         >
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => handleDelete(item.departmentId)}
+          onClick={() => handleDelete(item.leaveId)}
         >
           Delete Row
         </DropdownMenuItem>

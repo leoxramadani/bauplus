@@ -23,7 +23,10 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
 
   return (
     <div>
-      <Card className="mx-auto flex max-h-[450px] min-h-[450px] max-w-xs flex-col gap-4 overflow-hidden rounded-2xl p-0 shadow-xl ring-0">
+      <Card
+        className="mx-auto flex max-h-[450px] min-h-[450px] max-w-xs flex-col gap-4 overflow-hidden rounded-2xl p-0 shadow-xl ring-0"
+        key={cardData}
+      >
         <div className="flex items-center justify-center">
           <Image src={Logo} alt={'test'} />
         </div>
