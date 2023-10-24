@@ -83,7 +83,7 @@ const DepartmentsForm = ({
         await axios
           .put(UPDATE_DEPARTMENT, {
             departmentId: departmentId,
-            parentDepartmentId: data.departmentId,
+            parentDepartmentId: data.parentDepartmentId,
             departmentName: data.departmentName,
             companyId: data.companyId,
             // ...data,
