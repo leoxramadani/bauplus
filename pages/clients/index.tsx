@@ -12,7 +12,7 @@ import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const clients = () => {
+const Clients = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data, isError, isLoading, error } = useData<IClients[]>(
@@ -77,7 +77,7 @@ console.log("data=",data)
   );
 };
 
-export default clients;
+export default Clients;
 
 export type Payment = {
   id: string;
