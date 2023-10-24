@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { DatePicker } from './DatePicker';
 
-const Duration: React.FC = () => {
+interface IDuration {
+  className?: string;
+}
+
+const Duration = ({ className }: IDuration) => {
   const [selectedRange, setSelectedRange] = useState<string>('Today');
   const [dropDown, setDropDown] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -68,7 +74,7 @@ const Duration: React.FC = () => {
     }
 
     if (value === 'Custom range') {
-      console.log('test');
+      setOpen(true);
     }
   };
 
@@ -101,7 +107,7 @@ const Duration: React.FC = () => {
   console.log(date);
   console.log('start: ', startDate);
   return (
-    <div className="absolute right-4">
+    <div className={cn('absolute right-4', className)}>
       <div className="relative flex h-full  w-max flex-col">
         <div
           onClick={() => setDropDown(!dropDown)}
@@ -138,9 +144,9 @@ const Duration: React.FC = () => {
               </li>
             ))}
           </ul>
-          {/* date picker here */}
-          {selectedRange === 'Custom range' && (
-            <DatePicker setDateRange={setDate} />
+
+          {open && (
+            <DatePicker setDateRange={setDate} setOpen={setOpen} setDropDown={setDropDown} />
           )}
         </div>
       )}

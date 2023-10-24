@@ -1,5 +1,6 @@
+import Duration from '@/components/atoms/Duration';
 import { cn } from '@/lib/utils';
-import { Card } from '@tremor/react';
+import { Card, Title } from '@tremor/react';
 import React, {
   CSSProperties,
   HTMLAttributes,
@@ -10,6 +11,7 @@ interface CustomGridItemProps extends HTMLAttributes<HTMLDivElement> {
   style?: CSSProperties;
   children: React.ReactNode;
   className?: string;
+  title?: string;
 }
 
 const GridItem = forwardRef<HTMLDivElement, CustomGridItemProps>(
@@ -21,6 +23,7 @@ const GridItem = forwardRef<HTMLDivElement, CustomGridItemProps>(
       onMouseUp,
       onTouchEnd,
       children,
+      title,
       ...props
     },
     ref
@@ -30,7 +33,7 @@ const GridItem = forwardRef<HTMLDivElement, CustomGridItemProps>(
         style={{ ...style }}
         className={cn(
           className,
-          'flex flex-col items-center justify-center'
+          'flex flex-col items-center justify-center pt-4'
         )}
         ref={ref}
         onMouseDown={onMouseDown}
@@ -39,7 +42,8 @@ const GridItem = forwardRef<HTMLDivElement, CustomGridItemProps>(
         {...props}
       >
         {/* <div className='grid-item__title bg-zinc-200 h-3 w-full  max-w-[80px] rounded-3xl absolute top-2 left-1/2 -translate-x-1/2 group-hover:opacity-100 cursor-move  opacity-0 transition-all'></div> */}
-
+        <Title className="self-start">{title}</Title>
+        <Duration className="top-4" />
         {children}
       </Card>
     );
