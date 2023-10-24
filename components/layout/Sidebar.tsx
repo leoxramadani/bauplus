@@ -145,6 +145,13 @@ const Sidebar = ({
               href="/employees"
             /> */}
             <SidebarItem
+              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
+              text="Clients"
+              alert={false}
+              href="/clients"
+
+            />
+            <SidebarItem
               icon={<Calculator size={20} strokeWidth={1.5} />}
               text="Finance"
               asDropdown
