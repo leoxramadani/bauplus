@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from 'react';
 import {
+  Defs,
   Document,
+  Font,
+  G,
+  LinearGradient,
+  PDFViewer,
   Page,
+  Path,
+  Stop,
+  StyleSheet,
+  Svg,
   Text,
   View,
-  StyleSheet,
-  PDFViewer,
-  Font,
-  Image,
-  G,
-  Polygon,
-  Svg,
-  Path,
-  Defs,
-  LinearGradient,
-  Stop,
-  Circle,
 } from '@react-pdf/renderer';
-import { custom } from 'zod';
+import React, { useEffect, useState } from 'react';
 
 Font.register({
   family: 'Roboto',
@@ -505,11 +501,32 @@ const generalStyle = StyleSheet.create({
   tableCell: {
     width: '16.6666666667%',
   },
-  tableCellText: {
+  tableCellHeader: {
     fontSize: 10,
     padding: 5,
     margin: 5,
     textTransform: 'uppercase',
+    color: '#5E6470',
+    fontWeight: 'semibold',
+  },
+  tableCellRow: {
+    fontSize: 10,
+    paddingTop: 5,
+    paddingHorizontal: 5,
+    marginTop: 5,
+    marginHorizontal: 5,
+    textTransform: 'uppercase',
+    color: '#1A1C21',
+    fontWeight: 'medium',
+    flexWrap: 'wrap',
+    //width: '16.6666666667%',
+  },
+  tableCellItemDescription: {
+    color: '#5E6470',
+    fontWeight: 'normal',
+    fontSize: 10,
+    paddingHorizontal: 5,
+    marginHorizontal: 5,
   },
 });
 
@@ -1153,6 +1170,78 @@ const EverestLogo = () => {
 //   </Document>
 // );
 
+// const tableData = [
+//   [
+//     'Ред бр.',
+//     'Опис',
+//     'Единица мера',
+//     'Количина',
+//     'Единица цена \nБез ДДВ',
+//     'Вкупно \nБез ДДВ',
+//   ],
+//   [
+//     input1,
+//     'Row 1, Cell 2',
+//     'Row 1, Cell 3',
+//     'Row 1, Cell 4',
+//     'Row 1, Cell 5',
+//     'Row 1, Cell 6',
+//   ],
+//   [
+//     input2,
+//     'Row 2, Cell 2',
+//     'Row 2, Cell 3',
+//     'Row 2, Cell 4',
+//     'Row 2, Cell 5',
+//     input3,
+//   ],
+//   // Add more rows here
+// ];
+
+// const tableData2 = [
+//   [
+//     'Nr. Бр.',
+//     'Pozicioni/Позици',
+//     'Masa\nМера',
+//     'Sasia\nКолич',
+//     'Çmimi\nЦена',
+//     'Totali/Вкупно',
+//   ],
+//   [
+//     input1,
+//     'Row 1, Cell 2',
+//     'Row 1, Cell 3',
+//     'Row 1, Cell 4',
+//     'Row 1, Cell 5',
+//     'Row 1, Cell 6',
+//   ],
+//   [
+//     input2,
+//     'Row 2, Cell 2',
+//     'Row 2, Cell 3',
+//     'Row 2, Cell 4',
+//     'Row 2, Cell 5',
+//     input3,
+//   ],
+//   ['', '', '', '', 'gjithsej/\nВкупно', input3],
+//   ['', '', '', '', 'TVSH/ДДВ\n18%', input3],
+//   ['Totali me TVSH/\nВкупно со ДДВ18%', input3],
+//   // Add more rows here
+// ];
+
+// const tableData3 = [
+//   ['Назив', 'Количина', 'ЕМ', 'Цена', 'ДДВ %', 'Вредност без ДДВ'],
+//   [`Закупнина\n${input1}`, '440,00', 'm2', '100', '18,00', '82'],
+//   [
+//     `Сервисен Трошок\n${input2}`,
+//     '440,00',
+//     'm2',
+//     '100',
+//     '18,00',
+//     '82',
+//   ],
+// ];
+
 const SoraviaLogo = () => {
   return (
     <Svg
@@ -1320,13 +1409,98 @@ const PDFRenderer = () => {
   const [subject, setSubject] = useState('');
   const [issueDate, setIssueDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
-  const [cell1, setCell1] = useState('');
-  const [cell2, setCell2] = useState('');
-  const [cell3, setCell3] = useState('');
-  const [cell4, setCell4] = useState('');
-  const [cell5, setCell5] = useState('');
+  const [selectedRow, setSelectedRow] = useState(0); // Default to the first row
+  const [selectedColumn, setSelectedColumn] = useState(0); // Default to the first column
 
-  const tableData = [cell1, cell2, cell3, cell4, cell5];
+  const predefinedProducts = [
+    {
+      id: 1,
+      cell1: 'Product 1',
+      cell2: 'Unit 1',
+      cell3: '10',
+      cell4: '20',
+      cell5: '200',
+      cell6: '2000',
+    },
+    {
+      id: 2,
+      cell1: 'Product 2',
+      cell2: 'Unit 2',
+      cell3: '5',
+      cell4: '30',
+      cell5: '150',
+      cell6: '750',
+    },
+    // Add more products as needed
+  ];
+
+  const [modifiedCell3Values, setModifiedCell3Values] = useState(
+    predefinedProducts.map(() => '')
+  );
+
+  const [selectedProducts, setSelectedProducts] = useState<
+    {
+      id: number;
+      cell1: string;
+      cell2: string;
+      cell3: string;
+      cell4: string;
+      cell5: string;
+      cell6: string;
+    }[]
+  >([]);
+  const [productIdCounter, setProductIdCounter] = useState(3);
+
+  const generateProductId = () => {
+    const newProductId = productIdCounter + 1;
+    setProductIdCounter(newProductId); // Update the counter for the next ID.
+    return newProductId;
+  };
+
+  const addProductToPDF = (product: {
+    cell3: string;
+    id?: number;
+    cell1: any;
+    cell2: string;
+    cell4: string;
+    cell5: string;
+    cell6: string;
+  }) => {
+    const existingProduct = selectedProducts.find(
+      (p) => p.cell1 === product.cell1
+    );
+
+    if (existingProduct) {
+      // If a product with the same "cell1" value already exists, update it.
+      const updatedProducts = selectedProducts.map((p) =>
+        p.cell1 === existingProduct.cell1 ? { ...p, ...product } : p
+      );
+
+      setSelectedProducts(updatedProducts);
+    } else {
+      // If the product doesn't exist, add it with a default id value.
+      const newProduct = {
+        id: generateProductId(),
+        ...product,
+      };
+      setSelectedProducts([...selectedProducts, newProduct]);
+    }
+    // Clear the modifiedCell3 state
+    const newModifiedCell3Values = [...modifiedCell3Values];
+    if (product.id !== undefined) {
+      newModifiedCell3Values[product.id - 1] = '';
+    }
+    setModifiedCell3Values(newModifiedCell3Values);
+  };
+
+  const removeProductFromPDF = (productId: number) => {
+    setSelectedProducts((prevSelectedProducts) => {
+      // Use the filter function to remove the product with the specified id
+      return prevSelectedProducts.filter(
+        (product) => product.id !== productId
+      );
+    });
+  };
 
   const headers = [
     [
@@ -1358,77 +1532,15 @@ const PDFRenderer = () => {
     }
   }, [issueDate]);
 
-  // const tableData = [
-  //   [
-  //     'Ред бр.',
-  //     'Опис',
-  //     'Единица мера',
-  //     'Количина',
-  //     'Единица цена \nБез ДДВ',
-  //     'Вкупно \nБез ДДВ',
-  //   ],
-  //   [
-  //     input1,
-  //     'Row 1, Cell 2',
-  //     'Row 1, Cell 3',
-  //     'Row 1, Cell 4',
-  //     'Row 1, Cell 5',
-  //     'Row 1, Cell 6',
-  //   ],
-  //   [
-  //     input2,
-  //     'Row 2, Cell 2',
-  //     'Row 2, Cell 3',
-  //     'Row 2, Cell 4',
-  //     'Row 2, Cell 5',
-  //     input3,
-  //   ],
-  //   // Add more rows here
-  // ];
+  const handleRowChange = (event: { target: { value: string } }) => {
+    setSelectedRow(parseInt(event.target.value));
+  };
 
-  // const tableData2 = [
-  //   [
-  //     'Nr. Бр.',
-  //     'Pozicioni/Позици',
-  //     'Masa\nМера',
-  //     'Sasia\nКолич',
-  //     'Çmimi\nЦена',
-  //     'Totali/Вкупно',
-  //   ],
-  //   [
-  //     input1,
-  //     'Row 1, Cell 2',
-  //     'Row 1, Cell 3',
-  //     'Row 1, Cell 4',
-  //     'Row 1, Cell 5',
-  //     'Row 1, Cell 6',
-  //   ],
-  //   [
-  //     input2,
-  //     'Row 2, Cell 2',
-  //     'Row 2, Cell 3',
-  //     'Row 2, Cell 4',
-  //     'Row 2, Cell 5',
-  //     input3,
-  //   ],
-  //   ['', '', '', '', 'gjithsej/\nВкупно', input3],
-  //   ['', '', '', '', 'TVSH/ДДВ\n18%', input3],
-  //   ['Totali me TVSH/\nВкупно со ДДВ18%', input3],
-  //   // Add more rows here
-  // ];
-
-  // const tableData3 = [
-  //   ['Назив', 'Количина', 'ЕМ', 'Цена', 'ДДВ %', 'Вредност без ДДВ'],
-  //   [`Закупнина\n${input1}`, '440,00', 'm2', '100', '18,00', '82'],
-  //   [
-  //     `Сервисен Трошок\n${input2}`,
-  //     '440,00',
-  //     'm2',
-  //     '100',
-  //     '18,00',
-  //     '82',
-  //   ],
-  // ];
+  const handleColumnChange = (event: {
+    target: { value: string };
+  }) => {
+    setSelectedColumn(parseInt(event.target.value));
+  };
 
   const [selectedLogo, setSelectedLogo] = useState('1');
 
@@ -1436,15 +1548,6 @@ const PDFRenderer = () => {
     const logoId = event.target.value;
     setSelectedLogo(logoId);
   };
-
-  function separateTextIntoLines(
-    text: any,
-    charactersPerLine: number
-  ): string[] {
-    const textString = String(text);
-    const regex = new RegExp(`.{1,${charactersPerLine}}`, 'g');
-    return textString.match(regex) || [];
-  }
 
   const generatePDF = () => {
     if (invoiceNumber || subject || issueDate || dueDate !== null) {
@@ -1542,7 +1645,9 @@ const PDFRenderer = () => {
                   <Text style={{ fontSize: 10, color: '#5E6470' }}>
                     БРОЈ НА ФАКТУРА / NUMRI FATURËS
                   </Text>
-                  <Text style={{ fontSize: 10 }}>
+                  <Text
+                    style={{ fontSize: 10, fontWeight: 'semibold' }}
+                  >
                     {invoiceNumber}
                   </Text>
                 </View>
@@ -1631,7 +1736,7 @@ const PDFRenderer = () => {
                     style={{
                       borderTop: 0.4,
                       borderBottom: 0.4,
-                      marginTop: 35,
+                      marginTop: 15,
                     }}
                   >
                     {headers.map((row, rowIndex) => (
@@ -1644,11 +1749,59 @@ const PDFRenderer = () => {
                             style={generalStyle.tableCell}
                             key={cellIndex}
                           >
-                            <Text style={generalStyle.tableCellText}>
+                            <Text
+                              style={generalStyle.tableCellHeader}
+                            >
                               {header}
                             </Text>
                           </View>
                         ))}
+                      </View>
+                    ))}
+                  </View>
+
+                  <View
+                    style={{
+                      borderBottom: 0.4,
+                      marginTop: 0,
+                      paddingBottom: 10,
+                    }}
+                  >
+                    {selectedProducts.map((product, rowIndex) => (
+                      <View
+                        style={generalStyle.tableRow}
+                        key={rowIndex}
+                      >
+                        {Object.entries(product).map(
+                          ([key, value], cellIndex) => {
+                            if (key !== 'id') {
+                              return (
+                                <View
+                                  style={generalStyle.tableCell}
+                                  key={cellIndex}
+                                >
+                                  <Text
+                                    style={generalStyle.tableCellRow}
+                                    break
+                                  >
+                                    {value}
+                                  </Text>
+                                  {key === 'cell2' && (
+                                    <Text
+                                      style={
+                                        generalStyle.tableCellItemDescription
+                                      }
+                                      break
+                                    >
+                                      {product.cell6}
+                                    </Text>
+                                  )}
+                                </View>
+                              );
+                            }
+                            return null; // Exclude the 'id' property
+                          }
+                        )}
                       </View>
                     ))}
                   </View>
@@ -1669,7 +1822,7 @@ const PDFRenderer = () => {
                 }}
               >
                 {/* date */}
-                <View style={{ borderBottom: 1 }}>
+                <View style={{ borderBottom: 0.4 }}>
                   <Text
                     style={{
                       fontSize: 10,
@@ -1682,7 +1835,7 @@ const PDFRenderer = () => {
                 </View>
 
                 {/* received */}
-                <View style={{ borderBottom: 1 }}>
+                <View style={{ borderBottom: 0.4 }}>
                   <Text
                     style={{
                       fontSize: 10,
@@ -1695,7 +1848,7 @@ const PDFRenderer = () => {
                 </View>
 
                 {/* director */}
-                <View style={{ borderBottom: 1 }}>
+                <View style={{ borderBottom: 0.4 }}>
                   <Text
                     style={{
                       fontSize: 10,
@@ -1742,91 +1895,115 @@ const PDFRenderer = () => {
   };
 
   return (
-    <div className={centerDivStyle}>
-      <div className="p-4">
-        <div className="mb-4 flex space-x-4">
-          <select onChange={handleLogoChange} value={selectedLogo}>
-            <option value="1">Thor Invoice</option>
-            <option value="2">Everest invoice</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Invoice Number"
-            value={invoiceNumber}
-            onChange={(e) => setInvoiceNumber(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Issue Date"
-            value={issueDate.toDateString()}
-            onChange={(e) => setIssueDate(new Date(e.target.value))}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Due Date"
-            value={dueDate.toDateString()}
-            onChange={(e) => setDueDate(new Date(e.target.value))}
-            className={inputStyle}
-          />
+    <>
+      <div className="p-2">
+        <div className="p-4">
+          <div className="flex gap-2">
+            <select onChange={handleLogoChange} value={selectedLogo}>
+              <option value="1">Thor Invoice</option>
+              <option value="2">Everest invoice</option>
+            </select>
 
-          <button onClick={generatePDF} className={buttonStyle}>
-            Generate PDF
-          </button>
+            <input
+              type="text"
+              placeholder="Invoice Number"
+              value={invoiceNumber}
+              onChange={(e) => setInvoiceNumber(e.target.value)}
+              className={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Subject"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Issue Date"
+              value={issueDate.toDateString()}
+              onChange={(e) => setIssueDate(new Date(e.target.value))}
+              className={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Due Date"
+              value={dueDate.toDateString()}
+              onChange={(e) => setDueDate(new Date(e.target.value))}
+              className={inputStyle}
+            />
+          </div>
         </div>
-
-        <div className="flex p-10 gap-5">
-          <input
-            type="text"
-            placeholder="Product Description"
-            value={cell1}
-            onChange={(e) => setCell1(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Unit Measure"
-            value={cell2}
-            onChange={(e) => setCell2(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Quantity"
-            value={cell3}
-            onChange={(e) => setCell3(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Unit Price Without VAT"
-            value={cell4}
-            onChange={(e) => setCell4(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Total Price Without VAT"
-            value={cell5}
-            onChange={(e) => setCell5(e.target.value)}
-            className={inputStyle}
-          />
+        <div className="">
+          <h2>Predefined Products</h2>
+          <div className="my-4 flex-row border-2 border-red-700 py-10">
+            {predefinedProducts.map((product, index) => (
+              <p key={index} className="my-2 p-3">
+                {product.cell1} - {product.cell2} -{' '}
+                <input
+                  type="text"
+                  value={modifiedCell3Values[index]} // Use the corresponding modifiedCell3 value
+                  className="border-red-7 00 m-2 rounded-lg border-2 p-2 text-black"
+                  onChange={(e) => {
+                    const newModifiedCell3Values = [
+                      ...modifiedCell3Values,
+                    ];
+                    newModifiedCell3Values[index] = e.target.value;
+                    setModifiedCell3Values(newModifiedCell3Values);
+                  }}
+                  placeholder="Sasia"
+                />
+                - {product.cell4}
+                <button
+                  onClick={() =>
+                    addProductToPDF({
+                      ...product,
+                      cell3: modifiedCell3Values[index],
+                    })
+                  }
+                  className="button m-2"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => removeProductFromPDF(product.id)}
+                  className="button m-2"
+                >
+                  Remove
+                </button>
+              </p>
+            ))}
+          </div>
         </div>
+        <button onClick={generatePDF} className={buttonStyle}>
+          Generate PDF
+        </button>
+      </div>
+      <div>
+        <h2>Selected Products</h2>
+        <ul>
+          {selectedProducts.map((product) => (
+            <li key={product.id}>
+              {product.cell1} - {product.cell2} - {product.cell3} -{' '}
+              {product.cell4}
+              <button
+                onClick={() => removeProductFromPDF(product.id)}
+                className="button m-2"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
         {pdfData ? (
           <PDFViewer width="100%" height={800}>
             {pdfData}
           </PDFViewer>
         ) : null}
       </div>
-    </div>
+    </>
   );
 };
 
