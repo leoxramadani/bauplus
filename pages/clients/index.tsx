@@ -57,9 +57,9 @@ const Clients = () => {
               description="Fill all the fields to add a new client"
             >
               <ClientsCreate
-                ClientId={
-                  router.isReady ? router.query.id?.toString() : ''
-                }
+                // ClientId={
+                //   router.isReady ? router.query.id?.toString() : ''
+                // }
                 setModal={setIsOpen}
               />
             </Modal.Content>
