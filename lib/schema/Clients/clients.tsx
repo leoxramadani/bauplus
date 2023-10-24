@@ -9,11 +9,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
-import { DELETE_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { Key } from 'react';
 import * as z from 'zod';
 
 export const clientsSchema = z.object({
@@ -24,19 +24,25 @@ export const clientsSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   companyName: z.string(),
-  clientAccountNumbers: z.object({
-    accountNumber: z.string().optional(),
-    country: z.string().optional(),
-  }),
-  clientBusinessIds: z.object({
-    businessId : z.string().optional(),
-    country : z.string().optional(),
-  }),
-  clientContactInfos: z.object({
-    email : z.string().optional(),
-    phone : z.string().optional(),
-    address : z.string().optional(),
-  }),
+  clientAccountNumbers: z
+    .object({
+      accountNumber: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .array(),
+  clientBusinessIds: z
+    .object({
+      businessId: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .array(),
+  clientContactInfos: z
+    .object({
+      email: z.string().optional(),
+      phone: z.string().optional(),
+      address: z.string().optional(),
+    })
+    .array(),
 });
 
 export type IClients = z.infer<typeof clientsSchema>;
@@ -151,22 +157,58 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
   {
     accessorKey: 'clientAccountNumbers.accountNumber',
     header: 'Account Number',
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientAccountNumbers.map((client, i: Key) => (
+          <li key={i}>{client.accountNumber}</li>
+        ))}
+      </ul>
+    ),
   },
   {
-    accessorKey:'clientAccountNumbers.country',
-    header: 'Country'
+    accessorKey: 'clientAccountNumbers.country',
+    header: 'Country',
+
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientAccountNumbers.map((client, i: Key) => (
+          <li key={i}>{client.country}</li>
+        ))}
+      </ul>
+    ),
   },
   {
-    accessorKey:'clientContactInfos.email',
+    accessorKey: 'clientContactInfos.email',
     header: 'Email',
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientContactInfos.map((client, i: Key) => (
+          <li key={i}>{client.email}</li>
+        ))}
+      </ul>
+    ),
   },
   {
-    accessorKey:'clientContactInfos.phone',
-    header:'Phone',
+    accessorKey: 'clientContactInfos.phone',
+    header: 'Phone',
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientContactInfos.map((client, i: Key) => (
+          <li key={i}>{client.phone}</li>
+        ))}
+      </ul>
+    ),
   },
   {
-    accessorKey:'clientContactInfos[0].address',
-    header:'Address',
+    accessorKey: 'clientContactInfos.address',
+    header: 'Address',
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientContactInfos.map((client, i: Key) => (
+          <li key={i}>{client.address}</li>
+        ))}
+      </ul>
+    ),
   },
   {
     id: 'actions',

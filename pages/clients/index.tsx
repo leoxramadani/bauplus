@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
 import {
-    IClients,
-    clientsColumnDef
+  IClients,
+  clientsColumnDef,
 } from '@/lib/schema/Clients/clients';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
@@ -19,14 +19,14 @@ const Clients = () => {
     ['clients'],
     GET_ALL_CLIENTS
   );
-console.log("data=",data)
   useEffect(() => {
     if (router.query.id) {
       setIsOpen(true);
     }
-    console.log('router==', router);
+    // console.log('router==', router);
   }, [router.query.id]);
 
+  console.log(data);
   useEffect(() => {
     if (!isOpen) {
       router.replace('/clients', undefined, {
