@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { GET_ALL_CLIENT_TYPES } from '@/lib/constants/endpoints/clients';
+import { CREATE_CLIENTS, GET_ALL_CLIENT_TYPES } from '@/lib/constants/endpoints/clients';
 import {
   CREATE_BANK_ACCOUNT,
   GET_ALL_ACCOUNT_STATUSES,
@@ -90,15 +90,6 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
     GET_ALL_CLIENT_TYPES
   );
 
-  const {
-    data: accountTypes,
-    isError: accountTypesIsError,
-    isLoading: accountTypesIsLoading,
-    error: accountTypesError,
-  } = useData<Array<{ [key: string]: any }>>(
-    ['account_types'],
-    GET_ALL_ACCOUNT_TYPES
-  );
 
   // const {
   //   data: employees,
@@ -119,10 +110,12 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
     values: { ...client },
   });
 
+  console.log("clientId=",clientId)
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
       setIsSubmitting(true);
-      // try {
+      try {
+        console.log("data=",data)
       //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
       //   console.log('submit:', data);
       //   if (bankAccount && router.query.id) {
@@ -137,20 +130,19 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
       //     setModal(false);
       //   } else {
       //     // Bank account data is empty, perform create
-      //     const res = await axios.post(CREATE_BANK_ACCOUNT, {
-      //       ...data,
-      //       companyId: '145D8D93-7FF7-4A24-A184-AA4E010E7F37',
-      //     });
-      //     console.log('Create response:', res);
-      //     toast.success('Successfully created new bank account!');
-      //     setIsSubmitting(false);
-      //     setModal(false);
+          const res = await axios.post(CREATE_CLIENTS, {
+            ...data
+          });
+          console.log('Create response:', res);
+          toast.success('Successfully created new client!');
+          setIsSubmitting(false);
+          setModal(false);
       //   }
-      // } catch (error) {
-      //   console.error('Error:', error);
-      //   toast.error('There was an issue! Please try again.');
-      //   setIsSubmitting(false);
-      // }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('There was an issue! Please try again.');
+        setIsSubmitting(false);
+      }
     },
     [client]
   );
@@ -162,7 +154,6 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
   return (
     !statusIsLoading &&
     !ClientTypesIsLoading &&
-    !accountTypesIsLoading && (
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -284,7 +275,6 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
         </form>
       </Form>
     )
-  );
 };
 
 export default ClientsCreate;
