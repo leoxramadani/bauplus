@@ -174,14 +174,13 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
   },
 ];
 
-export const createEmployeeSchema = z.object({
-  employeeId: z.string().optional(),
-  companyId: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  dateOfBirth: z.coerce.date(),
-  departmentId: z.string(),
+export const createClientSchema = z.object({
+  clientTypeId: z.string().optional(),
+  companyName: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
 });
 
-export type ICreateEmployee = z.infer<typeof createEmployeeSchema>;
+export type ICreateClientSchema = z.infer<
+typeof createClientSchema>;
+

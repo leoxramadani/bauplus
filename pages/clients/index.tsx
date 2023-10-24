@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import ClientsCreate from '@/components/molecules/Clients/ClientsCreate';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,9 @@ import {
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+
+
+
 
 const Clients = () => {
   const router = useRouter();
@@ -52,8 +56,8 @@ console.log("data=",data)
               title="Add New Client"
               description="Fill all the fields to add a new client"
             >
-              <BankAccountCreate
-                bankAccountId={
+              <ClientsCreate
+                ClientId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
                 setModal={setIsOpen}

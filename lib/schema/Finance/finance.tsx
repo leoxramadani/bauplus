@@ -155,6 +155,7 @@ export type IcreateBankAccountSchema = z.infer<
   typeof createBankAccountSchema
 >;
 
+
 export const bankAccountSchemaCash = z.object({
   cashAccountHolderName: z.string(),
   cashCurrency: z.string(),
