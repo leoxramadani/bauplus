@@ -1,8 +1,8 @@
-import * as z from 'zod';
+import { Box } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
+import * as z from 'zod';
 import { formatDate } from '../helper/helper';
 import useTranslation from '../hooks/useTranslation';
-import { Box } from '@mui/material';
 //*  ***** OUTFLOW
 const outflowColumnSchema_filtered = z.object({
   nr: z.number(),

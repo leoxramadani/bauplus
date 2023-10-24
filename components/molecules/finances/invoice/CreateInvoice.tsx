@@ -1,27 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import Drop from '@/components/atoms/Drop';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import {
-  IPayment,
-  paymentSchema,
-} from '@/lib/schema/Finance/payment';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, Check, ChevronsUpDown, X } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Command,
   CommandEmpty,
@@ -29,9 +8,20 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -39,55 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  DropzoneInputProps,
-  FileRejection,
-  useDropzone,
-} from 'react-dropzone';
-import Drop from '@/components/atoms/Drop';
 import {
   IInvoice,
   invoiceSchema,
 } from '@/lib/schema/Finance/invoice';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { FileRejection, useDropzone } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
 
 interface ICreateInvoice {
   setCloseModal(open: boolean): void;
 }
-
-const baseStyle = {
-  flex: 1,
-  display: 'flex',
-  // flexDirection: 'column',
-  alignItems: 'center',
-  padding: '20px',
-  borderWidth: 2,
-  borderRadius: 2,
-  borderColor: '#eeeeee',
-  borderStyle: 'dashed',
-  backgroundColor: '#fafafa',
-  color: '#bdbdbd',
-  outline: 'none',
-  transition: 'border .24s ease-in-out',
-};
-
-const focusedStyle = {
-  borderColor: '#2196f3',
-};
-
-const acceptStyle = {
-  borderColor: '#00e676',
-};
-
-const rejectStyle = {
-  borderColor: '#ff1744',
-};
 
 const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -186,15 +143,15 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
   }
 
   return (
-    <div className="z-0 flex flex-col gap-4 w-full  ">
+    <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="flex flex-col  sm:grid sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
             {/* project */}
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
+            <div className="col-span-2 flex w-full grid-cols-3 flex-col gap-4 sm:grid ">
               <FormField
                 control={form.control}
                 name="invoiceNumber"
@@ -219,7 +176,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                 control={form.control}
                 name="invoiceFor"
                 render={({ field }) => (
-                  <FormItem className="w-full flex flex-col">
+                  <FormItem className="flex w-full flex-col">
                     <FormLabel>Invoice For</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -228,7 +185,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              'w-full flex items-center gap-1 justify-between',
+                              'flex w-full items-center justify-between gap-1',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -293,7 +250,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                           <Button
                             variant={'outline'}
                             className={cn(
-                              'w-full flex justify-between items-center text-left font-normal',
+                              'flex w-full items-center justify-between text-left font-normal',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -326,7 +283,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
               />
             </div>
 
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
+            <div className="col-span-2 flex w-full grid-cols-3 flex-col gap-4 sm:grid ">
               <FormField
                 control={form.control}
                 name="sumWithTax"
@@ -388,7 +345,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
               />
             </div>
 
-            <div className="flex flex-col gap-4 sm:grid grid-cols-3 col-span-2 w-full ">
+            <div className="col-span-2 flex w-full grid-cols-3 flex-col gap-4 sm:grid ">
               <FormField
                 control={form.control}
                 name="dueDate"
@@ -401,7 +358,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
                           <Button
                             variant={'outline'}
                             className={cn(
-                              'w-full flex justify-between items-center text-left font-normal',
+                              'flex w-full items-center justify-between text-left font-normal',
                               !field.value && 'text-muted-foreground'
                             )}
                           >
@@ -498,7 +455,7 @@ const CreateInvoice = ({ setCloseModal }: ICreateInvoice) => {
               )}
             />
 
-            <div className="flex flex-col col-span-2 w-full gap-2">
+            <div className="col-span-2 flex w-full flex-col gap-2">
               <FormLabel>File</FormLabel>
               <Drop
                 selectedFile={selectedFile}

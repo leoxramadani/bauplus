@@ -1,10 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ICreateEmployee,
-  employeeColumnDef,
-  createEmployeeSchema,
-  IEmployee,
-} from '@/lib/schema/hr/employee/employee';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -13,36 +8,39 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import axios from 'axios';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   CREATE_EMPLOYEES,
   GET_BY_ID_EMPLOYEE,
   UPDATE_EMPLOYEES,
 } from '@/lib/constants/endpoints/employee';
-import { useRouter } from 'next/router';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
+import { GET_ALL_DEPATRMENTS_OF_COMAPNY } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
+import {
+  ICreateEmployee,
+  createEmployeeSchema,
+} from '@/lib/schema/hr/employee/employee';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
@@ -52,13 +50,19 @@ const EmployeesForm = ({
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   // const [departments, setDepartments] = useState<any>();
 
   const {
     data: departments,
     isLoading: departmentsLoading,
     isError: departmentsError,
-  } = useData<any>(['departments'], GET_ALL_DEPARTMENTS);
+  } = useData<any>(
+    ['departments'],
+    GET_ALL_DEPATRMENTS_OF_COMAPNY +
+      `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
+  );
 
   //TODO: handle null when there isn't an employee id
   // const {
@@ -96,11 +100,11 @@ const EmployeesForm = ({
 
   const onSubmit = useCallback(
     async (data: ICreateEmployee) => {
-      console.log('Employee data->', employeeData);
+      setIsLoading(true);
+      console.log('form data->', data);
 
       if (employeeData) {
-        console.log('employeeData=>', employeeData);
-        console.log('data=======>', data);
+        console.log('Updating employee');
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
@@ -112,23 +116,32 @@ const EmployeesForm = ({
             router.replace('/hr/employees', undefined, {
               shallow: true,
             });
+            setIsModalOpen(false);
+            toast.success('Successfully updated employee');
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
+            toast.error(
+              'There was an issue updating employee! Please try again.'
+            );
           });
       } else {
-        console.log('No employee data ****');
+        console.log('Creating employee');
         await axios
           .post(CREATE_EMPLOYEES, { ...data })
           .then((res) => {
             console.log('Successfully created employee->', res);
+            toast.success('Successfully added employee');
+            setIsModalOpen(false);
           })
           .catch((error) => {
-            console.log('Error creating employee:', error);
+            console.error('Error creating employee:', error);
+            toast.error(
+              'There was an issue adding employee! Please try again.'
+            );
           });
       }
-
-      setIsModalOpen(false);
+      setIsLoading(false);
     },
     [employeeData]
   );
@@ -138,69 +151,72 @@ const EmployeesForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Employees
-        </h2>
-        <h3 className="font-normal text-lg text-gray-900">
-          Add an employee
-        </h3>
-      </div>
+    <div className="flex w-full flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* First name */}
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    First Name<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="First Name" {...field} />
+                    <Input
+                      placeholder="First Name"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Last name */}
             <FormField
               control={form.control}
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Last Name<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Last Name" {...field} />
+                    <Input
+                      placeholder="Last Name"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* Company Id */}
             <FormField
               control={form.control}
               name="companyId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Company Id<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Company Id</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Company Id" {...field} />
+                    <Input
+                      placeholder="Company Id"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Department Id */}
             <FormField
               control={form.control}
               name="departmentId"
@@ -211,6 +227,7 @@ const EmployeesForm = ({
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     value={field.value}
+                    disabled={isLoading}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -241,47 +258,51 @@ const EmployeesForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Email <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl className="relative">
-                    <Input placeholder="Email@email.com" {...field} />
+                    <Input
+                      placeholder="Email@email.com"
+                      {...field}
+                      type="email"
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Date of birth */}
             <FormField
               control={form.control}
               name="dateOfBirth"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>
-                    Date of birth{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Date of birth </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
                             format(new Date(field.value), 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -309,11 +330,10 @@ const EmployeesForm = ({
               )}
             />
           </div>
-
-          <hr />
           <Button
-            className="w-max flex flex-none"
-            variant="outline"
+            className="flex w-max flex-none items-center justify-center"
+            // variant="outline"
+            loading={isLoading}
             type="submit"
           >
             Submit

@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Check, Plus } from 'lucide-react';
-import React from 'react';
 
 const Holiday = () => {
   return (

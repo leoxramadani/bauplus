@@ -1,6 +1,5 @@
 import routes from '@/lib/constants/routes';
-import { capitalize, divide } from 'lodash';
-import { ChevronRight, Slash } from 'lucide-react';
+import { capitalize } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Key, PropsWithChildren, useMemo } from 'react';
@@ -16,7 +15,7 @@ const Crumb = ({
     );
   return (
     <Link
-      className="transition-all duration-75 inline-flex items-center text-sm font-medium text-gray-700 hover:underline rounded-lg py-0.5 px-1"
+      className="inline-flex items-center rounded-lg px-1 py-0.5 text-sm font-medium text-gray-700 transition-all duration-75 hover:underline"
       href={href}
     >
       {children}

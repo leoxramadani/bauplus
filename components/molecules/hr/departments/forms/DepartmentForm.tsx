@@ -21,9 +21,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { Calendar } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
 const DepartmentForm = ({
@@ -68,9 +67,9 @@ const DepartmentForm = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, onError)}
-        className="flex flex-col gap-4 w-full"
+        className="flex w-full flex-col gap-4"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+        <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
             name="departmentId"
@@ -98,7 +97,7 @@ const DepartmentForm = ({
             )}
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+        <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
             name="companyId"
@@ -127,7 +126,7 @@ const DepartmentForm = ({
           />
         </div>
 
-        <Button className="w-max flex flex-none" type="submit">
+        <Button className="flex w-max flex-none" type="submit">
           Submit
         </Button>
       </form>

@@ -1,15 +1,7 @@
-import React from 'react';
+import { Card, LineChart, Metric, Text } from '@tremor/react';
 import ReactGridLayout from 'react-grid-layout';
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
-import {
-  Card,
-  Text,
-  Metric,
-  LineChart,
-  DonutChart,
-} from '@tremor/react';
-import DonutChartGrid from './DonutChartGrid';
 
 const chartdata = [
   {
@@ -71,7 +63,7 @@ const GridLayout = () => {
     >
       <Card
         key="a"
-        className="w-auto h-auto flex justify-center items-center flex-col gap-2 "
+        className="flex h-auto w-auto flex-col items-center justify-center gap-2 "
       >
         <Text>Sales</Text>
         <Metric>34,743</Metric>

@@ -1,40 +1,28 @@
+import mimiroArrow from '@/public/Arrow-M.svg';
+import mimiro from '@/public/logo-white-mimiro.svg';
 import {
-  Users,
-  Square,
-  ChevronsLeft,
-  ChevronsRight,
   Calculator,
-  Wallet,
-  ChevronUp,
   ChevronRight,
+  ChevronsLeft,
   ClipboardList,
-  LogInIcon,
-} from 'lucide-react';
-import {
-  useContext,
-  createContext,
-  useState,
-  PropsWithChildren,
-  SetStateAction,
-  Dispatch,
-  useEffect,
-  ReactNode,
-  Children,
-} from 'react';
-import {
-  Boxes,
-  Package,
-  UserCircle,
   LayoutDashboard,
-  Settings,
+  UserCircle,
+  Users,
+  Wallet,
   X,
 } from 'lucide-react';
-import { useRouter, withRouter } from 'next/router';
-import Link from 'next/link';
-import Logo from '@/public/logo-arkiva.svg';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-import { Button } from '../ui/button';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 
 interface SidebarItem {
   icon?: React.JSX.Element;
@@ -72,22 +60,23 @@ const Sidebar = ({
   const router = useRouter();
   return (
     <aside
-      className={`fixed z-50 w-full top-0 left-0 h-full group/sidebar ${
+      className={`group/sidebar fixed left-0 top-0 z-50 h-full w-full ${
         !isWindowSmall
           ? expanded
-            ? `max-w-[15rem] transition-all duration-[250ms]`
-            : 'max-w-[4.5rem] transition-all duration-[250ms]'
-          : `max-w-[15rem] transition-all duration-[250ms]`
+            ? `duration-[250ms] max-w-[15rem] transition-all`
+            : 'duration-[250ms] max-w-[4.5rem] transition-all'
+          : `duration-[250ms] max-w-[15rem] transition-all`
       }`}
     >
-      <nav className="relative h-full flex flex-col bg-[#1A202E] border-r shadow-sm w-full z-50">
-        <div className="p-3.5 justify-between items-center flex">
+      <nav className="relative z-50 flex h-full w-full flex-col border-r bg-[#1A202E] shadow-sm">
+        <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
               href="/dashboard"
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }
+              className="px-3"
             >
               {/* <Image
               src={Logo}
@@ -96,16 +85,23 @@ const Sidebar = ({
                 !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
               } hover:cursor-pointer`}
             /> */}
-              <h1 className="text-white text-xl font-bold flex gap-2 items-center w-full justify-center ml-2">
+              <Image
+                src={mimiro}
+                alt="logo"
+                width={110}
+                height={100}
+              />
+              {/* <h1 className="ml-2 flex w-full items-center justify-center gap-2 text-xl font-bold text-white">
                 <Square strokeWidth={10} size={18} radius={0} />
                 Mimiro
-              </h1>
+              </h1> */}
             </Link>
           )}
 
           <button
-            className="flex justify-center items-center rounded-full text-white hover:bg-slate-600 p-1 transition-all opacity-0 group-hover/sidebar:opacity-100"
-            // onClick={() => setExpanded((current) => !current)}
+            className={`flex items-center justify-center rounded-full p-2 text-white transition-all hover:bg-slate-800 ${
+              !isWindowSmall && !expanded ? 'w-full' : 'w-fit'
+            }`}
           >
             {isWindowSmall ? (
               <X
@@ -121,10 +117,11 @@ const Sidebar = ({
                 height={30}
               />
             ) : (
-              <ChevronsRight
-                strokeWidth={1.5}
-                width={30}
-                height={30}
+              <Image
+                alt="right-arrow-to-open-sidebar"
+                src={mimiroArrow}
+                width={19}
+                height={18}
                 onClick={() => toggleSidebar()}
               />
             )}
@@ -133,7 +130,7 @@ const Sidebar = ({
 
         <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
           <ul
-            className="sidebar flex flex-col sm:flex-1 px-3 overflow-y-auto mb-16"
+            className="sidebar mb-20 flex flex-col overflow-y-auto px-3 sm:flex-1"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
@@ -284,9 +281,9 @@ const Sidebar = ({
             )} */}
           </ul>
         </SidebarContext.Provider>
-        <div className="border-t-2 border-slate-600 absolute bottom-0 left-0 w-full h-16 bg-inherit">
+        <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-600 bg-inherit">
           {!isWindowSmall && status === 'authenticated' ? (
-            <div className="hover:bg-slate-700 w-full h-full flex p-3 text-gray-50 cursor-pointer">
+            <div className="flex h-full w-full cursor-pointer p-3 text-gray-50 hover:bg-slate-700">
               <Image
                 src={`https://ui-avatars.com/api/?name=${
                   session.user.firstName.charAt(0) +
@@ -295,13 +292,13 @@ const Sidebar = ({
                 alt=""
                 width={100}
                 height={100}
-                className="w-10 h-10 rounded-md mx-auto "
+                className="mx-auto h-10 w-10 rounded-md "
               />
               <div
                 className={`
-                  flex justify-between items-center
+                  flex items-center justify-between
                   overflow-hidden transition-all ${
-                    expanded ? 'w-full ml-3' : 'w-0'
+                    expanded ? 'ml-3 w-full' : 'w-0'
                   }
                 `}
                 onClick={() => router.push('/account')}
@@ -358,18 +355,18 @@ export function SidebarItem({
     <>
       <button
         onClick={handleClick}
-        className={`relative z-50 w-full flex items-center p-2 justify-start ${
+        className={`relative z-50 flex w-full items-center justify-start p-2 ${
           !isWindowSmall ? `my-2` : `my-1.5`
-        } rounded-[0.6rem] cursor-pointer transition-colors group 
+        } group cursor-pointer rounded-[0.6rem] transition-colors 
         ${
           router.pathname.startsWith(href)
             ? 'bg-slate-700 text-white'
-            : 'hover:bg-slate-800 text-white'
+            : 'text-white hover:bg-slate-800'
         }`}
       >
         {asDropdown && expanded && (
           <span
-            className={`absolute right-2 h-full flex items-center`}
+            className={`absolute right-2 flex h-full items-center`}
           >
             <ChevronRight
               size={20}
@@ -381,20 +378,20 @@ export function SidebarItem({
         {icon && <div className="ml-1 w-[20px]">{icon}</div>}
         {alert && (
           <div
-            className={`absolute flex justify-end w-full pr-3 
+            className={`absolute flex w-full justify-end pr-3 
             ${
               !expanded
-                ? `top-1 left-2`
+                ? `left-2 top-1`
                 : asDropdown
                 ? `-left-6`
                 : `left-0`
             }`}
           >
-            <div className={`w-2 h-2 rounded-full bg-red-500`} />
+            <div className={`h-2 w-2 rounded-full bg-red-500`} />
           </div>
         )}
         <span
-          className={`overflow-hidden ml-1 text-left transition-all ${
+          className={`ml-1 overflow-hidden text-left transition-all ${
             icon && `ml-3`
           } ${
             !isWindowSmall ? (expanded ? 'w-full' : 'w-0') : `w-full`
@@ -406,8 +403,8 @@ export function SidebarItem({
         {!expanded && (
           <div
             className={`
-                          absolute max-w-xs left-full rounded-md ml-1 bg-slate-500 text-white px-2 py-1 flex items-center
-                          invisible opacity-0 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+                          invisible absolute left-full ml-1 flex max-w-xs -translate-x-3 items-center rounded-md bg-slate-500 px-2
+                          py-1 text-white opacity-0 transition-all group-hover:visible group-hover:translate-x-0 group-hover:opacity-100
                       `}
           >
             {text}

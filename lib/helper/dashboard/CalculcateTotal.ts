@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { TotalCalculated } from '../../queries/dashboard';
 import { useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { TotalCalculated } from '../../queries/dashboard';
 
 export const CalculateTotal = () => {
   const { loading, error, data } = useQuery(TotalCalculated);

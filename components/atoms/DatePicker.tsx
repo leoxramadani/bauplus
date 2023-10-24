@@ -1,20 +1,13 @@
 'use client';
-import { Dispatch, SetStateAction } from 'react';
 import {} from 'date-fns';
+import { Dispatch, SetStateAction } from 'react';
 
+import { addDays, isAfter, isSameDay } from 'date-fns';
 import * as React from 'react';
-import { addDays, isAfter, isSameDay, format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 interface IDatePicker {
   className?: string;
@@ -44,10 +37,10 @@ export function DatePicker({ className, setDateRange }: IDatePicker) {
   };
 
   return (
-    <div className={cn('grid gap-2 relative', className)}>
+    <div className={cn('relative grid gap-2', className)}>
       <Calendar
         initialFocus
-        className="bg-white mb-12"
+        className="mb-12 bg-white"
         mode="range"
         defaultMonth={date?.from}
         selected={date}
@@ -60,7 +53,7 @@ export function DatePicker({ className, setDateRange }: IDatePicker) {
         onClick={handleDateChange}
         type="button"
         value="Apply"
-        className="w-max px-3 py-1 cursor-pointer absolute right-4 bottom-4 mt-8 rounded-md bg-blue-500 text-white text-bold hover:bg-blue-600 active:bg-blue-600"
+        className="text-bold absolute bottom-4 right-4 mt-8 w-max cursor-pointer rounded-md bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 active:bg-blue-600"
       />
     </div>
   );

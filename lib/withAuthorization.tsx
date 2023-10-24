@@ -1,8 +1,7 @@
-import { FC } from 'react';
-import { useCompany } from './hooks/useCompany';
-import Forbidden from '@/pages/403';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { FC } from 'react';
+import { useCompany } from './hooks/useCompany';
 
 type WithAuthorization<P = Record<string, unknown>> = (
   Component: FC,

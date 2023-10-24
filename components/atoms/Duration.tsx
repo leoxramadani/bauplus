@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DatePicker } from './DatePicker';
 import { DateRange } from 'react-day-picker';
+import { DatePicker } from './DatePicker';
 
 const Duration: React.FC = () => {
   const [selectedRange, setSelectedRange] = useState<string>('Today');
@@ -102,10 +102,10 @@ const Duration: React.FC = () => {
   console.log('start: ', startDate);
   return (
     <div className="absolute right-4">
-      <div className="relative flex flex-col  w-max h-full">
+      <div className="relative flex h-full  w-max flex-col">
         <div
           onClick={() => setDropDown(!dropDown)}
-          className="hover:bg-zinc-50 cursor-pointer min-w-[80px] w-max flex justify-center items-center px-3 py-1 bg-zinc-100 text-zinc-500 rounded-sm font-semibold"
+          className="flex w-max min-w-[80px] cursor-pointer items-center justify-center rounded-sm bg-zinc-100 px-3 py-1 font-semibold text-zinc-500 hover:bg-zinc-50"
         >
           {selectedRange === 'Custom range' ? (
             <p>
@@ -124,13 +124,13 @@ const Duration: React.FC = () => {
         </div>
       </div>
       {dropDown && (
-        <div className="absolute  flex flex-col  lg:flex-row gap-4 justify-center items-center z-50 mt-2 w-max right-0 bg-white shadow-md border rounded-sm font-semibold text-slate-500">
-          <ul className="flex flex-col justify-center items-center">
+        <div className="absolute  right-0 z-50  mt-2 flex w-max flex-col items-center justify-center gap-4 rounded-sm border bg-white font-semibold text-slate-500 shadow-md lg:flex-row">
+          <ul className="flex flex-col items-center justify-center">
             {range.map((range) => (
               <li
                 className={`${
                   selectedRange === range && 'bg-zinc-100'
-                } w-full px-3 py-2 text-slate-500 hover:bg-zinc-100 justify-start cursor-pointer items-center flex`}
+                } flex w-full cursor-pointer items-center justify-start px-3 py-2 text-slate-500 hover:bg-zinc-100`}
                 key={range}
                 onClick={() => handleDateRangeChange(range)}
               >

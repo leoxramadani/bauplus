@@ -17,10 +17,10 @@ import {
 } from '@/components/ui/select';
 import {
   CREATE_DEPARTMENT,
+  GET_ALL_DEPARTMENTS,
   GET_SPECIFIC_DEPARTMENT,
   UPDATE_DEPARTMENT,
 } from '@/lib/constants/endpoints/hr/departments';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
@@ -29,7 +29,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface DepartmentsFormProps {
@@ -51,8 +51,8 @@ const DepartmentsForm = ({
   } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
 
   useEffect(() => {
-    console.log('inside getData');
     async function getData(Id: string) {
+      console.log('inside getData');
       await axios
         .get(GET_SPECIFIC_DEPARTMENT + `?Id=${Id}`)
         .then((res) => {
@@ -79,12 +79,14 @@ const DepartmentsForm = ({
       console.log('form data ->', data);
 
       if (departmentData) {
+        console.log('Updating department');
         await axios
           .put(UPDATE_DEPARTMENT, {
+            departmentId: departmentId,
+            parentDepartmentId: data.departmentId,
             departmentName: data.departmentName,
             companyId: data.companyId,
-            departmentId: data.departmentId,
-            parentDepartmentId: data.parentDepartmentId,
+            // ...data,
           })
           .then((res) => {
             console.log('update department->', res);
@@ -96,12 +98,14 @@ const DepartmentsForm = ({
             console.log('Error UPDATING department:', error);
           });
       } else {
+        console.log('Creating department');
         await axios
           .post(CREATE_DEPARTMENT, {
-            departmentName: data.departmentName,
-            companyId: data.companyId,
-            // departmentId: data.departmentId,
-            parentDepartmentId: data.parentDepartmentId,
+            // departmentName: data.departmentName,
+            // companyId: data.companyId,
+            // // departmentId: data.departmentId,
+            // parentDepartmentId: data.parentDepartmentId,
+            ...data,
           })
           .then((res) => {
             console.log('Successfully created department->', res);
@@ -120,30 +124,13 @@ const DepartmentsForm = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4 w-full"
+          className="flex w-full flex-col gap-4"
         >
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4"> */}
-          {/* <FormField
-                control={form.control}
-                name="departmentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                    Department Id<span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl className="relative">
-                      <Input placeholder="Department Id" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
-          {/* </div> */}
+          {/* Department name */}
           <FormField
             control={form.control}
             name="departmentName"
@@ -161,7 +148,8 @@ const DepartmentsForm = ({
             )}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* Company Id --Like this for now! */}
             <FormField
               control={form.control}
               name="companyId"
@@ -178,29 +166,10 @@ const DepartmentsForm = ({
               )}
             />
 
-            {/* <FormField
-              control={form.control}
-              name="parentDepartmentId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Parent Department Id
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl className="relative">
-
-                    <Input
-                      placeholder="Parent Department Id"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
+            {/* Department Id */}
             <FormField
               control={form.control}
-              name="departmentId"
+              name="parentDepartmentId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Department</FormLabel>
@@ -239,7 +208,7 @@ const DepartmentsForm = ({
           </div>
           <hr />
           <Button
-            className="w-max flex flex-none"
+            className="flex w-max flex-none"
             variant="outline"
             type="submit"
           >

@@ -2,7 +2,6 @@ import Layout from '@/components/layout';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
 import { ApolloProvider } from '@apollo/client';
-import Client from '../lib/apollo/client';
 import {
   QueryClient,
   QueryClientProvider,
@@ -10,8 +9,12 @@ import {
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import type { AppType } from 'next/app';
-import NProgress from 'nprogress';
 import Router from 'next/router';
+import NProgress from 'nprogress';
+import { Slide, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import Client from '../lib/apollo/client';
 
 const client = new QueryClient();
 
@@ -40,6 +43,19 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
         <QueryClientProvider client={client}>
           <LanguageProvider>
             <Layout>
+              <ToastContainer
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={true}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Slide}
+              />
               <Component {...pageProps} />
             </Layout>
           </LanguageProvider>

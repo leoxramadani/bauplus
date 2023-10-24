@@ -1,6 +1,3 @@
-import { Card, DonutChart, Title } from '@tremor/react';
-import React from 'react';
-
 const DonutChartGrid = () => {
   return <div className="bg-red-400">hello worlds</div>;
 };

@@ -1,5 +1,5 @@
 import { Form } from '@/components/ui/form';
-import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/department';
+import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import {
   CREATE_NOTICE,
   DELETE_NOTICE,

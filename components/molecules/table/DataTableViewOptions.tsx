@@ -2,8 +2,8 @@
 
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 // import { MixerHorizontalIcon } from '@radix-ui/react-icons';
-import { SlidersHorizontal } from 'lucide-react';
 import { Table } from '@tanstack/react-table';
+import { SlidersHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +27,7 @@ export function DataTableViewOptions<TData>({
         <Button
           variant="outline"
           size="sm"
-          className="flex gap-2 p-2 w-24"
+          className="flex w-24 gap-2 p-2"
         >
           <div className="flex items-center">
             <SlidersHorizontal className="h-4 w-4" />

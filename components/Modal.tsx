@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 import useTranslation from '@/lib/hooks/useTranslation';
+import { Dialog, Transition } from '@headlessui/react';
+import React, { Fragment, useState } from 'react';
 import { Button } from './ui/button';
 type ModalProps = {
   children: React.ReactNode;
@@ -59,15 +59,15 @@ const Modal = ({
       <Transition.Root show={open || openModalOutside} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed z-[50] inset-0 overflow-y-scroll"
+          className="fixed inset-0 z-[50] overflow-y-scroll"
           onClose={handleClose}
         >
-          <div className="flex items-center justify-center min-h-screen">
+          <div className="flex min-h-screen items-center justify-center">
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             <div
               className={
                 modalStyle ??
-                'relative mx-auto min-w-[70%] overflow-y-scroll pb-20 bg-white z-50 p-10 my-10 rounded-3xl'
+                'relative z-50 mx-auto my-10 min-w-[70%] overflow-y-scroll rounded-3xl bg-white p-10 pb-20'
               }
             >
               {children}

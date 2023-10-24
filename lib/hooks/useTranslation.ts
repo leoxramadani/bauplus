@@ -4,7 +4,6 @@ import { useContext } from 'react';
 import {
   LanguageContext,
   defaultLocale,
-  locales,
 } from '@/lib/contexts/LanguageContext';
 import { strings } from '@/lib/i18n';
 

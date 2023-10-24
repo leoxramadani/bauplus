@@ -1,6 +1,4 @@
-import * as z from 'zod';
-import { ColumnDef } from '@tanstack/react-table';
-import { useRouter } from 'next/router';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
-import axios from 'axios';
 import { DELETE_BANK_ACCOUNT } from '@/lib/constants/endpoints/finance';
+import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
+import { MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/router';
+import * as z from 'zod';
 
 export const invoiceSchema = z.object({
   accountName: z.string(),
@@ -46,12 +46,25 @@ const ActionsColumn = ({ item }: { item: any }) => {
     });
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(DELETE_BANK_ACCOUNT, {
+        params: {
+          bankAccountId: id,
+        },
+      });
+      alert('success');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-8 w-8 p-0 flex items-center justify-center"
+          className="flex h-8 w-8 items-center justify-center p-0"
         >
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
@@ -71,6 +84,11 @@ const ActionsColumn = ({ item }: { item: any }) => {
           onClick={() => handleEdit(item.bankAccountId)}
         >
           Edit row
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => handleDelete(item.bankAccountId)}
+        >
+          Delete
         </DropdownMenuItem>
         <DropdownMenuItem>View payment details</DropdownMenuItem>
       </DropdownMenuContent>

@@ -4,53 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
- 
-  IBankAccountCash,
-  IInvoiceSchema,
-
-  bankAccountSchemaCash,
-  invoiceSchema,
-} from '@/lib/schema/Finance/finance';
-import { Input } from '@/components/ui/input';
-import { watch } from 'fs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import Link from 'next/link';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import {
-  IPayment,
-  paymentSchema,
-} from '@/lib/schema/Finance/payment';
 import {
   Command,
   CommandEmpty,
@@ -58,6 +14,33 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { IBankAccountCash } from '@/lib/schema/Finance/finance';
+import {
+  IPayment,
+  paymentSchema,
+} from '@/lib/schema/Finance/payment';
+import { cn } from '@/lib/utils';
 
 // import { toast } from "@/components/ui/use-toast"
 
@@ -111,7 +94,7 @@ const CreatePayment = () => {
   ] as const;
 
   return (
-    <div className="z-0 flex flex-col gap-4 w-full  ">
+    <div className="z-0 flex w-full flex-col gap-4  ">
       {/* <div>
         <h2 className="text-3xl font-bold text-blue-500">
             Add Payment
@@ -126,7 +109,7 @@ const CreatePayment = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2  justify-center items-center gap-4">
+          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* project */}
             <FormField
               control={form.control}
@@ -141,7 +124,7 @@ const CreatePayment = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -205,7 +188,7 @@ const CreatePayment = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -219,7 +202,7 @@ const CreatePayment = () => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[250px] p-0 relative z-50 ">
+                    <PopoverContent className="relative z-50 w-[250px] p-0 ">
                       <Command className="relative">
                         <CommandInput placeholder="Search invoice..." />
                         <CommandEmpty>No invoice found.</CommandEmpty>
@@ -268,7 +251,7 @@ const CreatePayment = () => {
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full flex justify-between items-center text-left font-normal',
+                            'flex w-full items-center justify-between text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -312,7 +295,7 @@ const CreatePayment = () => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter account number"
-                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}
@@ -328,7 +311,7 @@ const CreatePayment = () => {
               control={form.control}
               name="currency"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
+                <FormItem className="flex w-full flex-col">
                   <FormLabel>Currency</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -337,7 +320,7 @@ const CreatePayment = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
@@ -398,7 +381,7 @@ const CreatePayment = () => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter exchange rate"
-                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}
@@ -420,7 +403,7 @@ const CreatePayment = () => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter transaction id"
-                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}
@@ -474,7 +457,7 @@ const CreatePayment = () => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full flex items-center gap-1 justify-between',
+                            'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >

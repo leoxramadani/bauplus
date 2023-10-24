@@ -1,12 +1,11 @@
-import React from 'react';
-import { Card, Title, AreaChart } from '@tremor/react';
+import { AreaChart, Card, Title } from '@tremor/react';
 
 const AreaChartt = () => {
   return (
     <Card>
       <Title>Newsletter revenue over time (USD)</Title>
       <AreaChart
-        className="h-72 w-24 mt-4"
+        className="mt-4 h-72 w-24"
         data={chartdata}
         index="date"
         categories={['SemiAnalysis', 'The Pragmatic Engineer']}
