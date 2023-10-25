@@ -68,7 +68,7 @@ const Sidebar = ({
           : `duration-[250ms] max-w-[15rem] transition-all`
       }`}
     >
-      <nav className="relative z-50 flex h-full w-full flex-col border-r bg-[#1A202E] shadow-sm">
+      <nav className="bg-sidebar relative z-50 flex h-full w-full flex-col border-r shadow-sm">
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
@@ -150,43 +150,45 @@ const Sidebar = ({
               asDropdown
               toggleSidebar={toggleSidebar}
             >
-              <>
-                <SidebarItem
-                  text="Bank accounts"
-                  alert={false}
-                  href="/finance/bankaccounts"
-                />
-                <SidebarItem
-                  text="Credit note"
-                  alert={false}
-                  href="/finance/creditnote"
-                />
-                <SidebarItem
-                  text="Estimates"
-                  alert={false}
-                  href="/finance/estimates"
-                />
-                <SidebarItem
-                  text="Expenses"
-                  alert={false}
-                  href="/finance/expenses"
-                />
-                <SidebarItem
-                  text="Invoice"
-                  alert={false}
-                  href="/finance/invoice"
-                />
-                <SidebarItem
-                  text="Payments"
-                  alert={false}
-                  href="/finance/payments"
-                />
-                <SidebarItem
-                  text="Proposal"
-                  alert={false}
-                  href="/finance/proposal"
-                />
-              </>
+              {expanded && (
+                <>
+                  <SidebarItem
+                    text="Bank accounts"
+                    alert={false}
+                    href="/finance/bankaccounts"
+                  />
+                  <SidebarItem
+                    text="Credit note"
+                    alert={false}
+                    href="/finance/creditnote"
+                  />
+                  <SidebarItem
+                    text="Estimates"
+                    alert={false}
+                    href="/finance/estimates"
+                  />
+                  <SidebarItem
+                    text="Expenses"
+                    alert={false}
+                    href="/finance/expenses"
+                  />
+                  <SidebarItem
+                    text="Invoice"
+                    alert={false}
+                    href="/finance/invoice"
+                  />
+                  <SidebarItem
+                    text="Payments"
+                    alert={false}
+                    href="/finance/payments"
+                  />
+                  <SidebarItem
+                    text="Proposal"
+                    alert={false}
+                    href="/finance/proposal"
+                  />
+                </>
+              )}
             </SidebarItem>
             <SidebarItem
               icon={<Users size={20} strokeWidth={1.5} />}
@@ -194,65 +196,72 @@ const Sidebar = ({
               asDropdown
               toggleSidebar={toggleSidebar}
             >
-              <>
-                <SidebarItem
-                  text="Employees"
-                  alert={false}
-                  href="/hr/employees"
-                />
-                <SidebarItem
-                  text="Leaves"
-                  alert={false}
-                  href="/hr/leaves"
-                />
-                <SidebarItem
-                  text="Shift Roster"
-                  alert={false}
-                  href="/hr/shiftroster"
-                />
-                <SidebarItem
-                  text="Attendace"
-                  alert={false}
-                  href="/hr/attendace"
-                />
-                <SidebarItem
-                  text="Holiday"
-                  alert={false}
-                  href="/hr/holiday"
-                />
-                <SidebarItem
-                  text="Designation"
-                  alert={false}
-                  href="/hr/designation"
-                />
-                <SidebarItem
-                  text="Departments"
-                  alert={false}
-                  href="/hr/departments"
-                />
-                <SidebarItem
-                  text="Appreciation"
-                  alert={false}
-                  href="/hr/appreciation"
-                />
-              </>
+              {expanded && (
+                <>
+                  <SidebarItem
+                    text="Employees"
+                    alert={false}
+                    href="/hr/employees"
+                  />
+                  <SidebarItem
+                    text="Leaves"
+                    alert={false}
+                    href="/hr/leaves"
+                  />
+                  <SidebarItem
+                    text="Shift Roster"
+                    alert={false}
+                    href="/hr/shiftroster"
+                  />
+                  <SidebarItem
+                    text="Attendace"
+                    alert={false}
+                    href="/hr/attendace"
+                  />
+                  <SidebarItem
+                    text="Holiday"
+                    alert={false}
+                    href="/hr/holiday"
+                  />
+                  <SidebarItem
+                    text="Designation"
+                    alert={false}
+                    href="/hr/designation"
+                  />
+                  <SidebarItem
+                    text="Departments"
+                    alert={false}
+                    href="/hr/departments"
+                  />
+                  <SidebarItem
+                    text="Appreciation"
+                    alert={false}
+                    href="/hr/appreciation"
+                  />
+                </>
+              )}
             </SidebarItem>
             <SidebarItem
               icon={<Wallet size={20} strokeWidth={1.5} />}
               text="Payroll"
               alert
               asDropdown
+              toggleSidebar={toggleSidebar}
             >
-              <SidebarItem
-                text="Payroll"
-                alert={false}
-                href="/payroll"
-              />
-              <SidebarItem
-                text="Employee salary"
-                alert={false}
-                href="/payroll/employee-salary"
-              />
+              {expanded && (
+                <>
+                  <SidebarItem
+                    text="Payroll"
+                    alert={false}
+                    href="/payroll"
+                  />
+                  <SidebarItem
+                    text="Employee salary"
+                    alert={false}
+                    href="/payroll/employee-salary"
+                  />
+                </>
+              )}
             </SidebarItem>
             <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
@@ -352,13 +361,13 @@ export function SidebarItem({
     <>
       <button
         onClick={handleClick}
-        className={`relative z-50 flex w-full items-center justify-start p-2 ${
-          !isWindowSmall ? `my-2` : `my-1.5`
-        } group cursor-pointer rounded-[0.6rem] transition-colors 
+        className={`relative z-50 flex w-full items-center justify-center gap-4 px-[10px] py-[5px] ${
+          !isWindowSmall ? `` : ``
+        } group cursor-pointer  transition-colors 
         ${
           router.pathname.startsWith(href)
             ? 'bg-slate-700 text-white'
-            : 'text-white hover:bg-slate-800'
+            : 'text-gray-300 hover:bg-slate-700 hover:text-white'
         }`}
       >
         {asDropdown && expanded && (
@@ -372,7 +381,17 @@ export function SidebarItem({
             />
           </span>
         )}
-        {icon && <div className="ml-1 w-[20px]">{icon}</div>}
+        {icon ? (
+          <div
+            className=" w-[20px] text-gray-300
+          transition-all group-hover:text-white "
+          >
+            {icon}
+          </div>
+        ) : (
+          <div className=" h-[20px] w-[20px]"></div>
+        )}
+
         {alert && (
           <div
             className={`absolute flex w-full justify-end pr-3 
@@ -384,33 +403,34 @@ export function SidebarItem({
                 : `left-0`
             }`}
           >
-            <div className={`h-2 w-2 rounded-full bg-red-500`} />
+            <div className={`h-1.5 w-1.5 rounded-full bg-red-500`} />
           </div>
         )}
-        <span
-          className={`ml-1 overflow-hidden text-left transition-all ${
-            icon && `ml-3`
-          } ${
-            !isWindowSmall ? (expanded ? 'w-full' : 'w-0') : `w-full`
-          }`}
-        >
-          {text}
-        </span>
 
-        {!expanded && (
+        {!expanded ? (
           <div
             className={`
-                          invisible absolute left-full ml-1 flex max-w-xs -translate-x-3 items-center rounded-md bg-slate-500 px-2
-                          py-1 text-white opacity-0 transition-all group-hover:visible group-hover:translate-x-0 group-hover:opacity-100
+                          invisible absolute left-full  ml-2 flex h-full  w-full max-w-xs -translate-x-1/2 items-center rounded-md
+                          bg-slate-500 px-2 py-1 text-white opacity-0 transition-all group-hover:visible
+                           group-hover:translate-x-0 group-hover:opacity-100
                       `}
+          ></div>
+        ) : (
+          <span
+            className={` overflow-hidden text-left transition-all  ${
+              !isWindowSmall
+                ? expanded
+                  ? 'w-full'
+                  : 'w-0'
+                : `w-full`
+            }`}
           >
             {text}
-          </div>
+          </span>
         )}
       </button>
       {asDropdown && isOpen && (
-        <div className="flex gap-2 pl-[20px]">
-          <div className="h-full w-[3px]  rounded-full"></div>
+        <div className="flex gap-2">
           <div className="w-full">{children}</div>
         </div>
       )}
