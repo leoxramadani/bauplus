@@ -131,8 +131,14 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
       //   } else {
       //     // Bank account data is empty, perform create
           const res = await axios.post(CREATE_CLIENTS, {
-            ...data
-          });
+              ...data,             
+          },
+          {
+            params:{
+              clientTypeId:data.clientTypeId,
+            }
+          }
+          );
           console.log('Create response:', res);
           toast.success('Successfully created new client!');
           setIsSubmitting(false);
@@ -262,6 +268,105 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
                 </FormItem>
               )}
             />
+
+              <FormField
+              control={form.control}
+              name="accountNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Number</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Account Number"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Country</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Country"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Email"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
+
+
+              
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Phone"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
+
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Address"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
+
 
           </div>
 

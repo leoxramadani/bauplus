@@ -14,6 +14,7 @@ import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const clientsSchema = z.object({
@@ -68,8 +69,9 @@ const ActionsColumn = ({ item }: { item: any }) => {
       console.log('Delete row with id:', id);
 
       await axios
-        .delete(DELETE_CLIENT + `?id=${id}`)
+        .delete(DELETE_CLIENT + '/'+id)
         .then((res) => {
+          toast.success("Successfully deleted a client.");
           console.log('response after delete success =>', res);
         })
         .catch((error) => {
@@ -93,18 +95,18 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() =>
-            navigator.clipboard.writeText(item.employeeId)
+            navigator.clipboard.writeText(item.clientId)
           }
         >
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
+        <DropdownMenuItem onClick={() => handleEdit(item.clientId)}>
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => handleDelete(item.employeeId)}
+          onClick={() => handleDelete(item.clientId)}
         >
           Delete Row
         </DropdownMenuItem>
@@ -221,6 +223,11 @@ export const createClientSchema = z.object({
   companyName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
+  accountNumber: z.string().optional(),
+  country: z.string().optional(),
+  email:z.string().optional(),
+  phone:z.string().optional(),
+  address:z.string().optional()
 });
 
 export type ICreateClientSchema = z.infer<
