@@ -30,6 +30,12 @@ export const DepartmentSchema = z.object({
     })
     .optional()
     .nullable(),
+  parentDepartment: z
+    .object({
+      departmentName: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
 });
 
 export type IDepartment = z.infer<typeof DepartmentSchema>;
@@ -72,8 +78,8 @@ export const departmentColumnDef: ColumnDef<IDepartment>[] = [
     header: 'Company Name',
   },
   {
-    accessorKey: 'parentDepartmentId',
-    header: 'Parent Department Id',
+    accessorKey: 'parentDepartment.departmentName',
+    header: 'Parent Department Name',
   },
   {
     id: 'actions',
