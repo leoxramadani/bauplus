@@ -13,7 +13,7 @@ import {
   PlusCircle,
 } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Layout,
   Layouts,
@@ -254,7 +254,7 @@ const originalItems = [
   },
 ];
 
-const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
+const GridLayout = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [removedCharts, setRemovedCharts] = useState<any[]>([]);
   const [isAdding, setisAdding] = useState(false);
@@ -414,6 +414,7 @@ const GridLayout: React.FC<GridLayoutProps> = ({ data }) => {
               key={layoutItem.i}
               data-grid={layoutItem}
               className=""
+              title={layoutItem.title}
             >
               {isAdding && (
                 <Button
