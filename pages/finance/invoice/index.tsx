@@ -14,9 +14,8 @@ const Invoice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    console.log('Query changes here');
-
     if (router.query.id) {
+      console.log('Query changes here');
       setIsModalOpen(true);
     }
     console.log('router==', router);
@@ -33,7 +32,7 @@ const Invoice = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <Modal>
+        <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
             <Button
               variant="destructive"
@@ -67,7 +66,11 @@ const Invoice = () => {
           <FileInput /> <span>Export</span>
         </Button>
       </div>
-      <DataTable data={data} columns={invoiceColumnDef} searchVal='invoiceNumber'/>
+      <DataTable
+        data={data}
+        columns={invoiceColumnDef}
+        searchVal="invoiceNumber"
+      />
     </section>
   );
 };

@@ -54,11 +54,11 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     header: 'Invoice Type',
   },
   {
-    accessorKey: 'dateInTheDocument',
+    accessorKey: 'dateInDocument',
     header: 'Date in document',
     cell({ row }) {
       const formatedDate = new Date(
-        row.getValue('invoiceDate')
+        row.getValue('dateInDocument')
       ).toLocaleDateString('en-GB');
       return <div>{formatedDate}</div>;
     },

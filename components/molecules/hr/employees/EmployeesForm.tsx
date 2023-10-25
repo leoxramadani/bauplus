@@ -52,8 +52,6 @@ const EmployeesForm = ({
   const [employeeData, setEmployeeData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // const [departments, setDepartments] = useState<any>();
-
   const {
     data: departments,
     isLoading: departmentsLoading,
