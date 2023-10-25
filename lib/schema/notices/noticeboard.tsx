@@ -2,7 +2,7 @@ import * as z from 'zod';
 
 export const noticeSchema = z.object({
   noticeId: z.string().optional(),
-  // dateCreated: z.string(),
+  dateCreated: z.string(),
   noticeTitle: z.string(),
   noticeText: z.string(),
   isRead: z.boolean().default(false),

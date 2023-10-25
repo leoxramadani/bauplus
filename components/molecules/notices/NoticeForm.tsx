@@ -49,14 +49,8 @@ const NoticeForm = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [noticeData, setNoticeData] = useState<any>();
-  const [showConfirmationModal, setShowConfirmationModal] =
-    useState(false);
 
   console.log('asdasdasdasdas', noticeId);
-
-  const form = useForm<InoticeSchema>({
-    resolver: zodResolver(noticeSchema),
-  });
 
   const {
     data: departments,
@@ -66,25 +60,22 @@ const NoticeForm = ({
 
   useEffect(() => {
     async function getData(Id: string) {
-      try {
-        const response = await axios.get(
-          GET_SPECIFIC_NOTICE + `?noticeId=${Id}`
-        );
-        const notice = response.data;
-        setNoticeData(notice);
+      await axios
+        .get(GET_SPECIFIC_NOTICE + `?noticeId=${Id}`)
+        .then((res) => {
+          console.log('setting specific notice data ->', res.data);
 
-        form.setValue('noticeTitle', notice.noticeTitle);
-        form.setValue('departmentId', notice.departmentId);
-        form.setValue('noticeText', notice.noticeText);
-      } catch (error) {
-        console.log('error fetching notice->', error);
-      }
+          setNoticeData(res.data);
+        })
+        .catch((error) => {
+          console.log('Error fetching specific notice=>', error);
+        });
     }
 
     if (noticeId) {
       getData(noticeId);
     }
-  }, [noticeId, form]);
+  }, [noticeId]);
 
   const [noticeType, setNoticeType] =
     useState<'Employees'>('Employees');
@@ -93,7 +84,6 @@ const NoticeForm = ({
     async (data: InoticeSchema) => {
       if (noticeId) {
         console.log('updating data', data);
-
         await axios
           .put(UPDATE_NOTICE, {
             ...data,
@@ -101,11 +91,12 @@ const NoticeForm = ({
           })
           .then((res) => {
             console.log('Notice updated successfully->', res);
+            toast.success('Successfully updated the notice!');
+            setIsModalOpen(false);
           })
           .catch((error) => {
             console.log('Error updating notice -> ', error);
           });
-        toast.success('Successfully updated the notice schema!');
       } else {
         console.log('creating data', data);
         await axios
@@ -114,13 +105,13 @@ const NoticeForm = ({
           })
           .then((res) => {
             console.log('Notice created successfully->', res);
+            toast.success('Successfully created the notice!');
+            setIsModalOpen(false);
           })
           .catch((error) => {
             console.log('Error creating notice -> ', error);
           });
-        toast.success('Successfully created new notice schema!');
       }
-      // setIsModalOpen(false);
     },
     [noticeId]
   );
@@ -129,8 +120,10 @@ const NoticeForm = ({
     console.log('Error=>', error);
   };
 
-  console.log('noticeId', noticeId);
-  console.log('showConfirmationModal', showConfirmationModal);
+  const form = useForm<InoticeSchema>({
+    resolver: zodResolver(noticeSchema),
+    values: { ...noticeData },
+  });
 
   return (
     <div className="flex w-full flex-col gap-4">
