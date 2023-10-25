@@ -1,5 +1,5 @@
 import mimiroArrow from '@/public/Arrow-M.svg';
-import mimiro from '@/public/logo-white-mimiro.svg';
+import mimiro from '@/public/mimiro-new-9.svg';
 import {
   Calculator,
   ChevronRight,

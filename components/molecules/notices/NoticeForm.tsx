@@ -1,5 +1,5 @@
-
-import { Label } from '@/components/ui/label';
+import Modal from '@/components/atoms/Modal';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,6 +9,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -20,7 +25,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import {
   CREATE_NOTICE,
-  DELETE_NOTICE,
   GET_SPECIFIC_NOTICE,
   UPDATE_NOTICE,
 } from '@/lib/constants/endpoints/notices';
@@ -31,14 +35,10 @@ import {
 } from '@/lib/schema/notices/noticeboard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Button } from '@/components/ui/button';
 import NoticeDelete from './NoticeDelete';
-import Modal from '@/components/atoms/Modal';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const NoticeForm = ({
   setIsModalOpen,
@@ -92,20 +92,35 @@ const NoticeForm = ({
   const onSubmitNotice = useCallback(
     async (data: InoticeSchema) => {
       if (noticeId) {
-        await axios.put(UPDATE_NOTICE, {
-          ...data,
-          noticeId,
-        });
+        console.log('updating data', data);
+
+        await axios
+          .put(UPDATE_NOTICE, {
+            ...data,
+            noticeId,
+          })
+          .then((res) => {
+            console.log('Notice updated successfully->', res);
+          })
+          .catch((error) => {
+            console.log('Error updating notice -> ', error);
+          });
         toast.success('Successfully updated the notice schema!');
-        window.location.reload();
       } else {
-        await axios.post(CREATE_NOTICE, {
-          ...data,
-        });
+        console.log('creating data', data);
+        await axios
+          .post(CREATE_NOTICE, {
+            ...data,
+          })
+          .then((res) => {
+            console.log('Notice created successfully->', res);
+          })
+          .catch((error) => {
+            console.log('Error creating notice -> ', error);
+          });
         toast.success('Successfully created new notice schema!');
-        window.location.reload();
       }
-      setIsModalOpen(false);
+      // setIsModalOpen(false);
     },
     [noticeId]
   );
@@ -141,6 +156,7 @@ const NoticeForm = ({
           className="flex w-full flex-col gap-4"
         >
           <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* noticeTitle */}
             <FormField
               control={form.control}
               name="noticeTitle"
@@ -158,7 +174,7 @@ const NoticeForm = ({
                 </FormItem>
               )}
             />
-
+            {/* departmentId */}
             <FormField
               control={form.control}
               name="departmentId"
@@ -198,6 +214,7 @@ const NoticeForm = ({
               )}
             />
           </div>
+          {/* noticeText */}
           <FormField
             control={form.control}
             name="noticeText"
@@ -221,7 +238,7 @@ const NoticeForm = ({
               <Modal.Trigger asChild>
                 <Button
                   variant="destructive"
-                  className="flex gap-1 justify-center items-center"
+                  className="flex items-center justify-center gap-1"
                 >
                   Delete Notice
                 </Button>
