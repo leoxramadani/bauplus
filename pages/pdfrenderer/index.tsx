@@ -50,406 +50,406 @@ Font.register({
   fontWeight: 500,
 });
 
-const stylesThor = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    fontFamily: 'Roboto',
-    padding: 35,
-  },
-  image: {
-    marginLeft: 10,
-    margin: 25,
-    marginHorizontal: 90,
-    marginTop: 100,
-  },
-  belowLogo: {
-    padding: 10,
-    flexDirection: 'row',
-  },
-  information: {
-    paddingRight: 20,
-    paddingTop: 10,
-  },
-  buyerRight: {
-    borderColor: '#000000',
-    borderWidth: 1,
-    flexDirection: 'column',
-    padding: 10,
-    justifyContent: 'space-between',
-    flex: 1,
-  },
-  data: {
-    fontSize: 12,
-  },
-  table: {
-    flex: 'auto',
-    flexShrink: 1,
-    borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-  },
-  tableRow: { flexDirection: 'row' },
-  tableCell: {
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flex: 1,
-  },
-  tableCellText: {
-    fontSize: 10,
-    padding: 5,
-  },
-});
+// const stylesThor = StyleSheet.create({
+//   page: {
+//     flexDirection: 'column',
+//     backgroundColor: '#ffffff',
+//     fontFamily: 'Roboto',
+//     padding: 35,
+//   },
+//   image: {
+//     marginLeft: 10,
+//     margin: 25,
+//     marginHorizontal: 90,
+//     marginTop: 100,
+//   },
+//   belowLogo: {
+//     padding: 10,
+//     flexDirection: 'row',
+//   },
+//   information: {
+//     paddingRight: 20,
+//     paddingTop: 10,
+//   },
+//   buyerRight: {
+//     borderColor: '#000000',
+//     borderWidth: 1,
+//     flexDirection: 'column',
+//     padding: 10,
+//     justifyContent: 'space-between',
+//     flex: 1,
+//   },
+//   data: {
+//     fontSize: 12,
+//   },
+//   table: {
+//     flex: 'auto',
+//     flexShrink: 1,
+//     borderStyle: 'solid',
+//     borderColor: '#000',
+//     borderWidth: 1,
+//     borderRightWidth: 0,
+//     borderBottomWidth: 0,
+//   },
+//   tableRow: { flexDirection: 'row' },
+//   tableCell: {
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flex: 1,
+//   },
+//   tableCellText: {
+//     fontSize: 10,
+//     padding: 5,
+//   },
+// });
 
-const stylesEverest = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    fontFamily: 'Roboto',
-    padding: 25,
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    marginTop: 70,
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-  },
-  headerRight: {
-    borderColor: '#000000',
-    borderWidth: 3,
-    paddingTop: 60,
-    paddingHorizontal: 10,
-    textAlign: 'center',
-    justifyContent: 'space-between',
-  },
-  belowLogo: {
-    padding: 10,
-    flexDirection: 'row',
-  },
-  information: {
-    paddingRight: 20,
-    paddingTop: 10,
-  },
-  table: {
-    flex: 'auto',
-    flexShrink: 1,
-    borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    marginTop: 20,
-  },
-  tableRow: { flexDirection: 'row' },
-  tableCell: {
-    borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flex: 1,
-  },
-  tableCellBigger: {
-    borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-  },
-  tableCellLastRowFirstCell: {
-    // Adjust the width as needed
-    width: '83.3333333333333333333333333333333333%', // Set the desired width here
-    borderStyle: 'solid',
-    borderColor: '#000',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-    textAlign: 'right',
-  },
-  tableCellText: {
-    fontSize: 10,
-    padding: 5,
-    margin: 5,
-  },
-});
+// const stylesEverest = StyleSheet.create({
+//   page: {
+//     flexDirection: 'column',
+//     backgroundColor: '#ffffff',
+//     fontFamily: 'Roboto',
+//     padding: 25,
+//     flex: 1,
+//   },
+//   header: {
+//     flexDirection: 'row',
+//     marginTop: 70,
+//     alignItems: 'flex-start',
+//     justifyContent: 'space-between',
+//     marginHorizontal: 20,
+//   },
+//   headerRight: {
+//     borderColor: '#000000',
+//     borderWidth: 3,
+//     paddingTop: 60,
+//     paddingHorizontal: 10,
+//     textAlign: 'center',
+//     justifyContent: 'space-between',
+//   },
+//   belowLogo: {
+//     padding: 10,
+//     flexDirection: 'row',
+//   },
+//   information: {
+//     paddingRight: 20,
+//     paddingTop: 10,
+//   },
+//   table: {
+//     flex: 'auto',
+//     flexShrink: 1,
+//     borderStyle: 'solid',
+//     borderColor: '#000',
+//     borderWidth: 1,
+//     borderRightWidth: 0,
+//     borderBottomWidth: 0,
+//     marginTop: 20,
+//   },
+//   tableRow: { flexDirection: 'row' },
+//   tableCell: {
+//     borderStyle: 'solid',
+//     borderColor: '#000',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flex: 1,
+//   },
+//   tableCellBigger: {
+//     borderStyle: 'solid',
+//     borderColor: '#000',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//   },
+//   tableCellLastRowFirstCell: {
+//     // Adjust the width as needed
+//     width: '83.3333333333333333333333333333333333%', // Set the desired width here
+//     borderStyle: 'solid',
+//     borderColor: '#000',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//     textAlign: 'right',
+//   },
+//   tableCellText: {
+//     fontSize: 10,
+//     padding: 5,
+//     margin: 5,
+//   },
+// });
 
-const stylesAlbArchitect = StyleSheet.create({
-  page: {
-    margin: 25,
-    fontFamily: 'Roboto',
-  },
-  table: {
-    flexShrink: 1,
-    marginTop: 20,
-  },
-  tableCell: {
-    borderWidth: 1,
-    borderStyle: 'dotted',
-    flex: 'auto',
-    width: '10%',
-    backgroundColor: '#cfcfcf',
-    padding: 4,
-  },
-  tableCellWBorder: {
-    flex: '1',
-  },
-  tableCellText: {
-    fontSize: 8,
-  },
-  tableRowCellText: {
-    fontSize: 8,
-    padding: 4,
-    textAlign: 'right',
-  },
-  tableHeaderCellNaziv: {
-    width: '50%',
-    padding: 4,
-    borderWidth: 1,
-    borderStyle: 'dotted',
-  },
-  tableCellNaziv: {
-    width: '50%',
-  },
-  tableRowNazivCellText: {
-    textAlign: 'left',
-    fontSize: 8,
-  },
-});
+// const stylesAlbArchitect = StyleSheet.create({
+//   page: {
+//     margin: 25,
+//     fontFamily: 'Roboto',
+//   },
+//   table: {
+//     flexShrink: 1,
+//     marginTop: 20,
+//   },
+//   tableCell: {
+//     borderWidth: 1,
+//     borderStyle: 'dotted',
+//     flex: 'auto',
+//     width: '10%',
+//     backgroundColor: '#cfcfcf',
+//     padding: 4,
+//   },
+//   tableCellWBorder: {
+//     flex: '1',
+//   },
+//   tableCellText: {
+//     fontSize: 8,
+//   },
+//   tableRowCellText: {
+//     fontSize: 8,
+//     padding: 4,
+//     textAlign: 'right',
+//   },
+//   tableHeaderCellNaziv: {
+//     width: '50%',
+//     padding: 4,
+//     borderWidth: 1,
+//     borderStyle: 'dotted',
+//   },
+//   tableCellNaziv: {
+//     width: '50%',
+//   },
+//   tableRowNazivCellText: {
+//     textAlign: 'left',
+//     fontSize: 8,
+//   },
+// });
 
-const customTable = StyleSheet.create({
-  page: {
-    backgroundColor: '#ffffff',
-    padding: '50pt 50pt 70pt', // Adjusted padding to leave space for page number
-    fontFamily: 'Roboto',
-    flexDirection: 'column',
-    alignItems: 'center', // Center the table horizontally
-    justifyContent: 'center',
-  },
-  pageNumber: {
-    position: 'absolute',
-    fontSize: 10,
-    bottom: 35,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-  },
-  table: {
-    display: 'flex',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    width: '100%',
-    textAlign: 'center',
-    textOverflow: 'ellipsis',
-  },
-  tableRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 'auto',
-    width: '100%',
-    wordWrap: 'break-word',
-    minHeight: 35, // Adjust the value as needed
-    textOverflow: 'ellipsis',
-    height: 'auto',
-  },
-  tableCol: {
-    width: '10%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-    wordWrap: 'break-word', // Add this line to break long words
-    textAlign: 'center',
-    justifyContent: 'center',
-    objectFit: 'contain',
-    textOverflow: 'ellipsis',
-  },
-  tableCell: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-  },
-  widerTableCol: {
-    width: '12%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-    wordWrap: 'break-word', // Add this line to break long words
-    textAlign: 'center',
-    justifyContent: 'center',
-    padding: 5,
-    objectFit: 'contain',
-    textOverflow: 'ellipsis',
-  },
-  tableCellArkiva: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-    borderTop: 1,
-  },
-  tableCellArkivaFirst: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  tableCellArkivaEnd: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-    borderLeft: 1,
-    justifyContent: 'center',
-  },
-  tableCellArkivaEndFirst: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-    justifyContent: 'center',
-  },
-  tableCellArkivaEndFirstDate: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-    width: '90%',
-  },
-  tableCellArkivaEndData: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    overflow: 'hidden',
-    borderLeft: 1,
-    justifyContent: 'center',
-    width: '97%',
-  },
-  tableColEnd: {
-    display: 'flex',
-    width: '15%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-    wordWrap: 'break-word', // Add this line to break long words
-    textAlign: 'center',
-    justifyContent: 'center',
-    objectFit: 'contain',
-    textOverflow: 'ellipsis',
-  },
-  tableRowEnd: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 'auto',
-    width: '100%',
-    wordWrap: 'break-word',
-    minHeight: 35, // Adjust the value as needed
-    textOverflow: 'ellipsis',
-    height: 'auto',
-    justifyContent: 'center',
-    borderTop: 1,
-  },
-  tableRowEndData: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 'auto',
-    width: '100%',
-    wordWrap: 'break-word',
-    minHeight: 25, // Adjust the value as needed
-    textOverflow: 'ellipsis',
-    height: 'auto',
-    justifyContent: 'center',
-  },
-  tableColImePrezime: {
-    width: '25%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    flexDirection: 'column',
-    wordWrap: 'break-word', // Add this line to break long words
-    textAlign: 'center',
-    justifyContent: 'center',
-    objectFit: 'contain',
-    textOverflow: 'ellipsis',
-  },
-  tableCellArkivaWPadding: {
-    display: 'flex',
-    flexDirection: 'column',
-    fontSize: 10,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word', // Add this line to break long words
-    wordWrap: 'break-word',
-    textAlign: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  tableRowWPadding: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 'auto',
-    width: '100%',
-    wordWrap: 'break-word',
-    minHeight: 25, // Adjust the value as needed
-    textOverflow: 'ellipsis',
-  },
-});
+// const customTable = StyleSheet.create({
+//   page: {
+//     backgroundColor: '#ffffff',
+//     padding: '50pt 50pt 70pt', // Adjusted padding to leave space for page number
+//     fontFamily: 'Roboto',
+//     flexDirection: 'column',
+//     alignItems: 'center', // Center the table horizontally
+//     justifyContent: 'center',
+//   },
+//   pageNumber: {
+//     position: 'absolute',
+//     fontSize: 10,
+//     bottom: 35,
+//     left: 0,
+//     right: 0,
+//     textAlign: 'center',
+//   },
+//   table: {
+//     display: 'flex',
+//     borderStyle: 'solid',
+//     borderWidth: 1,
+//     borderRightWidth: 0,
+//     borderBottomWidth: 0,
+//     width: '100%',
+//     textAlign: 'center',
+//     textOverflow: 'ellipsis',
+//   },
+//   tableRow: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     margin: 'auto',
+//     width: '100%',
+//     wordWrap: 'break-word',
+//     minHeight: 35, // Adjust the value as needed
+//     textOverflow: 'ellipsis',
+//     height: 'auto',
+//   },
+//   tableCol: {
+//     width: '10%',
+//     borderStyle: 'solid',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//     wordWrap: 'break-word', // Add this line to break long words
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     objectFit: 'contain',
+//     textOverflow: 'ellipsis',
+//   },
+//   tableCell: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//   },
+//   widerTableCol: {
+//     width: '12%',
+//     borderStyle: 'solid',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//     wordWrap: 'break-word', // Add this line to break long words
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     padding: 5,
+//     objectFit: 'contain',
+//     textOverflow: 'ellipsis',
+//   },
+//   tableCellArkiva: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//     borderTop: 1,
+//   },
+//   tableCellArkivaFirst: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     overflow: 'hidden',
+//   },
+//   tableCellArkivaEnd: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//     borderLeft: 1,
+//     justifyContent: 'center',
+//   },
+//   tableCellArkivaEndFirst: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//     justifyContent: 'center',
+//   },
+//   tableCellArkivaEndFirstDate: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//     width: '90%',
+//   },
+//   tableCellArkivaEndData: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     paddingRight: 5,
+//     paddingLeft: 5,
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     overflow: 'hidden',
+//     borderLeft: 1,
+//     justifyContent: 'center',
+//     width: '97%',
+//   },
+//   tableColEnd: {
+//     display: 'flex',
+//     width: '15%',
+//     borderStyle: 'solid',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//     wordWrap: 'break-word', // Add this line to break long words
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     objectFit: 'contain',
+//     textOverflow: 'ellipsis',
+//   },
+//   tableRowEnd: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     margin: 'auto',
+//     width: '100%',
+//     wordWrap: 'break-word',
+//     minHeight: 35, // Adjust the value as needed
+//     textOverflow: 'ellipsis',
+//     height: 'auto',
+//     justifyContent: 'center',
+//     borderTop: 1,
+//   },
+//   tableRowEndData: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     margin: 'auto',
+//     width: '100%',
+//     wordWrap: 'break-word',
+//     minHeight: 25, // Adjust the value as needed
+//     textOverflow: 'ellipsis',
+//     height: 'auto',
+//     justifyContent: 'center',
+//   },
+//   tableColImePrezime: {
+//     width: '25%',
+//     borderStyle: 'solid',
+//     borderWidth: 1,
+//     borderLeftWidth: 0,
+//     borderTopWidth: 0,
+//     flexDirection: 'column',
+//     wordWrap: 'break-word', // Add this line to break long words
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     objectFit: 'contain',
+//     textOverflow: 'ellipsis',
+//   },
+//   tableCellArkivaWPadding: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     fontSize: 10,
+//     flexWrap: 'wrap',
+//     wordBreak: 'break-word', // Add this line to break long words
+//     wordWrap: 'break-word',
+//     textAlign: 'center',
+//     justifyContent: 'center',
+//     overflow: 'hidden',
+//   },
+//   tableRowWPadding: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     margin: 'auto',
+//     width: '100%',
+//     wordWrap: 'break-word',
+//     minHeight: 25, // Adjust the value as needed
+//     textOverflow: 'ellipsis',
+//   },
+// });
 
 const generalStyle = StyleSheet.create({
   page: {
@@ -502,7 +502,7 @@ const generalStyle = StyleSheet.create({
     width: '16.6666666667%',
   },
   tableCellHeader: {
-    fontSize: 10,
+    fontSize: 8,
     padding: 5,
     margin: 5,
     textTransform: 'uppercase',
@@ -521,6 +521,9 @@ const generalStyle = StyleSheet.create({
     flexWrap: 'wrap',
     //width: '16.6666666667%',
   },
+  tableCellRowLowerCase: {
+    textTransform: 'lowercase',
+  },
   tableCellItemDescription: {
     color: '#5E6470',
     fontWeight: 'normal',
@@ -534,7 +537,7 @@ const inputStyle =
   'w-48 p-2 border rounded-md border-gray-300 focus:outline-none focus:border-blue-500';
 
 const buttonStyle =
-  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded';
+  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded';
 
 const centerDivStyle = 'flex justify-center items-center h-screen';
 
@@ -1403,7 +1406,16 @@ const SoraviaLogo = () => {
     </Svg>
   );
 };
-
+interface SelectedProduct {
+  id: number;
+  nrRendor: string;
+  pozita: string;
+  njesiaMatese: string;
+  sasia: string;
+  cmimiNjesisePaTVSH: number;
+  cmimiPergjithshemPaTVSH: number;
+  [key: string]: string | number;
+}
 const PDFRenderer = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [subject, setSubject] = useState('');
@@ -1415,39 +1427,30 @@ const PDFRenderer = () => {
   const predefinedProducts = [
     {
       id: 1,
-      cell1: 'Product 1',
-      cell2: 'Unit 1',
-      cell3: '10',
-      cell4: '20',
-      cell5: '200',
-      cell6: '2000',
+      nrRendor: '',
+      pozita: 'Unit 1',
+      njesiaMatese: 'm3',
+      sasia: 0,
+      cmimiNjesisePaTVSH: 2000,
+      cmimiPergjithshemPaTVSH: 0,
     },
     {
       id: 2,
-      cell1: 'Product 2',
-      cell2: 'Unit 2',
-      cell3: '5',
-      cell4: '30',
-      cell5: '150',
-      cell6: '750',
+      nrRendor: '',
+      pozita: 'Unit 2',
+      njesiaMatese: 'm3',
+      sasia: 0,
+      cmimiNjesisePaTVSH: 1500,
+      cmimiPergjithshemPaTVSH: 0,
     },
     // Add more products as needed
   ];
 
-  const [modifiedCell3Values, setModifiedCell3Values] = useState(
-    predefinedProducts.map(() => '')
-  );
+  const [modifiednjesiaMateseValues, setModifiednjesiaMateseValues] =
+    useState(predefinedProducts.map(() => ''));
 
   const [selectedProducts, setSelectedProducts] = useState<
-    {
-      id: number;
-      cell1: string;
-      cell2: string;
-      cell3: string;
-      cell4: string;
-      cell5: string;
-      cell6: string;
-    }[]
+    SelectedProduct[]
   >([]);
   const [productIdCounter, setProductIdCounter] = useState(3);
 
@@ -1457,48 +1460,73 @@ const PDFRenderer = () => {
     return newProductId;
   };
 
+  const calculateTotalSum = () => {
+    let totalSum = 0;
+    selectedProducts.forEach((product) => {
+      totalSum += parseFloat(
+        String(product.cmimiNjesisePaTVSH * Number(product.sasia))
+      );
+    });
+    return totalSum;
+  };
+
   const addProductToPDF = (product: {
-    cell3: string;
-    id?: number;
-    cell1: any;
-    cell2: string;
-    cell4: string;
-    cell5: string;
-    cell6: string;
+    nrRendor: string;
+    pozita: string; // Ensure pozita is always a string
+    njesiaMatese: string;
+    sasia: string;
+    cmimiNjesisePaTVSH: number;
+    cmimiPergjithshemPaTVSH: number;
   }) => {
-    const existingProduct = selectedProducts.find(
-      (p) => p.cell1 === product.cell1
+    const existingProductIndex = selectedProducts.findIndex(
+      (p) => p.pozita === product.pozita
     );
 
-    if (existingProduct) {
-      // If a product with the same "cell1" value already exists, update it.
-      const updatedProducts = selectedProducts.map((p) =>
-        p.cell1 === existingProduct.cell1 ? { ...p, ...product } : p
-      );
+    if (existingProductIndex !== -1) {
+      // Product already exists, so enable editing the "Njësia matëse" field
+      const updatedProducts = [...selectedProducts];
+      updatedProducts[existingProductIndex] = {
+        ...updatedProducts[existingProductIndex],
+        ...product,
+        cmimiPergjithshemPaTVSH:
+          parseFloat(product.sasia) * product.cmimiNjesisePaTVSH,
+      };
 
       setSelectedProducts(updatedProducts);
     } else {
-      // If the product doesn't exist, add it with a default id value.
+      // Product doesn't exist, add it with the next available id value
       const newProduct = {
         id: generateProductId(),
         ...product,
+        nrRendor: (selectedProducts.length + 1).toString(),
+        cmimiPergjithshemPaTVSH:
+          parseFloat(product.sasia) * product.cmimiNjesisePaTVSH,
       };
       setSelectedProducts([...selectedProducts, newProduct]);
     }
-    // Clear the modifiedCell3 state
-    const newModifiedCell3Values = [...modifiedCell3Values];
-    if (product.id !== undefined) {
-      newModifiedCell3Values[product.id - 1] = '';
-    }
-    setModifiedCell3Values(newModifiedCell3Values);
+
+    // Clear the modifiednjesiaMatese state for the added product
+    const newModifiednjesiaMateseValues = [
+      ...modifiednjesiaMateseValues,
+    ];
+    newModifiednjesiaMateseValues[existingProductIndex] = ''; // Clear the modifiednjesiaMatese value
+    setModifiednjesiaMateseValues(newModifiednjesiaMateseValues);
   };
 
   const removeProductFromPDF = (productId: number) => {
     setSelectedProducts((prevSelectedProducts) => {
-      // Use the filter function to remove the product with the specified id
-      return prevSelectedProducts.filter(
+      const updatedProducts = prevSelectedProducts.filter(
         (product) => product.id !== productId
       );
+
+      const renumberedProducts = updatedProducts.map(
+        (product, index) => ({
+          ...product,
+          nrRendor: (index + 1).toString(),
+        })
+      );
+
+      return renumberedProducts;
     });
   };
 
@@ -1507,7 +1535,7 @@ const PDFRenderer = () => {
       'Nr. Rendor',
       'Të dhëna për pozitën',
       'Njësia matëse',
-      'Sasi',
+      'Sasia',
       'Çmimi njësisë pa TVSH',
       'Çmimi i përgjithshëm pa TVSH',
     ],
@@ -1554,6 +1582,9 @@ const PDFRenderer = () => {
       // Create the PDF content
       const selectedLogoComponent =
         selectedLogo === '1' ? <ThorLogo /> : <EverestLogo />;
+
+      const totalSum = calculateTotalSum();
+      const formattedTotal = `${totalSum.toFixed(2)} ден.`;
 
       const generalInvoice = (
         <Document>
@@ -1746,7 +1777,21 @@ const PDFRenderer = () => {
                       >
                         {row.map((header, cellIndex) => (
                           <View
-                            style={generalStyle.tableCell}
+                            style={
+                              header === headers[0][3]
+                                ? {
+                                    ...generalStyle.tableCell,
+                                    width: '10%',
+                                  }
+                                : header === headers[0][4] ||
+                                  header === headers[0][5]
+                                ? {
+                                    ...generalStyle.tableCell,
+                                    width: '20%',
+                                    textAlign: 'right',
+                                  }
+                                : { ...generalStyle.tableCell }
+                            }
                             key={cellIndex}
                           >
                             <Text
@@ -1777,23 +1822,60 @@ const PDFRenderer = () => {
                             if (key !== 'id') {
                               return (
                                 <View
-                                  style={generalStyle.tableCell}
+                                  style={
+                                    key === 'sasia'
+                                      ? {
+                                          ...generalStyle.tableCell,
+                                          width: '10%',
+                                        }
+                                      : key ===
+                                          'cmimiNjesisePaTVSH' ||
+                                        key ===
+                                          'cmimiPergjithshemPaTVSH'
+                                      ? {
+                                          ...generalStyle.tableCell,
+                                          width: '20%',
+                                          textAlign: 'right',
+                                          //paddingRight: '14px',
+                                        }
+                                      : { ...generalStyle.tableCell }
+                                  }
                                   key={cellIndex}
                                 >
                                   <Text
                                     style={generalStyle.tableCellRow}
                                     break
                                   >
-                                    {value}
+                                    {typeof value === 'number'
+                                      ? parseFloat(
+                                          String(value)
+                                        ).toLocaleString('en-US')
+                                      : value}{' '}
+                                    <Text
+                                      style={
+                                        generalStyle.tableCellRowLowerCase
+                                      }
+                                    >
+                                      {key === 'cmimiNjesisePaTVSH' ||
+                                      key ===
+                                        'cmimiPergjithshemPaTVSH'
+                                        ? 'ден.'
+                                        : ''}
+                                    </Text>
                                   </Text>
-                                  {key === 'cell2' && (
+
+                                  {key === 'pozita' && (
                                     <Text
                                       style={
                                         generalStyle.tableCellItemDescription
                                       }
                                       break
                                     >
-                                      {product.cell6}
+                                      {parseFloat(
+                                        String(
+                                          product.cmimiPergjithshemPaTVSH
+                                        )
+                                      ).toLocaleString('en-US')}
                                     </Text>
                                   )}
                                 </View>
@@ -1804,6 +1886,50 @@ const PDFRenderer = () => {
                         )}
                       </View>
                     ))}
+                  </View>
+
+                  <View>
+                    <View
+                      style={[
+                        generalStyle.tableRow,
+                        {
+                          justifyContent: 'flex-end',
+                          alignItems: 'center',
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          generalStyle.tableCell,
+                          {
+                            width: '70%',
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-end',
+                            flexDirection: 'row',
+                          },
+                        ]}
+                      >
+                        <Text style={[generalStyle.tableCellRow]}>
+                          Цена без ДДВ / Çmimi pa TVSH{' '}
+                        </Text>
+                        <View
+                          style={[
+                            generalStyle.tableCell,
+                            {
+                              width: '30%',
+                              alignItems: 'flex-end',
+                              justifyContent: 'flex-end',
+                            },
+                          ]}
+                        >
+                          <Text style={[generalStyle.tableCellRow]}>
+                            {parseFloat(
+                              formattedTotal
+                            ).toLocaleString('en-US')}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -1894,6 +2020,25 @@ const PDFRenderer = () => {
     }
   };
 
+  // Define a function to handle changes in the `selectedProducts` table.
+  const handleSelectedProductChange = (
+    index: number,
+    field: string,
+    value: string
+  ) => {
+    // Create a copy of the selectedProducts array.
+    const updatedSelectedProducts = [...selectedProducts];
+
+    // Ensure the product at the given index exists.
+    if (updatedSelectedProducts[index]) {
+      // Update the specific product's property based on the field.
+      updatedSelectedProducts[index][field] = value;
+
+      // Update the state with the modified array.
+      setSelectedProducts(updatedSelectedProducts);
+    }
+  };
+
   return (
     <>
       <div className="p-2">
@@ -1934,68 +2079,196 @@ const PDFRenderer = () => {
             />
           </div>
         </div>
-        <div className="">
-          <h2>Predefined Products</h2>
-          <div className="my-4 flex-row border-2 border-red-700 py-10">
-            {predefinedProducts.map((product, index) => (
-              <p key={index} className="my-2 p-3">
-                {product.cell1} - {product.cell2} -{' '}
-                <input
-                  type="text"
-                  value={modifiedCell3Values[index]} // Use the corresponding modifiedCell3 value
-                  className="border-red-7 00 m-2 rounded-lg border-2 p-2 text-black"
-                  onChange={(e) => {
-                    const newModifiedCell3Values = [
-                      ...modifiedCell3Values,
-                    ];
-                    newModifiedCell3Values[index] = e.target.value;
-                    setModifiedCell3Values(newModifiedCell3Values);
-                  }}
-                  placeholder="Sasia"
-                />
-                - {product.cell4}
-                <button
-                  onClick={() =>
-                    addProductToPDF({
-                      ...product,
-                      cell3: modifiedCell3Values[index],
-                    })
-                  }
-                  className="button m-2"
-                >
-                  Add
-                </button>
-                <button
-                  onClick={() => removeProductFromPDF(product.id)}
-                  className="button m-2"
-                >
-                  Remove
-                </button>
-              </p>
-            ))}
+        <div className="p-4">
+          <h2 className="mb-4 text-2xl font-semibold">
+            Predefined Products
+          </h2>
+          <div className="my-4 overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead>
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Të dhëna për pozitën
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Sasia
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Njësia matëse
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Çmimi njësisë pa TVSH
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Çmimi i përgjithshëm pa TVSH
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {predefinedProducts.map((product, index) => (
+                  <tr key={index}>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {product.pozita}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <input
+                        type="text"
+                        value={modifiednjesiaMateseValues[index]}
+                        className="m-2 rounded-lg border-[1.5px] border-indigo-500 p-2 text-black"
+                        onChange={(e) => {
+                          const newModifiednjesiaMateseValues = [
+                            ...modifiednjesiaMateseValues,
+                          ];
+                          newModifiednjesiaMateseValues[index] =
+                            e.target.value;
+                          setModifiednjesiaMateseValues(
+                            newModifiednjesiaMateseValues
+                          );
+                        }}
+                        placeholder="Sasia"
+                      />
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {product.njesiaMatese}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {product.cmimiNjesisePaTVSH}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {product.cmimiPergjithshemPaTVSH}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <button
+                        onClick={() => {
+                          const isNjesiaEmpty =
+                            modifiednjesiaMateseValues[index] === '';
+                          const isProductInSelected =
+                            selectedProducts.some(
+                              (p) => p.pozita === product.pozita
+                            );
+                          if (
+                            !isNjesiaEmpty &&
+                            !isProductInSelected
+                          ) {
+                            addProductToPDF({
+                              ...product,
+                              sasia:
+                                modifiednjesiaMateseValues[index],
+                            });
+                          }
+                        }}
+                        disabled={
+                          modifiednjesiaMateseValues[index] === '' ||
+                          selectedProducts.some(
+                            (p) => p.pozita === product.pozita
+                          )
+                        }
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Add
+                      </button>
+                      <button
+                        onClick={() =>
+                          removeProductFromPDF(product.id)
+                        }
+                        className="ml-2 text-red-600 hover:text-red-900"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <button onClick={generatePDF} className={buttonStyle}>
-          Generate PDF
-        </button>
       </div>
-      <div>
-        <h2>Selected Products</h2>
-        <ul>
-          {selectedProducts.map((product) => (
-            <li key={product.id}>
-              {product.cell1} - {product.cell2} - {product.cell3} -{' '}
-              {product.cell4}
-              <button
-                onClick={() => removeProductFromPDF(product.id)}
-                className="button m-2"
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+      <div className="p-4">
+        <h2 className="mb-4 text-2xl font-semibold">
+          Selected Products
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Të dhëna për pozitën
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Sasia
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Njësia matëse
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Çmimi njësisë pa TVSH
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Çmimi i përgjithshëm pa TVSH
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {selectedProducts.map((product, index) => (
+                <tr key={product.id}>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {product.pozita}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <input
+                      type="text"
+                      value={product.sasia}
+                      className="m-2 rounded-lg border-[1.5px] border-indigo-500 p-2 text-black"
+                      onChange={(e) =>
+                        handleSelectedProductChange(
+                          index,
+                          'sasia',
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {product.njesiaMatese}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {parseFloat(
+                      String(product.cmimiNjesisePaTVSH)
+                    ).toLocaleString()}{' '}
+                    ден.
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {parseFloat(
+                      String(
+                        product.cmimiNjesisePaTVSH *
+                          Number(product.sasia)
+                      )
+                    ).toLocaleString()}{' '}
+                    ден.
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <button
+                      onClick={() => removeProductFromPDF(product.id)}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+      <button onClick={generatePDF} className={buttonStyle}>
+        Generate PDF
+      </button>
       <div>
         {pdfData ? (
           <PDFViewer width="100%" height={800}>
