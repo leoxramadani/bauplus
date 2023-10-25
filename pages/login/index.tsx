@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import dashboard from '@/public/Dashboard.png';
 import binance from '@/public/binance.png';
 import google from '@/public/google.png';
-import mimiro from '@/public/logo-mimiro.svg';
+import mimiro from '@/public/mimiro-black.svg';
 import stripe from '@/public/stripe.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
@@ -139,16 +139,16 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
 const Login = () => {
   return (
     <>
-      <div className="flex h-full w-full flex-row">
+      <div className="flex h-full w-full flex-col md:flex-row">
         <div className="flex h-screen w-full flex-col">
-          <Link href="/" className="flex flex-row gap-4 p-8">
+          <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
             <Image src={mimiro} alt="logo" width={160} height={100} />
             {/* <Square strokeWidth={10} size={40} />
             <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
               Mimiro
             </h1> */}
           </Link>
-          <div className="flex h-screen w-full flex-col items-center justify-center">
+          <div className="flex h-screen w-full flex-col items-center justify-center p-4 sm:p-0">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
               <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">
@@ -176,8 +176,8 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-10 bg-[#1A202E] text-white">
-          <div className="flex flex-col gap-10 p-20">
+        <div className="flex w-full flex-col gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
+          <div className="flex flex-col gap-10 p-6 sm:p-20">
             <div className="flex flex-col gap-1">
               <h1 className="text-4xl font-semibold">
                 Simplify workforce management
@@ -194,23 +194,23 @@ const Login = () => {
                 height={1200}
               />
             </div>
-            <div className="flex flex-row items-center justify-center gap-10 pt-6">
-              <div className="w-[100px]">
+            <div className="flex flex-row items-center justify-center gap-4 pt-0 sm:gap-10 sm:pt-6">
+              <div className="w-[500px] sm:w-[100px]">
                 <Image src={google} alt="google" />
               </div>
-              <div className="w-[100px]">
+              <div className="w-[500px] sm:w-[100px]">
                 <Image src={stripe} alt="stripe" />
               </div>
-              <div className="w-[50px]">
+              <div className="w-[300px] sm:w-[50px]">
                 <Image src={binance} alt="binance" />
               </div>
-              <div className="w-[100px]">
+              <div className="w-[500px] sm:w-[100px]">
                 <Image src={google} alt="google" />
               </div>
-              <div className="w-[100px]">
+              <div className="w-[500px] sm:w-[100px]">
                 <Image src={stripe} alt="stripe" />
               </div>
-              <div className="w-[50px]">
+              <div className="w-[300px] sm:w-[50px]">
                 <Image src={binance} alt="binance" />
               </div>
             </div>

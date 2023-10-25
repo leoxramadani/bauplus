@@ -1,5 +1,5 @@
-
-import { Label } from '@/components/ui/label';
+import Modal from '@/components/atoms/Modal';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,6 +9,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -20,7 +25,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import {
   CREATE_NOTICE,
-  DELETE_NOTICE,
   GET_SPECIFIC_NOTICE,
   UPDATE_NOTICE,
 } from '@/lib/constants/endpoints/notices';
@@ -31,14 +35,10 @@ import {
 } from '@/lib/schema/notices/noticeboard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Button } from '@/components/ui/button';
 import NoticeDelete from './NoticeDelete';
-import Modal from '@/components/atoms/Modal';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const NoticeForm = ({
   setIsModalOpen,
@@ -49,14 +49,8 @@ const NoticeForm = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [noticeData, setNoticeData] = useState<any>();
-  const [showConfirmationModal, setShowConfirmationModal] =
-    useState(false);
 
   console.log('asdasdasdasdas', noticeId);
-
-  const form = useForm<InoticeSchema>({
-    resolver: zodResolver(noticeSchema),
-  });
 
   const {
     data: departments,
@@ -66,25 +60,22 @@ const NoticeForm = ({
 
   useEffect(() => {
     async function getData(Id: string) {
-      try {
-        const response = await axios.get(
-          GET_SPECIFIC_NOTICE + `?noticeId=${Id}`
-        );
-        const notice = response.data;
-        setNoticeData(notice);
+      await axios
+        .get(GET_SPECIFIC_NOTICE + `?noticeId=${Id}`)
+        .then((res) => {
+          console.log('setting specific notice data ->', res.data);
 
-        form.setValue('noticeTitle', notice.noticeTitle);
-        form.setValue('departmentId', notice.departmentId);
-        form.setValue('noticeText', notice.noticeText);
-      } catch (error) {
-        console.log('error fetching notice->', error);
-      }
+          setNoticeData(res.data);
+        })
+        .catch((error) => {
+          console.log('Error fetching specific notice=>', error);
+        });
     }
 
     if (noticeId) {
       getData(noticeId);
     }
-  }, [noticeId, form]);
+  }, [noticeId]);
 
   const [noticeType, setNoticeType] =
     useState<'Employees'>('Employees');
@@ -92,20 +83,35 @@ const NoticeForm = ({
   const onSubmitNotice = useCallback(
     async (data: InoticeSchema) => {
       if (noticeId) {
-        await axios.put(UPDATE_NOTICE, {
-          ...data,
-          noticeId,
-        });
-        toast.success('Successfully updated the notice schema!');
-        window.location.reload();
+        console.log('updating data', data);
+        await axios
+          .put(UPDATE_NOTICE, {
+            ...data,
+            noticeId,
+          })
+          .then((res) => {
+            console.log('Notice updated successfully->', res);
+            toast.success('Successfully updated the notice!');
+            setIsModalOpen(false);
+          })
+          .catch((error) => {
+            console.log('Error updating notice -> ', error);
+          });
       } else {
-        await axios.post(CREATE_NOTICE, {
-          ...data,
-        });
-        toast.success('Successfully created new notice schema!');
-        window.location.reload();
+        console.log('creating data', data);
+        await axios
+          .post(CREATE_NOTICE, {
+            ...data,
+          })
+          .then((res) => {
+            console.log('Notice created successfully->', res);
+            toast.success('Successfully created the notice!');
+            setIsModalOpen(false);
+          })
+          .catch((error) => {
+            console.log('Error creating notice -> ', error);
+          });
       }
-      setIsModalOpen(false);
     },
     [noticeId]
   );
@@ -114,8 +120,10 @@ const NoticeForm = ({
     console.log('Error=>', error);
   };
 
-  console.log('noticeId', noticeId);
-  console.log('showConfirmationModal', showConfirmationModal);
+  const form = useForm<InoticeSchema>({
+    resolver: zodResolver(noticeSchema),
+    values: { ...noticeData },
+  });
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -141,6 +149,7 @@ const NoticeForm = ({
           className="flex w-full flex-col gap-4"
         >
           <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+            {/* noticeTitle */}
             <FormField
               control={form.control}
               name="noticeTitle"
@@ -158,7 +167,7 @@ const NoticeForm = ({
                 </FormItem>
               )}
             />
-
+            {/* departmentId */}
             <FormField
               control={form.control}
               name="departmentId"
@@ -198,6 +207,7 @@ const NoticeForm = ({
               )}
             />
           </div>
+          {/* noticeText */}
           <FormField
             control={form.control}
             name="noticeText"
@@ -221,7 +231,7 @@ const NoticeForm = ({
               <Modal.Trigger asChild>
                 <Button
                   variant="destructive"
-                  className="flex gap-1 justify-center items-center"
+                  className="flex items-center justify-center gap-1"
                 >
                   Delete Notice
                 </Button>
