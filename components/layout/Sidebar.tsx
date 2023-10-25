@@ -1,5 +1,5 @@
 import mimiroArrow from '@/public/Arrow-M.svg';
-import mimiro from '@/public/logo-white-mimiro.svg';
+import mimiro from '@/public/mimiro-new-9.svg';
 import {
   Calculator,
   ChevronRight,
@@ -150,6 +150,13 @@ const Sidebar = ({
               text="Employees"
               href="/employees"
             /> */}
+            <SidebarItem
+              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
+              text="Clients"
+              alert={false}
+              href="/clients"
+
+            />
             <SidebarItem
               icon={<Calculator size={20} strokeWidth={1.5} />}
               text="Finance"
