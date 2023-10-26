@@ -15,11 +15,15 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import z from 'zod';
 export const productSchema = z.object({
-  productId: z.string(),
+  productId: z.string().optional(),
   productName: z.string(),
-  productCategory: z.object({
-    categoryName: z.string(),
-  }),
+  productCategory: z
+    .object({
+      categoryId: z.string().optional(),
+      categoryName: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
   price: z.coerce.number(),
   categoryId: z.string(),
 });

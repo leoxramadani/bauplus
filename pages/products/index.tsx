@@ -1,5 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import CreateProduct from '@/components/molecules/product/CreateProduct';
+import ProductForm from '@/components/molecules/product/ProductForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_PRODUCTS } from '@/lib/constants/endpoints/products/products';
@@ -10,7 +10,7 @@ import {
 } from '@/lib/schema/product/product';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Product = () => {
   const router = useRouter();
@@ -19,6 +19,22 @@ const Product = () => {
     ['products'],
     GET_ALL_PRODUCTS
   );
+
+  useEffect(() => {
+    if (router.query.id) {
+      setIsModalOpen(true);
+    }
+    console.log('router==', router);
+  }, [router.query.id]);
+
+  useEffect(() => {
+    if (!open) {
+      router.replace('/hr/departments', undefined, {
+        shallow: true,
+      });
+    }
+  }, [isModalOpen]);
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
@@ -32,7 +48,12 @@ const Product = () => {
             title="New Product"
             description="Add a product"
           >
-            <CreateProduct setCloseModal={setIsModalOpen} />
+            <ProductForm
+              setIsModalOpen={setIsModalOpen}
+              productId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+            />
           </Modal.Content>
         </Modal>
 
