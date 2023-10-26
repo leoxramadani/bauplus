@@ -6,6 +6,7 @@ import {
   ChevronsLeft,
   ClipboardList,
   LayoutDashboard,
+  ShoppingBasket,
   UserCircle,
   Users,
   Wallet,
@@ -68,7 +69,7 @@ const Sidebar = ({
           : `duration-[250ms] max-w-[15rem] transition-all`
       }`}
     >
-      <nav className="bg-sidebar relative z-50 flex h-full w-full flex-col border-r shadow-sm">
+      <nav className="relative z-50 flex h-full w-full flex-col border-r bg-sidebar shadow-sm">
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
@@ -149,8 +150,9 @@ const Sidebar = ({
               text="Clients"
               alert={false}
               href="/clients"
-
             />
+
+            {/* Finance */}
             <SidebarItem
               icon={<Calculator size={20} strokeWidth={1.5} />}
               text="Finance"
@@ -197,6 +199,7 @@ const Sidebar = ({
                 </>
               )}
             </SidebarItem>
+            {/* HR */}
             <SidebarItem
               icon={<Users size={20} strokeWidth={1.5} />}
               text="HR"
@@ -248,6 +251,8 @@ const Sidebar = ({
                 </>
               )}
             </SidebarItem>
+            {/* Payroll */}
+
             <SidebarItem
               icon={<Wallet size={20} strokeWidth={1.5} />}
               text="Payroll"
@@ -270,11 +275,20 @@ const Sidebar = ({
                 </>
               )}
             </SidebarItem>
+
+            {/* Users */}
             <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Users"
               alert={false}
               href="/users"
+            />
+            {/* Products */}
+            <SidebarItem
+              icon={<ShoppingBasket size={20} strokeWidth={1.5} />}
+              text="Products"
+              alert={false}
+              href="/products"
             />
 
             <SidebarItem
