@@ -8,7 +8,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ICategory, category } from '@/lib/schema/product/product';
+import {
+  ICategories,
+  categorySchema,
+} from '@/lib/schema/product/productCategories';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,11 +23,11 @@ interface ICreateCategory {
 const CreateCategory = ({ setCloseModal }: ICreateCategory) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const form = useForm<ICategory>({
-    resolver: zodResolver(category),
+  const form = useForm<ICategories>({
+    resolver: zodResolver(categorySchema),
   });
 
-  function onSubmit2(data: ICategory) {
+  function onSubmit2(data: ICategories) {
     console.log(data);
   }
 

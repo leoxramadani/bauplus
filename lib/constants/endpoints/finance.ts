@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from '.';
 
 export const GET_ALL_BANKACCOUNTS =
   BASE_URL + `/api/BankAccount/GetBankAccounts`;
