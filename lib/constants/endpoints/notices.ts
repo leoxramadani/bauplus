@@ -1,4 +1,4 @@
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from '.';
 
 export const GET_ALL_NOTICES =
   BASE_URL + `/api/NoticeBoard/GetAllNotices`;

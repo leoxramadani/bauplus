@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from '.';
 
 export const GET_ALL_USERS = BASE_URL + `/api/Users/GetAllUsers`;
 

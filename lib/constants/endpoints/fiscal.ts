@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from '.';
 
 export const GET_ONE_FISKALE_HYRESE =
   BASE_URL + `/api/FiskaleHyreseController/FiskaleHyrese/Get`;
