@@ -1424,33 +1424,36 @@ const QuantityInputTable: React.FC<QuantityInputTableProps> = ({
   handleQuantityChange,
 }) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        {predefinedProducts.map((product, index) => (
-          <tr key={index}>
-            <td>{product.pozita}</td>
-            <td>
-              <input
-                type="number"
-                value={productQuantities[index]}
-                onChange={(e) =>
-                  handleQuantityChange(
-                    index,
-                    parseInt(e.target.value, 10)
-                  )
-                }
-              />
-            </td>
+    <div className="mx-auto w-40">
+      <table className="w-full table-auto border-collapse">
+        <thead>
+          <tr>
+            <th className="w-1/2 py-2 text-center">Product</th>
+            <th className="w-1/2 py-2 text-center">Quantity</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {predefinedProducts.map((product, index) => (
+            <tr key={index} className="even:bg-gray-100">
+              <td className="py-2 text-center">{product.pozita}</td>
+              <td className="py-2 text-center">
+                <input
+                  type="number"
+                  value={productQuantities[index]}
+                  onChange={(e) =>
+                    handleQuantityChange(
+                      index,
+                      parseInt(e.target.value, 10)
+                    )
+                  }
+                  className="w-16 rounded border px-2 py-1 text-center"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
@@ -1775,8 +1778,9 @@ const PDFRenderer = ({
                   >
                     {predefinedProducts.map((product, rowIndex) => {
                       // Calculate the total for each row
+                      const quantity = productQuantities[rowIndex];
                       const total =
-                        product.sasia * product.cmimiNjesisePaTVSH;
+                        quantity * product.cmimiNjesisePaTVSH;
 
                       return (
                         <View
@@ -1796,6 +1800,16 @@ const PDFRenderer = ({
                           {Object.entries(product).map(
                             ([key, value], cellIndex) => {
                               if (key !== 'id') {
+                                let displayedValue;
+                                if (key === 'sasia') {
+                                  // Use the quantity from the input
+                                  displayedValue =
+                                    productQuantities[rowIndex];
+                                } else {
+                                  // Use the original value from predefinedProducts
+                                  displayedValue = value;
+                                }
+
                                 return (
                                   <View
                                     style={
@@ -1820,13 +1834,13 @@ const PDFRenderer = ({
                                       style={
                                         generalStyle.tableCellRow
                                       }
-                                      break
                                     >
-                                      {typeof value === 'number'
-                                        ? parseFloat(
-                                            String(value)
-                                          ).toLocaleString('en-US')
-                                        : value}{' '}
+                                      {typeof displayedValue ===
+                                      'number'
+                                        ? displayedValue.toLocaleString(
+                                            'en-US'
+                                          )
+                                        : displayedValue}{' '}
                                       <Text
                                         style={{
                                           ...generalStyle.tableCellRow,
@@ -1846,7 +1860,6 @@ const PDFRenderer = ({
                                         style={
                                           generalStyle.tableCellItemDescription
                                         }
-                                        break
                                       >
                                         {parseFloat(
                                           String(
@@ -1861,6 +1874,7 @@ const PDFRenderer = ({
                               return null; // Exclude the 'id' property
                             }
                           )}
+
                           {/* Add the total calculation in the last column */}
                           <View
                             style={{
