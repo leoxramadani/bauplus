@@ -39,6 +39,7 @@ import React, {
 } from 'react';
 import { useForm } from 'react-hook-form';
 import CreateCategory from './category/CreateCategory';
+import { Plus } from 'lucide-react';
 
 interface IProductForm {
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
@@ -53,6 +54,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
     data: productCategories,
     isLoading,
     isError,
+    refetch:refetchProductCategories,
   } = useData<ICategories[]>(
     ['parentDepartments'],
     GET_ALL_PRODUCT_CATEGORIES
@@ -151,47 +153,77 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
                   </FormItem>
                 )}
               />
-              {/* Product category */}
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Product Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Enter category" />
-                        </SelectTrigger>
-                      </FormControl>
 
-                      <SelectContent>
-                        {productCategories ? (
-                          <>
-                            {productCategories.map(
-                              (category: any) => (
-                                <SelectItem
-                                  key={category.categoryId}
-                                  value={category.categoryId}
-                                >
-                                  {category.categoryName}
-                                </SelectItem>
-                              )
+              <div className='flex flex-col gap-2'>
+
+                {/* Product category */}
+                  <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Enter category" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent>
+                          {productCategories ? (
+                            <>
+                              {productCategories.map(
+                                (category: any) => (
+                                  <SelectItem
+                                    key={category.categoryId}
+                                    value={category.categoryId}
+                                  >
+                                    {category.categoryName}
+                                  </SelectItem>
+                                )
+                                )}
+                            </>
+                          ) : (
+                            <p>Loading...</p>
                             )}
-                          </>
-                        ) : (
-                          <p>Loading...</p>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                      <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="flex w-max items-center justify-center "
+                      onClick={() => setCategoryModal(true)}
+                    >
+                      Add Category
+                    </Button>
+                    </FormItem>
+                    
+                  )}
+                  
+                  />
+                  {/* Add a new category */}
+                  {/* <Modal open={categoryModal} onOpenChange={setCategoryModal}>
+                    <Modal.Trigger asChild>
+                      <Button variant="outline" className="flex gap-2 max-w-[182.5px] self-end">
+                        <Plus size={20} /> <span>Add New Category</span>
+                      </Button>
+                    </Modal.Trigger>
+                    <Modal.Content
+                      title="New Category"
+                      description="Add a category"
+                    >
+                      <CreateCategory  setCategoryModal={setCategoryModal} refetchProductCategories={refetchProductCategories}/>
+                    </Modal.Content>
+                  </Modal> */}
+
+              </div>
 
               {/* Price */}
               <FormField
@@ -230,7 +262,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
 
       <Modal open={categoryModal} onOpenChange={setCategoryModal}>
         <Modal.Content className="w-full max-w-xl">
-          <CreateCategory setCloseModal={setCategoryModal} />
+          <CreateCategory setCategoryModal={setCategoryModal} refetchProductCategories={refetchProductCategories}/>
         </Modal.Content>
       </Modal>
 
