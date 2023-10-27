@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
-import ClientsCreate from '@/components/molecules/Clients/ClientsCreate';
+import ClientsForm from '@/components/molecules/Clients/ClientsForm';
+import ClientsCreate from '@/components/molecules/Clients/ClientsForm';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,6 @@ const Clients = () => {
     // console.log('router==', router);
   }, [router.query.id]);
 
-  console.log(data);
   useEffect(() => {
     if (!isOpen) {
       router.replace('/clients', undefined, {
@@ -56,8 +56,11 @@ const Clients = () => {
               title="Add New Client"
               description="Fill all the fields to add a new client"
             >
-              <ClientsCreate
+              <ClientsForm
                 setModal={setIsOpen}
+                clientId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
               />
             </Modal.Content>
           </Modal>
@@ -71,7 +74,7 @@ const Clients = () => {
         {data && <DataTable data={data} columns={clientsColumnDef} />}
         {isLoading && <p> Loading...</p>}
         {isError && (
-          <p> There was something wrong, please try again later.</p>
+          <p> There are no records to show or there is some error. Please try again later.</p>
         )}
       </section>
     </>
