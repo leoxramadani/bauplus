@@ -17,7 +17,7 @@ const Estimates = () => {
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Button
-            variant="destructive"
+            variant="default"
             className="flex gap-2"
             onClick={() => setIsCreateModalOpen(true)}
           >

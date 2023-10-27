@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,6 +14,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import z from 'zod';
 export const productSchema = z.object({
   productId: z.string().optional(),
@@ -86,23 +89,38 @@ const ActionsColumn = ({ item }: { item: any }) => {
     });
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this invoice?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
+  // const handleDelete = async (id: string) => {
+  //   const confirmDelete = window.confirm(
+  //     'Are you sure you want to delete this invoice?'
+  //   );
+  //   if (confirmDelete) {
+  //     console.log('Delete row with id:', id);
 
-      await axios
-        .delete(DELETE_PRODUCT + `?productId=${id}`)
-        .then((res) => {
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
-        });
+  //     await axios
+  //       .delete(DELETE_PRODUCT + `?productId=${id}`)
+  //       .then((res) => {
+  //         console.log('response after delete success =>', res);
+  //       })
+  //       .catch((error) => {
+  //         console.log('Response after error:', error);
+  //       });
+  //   }
+  // };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(DELETE_PRODUCT, {
+        params: {
+          productId: id,
+        },
+      });
+      toast.success('Successfully deleted bank account.');
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  const [open, setOpen] = useState(false);
 
   return (
     <DropdownMenu>
@@ -129,11 +147,38 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.productId)}
-        >
-          Delete Row
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <Button
+              variant="destructive"
+              className="flex items-center justify-center gap-1"
+            >
+              Delete Client
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Client"
+            description="Are you sure you want to delete this client?"
+            className="w-full max-w-sm"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.productId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="default" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -34,10 +34,7 @@ const Invoice = () => {
       <div className="flex flex-col gap-2 sm:flex-row">
         <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
-            <Button
-              variant="destructive"
-              className="flex flex-row gap-2"
-            >
+            <Button variant="default" className="flex flex-row gap-2">
               <Plus size={20} /> Add Invoice
             </Button>
           </Modal.Trigger>

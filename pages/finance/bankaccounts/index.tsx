@@ -42,7 +42,7 @@ const BankAccounts = () => {
           <Modal open={isOpen} onOpenChange={setIsOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add Bank Account
