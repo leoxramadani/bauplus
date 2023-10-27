@@ -50,6 +50,12 @@ Font.register({
   fontWeight: 500,
 });
 
+Font.register({
+  family: 'Inter',
+  src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYMZg.ttf',
+  fontWeight: 700,
+});
+
 // const stylesThor = StyleSheet.create({
 //   page: {
 //     flexDirection: 'column',
@@ -2128,6 +2134,12 @@ const PDFRenderer = ({
 
   return (
     <>
+      <QuantityInputTable
+        predefinedProducts={predefinedProducts}
+        productQuantities={productQuantities}
+        handleQuantityChange={handleQuantityChange}
+      />
+
       <div className="p-2">
         <div className="p-4">
           <div className="flex gap-2">
@@ -2135,7 +2147,6 @@ const PDFRenderer = ({
               <option value="1">Thor Invoice</option>
               <option value="2">Everest invoice</option>
             </select>
-
             <input
               type="text"
               placeholder="Invoice Number"
@@ -2168,14 +2179,9 @@ const PDFRenderer = ({
         </div>
       </div>
       <button onClick={generatePDF} className={buttonStyle}>
-        Generate PDF
+        Generate Invoice
       </button>
 
-      <QuantityInputTable
-        predefinedProducts={predefinedProducts}
-        productQuantities={productQuantities}
-        handleQuantityChange={handleQuantityChange}
-      />
       <div>
         {pdfData ? (
           <PDFViewer width="100%" height={800}>

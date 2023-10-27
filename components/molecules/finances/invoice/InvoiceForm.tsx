@@ -42,7 +42,12 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import {
+  CalendarIcon,
+  Check,
+  ChevronsUpDown,
+  Plus,
+} from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -448,6 +453,24 @@ const InvoiceForm = ({
                   <FormLabel>Dossier</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Dossier" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="dossier"
+              render={({ field }) => (
+                <FormItem className="w-full sm:col-span-2">
+                  <FormControl className="relative">
+                    <Button
+                      variant="destructive"
+                      className=" flex flex-row items-center gap-2"
+                    >
+                      <Plus size={20} /> Add Products
+                    </Button>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -1,13 +1,13 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+DropdownMenu,
+DropdownMenuContent,
+DropdownMenuLabel,
+DropdownMenuRadioGroup,
+DropdownMenuRadioItem,
+DropdownMenuSeparator,
+DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table } from '@tanstack/react-table';
@@ -46,11 +46,10 @@ export function DataTableColumnSearch<TData>({
             .getColumn(filterColumn)
             ?.getFilterValue() as string) ?? ''
         }
-        onChange={(event) =>
-          table
-            .getColumn(filterColumn)
-            ?.setFilterValue(event.target.value)
-        }
+        onChange={(event) => {
+          const input = event.target.value;
+          table.getColumn(filterColumn)?.setFilterValue(input);
+        }}
         className="max-w-xl"
       />
 
@@ -74,10 +73,15 @@ export function DataTableColumnSearch<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuRadioGroup
             value={filterColumn}
-            onValueChange={setFilterColumn}
-            onChange={() =>
-              table.getColumn(filterColumn)?.setFilterValue('')
-            }
+            onValueChange={(newFilterColumn) => {
+              const currentColumn = table.getColumn(filterColumn);
+              if (currentColumn) {
+                // Clear the filter for the currently selected column
+                currentColumn.setFilterValue('');
+              }
+              // Set the new filter column
+              setFilterColumn(newFilterColumn);
+            }}
           >
             {tableColumns.map((column: any) => {
               return (
