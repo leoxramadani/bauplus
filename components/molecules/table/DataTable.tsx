@@ -74,6 +74,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  console.log(data)
+
   return (
     <div className="my-3 flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">

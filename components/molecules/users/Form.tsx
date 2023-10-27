@@ -1,14 +1,13 @@
 import useTranslation from '@/lib/hooks/useTranslation';
 import { IUserForm, userFormSchema } from '@/lib/schemas/user';
-import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Button from '../Button';
 import CompaniesRolesAndPrivileges from './CompaniesRolesAndPrivileges';
 import { CompanyWithRoleAndPrivileges } from './CompanyWithPrivileges';
+import { Button } from '@/components/ui/button';
 const UsersForm = ({
   mutation,
   values,
@@ -47,38 +46,38 @@ const UsersForm = ({
     resolver: zodResolver(userFormSchema),
   });
 
-  const [saveUser, { loading }] = useMutation(mutation);
+  // const [saveUser, { loading }] = useMutation(mutation);
 
   const onSubmit = useCallback(
     async (data: IUserForm) => {
       console.log('Submitted: ', companiesWithPrivileges);
-      const result = saveUser({
-        variables: {
-          entity: setCompanies
-            ? {
-                ...data,
-                companies: companiesWithPrivileges,
-              }
-            : {
-                ...data,
-              },
-        },
-      })
-        .then((res) => {
-          //@ts-ignore
-          if (Object.values(res.data)[0].status === 200) {
-            toast.success('Saved successfully.');
-            if (values && refetch) {
-              refetch({ username: values?.user.userName });
-            }
-            //router.push("/users");
-          }
-          //@ts-ignore
-          else toast.error(Object.values(res.data)[0].message);
-        })
-        .catch((error) => {
-          toast.error("Couldn't save. \n" + error);
-        });
+      // const result = saveUser({
+      //   variables: {
+      //     entity: setCompanies
+      //       ? {
+      //           ...data,
+      //           companies: companiesWithPrivileges,
+      //         }
+      //       : {
+      //           ...data,
+      //         },
+      //   },
+      // })
+      //   .then((res) => {
+      //     //@ts-ignore
+      //     if (Object.values(res.data)[0].status === 200) {
+      //       toast.success('Saved successfully.');
+      //       if (values && refetch) {
+      //         refetch({ username: values?.user.userName });
+      //       }
+      //       //router.push("/users");
+      //     }
+      //     //@ts-ignore
+      //     else toast.error(Object.values(res.data)[0].message);
+      //   })
+      //   .catch((error) => {
+      //     toast.error("Couldn't save. \n" + error);
+      //   });
     },
     [companiesWithPrivileges, values]
   );
@@ -222,7 +221,7 @@ const UsersForm = ({
 
       {/* Butoni */}
       <div className="form-save-button">
-        <Button type="submit" className="button" isProgress={loading}>
+        <Button type="submit" className="button" loading={false}>
           {t('Save')}
         </Button>
       </div>

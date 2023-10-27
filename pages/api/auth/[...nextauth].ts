@@ -7,21 +7,7 @@ import NextAuth, {
 
 import { LOGIN } from '@/lib/constants/endpoints';
 import { loginSchema } from '@/lib/schemas/auth';
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-} from '@apollo/client';
 import Credentials from 'next-auth/providers/credentials';
-
-const client = new ApolloClient({
-  ssrMode: true,
-  link: createHttpLink({
-    uri: `${process.env.NEXT_PUBLIC_API_BASE_URL}/graphql/`,
-    credentials: 'same-origin',
-  }),
-  cache: new InMemoryCache(),
-});
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.

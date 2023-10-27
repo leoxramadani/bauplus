@@ -1,6 +1,6 @@
-import ChangePassword from '@/components/users/ChangePassword';
-import Disable2FA from '@/components/users/Disable2FA';
-import EditProfile from '@/components/users/EditProfile';
+import ChangePassword from '@/components/molecules/users/ChangePassword';
+import Disable2FA from '@/components/molecules/users/Disable2FA';
+import EditProfile from '@/components/molecules/users/EditProfile';
 import { GET_SPECIFIC_USER } from '@/lib/constants/endpoints/users';
 import useData from '@/lib/hooks/useData';
 import useTranslation from '@/lib/hooks/useTranslation';
