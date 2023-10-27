@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CREATE_CLIENTS, GET_ALL_CLIENT_TYPES } from '@/lib/constants/endpoints/clients';
+import { CREATE_CLIENTS, GET_ALL_CLIENT_TYPES, GET_SPECIFIC_CLIENT, UPDATE_SPECIFIC_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
   CREATE_BANK_ACCOUNT,
   GET_ALL_ACCOUNT_STATUSES,
@@ -57,28 +57,16 @@ export interface IClientsCreate {
   clientId?: string;
 }
 
-const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
+const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
 
-  // useEffect(() => {
-  //   async function getData(Id: string) {
-  //     await axios
-  //       .get(GET_ONE_BANKACCOUNT + `?BankAccountId=${Id}`)
-  //       .then((res) => {
-  //         console.log('setting employee data -->', res);
-  //         setBankAccount(res.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log('error fetching employees->', error);
-  //       });
-  //   }
+  const [clientAccountNumbers,setClientAccountNumbers]=useState({
+    accountNumber:'',
+    country:''
+  })
 
-  //   if (bankAccountId) {
-  //     getData(bankAccountId);
-  //   }
-  // }, [bankAccountId]);
 
   const {
     data: clientTypes,
@@ -91,13 +79,6 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
   );
 
 
-  // const {
-  //   data: employees,
-  //   isError: employeesIsError,
-  //   isLoading: employeesIsLoading,
-  //   error: employeesError,
-  // } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
-
   const {
     data: status,
     isError: statusIsError,
@@ -105,45 +86,95 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
     error: statusError,
   } = useData<any>(['status'], GET_ALL_ACCOUNT_STATUSES);
 
+
+
+  useEffect(() => {
+    async function getData(Id: string) {
+      console.log('inside getData');
+      await axios
+        .get(GET_SPECIFIC_CLIENT + Id)
+        .then((res) => {
+          setClient(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching employees->', error);
+        });
+    }
+
+    if (clientId) {
+      getData(clientId);
+    }
+  }, [clientId]);
+
+  
+
+
   const form = useForm<ICreateClientSchema>({
     resolver: zodResolver(createClientSchema),
-    values: { ...client },
+    values: { ...client ,
+      clientAccountNumbers: client?.clientAccountNumbers[0],
+      clientBusinessIds: client?.clientBusinessIds[0],
+      clientContactInfos: client?.clientContactInfos[0],
+    },
   });
 
-  console.log("clientId=",clientId)
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
       setIsSubmitting(true);
       try {
-        console.log("data=",data)
       //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
       //   console.log('submit:', data);
-      //   if (bankAccount && router.query.id) {
-      //     // Bank account data exists, perform update
-      //     const res = await axios.put(UPDATE_BANK_ACCOUNT, {
-      //       ...data,
-      //       bankAccountId: bankAccountId,
-      //     });
-      //     console.log('Update response:', res);
-      //     toast.success('Successfully updated bank account!');
-      //     setIsSubmitting(false);
-      //     setModal(false);
-      //   } else {
-      //     // Bank account data is empty, perform create
-          const res = await axios.post(CREATE_CLIENTS, {
-              ...data,             
-          },
-          {
+        if (clientId && router.query.id) {
+          let ArrayclientAccountNumbers : any = [] 
+          ArrayclientAccountNumbers.push(data.clientAccountNumbers);
+  
+          let ArrayclientBusinessIds : any = [] 
+          ArrayclientBusinessIds.push(data.clientBusinessIds);
+  
+          let ArrayclientContactInfos : any = [] 
+          ArrayclientContactInfos.push(data.clientContactInfos);
+
+          const res = await axios.put(UPDATE_SPECIFIC_CLIENTS, {
+            ...data,
+              clientAccountNumbers:ArrayclientAccountNumbers,
+              clientBusinessIds:ArrayclientBusinessIds,
+              clientContactInfos: ArrayclientContactInfos,
+          },{
             params:{
-              clientTypeId:data.clientTypeId,
+              id: clientId,
             }
-          }
-          );
-          console.log('Create response:', res);
-          toast.success('Successfully created new client!');
+          });
+          console.log('Update response:', res);
+          toast.success('Successfully updated bank account!');
           setIsSubmitting(false);
           setModal(false);
-      //   }
+        } else {
+          let ArrayclientAccountNumbers : any = [] 
+          ArrayclientAccountNumbers.push(data.clientAccountNumbers);
+  
+          let ArrayclientBusinessIds : any = [] 
+          ArrayclientBusinessIds.push(data.clientBusinessIds);
+  
+          let ArrayclientContactInfos : any = [] 
+          ArrayclientContactInfos.push(data.clientContactInfos);
+          
+            const res = await axios.post(CREATE_CLIENTS, {
+                ...data,
+                clientAccountNumbers:ArrayclientAccountNumbers,
+                clientBusinessIds:ArrayclientBusinessIds,
+                clientContactInfos: ArrayclientContactInfos,
+            },
+            {
+              params:{
+                clientTypeId:data.clientTypeId,
+              }
+            }
+            );
+            console.log('Create response:', res);
+            toast.success('Successfully created new client!');
+            setIsSubmitting(false);
+            setModal(false);
+        }
       } catch (error) {
         console.error('Error:', error);
         toast.error('There was an issue! Please try again.');
@@ -271,7 +302,7 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
 
               <FormField
               control={form.control}
-              name="accountNumber"
+              name="clientAccountNumbers.accountNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Account Number</FormLabel>
@@ -290,14 +321,33 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
 
             <FormField
               control={form.control}
-              name="country"
+              name="clientAccountNumbers.country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Account country</FormLabel>
 
                   <FormControl className="relative">
                     <Input
-                      placeholder="Country"
+                      placeholder="Account country"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
+
+              <FormField
+              control={form.control}
+              name="clientBusinessIds.country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Business country</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Business country"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -309,7 +359,26 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
 
             <FormField
               control={form.control}
-              name="email"
+              name="clientBusinessIds.businessId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Business Id</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Business id"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />    
+
+            <FormField
+              control={form.control}
+              name="clientContactInfos.email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
@@ -330,7 +399,7 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
               
             <FormField
               control={form.control}
-              name="phone"
+              name="clientContactInfos.phone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
@@ -350,7 +419,7 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
 
               <FormField
                 control={form.control}
-                name="address"
+                name="clientContactInfos.address"
                 render={({ field }) => (
                 <FormItem>
                   <FormLabel>Address</FormLabel>
@@ -382,4 +451,4 @@ const ClientsCreate = ({ setModal, clientId }: IClientsCreate) => {
     )
 };
 
-export default ClientsCreate;
+export default ClientsForm;
