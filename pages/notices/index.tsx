@@ -23,18 +23,6 @@ interface Notice {
 const Notices = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  // const [myData, setMyData] = useState<Notice[]>([]);
-  // useEffect(() => {
-  //   async function getData() {
-  //     try {
-  //       const res = await axios.get(GET_ALL_NOTICES);
-  //       setMyData(res.data);
-  //     } catch (error) {
-  //       console.log('Error fetching notices ->', error);
-  //     }
-  //   }
-  //   getData();
-  // }, []);
   const { data: noticesData } = useData<Notice[]>(
     ['notices'],
     GET_ALL_NOTICES

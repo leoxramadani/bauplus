@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 const Departments = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { data, isError, isLoading } = useData<IDepartment[]>(
+  const { data, isError, isLoading,refetch:refetchDepartments } = useData<IDepartment[]>(
     ['departments'],
     GET_ALL_DEPARTMENTS
   );
@@ -56,6 +56,7 @@ const Departments = () => {
               departmentId={
                 router.isReady ? router.query.id?.toString() : ''
               }
+              refetchDepartments={refetchDepartments}
             />
           </Modal.Content>
         </Modal>

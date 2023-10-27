@@ -44,15 +44,15 @@ import { toast } from 'react-toastify';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
+  refetchEmployees
 }: {
   setIsModalOpen: any;
   employeeId?: string;
+  refetchEmployees:any
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // const [departments, setDepartments] = useState<any>();
 
   const {
     data: departments,
@@ -118,6 +118,7 @@ const EmployeesForm = ({
             });
             setIsModalOpen(false);
             toast.success('Successfully updated employee');
+            refetchEmployees();
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
@@ -133,6 +134,7 @@ const EmployeesForm = ({
             console.log('Successfully created employee->', res);
             toast.success('Successfully added employee');
             setIsModalOpen(false);
+            refetchEmployees();
           })
           .catch((error) => {
             console.error('Error creating employee:', error);

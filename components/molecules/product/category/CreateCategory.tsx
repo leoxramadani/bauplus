@@ -8,31 +8,50 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ICategory, category } from '@/lib/schema/product/product';
+import { CREATE_PRODUCT_CATEGORY } from '@/lib/constants/endpoints/products/productCategories';
+import {
+  ICategories,
+  categorySchema,
+} from '@/lib/schema/product/productCategories';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { SetStateAction, useState } from 'react';
+import axios from 'axios';
+import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface ICreateCategory {
-  setCloseModal: React.Dispatch<SetStateAction<boolean>>;
+  setCategoryModal: React.Dispatch<SetStateAction<boolean>>;
+  refetchProductCategories:any
 }
 
-const CreateCategory = ({ setCloseModal }: ICreateCategory) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const form = useForm<ICategory>({
-    resolver: zodResolver(category),
+const CreateCategory = ({ setCategoryModal,refetchProductCategories }: ICreateCategory) => {
+  const form = useForm<ICategories>({
+    resolver: zodResolver(categorySchema),
   });
 
-  function onSubmit2(data: ICategory) {
-    console.log(data);
+  const onSubmit = useCallback(
+    async (data: ICategories) => {
+      await axios.post(CREATE_PRODUCT_CATEGORY,{...data})
+      .then((res)=>{
+        console.log("Succesfuly created a new category!");
+        refetchProductCategories();
+      }).catch((error)=>{
+        console.log("Error creating a new category!",error);
+      })
+
+      setCategoryModal(false);
+    },
+    []
+  );
+
+  const onError =(error:any)=>{
+    console.log("EEERRROOR->",error);
   }
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit2)}
+          onSubmit={form.handleSubmit(onSubmit,onError)}
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col  items-center justify-center  gap-4 ">
@@ -61,7 +80,7 @@ const CreateCategory = ({ setCloseModal }: ICreateCategory) => {
               variant="outline"
               type="button"
               className="w-max"
-              onClick={() => setCloseModal(false)}
+              onClick={() => setCategoryModal(false)}
             >
               Cancel
             </Button>

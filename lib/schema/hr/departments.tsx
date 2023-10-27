@@ -23,10 +23,16 @@ export const DepartmentSchema = z.object({
   companyId: z.string({
     required_error: 'Company Id is required',
   }),
-  parentDepartmentId: z.string(),
+  parentDepartmentId: z.string().optional(),
   company: z
     .object({
       companyName: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+  parentDepartment: z
+    .object({
+      departmentName: z.string().optional(),
     })
     .optional()
     .nullable(),
@@ -72,8 +78,8 @@ export const departmentColumnDef: ColumnDef<IDepartment>[] = [
     header: 'Company Name',
   },
   {
-    accessorKey: 'parentDepartmentId',
-    header: 'Parent Department Id',
+    accessorKey: 'parentDepartment.departmentName',
+    header: 'Parent Department Name',
   },
   {
     id: 'actions',
