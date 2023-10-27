@@ -23,7 +23,7 @@ export const DepartmentSchema = z.object({
   companyId: z.string({
     required_error: 'Company Id is required',
   }),
-  parentDepartmentId: z.string(),
+  parentDepartmentId: z.string().optional(),
   company: z
     .object({
       companyName: z.string().optional(),
