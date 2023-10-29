@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +13,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const invoiceSchema = z.object({
@@ -53,11 +56,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
           bankAccountId: id,
         },
       });
-      alert('success');
+      toast.success('Successfully deleted bank account.');
     } catch (error) {
       console.log(error);
     }
   };
+
+  const [open, setOpen] = useState(false);
 
   return (
     <DropdownMenu>
@@ -85,11 +90,37 @@ const ActionsColumn = ({ item }: { item: any }) => {
         >
           Edit row
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.bankAccountId)}
-        >
-          Delete
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <Button
+              variant="destructive"
+              className="flex items-center justify-center gap-1"
+            >
+              Delete Client
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Client"
+            description="Are you sure you want to delete this client?"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.bankAccountId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="default" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
         <DropdownMenuItem>View payment details</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

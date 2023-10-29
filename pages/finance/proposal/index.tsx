@@ -83,7 +83,7 @@ const Proposal = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Button variant="destructive" className="flex gap-2">
+        <Button variant="default" className="flex gap-2">
           <Plus size={20} /> <span>Create Estimate</span>
         </Button>
         <Button variant="outline" className="flex gap-2">

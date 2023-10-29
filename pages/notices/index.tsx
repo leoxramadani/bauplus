@@ -4,7 +4,7 @@ import NoticesCard from '@/components/molecules/notices/NoticesCard';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_NOTICES } from '@/lib/constants/endpoints/notices';
 import useData from '@/lib/hooks/useData';
-import { FileInput } from 'lucide-react';
+import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 interface Notice {
@@ -39,11 +39,8 @@ const Notices = () => {
         <div className="relative flex flex-row gap-2">
           <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
-              <Button
-                variant="default"
-                className="flex items-center justify-center gap-1"
-              >
-                Add Notice
+              <Button variant="default" className="flex gap-2">
+                <Plus size={20} /> <span>Add New Notice</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content

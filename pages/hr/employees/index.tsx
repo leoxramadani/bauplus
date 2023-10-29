@@ -45,7 +45,7 @@ const Employees = () => {
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex gap-2"
               >
                 <Plus size={20} /> <span>Add employee</span>

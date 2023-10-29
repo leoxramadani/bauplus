@@ -40,7 +40,7 @@ const Product = () => {
       <div className="flex flex-row gap-2">
         <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
-            <Button variant="destructive" className="flex gap-2">
+            <Button variant="default" className="flex gap-2">
               <Plus size={20} /> <span>Add New Product</span>
             </Button>
           </Modal.Trigger>

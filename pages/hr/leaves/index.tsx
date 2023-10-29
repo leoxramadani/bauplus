@@ -35,23 +35,24 @@ const Leaves = () => {
     }
   }, [isModalOpen]);
 
-
-  console.log("Data;",data);
-  
+  console.log('Data;', data);
 
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
         <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
-            <Button variant="destructive" className="flex gap-2">
+            <Button variant="default" className="flex gap-2">
               <Plus size={20} /> <span>New Leave</span>
             </Button>
           </Modal.Trigger>
           <Modal.Content title="New Leave" description="Assign Leave">
-            <LeaveForm setIsModalOpen={setIsModalOpen} leaveId={
-                  router.isReady ? router.query.id?.toString() : ''
-                }/>
+            <LeaveForm
+              setIsModalOpen={setIsModalOpen}
+              leaveId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+            />
           </Modal.Content>
         </Modal>
 

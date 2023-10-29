@@ -1,7 +1,5 @@
 import Modal from '@/components/atoms/Modal';
 import ClientsForm from '@/components/molecules/Clients/ClientsForm';
-import ClientsCreate from '@/components/molecules/Clients/ClientsForm';
-import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
@@ -13,9 +11,6 @@ import {
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-
-
 
 const Clients = () => {
   const router = useRouter();
@@ -46,7 +41,7 @@ const Clients = () => {
           <Modal open={isOpen} onOpenChange={setIsOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add new client
@@ -74,7 +69,11 @@ const Clients = () => {
         {data && <DataTable data={data} columns={clientsColumnDef} />}
         {isLoading && <p> Loading...</p>}
         {isError && (
-          <p> There are no records to show or there is some error. Please try again later.</p>
+          <p>
+            {' '}
+            There are no records to show or there is some error.
+            Please try again later.
+          </p>
         )}
       </section>
     </>

@@ -1,10 +1,12 @@
 import mimiroArrow from '@/public/Arrow-M.svg';
-import mimiro from '@/public/mimiro-new-9.svg';
+import mimiro from '@/public/mimiro-white.svg';
 import {
+  Building,
   Calculator,
   ChevronRight,
   ChevronsLeft,
   ClipboardList,
+  Home,
   LayoutDashboard,
   ShoppingBasket,
   UserCircle,
@@ -138,9 +140,15 @@ const Sidebar = ({
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
+              icon={<Home size={20} strokeWidth={1.5} />}
+              text="Main"
+              alert={false}
+              href="/"
+            />
+            <SidebarItem
               icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
               text="Dashboard"
-              alert={true}
+              alert={false}
               href="/dashboard"
             />
             {/* <SidebarItem
@@ -149,7 +157,7 @@ const Sidebar = ({
               href="/employees"
             /> */}
             <SidebarItem
-              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
+              icon={<Building size={20} strokeWidth={1.5} />}
               text="Clients"
               alert={false}
               href="/clients"
@@ -388,7 +396,7 @@ export function SidebarItem({
     <>
       <button
         onClick={handleClick}
-        className={`relative z-50 flex w-full items-center justify-center gap-4 px-[10px] py-[5px] ${
+        className={`relative z-50 my-1 flex w-full items-center justify-center gap-4 rounded-md px-[10px] py-[8px]  ${
           !isWindowSmall ? `` : ``
         } group cursor-pointer  transition-colors 
         ${
