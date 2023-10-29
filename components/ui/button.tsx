@@ -50,17 +50,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(
           buttonVariants({ variant, size, className }),
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none',
           className
         )}
         ref={ref}
-        disabled={loading}
+        disabled={props.disabled ?? loading}
         {...props}
       >
         {loading === true && (
           <Loader2 className="mr-1 animate-spin" size={18} />
         )}
-        <span className={className}>{children}</span>
+        {children}
       </button>
     );
   }

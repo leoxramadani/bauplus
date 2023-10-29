@@ -58,7 +58,10 @@ const Sidebar = ({
   expanded,
 }: Sidebar) => {
   const { data: session, status } = useSession();
+
   const router = useRouter();
+  console.log(session)
+  
   return (
     <aside
       className={`group/sidebar fixed left-0 top-0 z-50 h-full w-full ${
@@ -348,7 +351,7 @@ const Sidebar = ({
             <div className="relative w-full h-full flex items-center justify-center">
               <Link
                 href={'/login'}
-                className="hover hover:bg-slate-800 transition-all w-full mx-3 py-2 rounded-lg text-white px-2 flex gap-1 items-center"
+                className="m-3 hover:bg-slate-800 transition-all w-full py-2 rounded-lg text-white px-2 flex gap-1 items-center"
               >
                 Login
               </Link>
