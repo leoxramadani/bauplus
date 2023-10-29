@@ -11,7 +11,7 @@ import {
 import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
-import { MoreHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key } from 'react';
 import { toast } from 'react-toastify';
@@ -69,9 +69,9 @@ const ActionsColumn = ({ item }: { item: any }) => {
       console.log('Delete row with id:', id);
 
       await axios
-        .delete(DELETE_CLIENT + '/'+id)
+        .delete(DELETE_CLIENT + '/' + id)
         .then((res) => {
-          toast.success("Successfully deleted a client.");
+          toast.success('Successfully deleted a client.');
           console.log('response after delete success =>', res);
         })
         .catch((error) => {
@@ -94,9 +94,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
-          onClick={() =>
-            navigator.clipboard.writeText(item.clientId)
-          }
+          onClick={() => navigator.clipboard.writeText(item.clientId)}
         >
           Copy item id
         </DropdownMenuItem>
@@ -105,9 +103,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.clientId)}
-        >
+        <DropdownMenuItem onClick={() => handleDelete(item.clientId)}>
           Delete Row
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -129,13 +125,28 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value: boolean) =>
-          row.toggleSelected(!!value)
-        }
-        aria-label="Select row"
-      />
+      <div className="flex items-center justify-center gap-2">
+        {row.getCanExpand() ? (
+          <button
+            {...{
+              onClick: row.getToggleExpandedHandler(),
+              style: { cursor: 'pointer' },
+            }}
+          >
+            {row.getIsExpanded() ? <ChevronUp /> : <ChevronDown />}
+          </button>
+        ) : (
+          '🔵'
+        )}
+
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) =>
+            row.toggleSelected(!!value)
+          }
+          aria-label="Select row"
+        />
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -166,6 +177,28 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
         ))}
       </ul>
     ),
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <ActionsColumn item={row.original} />,
+  },
+];
+
+export const clientSubColumnDef: ColumnDef<IClients>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: 'clientAccountNumbers.country',
@@ -212,10 +245,6 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
       </ul>
     ),
   },
-  {
-    id: 'actions',
-    cell: ({ row }) => <ActionsColumn item={row.original} />,
-  },
 ];
 
 export const createClientSchema = z.object({
@@ -225,11 +254,9 @@ export const createClientSchema = z.object({
   lastName: z.string().optional(),
   accountNumber: z.string().optional(),
   country: z.string().optional(),
-  email:z.string().optional(),
-  phone:z.string().optional(),
-  address:z.string().optional()
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
 });
 
-export type ICreateClientSchema = z.infer<
-typeof createClientSchema>;
-
+export type ICreateClientSchema = z.infer<typeof createClientSchema>;
