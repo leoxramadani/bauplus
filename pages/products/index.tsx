@@ -28,8 +28,8 @@ const Product = () => {
   }, [router.query.id]);
 
   useEffect(() => {
-    if (!open) {
-      router.replace('/hr/departments', undefined, {
+    if (!isModalOpen) {
+      router.replace('/products', undefined, {
         shallow: true,
       });
     }

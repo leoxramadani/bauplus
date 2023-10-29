@@ -1,5 +1,7 @@
 import Modal from '@/components/atoms/Modal';
-import ClientsCreate from '@/components/molecules/Clients/ClientsCreate';
+import ClientsForm from '@/components/molecules/Clients/ClientsForm';
+import ClientsCreate from '@/components/molecules/Clients/ClientsForm';
+import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
@@ -28,7 +30,6 @@ const Clients = () => {
     // console.log('router==', router);
   }, [router.query.id]);
 
-  console.log(data);
   useEffect(() => {
     if (!isOpen) {
       router.replace('/clients', undefined, {
@@ -62,7 +63,12 @@ const Clients = () => {
               title="Add New Client"
               description="Fill all the fields to add a new client"
             >
-              <ClientsCreate setModal={setIsOpen} />
+              <ClientsForm
+                setModal={setIsOpen}
+                clientId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+              />
             </Modal.Content>
           </Modal>
           <Button
@@ -83,7 +89,7 @@ const Clients = () => {
         )}
         {isLoading && <p> Loading...</p>}
         {isError && (
-          <p> There was something wrong, please try again later.</p>
+          <p> There are no records to show or there is some error. Please try again later.</p>
         )}
       </section>
     </>

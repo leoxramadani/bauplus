@@ -202,11 +202,35 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
   },
   {
     accessorKey: 'clientAccountNumbers.country',
-    header: 'Country',
+    header: 'Account country',
 
     cell: ({ row }) => (
       <ul>
         {row.original.clientAccountNumbers.map((client, i: Key) => (
+          <li key={i}>{client.country}</li>
+        ))}
+      </ul>
+    ),
+  },
+  {
+    accessorKey: 'clientBusinessIds.businessId',
+    header: 'Business Id',
+
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientBusinessIds.map((client, i: Key) => (
+          <li key={i}>{client.businessId}</li>
+        ))}
+      </ul>
+    ),
+  },
+  {
+    accessorKey: 'clientBusinessIds.country',
+    header: 'Business country',
+
+    cell: ({ row }) => (
+      <ul>
+        {row.original.clientBusinessIds.map((client, i: Key) => (
           <li key={i}>{client.country}</li>
         ))}
       </ul>
@@ -252,11 +276,19 @@ export const createClientSchema = z.object({
   companyName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  accountNumber: z.string().optional(),
-  country: z.string().optional(),
-  email: z.string().optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
+  clientAccountNumbers:z.object({
+    accountNumber:z.string().optional(),
+    country:z.string().optional(),
+  }),
+  clientBusinessIds:z.object({
+    businessId: z.string().optional(),
+    country: z.string().optional(),
+  }),
+  clientContactInfos:z.object({
+    email:z.string().optional(),
+    phone:z.string().optional(),
+    address:z.string().optional(),
+  })
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;
