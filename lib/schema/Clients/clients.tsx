@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
-import account from '@/pages/account';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
@@ -277,29 +276,55 @@ export const createClientSchema = z.object({
   companyName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  clientAccountNumbers:z.object({
-    accountNumber:z.string().optional(),
-    country:z.string().optional(),
+  clientAccountNumbers: z.object({
+    accountNumber: z.string().optional(),
+    country: z.string().optional(),
   }),
-  clientBusinessIds:z.object({
+  clientBusinessIds: z.object({
     businessId: z.string().optional(),
     country: z.string().optional(),
   }),
-  clientContactInfos:z.object({
-    email:z.string().optional(),
-    phone:z.string().optional(),
-    address:z.string().optional(),
-  })
+  clientContactInfos: z.object({
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }),
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;
 
+export const accountDetailSchema = z
+  .object({
+    clientAccountNumbers: z.object({
+      accountNumber: z.coerce
+        .string()
+        .min(1, 'Account Number is required'),
+      country: z.string().min(1, 'Country is required'),
+    }),
+    accountDetails: z
+      .array(
+        z.object({
+          accountNumber: z.string(),
+          country: z.string(),
+        })
+      )
+      .optional(),
+  })
+  .refine(
+    ({ clientAccountNumbers, accountDetails }) => {
+      const accountNumberExists = accountDetails?.some(
+        (account) =>
+          account.accountNumber ===
+          String(clientAccountNumbers.accountNumber)
+      );
+      return !accountNumberExists;
+    },
+    {
+      message: 'Account number must be unique',
+      path: ['clientAccountNumbers', 'accountNumber'],
+    }
+  );
 
-
-export const accountDetailSchema = z.object({
-    clientAccountNumbers:z.object({
-    accountNumber:z.string().optional(),
-    country:z.string().optional(),
-  }),
-})
-export type iCreateAccountDetail = z.infer<typeof accountDetailSchema>;
+export type iCreateAccountDetail = z.infer<
+  typeof accountDetailSchema
+>;

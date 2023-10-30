@@ -8,69 +8,122 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { iCreateAccountDetail,accountDetailSchema } from '@/lib/schema/Clients/clients';
+import {
+  accountDetailSchema,
+  iCreateAccountDetail,
+} from '@/lib/schema/Clients/clients';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { YourAccountDetailsType } from '../ClientsForm';
 
 interface ICreateAccount {
-    setAccoundModal: React.Dispatch<SetStateAction<boolean>>;
-    setAccountDetails : any;
-    accCon:any;
-    accNr:any;
-    isUpdate:any;
-    // (value: React.SetStateAction<{
-    //     accountNumber: string;
-    //     country: string;
-    // }>) => void
+  setAccoundModal: React.Dispatch<SetStateAction<boolean>>;
+  accountDetails: YourAccountDetailsType[];
+  setAccNr: any;
+  setAccCon: any;
+  setAccountDetails: any;
+  accCon: any;
+  accNr: any;
+  isUpdate: any;
 }
 
-const CreateAccountDetails = ({ setAccoundModal,setAccountDetails,accCon,accNr,isUpdate}: ICreateAccount) => {
+const CreateAccountDetails = ({
+  setAccoundModal,
+  setAccountDetails,
+  setAccCon,
+  setAccNr,
+  accCon,
+  accNr,
+  isUpdate,
+  accountDetails,
+}: ICreateAccount) => {
+  const isAccountNumberUnique = (
+    accountNumber: string,
+    accountDetails: any[]
+  ) => {
+    return !accountDetails.some(
+      (account) => account.accountNumber === accountNumber
+    );
+  };
+
   const form = useForm<iCreateAccountDetail>({
     resolver: zodResolver(accountDetailSchema),
+    defaultValues: {
+      clientAccountNumbers: {
+        accountNumber: accNr || '',
+        country: accCon || '',
+      },
+      accountDetails,
+    },
   });
-  
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const accountDetails: { accountNumber: string; country: string }[] = [];
+  //   const accountDetails: { accountNumber: string; country: string }[] = [];
 
-  
   const onSubmit = useCallback(
     async (data: iCreateAccountDetail) => {
-
-
-        if(data.clientAccountNumbers.country == undefined || data.clientAccountNumbers.accountNumber == undefined)
-            console.log("empty arrays")
-        else{
-
-            // if(accCon != null || undefined || ''){
-              
-            // }
-            setAccountDetails((prev:any) => ([
-                ...prev,
-                {
-                  accountNumber: data.clientAccountNumbers.accountNumber == undefined || null ? "" : data.clientAccountNumbers.accountNumber,
-                  country: data.clientAccountNumbers.country == undefined || null ? "" : data.clientAccountNumbers.country,
-                },
-              ]));
+      if (
+        data.clientAccountNumbers.country == undefined ||
+        data.clientAccountNumbers.accountNumber == undefined
+      ) {
+        console.log('empty arrays');
+      } else {
+        if (isUpdate) {
+          // Update the existing account details
+          setAccountDetails((prev: any) =>
+            prev.map((account: any) =>
+              account.accountNumber === accNr
+                ? {
+                    accountNumber:
+                      data.clientAccountNumbers.accountNumber ==
+                        undefined || null
+                        ? ''
+                        : data.clientAccountNumbers.accountNumber,
+                    country:
+                      data.clientAccountNumbers.country ==
+                        undefined || null
+                        ? ''
+                        : data.clientAccountNumbers.country,
+                  }
+                : account
+            )
+          );
+        } else if (!isUpdate) {
+          // Add a new account
+          setAccountDetails((prev: any) => [
+            ...prev,
+            {
+              accountNumber:
+                data.clientAccountNumbers.accountNumber ==
+                  undefined || null
+                  ? ''
+                  : data.clientAccountNumbers.accountNumber,
+              country:
+                data.clientAccountNumbers.country == undefined || null
+                  ? ''
+                  : data.clientAccountNumbers.country,
+            },
+          ]);
         }
+      }
 
-
-    setAccoundModal(false);
+      setAccoundModal(false);
+      setAccCon('');
+      setAccNr('');
     },
-    []
+    [isUpdate, accNr, setAccountDetails]
   );
-  const onError =(error:any)=>{
-    console.log("EEERRROOR->",error);
-  }
+  const onError = (error: any) => {
+    console.log('EEERRROOR->', error);
+  };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit,onError)}
+          onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4"
         >
           <div className="flex flex-row  items-center justify-center  gap-4 ">
@@ -88,7 +141,7 @@ const CreateAccountDetails = ({ setAccoundModal,setAccountDetails,accCon,accNr,i
                       placeholder="Account Number"
                       {...field}
                       disabled={isSubmitting}
-                      value={accNr!=''||undefined||null ? accNr : ""}
+                      type="number"
                     />
                   </FormControl>
                   <FormMessage />
@@ -96,7 +149,7 @@ const CreateAccountDetails = ({ setAccoundModal,setAccountDetails,accCon,accNr,i
               )}
             />
 
-              <FormField
+            <FormField
               control={form.control}
               name="clientAccountNumbers.country"
               render={({ field }) => (
@@ -108,17 +161,13 @@ const CreateAccountDetails = ({ setAccoundModal,setAccountDetails,accCon,accNr,i
                       placeholder="Account country"
                       {...field}
                       disabled={isSubmitting}
-                      value={isUpdate == true ? accCon : ""}
                     />
-                    
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-              />
-
+            />
           </div>
-          
 
           <div className="flex flex-row items-center gap-2">
             <Button
@@ -129,16 +178,15 @@ const CreateAccountDetails = ({ setAccoundModal,setAccountDetails,accCon,accNr,i
             >
               Cancel
             </Button>
-            {isUpdate == true ?            
-            <Button type="submit" className="w-max">
-              Change
-            </Button>
-            :
-            <Button type="submit" className="w-max">
-            Submit
-          </Button>
-            
-            }
+            {isUpdate == true ? (
+              <Button type="submit" className="w-max">
+                Change
+              </Button>
+            ) : (
+              <Button type="submit" className="w-max">
+                Submit
+              </Button>
+            )}
           </div>
         </form>
       </Form>
