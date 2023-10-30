@@ -1,5 +1,12 @@
+import Topbar from '@/components/layout/Topbar';
+
 const Finance = () => {
-  return <div>Finance page</div>;
+  return (
+    <div>
+      <Topbar />
+      Finance page
+    </div>
+  );
 };
 
 export default Finance;

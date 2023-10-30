@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import Topbar from '@/components/layout/Topbar';
 import EmployeesForm from '@/components/molecules/hr/employees/EmployeesForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -17,10 +18,12 @@ import { toast } from 'react-toastify';
 const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, refetch:refetchEmployees } = useData<IEmployee[]>(
-    ['employees'],
-    GET_ALL_EMPLOYEES
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchEmployees,
+  } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
 
   console.log('data=', data);
   useEffect(() => {
@@ -40,14 +43,12 @@ const Employees = () => {
 
   return (
     <>
+      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
-              <Button
-                variant="default"
-                className="flex gap-2"
-              >
+              <Button variant="default" className="flex gap-2">
                 <Plus size={20} /> <span>Add employee</span>
               </Button>
             </Modal.Trigger>

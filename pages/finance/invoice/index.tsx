@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import Topbar from '@/components/layout/Topbar';
 import InvoiceForm from '@/components/molecules/finances/invoice/InvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -30,45 +31,51 @@ const Invoice = () => {
   }, [isModalOpen]);
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <Modal.Trigger asChild>
-            <Button variant="default" className="flex flex-row gap-2">
-              <Plus size={20} /> Add Invoice
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="Add Invoice"
-            description="Fill all the fields to add an invoice"
+    <>
+      <Topbar />
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Modal.Trigger asChild>
+              <Button
+                variant="default"
+                className="flex flex-row gap-2"
+              >
+                <Plus size={20} /> Add Invoice
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content
+              title="Add Invoice"
+              description="Fill all the fields to add an invoice"
+            >
+              <InvoiceForm
+                setIsModalOpen={setIsModalOpen}
+                invoiceNumber={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+              />
+            </Modal.Content>
+          </Modal>
+          <Button variant="outline" className="flex gap-2">
+            <RotateCw /> <span>Recurring Invoice</span>
+          </Button>
+          <Button variant="outline" className="flex gap-2 ">
+            <Plus size={20} /> <span>Create Time Log Invoice</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="flex flex-row items-center gap-2"
           >
-            <InvoiceForm
-              setIsModalOpen={setIsModalOpen}
-              invoiceNumber={
-                router.isReady ? router.query.id?.toString() : ''
-              }
-            />
-          </Modal.Content>
-        </Modal>
-        <Button variant="outline" className="flex gap-2">
-          <RotateCw /> <span>Recurring Invoice</span>
-        </Button>
-        <Button variant="outline" className="flex gap-2 ">
-          <Plus size={20} /> <span>Create Time Log Invoice</span>
-        </Button>
-        <Button
-          variant="outline"
-          className="flex flex-row items-center gap-2"
-        >
-          <FileInput /> <span>Export</span>
-        </Button>
-      </div>
-      <DataTable
-        data={data}
-        columns={invoiceColumnDef}
-        searchVal="invoiceNumber"
-      />
-    </section>
+            <FileInput /> <span>Export</span>
+          </Button>
+        </div>
+        <DataTable
+          data={data}
+          columns={invoiceColumnDef}
+          searchVal="invoiceNumber"
+        />
+      </section>
+    </>
   );
 };
 

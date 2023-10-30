@@ -148,11 +148,13 @@ const Sidebar = ({
               alert={false}
               href="/dashboard"
             />
+
             {/* <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Employees"
               href="/employees"
             /> */}
+
             <SidebarItem
               icon={<Building size={20} strokeWidth={1.5} />}
               text="Clients"
@@ -379,6 +381,8 @@ export function SidebarItem({
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
   const [isOpen, setIsOpen] = useState(false);
 
+  const isActive = router.pathname === href;
+
   const handleClick = () => {
     if (asDropdown) {
       setIsOpen(!isOpen);
@@ -394,7 +398,7 @@ export function SidebarItem({
           !isWindowSmall ? `` : ``
         } group cursor-pointer  transition-colors 
         ${
-          router.pathname.startsWith(href)
+          isActive
             ? 'bg-slate-700 text-white'
             : 'text-gray-300 hover:bg-slate-700 hover:text-white'
         }`}
