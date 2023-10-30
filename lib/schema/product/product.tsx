@@ -13,19 +13,15 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import z from 'zod';
 export const productSchema = z.object({
   productId: z.string().optional(),
   productName: z.string(),
-  productCategory: z
-    .object({
-      categoryId: z.string().optional(),
-      categoryName: z.string().optional(),
-    })
-    .optional()
-    .nullable(),
+  categoryName: z.string().optional().nullable(),
   price: z.coerce.number(),
   categoryId: z.string(),
+  quantity: z.coerce.number(),
 });
 
 export type IProduct = z.infer<typeof productSchema>;
@@ -60,12 +56,16 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
     header: 'Product Name',
   },
   {
-    accessorKey: 'productCategory.categoryName',
+    accessorKey: 'categoryName',
     header: 'Product category',
   },
   {
     accessorKey: 'price',
     header: 'Price',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     id: 'actions',
@@ -86,7 +86,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
     });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this invoice?'
     );
@@ -102,7 +102,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           console.log('Response after error:', error);
         });
     }
-  };
+  }, []);
 
   return (
     <DropdownMenu>
