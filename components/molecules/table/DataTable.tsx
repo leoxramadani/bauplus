@@ -188,7 +188,7 @@ export function DataTable<TData, TValue>({
                         ))}
                       </TableRow>
                       {row.getIsExpanded() && renderSubComponent && (
-                        <TableRow className=" bg-slate-100">
+                        <TableRow className=" bg-slate-50">
                           <TableCell
                             className="w-full"
                             colSpan={columns.length}

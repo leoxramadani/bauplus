@@ -20,15 +20,10 @@ import z from 'zod';
 export const productSchema = z.object({
   productId: z.string().optional(),
   productName: z.string(),
-  productCategory: z
-    .object({
-      categoryId: z.string().optional(),
-      categoryName: z.string().optional(),
-    })
-    .optional()
-    .nullable(),
+  categoryName: z.string().optional().nullable(),
   price: z.coerce.number(),
   categoryId: z.string(),
+  quantity: z.coerce.number(),
 });
 
 export type IProduct = z.infer<typeof productSchema>;
@@ -63,12 +58,16 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
     header: 'Product Name',
   },
   {
-    accessorKey: 'productCategory.categoryName',
+    accessorKey: 'categoryName',
     header: 'Product category',
   },
   {
     accessorKey: 'price',
     header: 'Price',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     id: 'actions',
