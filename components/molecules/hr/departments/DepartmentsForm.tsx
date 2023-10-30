@@ -35,11 +35,13 @@ import { useForm } from 'react-hook-form';
 interface DepartmentsFormProps {
   setIsModalOpen: any;
   departmentId?: string;
+  refetchDepartments:any
 }
 
 const DepartmentsForm = ({
   setIsModalOpen,
   departmentId,
+  refetchDepartments
 }: DepartmentsFormProps) => {
   const router = useRouter();
   const [departmentData, setDepartmentData] = useState<any>();
@@ -93,6 +95,7 @@ const DepartmentsForm = ({
             router.replace('/hr/departments', undefined, {
               shallow: true,
             });
+            refetchDepartments();
           })
           .catch((error) => {
             console.log('Error UPDATING department:', error);
@@ -109,6 +112,7 @@ const DepartmentsForm = ({
           })
           .then((res) => {
             console.log('Successfully created department->', res);
+            refetchDepartments();
           })
           .catch((error) => {
             console.log('Error creating department:', error);
@@ -172,7 +176,7 @@ const DepartmentsForm = ({
               name="parentDepartmentId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Department</FormLabel>
+                  <FormLabel>Parent Department</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

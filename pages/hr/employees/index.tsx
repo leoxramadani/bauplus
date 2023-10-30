@@ -1,5 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import EmployeesCreate from '@/components/molecules/hr/employees/EmployeesForm';
+import EmployeesForm from '@/components/molecules/hr/employees/EmployeesForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, refetch } = useData<IEmployee[]>(
+  const { data, isLoading, isError, refetch:refetchEmployees } = useData<IEmployee[]>(
     ['employees'],
     GET_ALL_EMPLOYEES
   );
@@ -47,7 +47,6 @@ const Employees = () => {
               <Button
                 variant="default"
                 className="flex gap-2"
-                // onClick={() => setIsCreateModalOpen(true)}
               >
                 <Plus size={20} /> <span>Add employee</span>
               </Button>
@@ -56,11 +55,12 @@ const Employees = () => {
               title="Add Employee"
               description="Fill all the fields to add employee"
             >
-              <EmployeesCreate
+              <EmployeesForm
                 setIsModalOpen={setIsModalOpen}
                 employeeId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
+                refetchEmployees={refetchEmployees}
               />
             </Modal.Content>
           </Modal>
