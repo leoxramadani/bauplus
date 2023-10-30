@@ -344,7 +344,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                     {
                   accountDetails &&
                   accountDetails.map(x=>
-                  <div className="bg-indigo-400 rounded-lg cursor-pointer text-white p-2 flex items-center" onClick={()=>{
+                  <div key={x.accountNumber} className="bg-indigo-400 rounded-lg cursor-pointer text-white p-2 flex items-center" onClick={()=>{
                     setAccNr(x.accountNumber);
                     setAccCon(x.country);
                     setIsUpdate(true);
