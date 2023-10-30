@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -45,29 +46,40 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, ClipboardEdit, LayoutDashboard, Pencil } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import CreateAccountDetails from './CreateAccountDetails/CreateAccountDetails';
 
 
 export interface IClientsCreate {
   setModal(open: boolean): void;
   clientId?: string;
 }
+interface YourAccountDetailsType {
+  accountNumber: string,
+      country: string,
+}
 
 const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
+  const [accountModal, setAccoundModal] = useState<boolean>(false);
+  const [accNr,setAccNr]=useState<string>();
+  const [accCon,setAccCon] = useState<string>();
+  const [isUpdate,setIsUpdate] = useState<boolean>(false);
+  // const [accountDetails, setAccountDetails] = useState([
+  //   {
+  //     accountNumber: '',
+  //     country: '',
+  //   },
+  // ]);
 
-  const [clientAccountNumbers,setClientAccountNumbers]=useState({
-    accountNumber:'',
-    country:''
-  })
-
-
+  const [accountDetails, setAccountDetails] = useState<YourAccountDetailsType[]>([]);
+  const [speicificAccountDetails, setSpecificAccountDetails] = useState<YourAccountDetailsType[]>([]);
   const {
     data: clientTypes,
     isError: clientTypessIsError,
@@ -106,6 +118,10 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
     }
   }, [clientId]);
 
+  useEffect(()=>{
+    // console.log("accountDetailsaccountDetails=",accountDetails)
+  },[accountDetails])
+
   
 
 
@@ -117,6 +133,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
       clientContactInfos: client?.clientContactInfos[0],
     },
   });
+
 
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
@@ -181,7 +198,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
         setIsSubmitting(false);
       }
     },
-    [client]
+  [client/*,accountDetails*/]
   );
 
   const onError = (error: any) => {
@@ -191,6 +208,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   return (
     !statusIsLoading &&
     !ClientTypesIsLoading &&
+    <div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -259,6 +277,8 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               )}
             />
 
+           
+
 
             <FormField
               control={form.control}
@@ -300,35 +320,59 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               )}
             />
 
+
               <FormField
               control={form.control}
               name="clientAccountNumbers.accountNumber"
               render={({ field }) => (
+                
                 <FormItem>
-                  <FormLabel>Account Number</FormLabel>
-
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="Account Number"
-                      {...field}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  
+                 <FormMessage />
+                      <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="flex w-max items-center justify-center "
+                      onClick={() => {
+                        setAccoundModal(true)
+                        setIsUpdate(false);
+                      }}
+                    >
+                      Add Account details
+                    </Button>
+                    {
+                  accountDetails &&
+                  accountDetails.map(x=>
+                  <div className="bg-indigo-400 rounded-lg cursor-pointer text-white p-2 flex items-center" onClick={()=>{
+                    setAccNr(x.accountNumber);
+                    setAccCon(x.country);
+                    setIsUpdate(true);
+                    setAccoundModal(true)
+                  }}>
+                    <div className='flex flex-grow gap-6'>
+                      <p className='flex flex-col'> <span>Account number:</span> <span className='italic'>{x.accountNumber} </span> </p>
+                      <p className='flex flex-col'> <span>Account country:</span> <span className='italic'>{x.country}</span> </p></div>
+                    <div className='flex flex-none px-2'>
+                      <Pencil size={20} strokeWidth={1.5} />
+                    </div>
+                </div>
+                )}
                 </FormItem>
               )}
             />
 
-            <FormField
+
+              <FormField
               control={form.control}
-              name="clientAccountNumbers.country"
+              name="clientBusinessIds.businessId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Account country</FormLabel>
+                  <FormLabel>Business Id</FormLabel>
 
                   <FormControl className="relative">
                     <Input
-                      placeholder="Account country"
+                      placeholder="Business id"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -336,9 +380,13 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                   <FormMessage />
                 </FormItem>
               )}
-              />
+              />    
 
-              <FormField
+
+
+
+
+            <FormField
               control={form.control}
               name="clientBusinessIds.country"
               render={({ field }) => (
@@ -357,24 +405,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               )}
               />
 
-            <FormField
-              control={form.control}
-              name="clientBusinessIds.businessId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Business Id</FormLabel>
-
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="Business id"
-                      {...field}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-              />    
+            
 
             <FormField
               control={form.control}
@@ -448,6 +479,15 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
           </Button>
         </form>
       </Form>
+      
+            <Modal open={accountModal} onOpenChange={setAccoundModal}>
+              <Modal.Content className="w-full max-w-xl">
+                <CreateAccountDetails setAccoundModal={setAccoundModal} setAccountDetails={setAccountDetails} isUpdate={isUpdate} accNr={accNr} accCon={accCon}/>
+              </Modal.Content>
+            </Modal>
+
+    </div>
+      
     )
 };
 

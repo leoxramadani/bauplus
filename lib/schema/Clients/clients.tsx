@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
+import account from '@/pages/account';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
@@ -292,3 +293,13 @@ export const createClientSchema = z.object({
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;
+
+
+
+export const accountDetailSchema = z.object({
+    clientAccountNumbers:z.object({
+    accountNumber:z.string().optional(),
+    country:z.string().optional(),
+  }),
+})
+export type iCreateAccountDetail = z.infer<typeof accountDetailSchema>;
