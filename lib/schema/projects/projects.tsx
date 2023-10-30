@@ -74,10 +74,6 @@ export const projectColumnDef: ColumnDef<IProject>[] = [
       );
     },
   },
-  {
-    id: 'actions',
-    cell: ({ row }) => <ActionsColumn item={row.original} />,
-  },
 ];
 
 const ActionsColumn = ({ item }: { item: any }) => {

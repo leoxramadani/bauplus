@@ -75,7 +75,7 @@ const Sidebar = ({
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
-              href="/dashboard"
+              href="/"
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }

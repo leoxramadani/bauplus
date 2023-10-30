@@ -50,7 +50,7 @@ const Topbar: React.FC<TopbarProps> = ({ showForm }) => {
 
   return (
     <>
-      <div className="mb-2 flex flex-row items-center gap-4 pb-2">
+      <div className="mb-2 flex flex-row items-center gap-4 px-8 pb-1">
         {showForm ? (
           <div className="flex flex-grow">
             <Form {...form}>
@@ -108,10 +108,15 @@ const Topbar: React.FC<TopbarProps> = ({ showForm }) => {
           </div>
         )}
         <div className="flex flex-none items-center gap-10 px-4">
-          <Bell size={24} color="#374957" />
+          <Bell size={22} color="#374957" />
           <div className="flex flex-row items-center gap-2">
-            <Image src={user} alt="user"></Image>
-            <ChevronDown size={20} />
+            <Image
+              src={user}
+              alt="user"
+              width={36}
+              height={36}
+            ></Image>
+            <ChevronDown size={18} />
           </div>
         </div>
       </div>
