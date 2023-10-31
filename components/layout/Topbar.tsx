@@ -52,7 +52,7 @@ const Topbar: React.FC<TopbarProps> = ({ showForm }) => {
     <>
       <div className="mb-2 flex flex-row items-center gap-4 px-8 pb-1">
         {showForm ? (
-          <div className="flex flex-grow">
+          <div className="flex flex-grow items-center">
             <Form {...form}>
               <form className="flex w-[500px] flex-col gap-4">
                 <div className="grid grid-cols-1 items-center justify-center gap-4 sm:grid-cols-2">

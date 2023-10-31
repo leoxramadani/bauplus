@@ -229,12 +229,14 @@ const NoticeForm = ({
             </Button>
             <Modal open={open} onOpenChange={setOpen}>
               <Modal.Trigger asChild>
-                <Button
-                  variant="destructive"
-                  className="flex items-center justify-center gap-1"
-                >
-                  Delete Notice
-                </Button>
+                {noticeId && (
+                  <Button
+                    variant="destructive"
+                    className="flex items-center justify-center gap-1"
+                  >
+                    Delete Notice
+                  </Button>
+                )}
               </Modal.Trigger>
               <Modal.Content
                 title="Delete Notice"

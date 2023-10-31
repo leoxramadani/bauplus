@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Home,
   LayoutDashboard,
+  Settings,
   ShoppingBasket,
   UserCircle,
   Users,
@@ -306,6 +307,13 @@ const Sidebar = ({
               text="Notice Board"
               alert
               href="/notices"
+            ></SidebarItem>
+
+            <SidebarItem
+              icon={<Settings size={20} strokeWidth={1.5} />}
+              text="Settings"
+              alert={false}
+              href="/settings"
             ></SidebarItem>
 
             {/* {!isWindowSmall && (
