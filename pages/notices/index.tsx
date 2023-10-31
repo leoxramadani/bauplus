@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import Topbar from '@/components/layout/Topbar';
 import NoticeForm from '@/components/molecules/notices/NoticeForm';
 import NoticesCard from '@/components/molecules/notices/NoticesCard';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,7 @@ const Notices = () => {
   }, [router.query.id]);
   return (
     <>
+      
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
           <Modal open={open} onOpenChange={setOpen}>

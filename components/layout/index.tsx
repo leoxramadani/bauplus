@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import Breadcrumbs from '../ui/breadcrumbs';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Topbar from './Topbar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
@@ -83,7 +83,7 @@ const Layout = ({ children }: PropsWithChildren) => {
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
           }`}
         >
-          <Breadcrumbs />
+          <Topbar />
           <div className="mt-4">{children}</div>
         </main>
       </div>

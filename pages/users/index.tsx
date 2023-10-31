@@ -1,5 +1,6 @@
 import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
 import { DataTable } from '@/components/molecules/DataTable';
+import Topbar from '@/components/layout/Topbar';
 import { GET_ALL_USERS } from '@/lib/constants/endpoints/users';
 import useData from '@/lib/hooks/useData';
 import { searchParamsSchema } from '@/lib/schemas/params';
@@ -24,6 +25,8 @@ const Users = ({ searchParams }: UsersPageProps) => {
   return (
     <>
       {isLoading && <DataTableLoading columnCount={columns.length} />}
+      
+      {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}
       {data && <DataTable columns={columns} data={data} pageCount={10} advancedFilter={true} />}

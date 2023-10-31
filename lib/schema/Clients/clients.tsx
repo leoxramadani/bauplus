@@ -12,7 +12,7 @@ import {
 import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
-import { MoreHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -148,13 +148,28 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value: boolean) =>
-          row.toggleSelected(!!value)
-        }
-        aria-label="Select row"
-      />
+      <div className="flex items-center justify-center gap-2">
+        {row.getCanExpand() ? (
+          <button
+            {...{
+              onClick: row.getToggleExpandedHandler(),
+              style: { cursor: 'pointer' },
+            }}
+          >
+            {row.getIsExpanded() ? <ChevronUp /> : <ChevronDown />}
+          </button>
+        ) : (
+          '🔵'
+        )}
+
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) =>
+            row.toggleSelected(!!value)
+          }
+          aria-label="Select row"
+        />
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -185,6 +200,28 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
         ))}
       </ul>
     ),
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <ActionsColumn item={row.original} />,
+  },
+];
+
+export const clientSubColumnDef: ColumnDef<IClients>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: 'clientAccountNumbers.country',
@@ -254,10 +291,6 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
         ))}
       </ul>
     ),
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
 

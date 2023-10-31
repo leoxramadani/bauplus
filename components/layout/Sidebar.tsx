@@ -130,11 +130,11 @@ const Sidebar = ({
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
-              href="/dashboard"
+              href="/"
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }
-              className="px-3"
+              className=""
             >
               <Image
                 src={mimiro}
@@ -537,7 +537,7 @@ function SidebarItem({
             <span
               className={`w-full text-left ${
                 Icon && 'ml-7'
-              } group-hover/trigger ${!expanded && 'invisible'}`}
+              } group-hover/trigger ${Icon && !expanded && 'invisible'}`}
             >
               {text}
             </span>

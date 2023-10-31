@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import Topbar from '@/components/layout/Topbar';
 import ClientsForm from '@/components/molecules/Clients/ClientsForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -6,8 +7,10 @@ import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
 import {
   IClients,
+  clientSubColumnDef,
   clientsColumnDef,
 } from '@/lib/schema/Clients/clients';
+import { Row } from '@tanstack/react-table';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -33,6 +36,14 @@ const Clients = () => {
       });
     }
   }, [isOpen]);
+
+  const renderSubComponent = ({ row }: { row: Row<IClients> }) => {
+    return (
+      <pre style={{ fontSize: '10px' }}>
+        <code>{JSON.stringify(row.original, null, 2)}</code>
+      </pre>
+    );
+  };
 
   return (
     <>
@@ -66,7 +77,15 @@ const Clients = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && <DataTable data={data} columns={clientsColumnDef} />}
+        {data && (
+          <DataTable
+            data={data}
+            columns={clientsColumnDef}
+            subcolumns={clientSubColumnDef}
+            renderSubComponent={renderSubComponent}
+            getRowCanExpand={() => true}
+          />
+        )}
         {isLoading && <p> Loading...</p>}
         {isError && (
           <p>

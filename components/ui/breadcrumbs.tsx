@@ -11,11 +11,11 @@ const Crumb = ({
 }: PropsWithChildren<any>) => {
   if (last)
     return (
-      <a className="text-sm font-medium mx-1 my-1 inline-flex py-0.5 px-1">{children}</a>
+      <a className="text-base font-medium inline-flex py-0.5 px-1">{children}</a>
     );
   return (
     <Link
-      className="inline-flex items-center rounded-lg px-1 py-0.5 text-sm font-medium text-gray-700 transition-all duration-75 hover:underline"
+      className="inline-flex items-center rounded-lg px-1 py-0.5 text-base font-medium text-gray-700 transition-all duration-75 hover:underline"
       href={href}
     >
       {children}

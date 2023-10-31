@@ -146,7 +146,11 @@ const Duration = ({ className }: IDuration) => {
           </ul>
 
           {open && (
-            <DatePicker setDateRange={setDate} setOpen={setOpen} setDropDown={setDropDown} />
+            <DatePicker
+              setDateRange={setDate}
+              setOpen={setOpen}
+              setDropDown={setDropDown}
+            />
           )}
         </div>
       )}
