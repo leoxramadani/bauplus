@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import {
   ICompanySettings,
   companySettingsSchema,
-} from '@/lib/schema/settings/companySettings';
+} from '@/lib/schema/settings/companysettings';
 import { useState } from 'react';
 
 const CompanyForm = () => {
