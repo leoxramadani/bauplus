@@ -1,6 +1,5 @@
 'use client';
 import KpiCard from '@/components/atoms/KpiCard';
-import Topbar from '@/components/layout/Topbar';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import {
   IProject,
@@ -137,7 +136,6 @@ const Main = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen w-full flex-col gap-4">
-        <Topbar showForm={true} />
         <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-white to-85% p-8 pb-[200px] lg:flex-row">
           <KpiCard
             title="Revenue"

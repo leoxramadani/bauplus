@@ -89,7 +89,6 @@ const Payments = () => {
 
   return (
     <>
-      <Topbar />
       <section className="z-0 flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Modal>

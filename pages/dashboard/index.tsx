@@ -11,7 +11,6 @@ const NoSSR = dynamic(
 const Dashboard = () => {
   return (
     <>
-      <Topbar />
       <NoSSR />
     </>
   );

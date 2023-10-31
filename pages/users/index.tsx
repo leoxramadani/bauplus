@@ -15,7 +15,6 @@ const Users = () => {
 
   return (
     <>
-      <Topbar />
       {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}

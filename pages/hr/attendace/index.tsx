@@ -5,7 +5,6 @@ import { FileInput, FileUp, Plus } from 'lucide-react';
 const Attendance = () => {
   return (
     <>
-      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Button variant="default" className="flex gap-2">

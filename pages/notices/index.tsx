@@ -36,7 +36,6 @@ const Notices = () => {
   }, [router.query.id]);
   return (
     <>
-      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
           <Modal open={open} onOpenChange={setOpen}>
