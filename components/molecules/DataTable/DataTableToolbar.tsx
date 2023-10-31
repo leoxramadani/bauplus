@@ -67,9 +67,9 @@ export function DataTableToolbar<TData>({
   }, [selectedOptions])
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto p-1">
-      <div className="flex items-center justify-between space-x-2">
-        <div className="flex flex-1 items-center space-x-2">
+    <div className="w-full overflow-auto flex justify-between flex-row-reverse">
+      <div className="flex items-center justify-between space-x-2 p-1">
+        <div className="flex items-center space-x-2">
           {searchableColumns.length > 0 &&
             searchableColumns.map(
               (column) =>
@@ -154,7 +154,7 @@ export function DataTableToolbar<TData>({
         </div>
       </div>
       {advancedFilter && open ? (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 p-1">
           {selectedOptions.map((selectedOption) => (
             <DataTableAdvancedFilterItem
               key={String(selectedOption.value)}
