@@ -5,10 +5,6 @@ import { Check, Plus } from 'lucide-react';
 const Holiday = () => {
   return (
     <>
-<<<<<<< HEAD
-      
-=======
->>>>>>> a36543fdc74e5c1361b5fc27c114aa1ee05c5184
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Button variant="default" className="flex gap-2">
