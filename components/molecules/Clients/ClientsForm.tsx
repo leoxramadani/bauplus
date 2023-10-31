@@ -36,6 +36,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import CreateAccountDetails from './CreateAccountDetails/CreateAccountDetails';
+import CreateBusinessDetails from './CreateBusinessDetails/CreateBusinessDetails';
 
 export interface IClientsCreate {
   setModal(open: boolean): void;
@@ -46,26 +47,48 @@ export interface YourAccountDetailsType {
   country: string;
 }
 
+export interface YourBusinessDetails {
+  businessId: string;
+  country: string;
+}
+export interface YourContactInfo {
+  email: string;
+  phone: string;
+  address: string;
+}
+
 const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
   const [accountModal, setAccoundModal] = useState<boolean>(false);
-  const [accNr, setAccNr] = useState<string>();
-  const [accCon, setAccCon] = useState<string>();
+  const [businessModal, setBusinessModal] = useState<boolean>(false);
+  const [clientModal, setClientModal] = useState<boolean>(false);
+  const [accDetail, setAccDetail] = useState<YourAccountDetailsType>({
+    accountNumber: '',
+    country: '',
+  });
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  // const [accountDetails, setAccountDetails] = useState([
-  //   {
-  //     accountNumber: '',
-  //     country: '',
-  //   },
-  // ]);
 
   const [accountDetails, setAccountDetails] = useState<
     YourAccountDetailsType[]
   >([]);
-  const [speicificAccountDetails, setSpecificAccountDetails] =
-    useState<YourAccountDetailsType[]>([]);
+  const [businessDetails, setBusinessDetails] = useState<
+    YourBusinessDetails[]
+  >([]);
+  const [bizDetail, setBizDetail] = useState<YourBusinessDetails>({
+    businessId: '',
+    country: '',
+  });
+  const [clientInfos, setClientInfos] = useState<YourContactInfo[]>(
+    []
+  );
+  const [clientInfo, setClientInfo] = useState<YourContactInfo>({
+    email: '',
+    phone: '',
+    address: '',
+  });
+
   const {
     data: clientTypes,
     isError: clientTypessIsError,
@@ -82,6 +105,15 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
     isLoading: statusIsLoading,
     error: statusError,
   } = useData<any>(['status'], GET_ALL_ACCOUNT_STATUSES);
+
+  const form = useForm<ICreateClientSchema>({
+    resolver: zodResolver(createClientSchema),
+    values: {
+      ...client,
+      clientBusinessIds: client?.clientBusinessIds[0],
+      clientContactInfos: client?.clientContactInfos[0],
+    },
+  });
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -102,18 +134,11 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   }, [clientId]);
 
   useEffect(() => {
-    // console.log("accountDetailsaccountDetails=",accountDetails)
+    form.setValue('clientAccountNumbers', accountDetails);
   }, [accountDetails]);
-
-  const form = useForm<ICreateClientSchema>({
-    resolver: zodResolver(createClientSchema),
-    values: {
-      ...client,
-      clientAccountNumbers: client?.clientAccountNumbers[0],
-      clientBusinessIds: client?.clientBusinessIds[0],
-      clientContactInfos: client?.clientContactInfos[0],
-    },
-  });
+  useEffect(() => {
+    form.setValue('clientBusinessIds', businessDetails);
+  }, [businessDetails]);
 
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
@@ -301,7 +326,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
 
               <FormField
                 control={form.control}
-                name="clientAccountNumbers.accountNumber"
+                name="clientAccountNumbers"
                 render={({ field }) => (
                   <FormItem>
                     <FormMessage />
@@ -321,31 +346,30 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                       accountDetails.map((x) => (
                         <div
                           key={x.accountNumber}
-                          className="flex cursor-pointer items-center rounded-lg bg-indigo-400 p-2 text-white"
-                          onClick={() => {
-                            setAccNr(x.accountNumber);
-                            setAccCon(x.country);
-                            setIsUpdate(true);
-                            setAccoundModal(true);
-                          }}
+                          className="flex  items-center rounded-lg bg-primary p-2 text-white"
                         >
                           <div className="flex flex-grow gap-6">
                             <p className="flex flex-col">
                               {' '}
                               <span>Account number:</span>{' '}
-                              <span className="italic">
+                              <span className="">
                                 {x.accountNumber}{' '}
                               </span>{' '}
                             </p>
                             <p className="flex flex-col">
                               {' '}
                               <span>Account country:</span>{' '}
-                              <span className="italic">
-                                {x.country}
-                              </span>{' '}
+                              <span className="">{x.country}</span>{' '}
                             </p>
                           </div>
-                          <div className="flex flex-none px-2">
+                          <div
+                            className="flex flex-none px-2"
+                            onClick={() => {
+                              setAccDetail(x);
+                              setIsUpdate(true);
+                              setAccoundModal(true);
+                            }}
+                          >
                             <Pencil size={20} strokeWidth={1.5} />
                           </div>
                         </div>
@@ -356,41 +380,60 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
 
               <FormField
                 control={form.control}
-                name="clientBusinessIds.businessId"
+                name="clientBusinessIds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Business Id</FormLabel>
-
-                    <FormControl className="relative">
-                      <Input
-                        placeholder="Business id"
-                        {...field}
-                        disabled={isSubmitting}
-                      />
-                    </FormControl>
                     <FormMessage />
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="flex w-max items-center justify-center "
+                      onClick={() => {
+                        setBusinessModal(true);
+                        setIsUpdate(false);
+                      }}
+                    >
+                      Add Business details
+                    </Button>
+                    {businessDetails &&
+                      businessDetails.map((x) => (
+                        <div
+                          key={x.businessId}
+                          className="flex  items-center rounded-lg bg-primary p-2 text-white"
+                        >
+                          <div className="flex flex-grow gap-6">
+                            <p className="flex flex-col">
+                              {' '}
+                              <span>Business number:</span>{' '}
+                              <span className="">
+                                {x.businessId}{' '}
+                              </span>{' '}
+                            </p>
+                            <p className="flex flex-col">
+                              {' '}
+                              <span>Business country:</span>{' '}
+                              <span className="">{x.country}</span>{' '}
+                            </p>
+                          </div>
+                          <div
+                            className="flex flex-none px-2"
+                            onClick={() => {
+                              setIsUpdate(true);
+                              setBusinessModal(true);
+                            }}
+                          >
+                            <Pencil size={20} strokeWidth={1.5} />
+                          </div>
+                        </div>
+                      ))}
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="clientBusinessIds.country"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Business country</FormLabel>
+      
 
-                    <FormControl className="relative">
-                      <Input
-                        placeholder="Business country"
-                        {...field}
-                        disabled={isSubmitting}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            
 
               <FormField
                 control={form.control}
@@ -451,7 +494,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
             </div>
 
             <Button
-              variant="destructive"
+              variant="default"
               loading={isSubmitting}
               className="w-max"
             >
@@ -467,10 +510,21 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               setAccountDetails={setAccountDetails}
               accountDetails={accountDetails}
               isUpdate={isUpdate}
-              accNr={accNr}
-              setAccNr={setAccNr}
-              accCon={accCon}
-              setAccCon={setAccCon}
+              setAccountDetail={setAccDetail}
+              accountDetail={accDetail}
+            />
+          </Modal.Content>
+        </Modal>
+
+        <Modal open={businessModal} onOpenChange={setBusinessModal}>
+          <Modal.Content className="w-full max-w-xl">
+            <CreateBusinessDetails
+              setOpen={setBusinessModal}
+              setDetails={setBusinessDetails}
+              details={businessDetails}
+              isUpdate={isUpdate}
+              detail={bizDetail}
+              setDetail={setBizDetail}
             />
           </Modal.Content>
         </Modal>

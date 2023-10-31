@@ -9,79 +9,78 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  accountDetailSchema,
-  iCreateAccountDetail,
+  ICreateBusiness,
+  businessDetailSchema,
 } from '@/lib/schema/Clients/clients';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { YourAccountDetailsType } from '../ClientsForm';
+import { YourBusinessDetails } from '../ClientsForm';
 
 interface ICreateAccount {
-  setAccoundModal: React.Dispatch<SetStateAction<boolean>>;
-  accountDetails: YourAccountDetailsType[];
-  accountDetail: any;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
+  details: YourBusinessDetails[];
+  detail: YourBusinessDetails;
 
-  setAccountDetails: any;
-  setAccountDetail: any;
+  setDetails: any;
+  setDetail: any;
   isUpdate: any;
 }
 
-const CreateAccountDetails = ({
-  setAccoundModal,
-  setAccountDetails,
+const CreateBusinessDetails = ({
+  setOpen,
+  setDetails,
   isUpdate,
-  accountDetails,
-  accountDetail,
-  setAccountDetail,
+  details,
+  detail,
+  setDetail,
 }: ICreateAccount) => {
-  const form = useForm<iCreateAccountDetail>({
-    resolver: zodResolver(accountDetailSchema),
+  const form = useForm<ICreateBusiness>({
+    resolver: zodResolver(businessDetailSchema),
     defaultValues: {
-      clientAccountNumbers: {
-        accountNumber: accountDetail?.accountNumber || '',
-        country: accountDetail?.country || '',
+      clientBusinessIds: {
+        businessId: detail?.businessId || '',
+        country: detail?.country || '',
       },
-      accountDetails,
+      businessDetails: details,
     },
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = useCallback(
-    async (data: iCreateAccountDetail) => {
+    async (data: ICreateBusiness) => {
       if (isUpdate) {
         // Update the existing account details
-        setAccountDetails((prev: any) =>
-          prev.map((account: any) =>
-            account.accountNumber === accountDetail?.accountNumber
+        setDetails((prev: any) =>
+          prev.map((account: YourBusinessDetails) =>
+            account.businessId === detail?.businessId
               ? {
-                  accountNumber:
-                    data.clientAccountNumbers.accountNumber,
-                  country: data.clientAccountNumbers.country,
+                  businessId: data.clientBusinessIds.businessId,
+                  country: data.clientBusinessIds.country,
                 }
               : account
           )
         );
       } else if (!isUpdate) {
         // Add a new account
-        setAccountDetails((prev: any) => [
+        setDetails((prev: any) => [
           ...prev,
           {
-            accountNumber: data.clientAccountNumbers.accountNumber,
-            country: data.clientAccountNumbers.country,
+            businessId: data.clientBusinessIds.businessId,
+            country: data.clientBusinessIds.country,
           },
         ]);
       }
 
-      setAccoundModal(false);
-      setAccountDetail({
+      setOpen(false);
+      setDetail({
         accountNumber: '',
         country: '',
       });
     },
-    [isUpdate, accountDetails, accountDetail]
+    [isUpdate, details, detail]
   );
   const onError = (error: any) => {
     console.log('EEERRROOR->', error);
@@ -99,14 +98,14 @@ const CreateAccountDetails = ({
 
             <FormField
               control={form.control}
-              name="clientAccountNumbers.accountNumber"
+              name="clientBusinessIds.businessId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Account Number</FormLabel>
+                  <FormLabel>Business Number</FormLabel>
 
                   <FormControl className="relative">
                     <Input
-                      placeholder="Account Number"
+                      placeholder="Business Number"
                       {...field}
                       disabled={isSubmitting}
                       type="number"
@@ -119,14 +118,14 @@ const CreateAccountDetails = ({
 
             <FormField
               control={form.control}
-              name="clientAccountNumbers.country"
+              name="clientBusinessIds.country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Account country</FormLabel>
+                  <FormLabel>Business country</FormLabel>
 
                   <FormControl className="relative">
                     <Input
-                      placeholder="Account country"
+                      placeholder="Business country"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -145,7 +144,7 @@ const CreateAccountDetails = ({
               variant="outline"
               type="button"
               className="w-max"
-              onClick={() => setAccoundModal(false)}
+              onClick={() => setOpen(false)}
             >
               Cancel
             </Button>
@@ -156,4 +155,4 @@ const CreateAccountDetails = ({
   );
 };
 
-export default CreateAccountDetails;
+export default CreateBusinessDetails;
