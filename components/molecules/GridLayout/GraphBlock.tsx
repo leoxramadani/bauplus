@@ -56,7 +56,7 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
       case 'donut':
         return (
           <DonutChart
-            className="h-full w-full p-6"
+            className="h-full w-full p-6 text-5xl font-medium"
             data={data}
             index={index}
             category="sales"

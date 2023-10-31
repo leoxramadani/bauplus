@@ -1,4 +1,5 @@
 import RightModal from '@/components/atoms/RightModal';
+import Topbar from '@/components/layout/Topbar';
 import EstimatesCreate from '@/components/molecules/finances/estimates/EstimatesCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -14,10 +15,11 @@ const Estimates = () => {
 
   return (
     <>
+      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Button
-            variant="destructive"
+            variant="default"
             className="flex gap-2"
             onClick={() => setIsCreateModalOpen(true)}
           >

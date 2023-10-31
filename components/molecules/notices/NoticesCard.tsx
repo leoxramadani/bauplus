@@ -31,7 +31,7 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
           <Image src={Logo} alt={'test'} />
         </div>
         <div className="flex flex-col items-start gap-2 px-6">
-          <h1 className="flex-grow text-xl font-bold">
+          <h1 className="flex-grow text-xl font-bold text-primary">
             {cardData.noticeTitle}
           </h1>
           <p className="text-xs font-medium text-indigo-500">

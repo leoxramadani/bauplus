@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import Topbar from '@/components/layout/Topbar';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -37,12 +38,13 @@ const BankAccounts = () => {
 
   return (
     <>
+      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
           <Modal open={isOpen} onOpenChange={setIsOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add Bank Account
