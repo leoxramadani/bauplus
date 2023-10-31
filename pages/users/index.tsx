@@ -25,7 +25,6 @@ const Users = ({ searchParams }: UsersPageProps) => {
   return (
     <>
       {isLoading && <DataTableLoading columnCount={columns.length} />}
-      
       {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}

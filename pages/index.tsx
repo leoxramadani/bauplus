@@ -1,6 +1,5 @@
 'use client';
 import KpiCard from '@/components/atoms/KpiCard';
-import Topbar from '@/components/layout/Topbar';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import {
   IProject,

@@ -1,6 +1,13 @@
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
   Form,
   FormControl,
   FormField,
@@ -10,12 +17,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { GET_ALL_PRODUCT_CATEGORIES } from '@/lib/constants/endpoints/products/productCategories';
 import {
   CREATE_PRODUCT,
@@ -28,26 +33,47 @@ import {
   productSchema,
 } from '@/lib/schema/product/product';
 import { ICategories } from '@/lib/schema/product/productCategories';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
+import { Check, ChevronsUpDown, Edit, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, {
+  Key,
   SetStateAction,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import { useForm } from 'react-hook-form';
-import CreateCategory from './category/CreateCategory';
+import ProductCategoryForm from './category/ProductCategoryForm';
 
 interface IProductForm {
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
   productId?: string;
+  refetchProducts?: any;
 }
 
-const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
+interface ICategory {
+  categoryName: string;
+  companyId: string;
+  categoryId?: string | undefined;
+  company?:
+    | {
+        companyId: string;
+        companyName: string;
+      }
+    | undefined;
+}
+
+const ProductForm = ({
+  setIsModalOpen,
+  productId,
+  refetchProducts,
+}: IProductForm) => {
   const router = useRouter();
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
+  const [categoryToEdit, setCategoryToEdit] = useState<ICategory>();
   const [productData, setProductData] = useState<any>();
   const {
     data: productCategories,
@@ -101,6 +127,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
             router.replace('/products', undefined, {
               shallow: true,
             });
+            refetchProducts();
           })
           .catch((error) => {
             console.log('Error UPDATING product:', error);
@@ -114,6 +141,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
           })
           .then((res) => {
             console.log('Successfully created product->', res);
+            refetchProducts();
           })
           .catch((error) => {
             console.log('Error creating product:', error);
@@ -127,6 +155,12 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
   const onError = (error: any) => {
     console.log('Error input->', error);
   };
+
+  useEffect(() => {
+    if (!categoryModal) {
+      setCategoryToEdit(undefined);
+    }
+  }, [categoryModal]);
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
@@ -156,7 +190,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
               />
 
               {/* Product category */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
@@ -202,6 +236,105 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
                     >
                       Add Category
                     </Button>
+                  </FormItem>
+                )}
+              /> */}
+
+              {/* Category */}
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem className="flex w-full flex-col">
+                    <FormLabel>Category</FormLabel>
+                    <div className="flex flex-row items-center gap-2">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                'flex w-full items-center justify-between gap-1',
+                                !field.value &&
+                                  'text-muted-foreground'
+                              )}
+                              // disabled={isSubmitting}
+                            >
+                              {field.value
+                                ? productCategories?.find(
+                                    (category) =>
+                                      category.categoryId ===
+                                      field.value
+                                  )?.categoryName
+                                : 'Choose category'}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="max-w-full p-0">
+                          <Command>
+                            <CommandInput placeholder="Search category..." />
+                            <CommandEmpty>
+                              No categories found.
+                            </CommandEmpty>
+                            <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                              {productCategories?.map(
+                                (category, i: Key) => (
+                                  <CommandItem
+                                    value={category.categoryName}
+                                    className="flex items-center"
+                                    key={i}
+                                    onSelect={() => {
+                                      category.categoryId &&
+                                        form.setValue(
+                                          'categoryId',
+                                          category?.categoryId
+                                        );
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4 transition-all',
+                                        category.categoryId ===
+                                          field.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    <p className="flex flex-grow">
+                                      {category.categoryName}
+                                    </p>
+                                    <Edit
+                                      className={cn(
+                                        'mr-2 h-4 w-4 flex-none opacity-30 transition-all hover:cursor-pointer hover:opacity-100'
+                                      )}
+                                      onClick={() => {
+                                        setCategoryToEdit(
+                                          () => category
+                                        );
+                                        setCategoryModal(true);
+                                      }}
+                                    />
+                                  </CommandItem>
+                                )
+                              )}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+
+                      <FormMessage />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="flex w-max items-center justify-center "
+                        onClick={() => setCategoryModal(true)}
+                      >
+                        <Plus size={20} color={'#6E71F1'} />
+                      </Button>
+                    </div>
                   </FormItem>
                 )}
               />
@@ -263,9 +396,10 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
 
       <Modal open={categoryModal} onOpenChange={setCategoryModal}>
         <Modal.Content className="w-full max-w-xl">
-          <CreateCategory
+          <ProductCategoryForm
             setCategoryModal={setCategoryModal}
             refetchProductCategories={refetchProductCategories}
+            categoryToEdit={categoryToEdit}
           />
         </Modal.Content>
       </Modal>

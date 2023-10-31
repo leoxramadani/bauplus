@@ -107,16 +107,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
   // };
 
   const handleDelete = async (id: string) => {
-    try {
-      await axios.delete(DELETE_PRODUCT, {
+    await axios
+      .delete(DELETE_PRODUCT, {
         params: {
           productId: id,
         },
+      })
+      .then((res) => {
+        toast.success('Successfully deleted product.');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log('Error deleting product->', error);
       });
-      toast.success('Successfully deleted bank account.');
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const [open, setOpen] = useState(false);
@@ -148,16 +156,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuSeparator />
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <Button
-              variant="destructive"
-              className="flex items-center justify-center gap-1"
-            >
-              Delete Client
-            </Button>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Product
+            </div>
           </Modal.Trigger>
           <Modal.Content
-            title="Delete Client"
-            description="Are you sure you want to delete this client?"
+            title="Delete Product"
+            description="Are you sure you want to delete this product?"
             className="w-full max-w-sm"
           >
             <div className="flex flex-row gap-4">
@@ -171,7 +176,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
                 </Button>
               </Modal.Close>
               <Modal.Close asChild>
-                <Button variant="default" className="w-max">
+                <Button variant="outline" className="w-max">
                   Close
                 </Button>
               </Modal.Close>

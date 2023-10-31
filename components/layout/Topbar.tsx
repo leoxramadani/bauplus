@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form';
 import Breadcrumbs from '../ui/breadcrumbs';
 import { Button } from '../ui/button';
 
-const projectNames = [
+const projectName = [
   { projectId: '1', projectName: 'All Projects' },
   { projectId: '2', projectName: 'Product Launch' },
   { projectId: '3', projectName: 'Ad Campaign' },
@@ -40,8 +40,6 @@ interface TopbarProps {
 const Topbar: React.FC<TopbarProps> = ({ showForm }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bankAccount, setBankAccount] = useState<any>();
-
-  const projectName = projectNames;
 
   const form = useForm<IProject>({
     resolver: zodResolver(createBankAccountSchema),

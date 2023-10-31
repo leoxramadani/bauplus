@@ -1,5 +1,4 @@
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -41,7 +40,10 @@ const Departments = () => {
 
   return (
     <>
+<<<<<<< HEAD
       
+=======
+>>>>>>> a36543fdc74e5c1361b5fc27c114aa1ee05c5184
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Modal open={open} onOpenChange={setOpen}>

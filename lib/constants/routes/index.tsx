@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Settings,
   SettingsIcon,
+  ShoppingBasket,
   UserCircle,
   Users,
   Wallet,
@@ -73,13 +74,18 @@ export default [
     ),
   },
   {
+    path: 'products',
+    title: 'Products',
+    icon: <ShoppingBasket size={18} />,
+  },
+  {
     path: 'notices',
     title: 'Notice Board',
-    icon: <ClipboardList size={18} />
+    icon: <ClipboardList size={18} />,
   },
   {
     path: 'account',
     title: 'Account settings',
-    icon: <Settings size={18} />
-  }
+    icon: <Settings size={18} />,
+  },
 ];

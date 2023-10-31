@@ -44,11 +44,11 @@ import { toast } from 'react-toastify';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
-  refetchEmployees
+  refetchEmployees,
 }: {
   setIsModalOpen: any;
   employeeId?: string;
-  refetchEmployees:any
+  refetchEmployees: any;
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();

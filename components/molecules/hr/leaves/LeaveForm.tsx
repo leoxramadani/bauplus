@@ -335,7 +335,7 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
               name="employeeId"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col">
-                  <FormLabel>Employee Name</FormLabel>
+                  <FormLabel>Employee</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
