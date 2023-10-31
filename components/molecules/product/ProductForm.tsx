@@ -51,6 +51,7 @@ import ProductCategoryForm from './category/ProductCategoryForm';
 interface IProductForm {
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
   productId?: string;
+  refetchProducts?: any;
 }
 
 interface ICategory {
@@ -65,7 +66,11 @@ interface ICategory {
     | undefined;
 }
 
-const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
+const ProductForm = ({
+  setIsModalOpen,
+  productId,
+  refetchProducts,
+}: IProductForm) => {
   const router = useRouter();
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
   const [categoryToEdit, setCategoryToEdit] = useState<ICategory>();
@@ -122,6 +127,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
             router.replace('/products', undefined, {
               shallow: true,
             });
+            refetchProducts();
           })
           .catch((error) => {
             console.log('Error UPDATING product:', error);
@@ -135,6 +141,7 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
           })
           .then((res) => {
             console.log('Successfully created product->', res);
+            refetchProducts();
           })
           .catch((error) => {
             console.log('Error creating product:', error);
@@ -260,16 +267,16 @@ const ProductForm = ({ setIsModalOpen, productId }: IProductForm) => {
                                       category.categoryId ===
                                       field.value
                                   )?.categoryName
-                                : 'Choose employee'}
+                                : 'Choose category'}
                               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="max-w-full p-0">
                           <Command>
-                            <CommandInput placeholder="Search employee..." />
+                            <CommandInput placeholder="Search category..." />
                             <CommandEmpty>
-                              No employees found.
+                              No categories found.
                             </CommandEmpty>
                             <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                               {productCategories?.map(
