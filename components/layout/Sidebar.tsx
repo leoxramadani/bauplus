@@ -1,10 +1,12 @@
 import mimiroArrow from '@/public/Arrow-M.svg';
-import mimiro from '@/public/mimiro-new-9.svg';
+import mimiro from '@/public/mimiro-white.svg';
 import {
+  Building,
   Calculator,
   ChevronRight,
   ChevronsLeft,
   ClipboardList,
+  Home,
   LayoutDashboard,
   ShoppingBasket,
   UserCircle,
@@ -73,7 +75,7 @@ const Sidebar = ({
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
-              href="/dashboard"
+              href="/"
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }
@@ -135,18 +137,26 @@ const Sidebar = ({
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
           >
             <SidebarItem
+              icon={<Home size={20} strokeWidth={1.5} />}
+              text="Main"
+              alert={false}
+              href="/"
+            />
+            <SidebarItem
               icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
               text="Dashboard"
-              alert={true}
+              alert={false}
               href="/dashboard"
             />
+
             {/* <SidebarItem
               icon={<UserCircle size={20} strokeWidth={1.5} />}
               text="Employees"
               href="/employees"
             /> */}
+
             <SidebarItem
-              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
+              icon={<Building size={20} strokeWidth={1.5} />}
               text="Clients"
               alert={false}
               href="/clients"
@@ -371,6 +381,8 @@ export function SidebarItem({
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
   const [isOpen, setIsOpen] = useState(false);
 
+  const isActive = router.pathname === href;
+
   const handleClick = () => {
     if (asDropdown) {
       setIsOpen(!isOpen);
@@ -382,11 +394,11 @@ export function SidebarItem({
     <>
       <button
         onClick={handleClick}
-        className={`relative z-50 flex w-full items-center justify-center gap-4 px-[10px] py-[5px] ${
+        className={`relative z-50 my-1 flex w-full items-center justify-center gap-4 rounded-md px-[10px] py-[8px]  ${
           !isWindowSmall ? `` : ``
         } group cursor-pointer  transition-colors 
         ${
-          router.pathname.startsWith(href)
+          isActive
             ? 'bg-slate-700 text-white'
             : 'text-gray-300 hover:bg-slate-700 hover:text-white'
         }`}

@@ -91,6 +91,17 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
               {...register('password')}
             />
           </div>
+          <div className="flex flex-row items-center gap-2 pb-2">
+            <Input
+              id="password"
+              placeholder="Password"
+              type="checkbox"
+              className="h-fit w-fit"
+            />
+            <p className="text-xs text-muted-foreground">
+              Rembember me
+            </p>
+          </div>
           {errors.password && (
             <p className="error">{errors.password.message}</p>
           )}

@@ -383,7 +383,7 @@ const GridLayout = () => {
   return (
     <div>
       {!isAdding && (
-        <div className="flex flex-col px-2 pb-3">
+        <div className="fixed right-0 z-50 flex flex-col px-2 pb-3 opacity-60 hover:opacity-100">
           <Button
             variant="default"
             className="flex w-fit items-center gap-2"
@@ -393,7 +393,6 @@ const GridLayout = () => {
             }}
           >
             <Pencil width={16} />
-            Edit
           </Button>
         </div>
       )}

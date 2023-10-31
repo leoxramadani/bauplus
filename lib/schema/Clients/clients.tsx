@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -14,7 +15,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { Key } from 'react';
+import { Key, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
@@ -63,24 +64,20 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this client?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
+    console.log('Delete row with id:', id);
 
-      await axios
-        .delete(DELETE_CLIENT + '/' + id)
-        .then((res) => {
-          toast.success('Successfully deleted a client.');
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
-        });
-    }
+    await axios
+      .delete(DELETE_CLIENT + '/' + id)
+      .then((res) => {
+        toast.success('Successfully deleted a client.');
+        console.log('response after delete success =>', res);
+      })
+      .catch((error) => {
+        console.log('Response after error:', error);
+      });
   };
 
+  const [open, setOpen] = useState(false);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -104,9 +101,35 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleDelete(item.clientId)}>
-          Delete Row
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <Button
+              variant="destructive"
+              className="flex items-center justify-center gap-1"
+            >
+              Delete Client
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Client"
+            description="Are you sure you want to delete this client?"
+          >
+            <div className="flex flex-row gap-4">
+              <Button
+                variant="destructive"
+                className="w-max"
+                onClick={() => handleDelete(item.clientId)}
+              >
+                Delete
+              </Button>
+              <Modal.Close asChild>
+                <Button variant="default" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -277,19 +300,19 @@ export const createClientSchema = z.object({
   companyName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  clientAccountNumbers:z.object({
-    accountNumber:z.string().optional(),
-    country:z.string().optional(),
+  clientAccountNumbers: z.object({
+    accountNumber: z.string().optional(),
+    country: z.string().optional(),
   }),
-  clientBusinessIds:z.object({
+  clientBusinessIds: z.object({
     businessId: z.string().optional(),
     country: z.string().optional(),
   }),
-  clientContactInfos:z.object({
-    email:z.string().optional(),
-    phone:z.string().optional(),
-    address:z.string().optional(),
-  })
+  clientContactInfos: z.object({
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }),
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;

@@ -1,3 +1,4 @@
+import Topbar from '@/components/layout/Topbar';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { GET_ALL_USERS } from '@/lib/constants/endpoints/users';
 import useData from '@/lib/hooks/useData';
@@ -14,6 +15,7 @@ const Users = () => {
 
   return (
     <>
+      <Topbar />
       {isLoading && <p>Loading...</p>}
       {/*@ts-ignore*/}
       {isError && <p className="error">{error.message}</p>}

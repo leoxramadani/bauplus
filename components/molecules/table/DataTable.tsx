@@ -45,6 +45,10 @@ interface DataTableProps<TData, TValue> {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement;
+  showPagination?: boolean;
+  showViewoptions?: boolean;
+  showSearchBar?: boolean;
+  showTitle?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -54,6 +58,10 @@ export function DataTable<TData, TValue>({
   subcolumns,
   getRowCanExpand,
   renderSubComponent,
+  showPagination = true,
+  showViewoptions = true,
+  showSearchBar = true,
+  showTitle = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -107,34 +115,42 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="my-3 flex flex-col gap-3">
+    <div
+      className={`flex flex-col
+    ${!showSearchBar ? `` : 'my-3 gap-3'}`}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex w-full flex-row items-center gap-2">
           {/* Input for filterin are here */}
-          <Input
-            placeholder="Search"
-            value={
-              (table
-                .getColumn(searchVal ?? 'id')
-                ?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn(searchVal ?? 'id')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-xl"
-          />
+          {showSearchBar && (
+            <Input
+              placeholder="Search"
+              value={
+                (table
+                  .getColumn(searchVal ?? 'id')
+                  ?.getFilterValue() as string) ?? ''
+              }
+              onChange={(event) =>
+                table
+                  .getColumn(searchVal ?? 'id')
+                  ?.setFilterValue(event.target.value)
+              }
+              className="max-w-xl"
+            />
+          )}
           {/* dropdown view columns select */}
           {/* <DataTableColumnSearch table={table} /> */}
         </div>
         {/* dropdown view columns select */}
-        <DataTableViewOptions table={table} />
+        {showViewoptions && <DataTableViewOptions table={table} />}
       </div>
       {/* The table component is here */}
       <div className="rounded-md border bg-white shadow-sm">
+        {showTitle && (
+          <h1 className="p-4 text-xl font-medium">Projects</h1>
+        )}
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-[#f1f1f1]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -172,7 +188,7 @@ export function DataTable<TData, TValue>({
                         ))}
                       </TableRow>
                       {row.getIsExpanded() && renderSubComponent && (
-                        <TableRow className=" bg-slate-100">
+                        <TableRow className=" bg-slate-50">
                           <TableCell
                             className="w-full"
                             colSpan={columns.length}
@@ -263,7 +279,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       {/* Buttons for pages are here */}
-      <DataTablePagination table={table} />
+      {showPagination && <DataTablePagination table={table} />}
     </div>
   );
 }
