@@ -3,6 +3,7 @@ import { capitalize } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Key, PropsWithChildren, useMemo } from 'react';
+import Topbar from '../layout/Topbar';
 
 const Crumb = ({
   children,
@@ -36,6 +37,24 @@ const Breadcrumbs = () => {
         .split('/')
         .filter((v) => v.length > 0);
 
+      if (asPathNestedRoutes.length === 0) {
+        const homeRoute = routes.find((r) => r.path === '') ?? {
+          path: '',
+          title: capitalize('Main'),
+          icon: undefined,
+        };
+
+        if (homeRoute) {
+          return [
+            {
+              href: '/',
+              title: homeRoute.title,
+              icon: homeRoute.icon,
+            },
+          ];
+        }
+      }
+
       const crumblist = asPathNestedRoutes.map((subpath, idx) => {
         const href =
           '/' + asPathNestedRoutes.slice(0, idx + 1).join('/');
@@ -62,13 +81,19 @@ const Breadcrumbs = () => {
 
             return (
               <>
-                <Crumb {...crumb} key={i} last={isLast}>
-                  <div className="flex items-center gap-1">
-                    {crumb?.icon && crumb.icon}
-                    {crumb?.title}
-                  </div>
-                </Crumb>
-                {!isLast && <span className="mx-1">/</span>}
+                {crumb.href === '/' ? (
+                  <Topbar showForm={true} />
+                ) : (
+                  <>
+                    <Crumb {...crumb} key={i} last={isLast}>
+                      <div className="flex items-center gap-1">
+                        {crumb?.icon && crumb.icon}
+                        {crumb?.title}
+                      </div>
+                    </Crumb>
+                    {!isLast && <span className="mx-1">/</span>}
+                  </>
+                )}
               </>
             );
           })}

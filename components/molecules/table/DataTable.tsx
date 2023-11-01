@@ -24,7 +24,6 @@ import {
 } from '@/components/ui/table';
 
 import { ContextMenuShortcut } from '@/components/ui/context-menu';
-import { Input } from '@/components/ui/input';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -33,6 +32,7 @@ import {
   ContextMenuTrigger,
 } from '@radix-ui/react-context-menu';
 import { DataTableColumnHeader } from './DataTableColumnHeader';
+import { DataTableColumnSearch } from './DataTableColumnSearch';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableViewOptions } from './DataTableViewOptions';
 
@@ -121,25 +121,8 @@ export function DataTable<TData, TValue>({
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex w-full flex-row items-center gap-2">
-          {/* Input for filterin are here */}
-          {showSearchBar && (
-            <Input
-              placeholder="Search"
-              value={
-                (table
-                  .getColumn(searchVal ?? 'id')
-                  ?.getFilterValue() as string) ?? ''
-              }
-              onChange={(event) =>
-                table
-                  .getColumn(searchVal ?? 'id')
-                  ?.setFilterValue(event.target.value)
-              }
-              className="max-w-xl"
-            />
-          )}
           {/* dropdown view columns select */}
-          {/* <DataTableColumnSearch table={table} /> */}
+          {showSearchBar && <DataTableColumnSearch table={table} />}
         </div>
         {/* dropdown view columns select */}
         {showViewoptions && <DataTableViewOptions table={table} />}

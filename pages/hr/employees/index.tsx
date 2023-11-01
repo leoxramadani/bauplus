@@ -43,7 +43,6 @@ const Employees = () => {
 
   return (
     <>
-      <Topbar />
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>

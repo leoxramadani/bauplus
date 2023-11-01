@@ -1,8 +1,10 @@
 import {
   Calculator,
+  ClipboardList,
   Home,
   LayoutDashboard,
   SettingsIcon,
+  ShoppingBasket,
   UserCircle,
   Users,
   Wallet,
@@ -47,5 +49,15 @@ export default [
     path: 'users',
     title: 'Users',
     icon: <UserCircle size={18} />,
+  },
+  {
+    path: 'products',
+    title: 'Products',
+    icon: <ShoppingBasket size={18} />,
+  },
+  {
+    path: 'notices',
+    title: 'Notice Board',
+    icon: <ClipboardList size={18} />,
   },
 ];
