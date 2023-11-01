@@ -50,7 +50,7 @@ const Topbar: React.FC<TopbarProps> = ({ showForm }) => {
       <div
         className={`flex ${
           showForm ? `w-full` : `flex-none`
-        } items-center gap-4 bg-red-300 p-2`}
+        } items-center gap-4  p-2`}
       >
         {showForm && (
           <div className="flex flex-grow">

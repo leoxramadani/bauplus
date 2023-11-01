@@ -16,7 +16,7 @@ const Crumb = ({
     );
   return (
     <Link
-      className="inline-flex items-center rounded-lg bg-blue-200 px-1 py-0.5 text-base font-medium text-gray-700 transition-all duration-75 hover:underline"
+      className="inline-flex items-center rounded-lg px-1 py-0.5 text-base font-medium text-gray-700 transition-all duration-75 hover:underline"
       href={href}
     >
       {children}
@@ -76,29 +76,38 @@ const Breadcrumbs = () => {
   );
 
   return (
-    <nav className="flex items-center" aria-label="Breadcrumb">
-      {breadcrumbs.map((crumb, i: Key) => {
-        const isLast = i === breadcrumbs.length - 1;
+    <nav className="flex w-full items-center" aria-label="Breadcrumb">
+      {breadcrumbs[0].href == '/' ? (
+        <Topbar showForm={true} />
+      ) : (
+        <div className="flex w-full">
+          <div className="flex flex-grow">
+            {breadcrumbs.map((crumb, i: Key) => {
+              console.log('breadcrumbs->', breadcrumbs);
 
-        if (crumb.href === '/') {
-          return <Topbar showForm={crumb.showForm} key={i} />;
-        }
+              const isLast = i === breadcrumbs.length - 1;
+              return (
+                <div className="flex items-center" key={i}>
+                  <div className="flex">
+                    <Crumb {...crumb} last={isLast}>
+                      <div className="flex items-center gap-1">
+                        {crumb?.icon && crumb.icon}
+                        {crumb?.title}
+                      </div>
+                    </Crumb>
 
-        return (
-          <>
-            <Crumb {...crumb} last={isLast}>
-              <div className="flex items-center gap-1">
-                {crumb?.icon && crumb.icon}
-                {crumb?.title}
-              </div>
-            </Crumb>
+                    {!isLast && <span className="mx-1">/</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-            {!isLast && <span className="mx-1">/</span>}
-
-            {isLast && <Topbar />}
-          </>
-        );
-      })}
+          <div className="flex flex-none">
+            <Topbar />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
           <h1 className="p-4 text-xl font-medium">Projects</h1>
         )}
         <Table>
-          <TableHeader className="bg-[#f1f1f1]">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
