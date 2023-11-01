@@ -16,7 +16,7 @@ const Crumb = ({
     );
   return (
     <Link
-      className="inline-flex items-center rounded-lg px-1 py-0.5 text-base font-medium text-gray-700 transition-all duration-75 hover:underline"
+      className="inline-flex items-center rounded-lg bg-blue-200 px-1 py-0.5 text-base font-medium text-gray-700 transition-all duration-75 hover:underline"
       href={href}
     >
       {children}
@@ -37,11 +37,13 @@ const Breadcrumbs = () => {
         .split('/')
         .filter((v) => v.length > 0);
 
+      //check if it's the home route
       if (asPathNestedRoutes.length === 0) {
         const homeRoute = routes.find((r) => r.path === '') ?? {
           path: '',
           title: capitalize('Main'),
           icon: undefined,
+          showForm: true,
         };
 
         if (homeRoute) {
@@ -50,6 +52,7 @@ const Breadcrumbs = () => {
               href: '/',
               title: homeRoute.title,
               icon: homeRoute.icon,
+              showForm: homeRoute.showForm,
             },
           ];
         }
@@ -62,6 +65,7 @@ const Breadcrumbs = () => {
           path: subpath,
           title: capitalize(subpath),
           icon: undefined,
+          showForm: false,
         };
 
         return { ...route, href };
@@ -72,32 +76,29 @@ const Breadcrumbs = () => {
   );
 
   return (
-    <nav className="flex w-full" aria-label="Breadcrumb">
-      <div className="inline-flex w-full items-center space-x-1 md:space-x-3">
-        <div className="inline-flex w-full items-center justify-start">
-          {breadcrumbs.map((crumb, i: Key) => {
-            const isLast = i === breadcrumbs.length - 1;
+    <nav className="flex items-center" aria-label="Breadcrumb">
+      {breadcrumbs.map((crumb, i: Key) => {
+        const isLast = i === breadcrumbs.length - 1;
 
-            return (
-              <>
-                {crumb.href === '/' ? (
-                  <Topbar showForm={true} />
-                ) : (
-                  <>
-                    <Crumb {...crumb} key={i} last={isLast}>
-                      <div className="flex items-center gap-1">
-                        {crumb?.icon && crumb.icon}
-                        {crumb?.title}
-                      </div>
-                    </Crumb>
-                    {!isLast && <span className="mx-1">/</span>}
-                  </>
-                )}
-              </>
-            );
-          })}
-        </div>
-      </div>
+        if (crumb.href === '/') {
+          return <Topbar showForm={crumb.showForm} key={i} />;
+        }
+
+        return (
+          <>
+            <Crumb {...crumb} last={isLast}>
+              <div className="flex items-center gap-1">
+                {crumb?.icon && crumb.icon}
+                {crumb?.title}
+              </div>
+            </Crumb>
+
+            {!isLast && <span className="mx-1">/</span>}
+
+            {isLast && <Topbar />}
+          </>
+        );
+      })}
     </nav>
   );
 };
