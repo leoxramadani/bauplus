@@ -11,9 +11,9 @@ const CompanyForm = () => {
   const [formData, setFormData] = useState<ICompanySettings>({
     companyId: '', // You might want to populate this from an API or some other source
     companyName: '',
-    companyEmail: '',
-    companyPhone: 0,
-    companyWebsite: '',
+    contactEmail: '',
+    contactPhone: 0,
+    website: '',
   });
 
   // Create a function to handle form input changes
@@ -60,7 +60,7 @@ const CompanyForm = () => {
             <Input
               placeholder="info@thorindustriesmk.com"
               className="w-96"
-              value={formData.companyEmail}
+              value={formData.contactEmail}
               onChange={(e) =>
                 handleInputChange('companyEmail', e.target.value)
               }
@@ -87,7 +87,7 @@ const CompanyForm = () => {
             <Input
               placeholder="www.thorindustries.mk"
               className="w-96"
-              value={formData.companyWebsite}
+              value={formData.website}
               onChange={(e) =>
                 handleInputChange('companyWebsite', e.target.value)
               }
