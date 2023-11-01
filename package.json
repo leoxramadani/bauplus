@@ -16,6 +16,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.6",
     "@hookform/resolvers": "^3.3.1",
     "@mui/x-date-pickers": "^6.16.0",
     "@radix-ui/react-checkbox": "^1.0.4",
