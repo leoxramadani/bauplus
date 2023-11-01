@@ -16,7 +16,7 @@ const KpiCard = ({
   icon,
 }: IKpiCard) => {
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm rounded-none">
       <Flex alignItems="start">
         <div>
           <Text>{title}</Text>

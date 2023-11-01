@@ -78,32 +78,32 @@ const chartdata = [
   {
     date: 'Jan 22',
     Income: 2890,
-    Outcome: 2338,
+    Expenses: 2338,
   },
   {
     date: 'Feb 22',
     Income: 2756,
-    Outcome: 2103,
+    Expenses: 2103,
   },
   {
     date: 'Mar 22',
     Income: 3322,
-    Outcome: 2194,
+    Expenses: 2194,
   },
   {
     date: 'Apr 22',
     Income: 3470,
-    Outcome: 2108,
+    Expenses: 2108,
   },
   {
     date: 'May 22',
     Income: 3475,
-    Outcome: 1812,
+    Expenses: 1812,
   },
   {
     date: 'Jun 22',
     Income: 3129,
-    Outcome: 1726,
+    Expenses: 1726,
   },
 ];
 
@@ -140,29 +140,36 @@ const Main = () => {
         <Topbar showForm={true} />
         <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] lg:flex-row">
           <KpiCard
-            title="Revenue"
+            title="Gross Revenue"
             metric="€2,500,000"
             percentage="10.2"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
-            title="Customer Retention Rate"
-            metric="85%"
-            percentage="2.5"
+            title="Total Cost of Sales"
+            metric="€2,300,000"
+            percentage="7.5"
             delta="increase"
             icon={<HeartHandshake color="#fff" size={32} />}
           />
           <KpiCard
-            title="Inventory Turnover"
-            metric="5.2"
+            title="Gross Profit"
+            metric="€200,000"
             percentage="3.0"
-            delta="decrease"
+            delta="increase"
             icon={<RefreshCcw color="#fff" size={32} />}
           />
           <KpiCard
-            title="Employee Productivity"
-            metric="4.5"
+            title="EBITDA"
+            metric="€100,000"
+            percentage="1.8"
+            delta="increase"
+            icon={<User2 color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="Net Revenue"
+            metric="€50,000"
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
@@ -172,18 +179,18 @@ const Main = () => {
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
           <div className="flex w-full flex-col gap-4 lg:flex-row">
             <Card className="shadow-xl">
-              <Title>Income and Outcome</Title>
+              <Title>Income and Expenses</Title>
               <AreaChart
                 className="mt-4 h-72"
                 data={chartdata}
                 index="date"
-                categories={['Income', 'Outcome']}
+                categories={['Income', 'Expenses']}
                 colors={['indigo', 'red']}
                 valueFormatter={valueFormatter}
               />
             </Card>
             <Card className="max-w-lg shadow-xl">
-              <Title>Income in Projects</Title>
+              <Title>Gross Revenue of Projects</Title>
               <DonutChart
                 className="h-[400px] w-full p-6 text-5xl font-medium tracking-tight"
                 data={projects}
@@ -205,7 +212,7 @@ const Main = () => {
             <Card className="max-w-2xl shadow-xl">
               <Title>Financial Performance</Title>
               <Subtitle>
-                Revenue and Expenses by Quarter (2022)
+                Revenue and Expenses by Quarter (2023)
               </Subtitle>
               <BarChart
                 className="mt-6"

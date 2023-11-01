@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ClipboardList,
+  FileText,
   Home,
   LayoutDashboard,
   Settings,
@@ -155,6 +156,13 @@ const Sidebar = ({
               text="Employees"
               href="/employees"
             /> */}
+
+            <SidebarItem
+              icon={<FileText size={20} strokeWidth={1.5} />}
+              text="PNL"
+              alert={false}
+              href="/pnl"
+            />
 
             <SidebarItem
               icon={<Building size={20} strokeWidth={1.5} />}
