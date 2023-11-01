@@ -77,6 +77,7 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -87,24 +88,6 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
-
-  // const handleDelete = async (id: string) => {
-  //   const confirmDelete = window.confirm(
-  //     'Are you sure you want to delete this invoice?'
-  //   );
-  //   if (confirmDelete) {
-  //     console.log('Delete row with id:', id);
-
-  //     await axios
-  //       .delete(DELETE_PRODUCT + `?productId=${id}`)
-  //       .then((res) => {
-  //         console.log('response after delete success =>', res);
-  //       })
-  //       .catch((error) => {
-  //         console.log('Response after error:', error);
-  //       });
-  //   }
-  // };
 
   const handleDelete = async (id: string) => {
     await axios
@@ -126,8 +109,6 @@ const ActionsColumn = ({ item }: { item: any }) => {
         console.log('Error deleting product->', error);
       });
   };
-
-  const [open, setOpen] = useState(false);
 
   return (
     <DropdownMenu>

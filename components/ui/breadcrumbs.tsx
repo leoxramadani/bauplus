@@ -37,11 +37,13 @@ const Breadcrumbs = () => {
         .split('/')
         .filter((v) => v.length > 0);
 
+      //check if it's the home route
       if (asPathNestedRoutes.length === 0) {
         const homeRoute = routes.find((r) => r.path === '') ?? {
           path: '',
           title: capitalize('Main'),
           icon: undefined,
+          showForm: true,
         };
 
         if (homeRoute) {
@@ -50,6 +52,7 @@ const Breadcrumbs = () => {
               href: '/',
               title: homeRoute.title,
               icon: homeRoute.icon,
+              showForm: homeRoute.showForm,
             },
           ];
         }
@@ -62,6 +65,7 @@ const Breadcrumbs = () => {
           path: subpath,
           title: capitalize(subpath),
           icon: undefined,
+          showForm: false,
         };
 
         return { ...route, href };
@@ -73,32 +77,38 @@ const Breadcrumbs = () => {
   );
 
   return (
-    <nav className="flex" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center space-x-1 md:space-x-3">
-        <li className="inline-flex items-center">
-          {breadcrumbs.map((crumb, i: Key) => {
-            const isLast = i === breadcrumbs.length - 1;
+    <nav className="flex w-full items-center" aria-label="Breadcrumb">
+      {breadcrumbs[0].href == '/' ? (
+        <Topbar showForm={true} />
+      ) : (
+        <div className="flex w-full">
+          <div className="flex flex-grow">
+            {breadcrumbs.map((crumb, i: Key) => {
+              console.log('breadcrumbs->', breadcrumbs);
 
-            return (
-              <>
-                {crumb.href === '/' ? (
-                  <Topbar showForm={true} />
-                ) : (
-                  <>
-                    <Crumb {...crumb} key={i} last={isLast}>
+              const isLast = i === breadcrumbs.length - 1;
+              return (
+                <div className="flex items-center" key={i}>
+                  <div className="flex">
+                    <Crumb {...crumb} last={isLast}>
                       <div className="flex items-center gap-1">
                         {crumb?.icon && crumb.icon}
                         {crumb?.title}
                       </div>
                     </Crumb>
+
                     {!isLast && <span className="mx-1">/</span>}
-                  </>
-                )}
-              </>
-            );
-          })}
-        </li>
-      </ol>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-none">
+            <Topbar />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

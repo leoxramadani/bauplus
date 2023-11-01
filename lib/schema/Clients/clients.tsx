@@ -299,14 +299,18 @@ export const createClientSchema = z.object({
   companyName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  clientAccountNumbers: z.object({
-    accountNumber: z.string().optional(),
-    country: z.string().optional(),
-  }),
-  clientBusinessIds: z.object({
-    businessId: z.string().optional(),
-    country: z.string().optional(),
-  }),
+  clientAccountNumbers: z
+    .object({
+      accountNumber: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .array(),
+  clientBusinessIds: z
+    .object({
+      businessId: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .array(),
   clientContactInfos: z.object({
     email: z.string().optional(),
     phone: z.string().optional(),
@@ -315,3 +319,91 @@ export const createClientSchema = z.object({
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;
+
+export const accountDetailSchema = z
+  .object({
+    clientAccountNumbers: z.object({
+      accountNumber: z.coerce
+        .string()
+        .min(1, 'Account Number is required'),
+      country: z.string().min(1, 'Country is required'),
+    }),
+    accountDetails: z
+      .array(
+        z.object({
+          accountNumber: z.string(),
+          country: z.string(),
+        })
+      )
+      .optional(),
+  })
+  .refine(
+    ({ clientAccountNumbers, accountDetails }) => {
+      const accountNumberExists = accountDetails?.some(
+        (account) =>
+          account.accountNumber ===
+          String(clientAccountNumbers.accountNumber)
+      );
+      return !accountNumberExists;
+    },
+    {
+      message: 'Account number must be unique',
+      path: ['clientAccountNumbers', 'accountNumber'],
+    }
+  );
+
+export type iCreateAccountDetail = z.infer<
+  typeof accountDetailSchema
+>;
+
+export const businessDetailSchema = z
+  .object({
+    clientBusinessIds: z.object({
+      businessId: z.coerce
+        .string()
+        .min(1, 'Business number is required'),
+      country: z.string().min(1, 'Country is required'),
+    }),
+    businessDetails: z
+      .array(
+        z.object({
+          businessId: z.string(),
+          country: z.string(),
+        })
+      )
+      .optional(),
+  })
+  .refine(
+    ({ clientBusinessIds, businessDetails }) => {
+      const accountNumberExists = businessDetails?.some(
+        (account) =>
+          account.businessId === String(clientBusinessIds.businessId)
+      );
+      return !accountNumberExists;
+    },
+    {
+      message: 'Account number must be unique',
+      path: ['clientAccountNumbers', 'accountNumber'],
+    }
+  );
+
+export type ICreateBusiness = z.infer<typeof businessDetailSchema>;
+
+export const clientDetailSchema = z.object({
+  clientContactInfos: z.object({
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }),
+  clientDetails: z
+    .array(
+      z.object({
+        email: z.string(),
+        phone: z.string(),
+        address: z.string(),
+      })
+    )
+    .optional(),
+});
+
+export type ICreateClientInfo = z.infer<typeof clientDetailSchema>;
