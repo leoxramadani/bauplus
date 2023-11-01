@@ -92,16 +92,16 @@ const CreateAccountDetails = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4"
+          className="flex w-full flex-col gap-4"
         >
-          <div className="flex w-full  flex-row items-center justify-start  gap-4 ">
+          <div className="flex w-full flex-col   items-center justify-start gap-4  sm:flex-row ">
             {/* project */}
 
             <FormField
               control={form.control}
               name="clientAccountNumbers.accountNumber"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Account Number</FormLabel>
 
                   <FormControl className="relative">
@@ -110,6 +110,7 @@ const CreateAccountDetails = ({
                       {...field}
                       disabled={isSubmitting}
                       type="number"
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />
@@ -121,7 +122,7 @@ const CreateAccountDetails = ({
               control={form.control}
               name="clientAccountNumbers.country"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Account country</FormLabel>
 
                   <FormControl className="relative">
@@ -137,14 +138,14 @@ const CreateAccountDetails = ({
             />
           </div>
 
-          <div className="flex flex-row items-center gap-2">
-            <Button type="submit" className="w-max">
+          <div className="flex w-full flex-row items-center gap-2 sm:w-max">
+            <Button type="submit" className="w-full sm:w-max">
               Submit
             </Button>
             <Button
               variant="outline"
               type="button"
-              className="w-max"
+              className="w-full sm:w-max"
               onClick={() => setAccoundModal(false)}
             >
               Cancel
