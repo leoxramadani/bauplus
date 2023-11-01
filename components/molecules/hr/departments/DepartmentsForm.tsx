@@ -25,7 +25,7 @@ import useData from '@/lib/hooks/useData';
 import {
   DepartmentSchema,
   IDepartment,
-} from '@/lib/schema/hr/departments';
+} from '@/lib/schema/hr/departments/departments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -35,13 +35,13 @@ import { useForm } from 'react-hook-form';
 interface DepartmentsFormProps {
   setIsModalOpen: any;
   departmentId?: string;
-  refetchDepartments:any
+  refetchDepartments: any;
 }
 
 const DepartmentsForm = ({
   setIsModalOpen,
   departmentId,
-  refetchDepartments
+  refetchDepartments,
 }: DepartmentsFormProps) => {
   const router = useRouter();
   const [departmentData, setDepartmentData] = useState<any>();

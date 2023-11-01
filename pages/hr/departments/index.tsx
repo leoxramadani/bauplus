@@ -7,7 +7,7 @@ import useData from '@/lib/hooks/useData';
 import {
   IDepartment,
   departmentColumnDef,
-} from '@/lib/schema/hr/departments';
+} from '@/lib/schema/hr/departments/departments';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

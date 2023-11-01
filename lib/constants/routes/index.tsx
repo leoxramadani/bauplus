@@ -29,10 +29,14 @@ export default [
     icon: <Calculator size={18} />,
     showForm: false,
   },
-  // {
-  //   path: 'bankaccounts',
-  //   title: 'Bank Accounts',
-  // },
+  {
+    path: 'bankaccounts',
+    title: 'Bank Accounts',
+  },
+  {
+    path: 'creditnote',
+    title: 'Credit Note',
+  },
   {
     path: 'hr',
     title: 'HR',

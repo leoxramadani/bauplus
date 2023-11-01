@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,7 +14,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
-import * as z from 'zod';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 export const DepartmentSchema = z.object({
   departmentId: z.string().optional(),
@@ -89,7 +92,7 @@ export const departmentColumnDef: ColumnDef<IDepartment>[] = [
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
-
+  const [open, setOpen] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -101,21 +104,20 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this invoice?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
-
-      await axios
-        .delete(DELETE_DEPARTMENT + `?Id=${id}`)
-        .then((res) => {
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
+    await axios
+      .delete(DELETE_DEPARTMENT + `?Id=${id}`)
+      .then((res) => {
+        toast.success('Successfully deleted department.');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
         });
-    }
+      })
+      .catch((error) => {
+        console.log('Response after error:', error);
+      });
   };
 
   return (
@@ -145,11 +147,35 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.departmentId)}
-        >
-          Delete Row
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Department
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Department"
+            description="Are you sure you want to delete this department?"
+            className="w-full max-w-sm"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.departmentId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );
