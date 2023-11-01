@@ -82,12 +82,12 @@ const Breadcrumbs = () => {
         const isLast = i === breadcrumbs.length - 1;
 
         if (crumb.href === '/') {
-          return <Topbar showForm={crumb.showForm} />;
+          return <Topbar showForm={crumb.showForm} key={i} />;
         }
 
         return (
           <>
-            <Crumb {...crumb} key={i} last={isLast}>
+            <Crumb {...crumb} last={isLast}>
               <div className="flex items-center gap-1">
                 {crumb?.icon && crumb.icon}
                 {crumb?.title}
