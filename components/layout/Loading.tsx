@@ -1,8 +1,8 @@
-import loadingGIF from '@/public/video/BG_4.gif';
+import loadingGIF from '@/public/video/loading-mimiro.gif';
 import Image from 'next/image';
 const Loading = () => {
   return (
-    <main className="fixed left-0 top-0 flex h-full w-full flex-col justify-center bg-[#F5F7FA] text-center">
+    <main className="fixed left-0 top-0 flex h-full w-full flex-col justify-center bg-[#F3F3FB] text-center">
       <Image
         src={loadingGIF}
         layout={'responsive'}

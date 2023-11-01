@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import loadingGIF from '@/public/video/BG_4.gif';
+import loadingGIF from '@/public/video/loading-mimiro.gif';
 
 const Employees = () => {
   const router = useRouter();
