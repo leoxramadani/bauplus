@@ -46,10 +46,10 @@ const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Head>
-        <title>Arkiva</title>
+        <title>Mimiro</title>
       </Head>
       <div
-        className={`scroll flex min-h-screen w-full flex-col`}
+        className={`scroll flex min-h-screen w-full flex-col bg-[#F5F7FA]`}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (

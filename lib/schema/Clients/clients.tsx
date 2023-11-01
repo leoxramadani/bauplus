@@ -388,3 +388,22 @@ export const businessDetailSchema = z
   );
 
 export type ICreateBusiness = z.infer<typeof businessDetailSchema>;
+
+export const clientDetailSchema = z.object({
+  clientContactInfos: z.object({
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }),
+  clientDetails: z
+    .array(
+      z.object({
+        email: z.string(),
+        phone: z.string(),
+        address: z.string(),
+      })
+    )
+    .optional(),
+});
+
+export type ICreateClientInfo = z.infer<typeof clientDetailSchema>;
