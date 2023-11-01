@@ -10,7 +10,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
-  const [status, setStatus] = useState<string>('loading');
+
+  //this is temporary to test the loading screen
+  const [status, setStatus] = useState<string>('');
   //to open or not the sidebar
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
