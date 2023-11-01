@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import Breadcrumbs from '../ui/breadcrumbs';
+import Loading from './Loading';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
@@ -9,6 +10,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
+  const [status, setStatus] = useState<string>('loading');
   //to open or not the sidebar
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +37,9 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
   };
-
+  if (status === 'loading') return <Loading />;
   if (router.asPath === '/login') return children;
+
   return (
     <>
       <Head>
@@ -76,7 +79,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`duration-[250ms] p-4 transition-all ${
+          className={`duration-[250ms] p-2 transition-all ${
             !isWindowSmall &&
             (expanded
               ? `duration-[250ms] ml-[15rem] transition-all`

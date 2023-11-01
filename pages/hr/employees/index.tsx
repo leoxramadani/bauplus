@@ -1,5 +1,4 @@
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import EmployeesForm from '@/components/molecules/hr/employees/EmployeesForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -11,12 +10,16 @@ import {
 } from '@/lib/schema/hr/employee/employee';
 
 import { FileInput, FileUp, Plus } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import loadingGIF from '@/public/video/BG.gif';
+
 const Employees = () => {
   const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data,
@@ -86,7 +89,24 @@ const Employees = () => {
             searchVal="firstName"
           />
         ) : (
-          <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
+          <>
+            {isError ? (
+              <div>No data.</div>
+            ) : (
+              <div>
+                {' '}
+                <p>Loading ...</p>
+                <Image
+                  src={loadingGIF}
+                  layout={'responsive'}
+                  height={175}
+                  width={175}
+                  alt={`A cute animal!`}
+                  unoptimized={true}
+                />
+              </div>
+            )}
+          </>
         )}
       </section>
 
