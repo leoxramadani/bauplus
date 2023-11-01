@@ -88,7 +88,7 @@ const Breadcrumbs = () => {
 
               const isLast = i === breadcrumbs.length - 1;
               return (
-                <div className="flex items-center ">
+                <div className="flex items-center" key={i}>
                   <div className="flex">
                     <Crumb {...crumb} last={isLast}>
                       <div className="flex items-center gap-1">
