@@ -13,52 +13,43 @@ import { useRouter } from 'next/router';
 import * as z from 'zod';
 
 export const invoiceSchema = z.object({
-  invoiceId: z.string(),
-  invoiceType: z.string(),
-  invoiceNumber: z
-    .string()
-    .max(20, {
-      message:
-        'The length of your invoice number must not exceeded 20 digits',
-    })
-    .min(1, {
-      message:
-        'You must have at least a digit for your invoice number',
-    }),
-  invoiceFor: z.coerce.number(),
-  dateInDocument: z.coerce.date(),
-  sumWithTax: z.coerce.number(),
-  taxValue: z.coerce.number(),
-  sumWithoutTax: z.coerce.number(),
-  dueDate: z.coerce.date(),
-  invoiceStatus: z.string(),
-  dossier: z.string().max(20, {
-    message:
-      "The length of 'dossier' must be 20 characters or shorter",
-  }),
-  description: z.string().max(150, {
-    message:
-      'The length of description must be 150 characters or shorter',
-  }),
+  invoiceId: z.string().optional(),
+  clientId: z.string(),
+  // companyID: z.string(), // this is the id for the company
+  companyName: z.string().optional(),
+  invoiceTypeID: z.string(), //this is the id for the invoice type
+  // invoiceTypeName: z.string().optional(),
+  invoiceDate: z.coerce.date(),
+  dueDate: z.string().optional(),
+  totalAmount: z.coerce.number(),
+  paidAmount: z.coerce.number(),
+  invoiceStatusID: z.string(), //this is the id for the invoice type
+  // invoiceStatus: z.string().optional(),
+  // paymentMethodID: z.string(), //this is the id for the payment method
+  paymentMethod: z.string().optional(),
+  transactionID: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
-
 export type IInvoice = z.infer<typeof invoiceSchema>;
 
 export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
   {
-    accessorKey: 'invoiceNumber',
-    header: 'Invoice Number',
+    accessorKey: 'invoiceID',
+    header: 'Invoice Id',
+  },
+  {
+    accessorKey: 'clientId',
+    header: 'Client Id',
   },
   {
     accessorKey: 'invoiceType',
     header: 'Invoice Type',
   },
   {
-    accessorKey: 'dateInDocument',
-    header: 'Date in document',
+    accessorKey: 'invoiceDate',
+    header: 'Invoice Date',
     cell({ row }) {
       const formatedDate = new Date(
-        row.getValue('dateInDocument')
+        row.getValue('invoiceDate')
       ).toLocaleDateString('en-GB');
       return <div>{formatedDate}</div>;
     },
@@ -74,32 +65,24 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     },
   },
   {
-    accessorKey: 'invoiceFor',
-    header: 'Invoice For',
+    accessorKey: 'totalAmount',
+    header: 'Total Amount',
   },
   {
-    accessorKey: 'sumWithTax',
-    header: 'Sum With Tax',
+    accessorKey: 'paidAmount',
+    header: 'Paid Amount',
   },
   {
-    accessorKey: 'taxValue',
-    header: 'Tax Value',
+    accessorKey: 'invoiceStatusId',
+    header: 'invoice Status Id',
   },
   {
-    accessorKey: 'sumWithoutTax',
-    header: 'Sum Without Tax',
+    accessorKey: 'paymentMethodId',
+    header: 'payment Method Id',
   },
   {
-    accessorKey: 'invoiceStatus',
-    header: 'Invoice Status',
-  },
-  {
-    accessorKey: 'dossier',
-    header: 'Dossier',
-  },
-  {
-    accessorKey: 'description',
-    header: 'Description',
+    accessorKey: 'transactionId',
+    header: 'transaction Id',
   },
   {
     id: 'actions',

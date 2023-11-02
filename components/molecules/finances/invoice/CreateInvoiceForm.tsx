@@ -28,23 +28,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
-  CREATE_INVOICE,
   GET_SPECIFIC_INVOICE,
+  INVOICE_REGISTER,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
+import useData from '@/lib/hooks/useData';
+import { IClients } from '@/lib/schema/Clients/clients';
 import {
   IInvoice,
   invoiceSchema,
-} from '@/lib/schema/Finance/invoice';
+} from '@/lib/schema/Finance/invoice/invoice';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -61,6 +63,12 @@ const InvoiceForm = ({
   const [invoiceData, setInvoiceData] = useState<any>();
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    data: clients,
+    isError: clientsIsError,
+    isLoading: clientsIsLoading,
+  } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -113,7 +121,12 @@ const InvoiceForm = ({
       } else {
         console.log('Creating invoice');
         await axios
-          .post(CREATE_INVOICE, { ...data })
+          .post(INVOICE_REGISTER, {
+            clientId: data.clientId,
+            totalAmount: data.totalAmount,
+            paidAmount: data.paidAmount,
+            // ...data
+          })
           .then((res) => {
             console.log('Successfully created invoice->', res);
             toast.success('Successfully added invoice');
@@ -142,11 +155,11 @@ const InvoiceForm = ({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4"
         >
-          <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
+          <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
             {/* Invoice type */}
             <FormField
               control={form.control}
-              name="invoiceType"
+              name="invoiceTypeID"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Invoice Type</FormLabel>
@@ -174,31 +187,14 @@ const InvoiceForm = ({
                 </FormItem>
               )}
             />
-            {/* Invoice number */}
-            <FormField
-              control={form.control}
-              name="invoiceNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Invoice number{' '}
-                    {/* <span className="text-red-500">*</span> */}
-                  </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Invoice number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            {/* Invoice For */}
+            {/* Client */}
             <FormField
               control={form.control}
-              name="invoiceFor"
+              name="clientId"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col">
-                  <FormLabel>Invoice For</FormLabel>
+                  <FormLabel>Client</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -209,42 +205,54 @@ const InvoiceForm = ({
                             'flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isSubmitting}
                         >
                           {field.value
-                            ? companies.find(
-                                (company) =>
-                                  company.value === field.value
-                              )?.label
-                            : 'Choose member'}
+                            ? clients?.find(
+                                (client) =>
+                                  client.clientId === field.value
+                              )?.firstName +
+                              ' ' +
+                              clients?.find(
+                                (client) =>
+                                  client.clientId === field.value
+                              )?.lastName
+                            : 'Choose client'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[250px] p-0">
+                    <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search language..." />
-                        <CommandEmpty>No member found.</CommandEmpty>
-                        <CommandGroup>
-                          {companies.map((company) => (
+                        <CommandInput placeholder="Search client..." />
+                        <CommandEmpty>No clients found.</CommandEmpty>
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                          {clients?.map((client, i: Key) => (
                             <CommandItem
-                              value={company.label}
-                              key={company.value}
+                              value={
+                                client.firstName +
+                                ' ' +
+                                client.lastName
+                              }
+                              className="flex items-center"
+                              key={i}
                               onSelect={() => {
-                                form.setValue(
-                                  'invoiceFor',
-                                  company.value
-                                );
+                                client.clientId &&
+                                  form.setValue(
+                                    'clientId',
+                                    client?.clientId
+                                  );
                               }}
                             >
                               <Check
                                 className={cn(
                                   'mr-2 h-4 w-4 transition-all',
-                                  company.value === field.value
+                                  client.clientId === field.value
                                     ? 'opacity-100'
                                     : 'opacity-0'
                                 )}
                               />
-                              {company.label}
+                              {`${client.firstName} ${client.lastName}`}
                             </CommandItem>
                           ))}
                         </CommandGroup>
@@ -257,10 +265,55 @@ const InvoiceForm = ({
               )}
             />
 
-            {/* Date */}
+            {/* Total Amount */}
             <FormField
               control={form.control}
-              name="dateInDocument"
+              name="totalAmount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Total amount</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Enter Total amount"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      type="number"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Paid Amount */}
+            <FormField
+              control={form.control}
+              name="paidAmount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Paid amount</FormLabel>
+
+                  <FormControl className="relative">
+                    <Input
+                      placeholder="Enter Paid amount"
+                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      type="number"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/*Invoice Date */}
+            <FormField
+              control={form.control}
+              name="invoiceDate"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Date</FormLabel>
@@ -302,118 +355,13 @@ const InvoiceForm = ({
               )}
             />
 
-            {/* Sum with TAX */}
+            {/* Invoice Status */}
             <FormField
               control={form.control}
-              name="sumWithTax"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sum with Tax </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Sum with tax" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Tax value */}
-            <FormField
-              control={form.control}
-              name="taxValue"
+              name="invoiceStatusID"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Tax Value</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select tax value" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {taxValue.map((tax) => (
-                        <SelectItem value={tax.value} key={tax.value}>
-                          {tax.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Sum without tax */}
-            <FormField
-              control={form.control}
-              name="sumWithoutTax"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sum without tax </FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Sum without tax" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Due date */}
-            <FormField
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Due Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, 'PPP')
-                          ) : (
-                            <span>Pick due date </span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < form.getValues('dateInDocument')
-                        }
-                        //   initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Status */}
-            <FormField
-              control={form.control}
-              name="invoiceStatus"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Status</FormLabel>
+                  <FormLabel>Invoice Status</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -424,12 +372,12 @@ const InvoiceForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {status.map((status) => (
+                      {invoiceStatus.map((invoice) => (
                         <SelectItem
-                          value={status.value}
-                          key={status.value}
+                          value={invoice.value}
+                          key={invoice.value}
                         >
-                          {status.label}
+                          {invoice.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -438,48 +386,6 @@ const InvoiceForm = ({
                 </FormItem>
               )}
             />
-
-            {/* Dossier */}
-            <FormField
-              control={form.control}
-              name="dossier"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dossier</FormLabel>
-                  <FormControl className="relative">
-                    <Input placeholder="Dossier" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Description */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full sm:col-span-2">
-                  <FormLabel>Description</FormLabel>
-                  <FormControl className="relative">
-                    <Textarea
-                      placeholder="Invoice description..."
-                      rows={5}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* <div className="col-span-2 flex w-full flex-col gap-2">
-              <FormLabel>File</FormLabel>
-              <Drop
-                selectedFile={selectedFile}
-                setSelectedFile={setSelectedFile}
-              />
-            </div> */}
           </div>
 
           <Button className="w-max" type="submit">
@@ -493,24 +399,18 @@ const InvoiceForm = ({
 
 export default InvoiceForm;
 
-const companies = [
-  { label: 'Thor', value: 123 },
-  { label: 'Thor Website', value: 1234 },
-  { label: 'Arkiva', value: 12345 },
-  { label: 'ProWork', value: 123456 },
-  { label: 'Miniera', value: 1111 },
-] as const;
-
-const taxValue = [
-  { label: '18%', value: '18' },
-  { label: '15%', value: '15' },
-  { label: '10%', value: '10' },
-] as const;
-
-const status = [
-  { label: 'Paid', value: 'paid' },
-  { label: 'Unpaid', value: 'unpaid' },
-  { label: 'Semi-paid', value: 'semipaid' },
+const invoiceStatus = [
+  {
+    label: 'Cancelled',
+    value: '039e9103-4136-4961-afe2-496a0e58ec43',
+  },
+  { label: 'Paid', value: '809bcb94-3496-4a80-9566-900ce5f6e481' },
+  { label: 'Pending', value: 'cea6308a-d138-4977-8814-929bfb4b6ad8' },
+  {
+    label: 'Partially Paid',
+    value: '482ec8b8-b321-4c06-905c-9cc89ba689a3',
+  },
+  { label: 'Overdue', value: '427e80ba-1e1c-45ce-8791-c59fa300559d' },
 ] as const;
 
 const invoiceTypes = [

@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const clientsSchema = z.object({
+  clientId: z.string().optional(),
   clientType: z.object({
     clientTypeName: z.string().optional(),
   }),
