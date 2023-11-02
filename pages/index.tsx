@@ -136,7 +136,7 @@ const Main = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen w-full flex-col gap-4">
-        <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-white to-85% p-8 pb-[200px] lg:flex-row">
+        <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] lg:flex-row">
           <KpiCard
             title="Gross Revenue"
             metric="€2,500,000"

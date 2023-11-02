@@ -5,8 +5,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
   ClipboardList,
+  Home,
   LayoutDashboard,
   Settings,
+  SettingsIcon,
   ShoppingBasket,
   UserCircle,
   Users,
@@ -41,7 +43,6 @@ import {
   PopoverTrigger,
 } from '../ui/popover';
 import { Separator } from '../ui/separator';
-import { Button } from '../ui/button';
 interface ListItem {
   icon?: React.JSX.Element;
   text?: string;
@@ -184,6 +185,12 @@ const Sidebar = ({
               ref={setList}
               className="h-full w-full flex-col justify-start gap-1 text-sm"
             >
+              <SidebarItem
+                Icon={Home}
+                text="Main"
+                alert={false}
+                href="/"
+              />
               <SidebarItem
                 Icon={LayoutDashboard}
                 text="Dashboard"
@@ -347,6 +354,13 @@ const Sidebar = ({
                 alert
                 href="/notices"
               ></SidebarItem>
+
+              <SidebarItem
+                Icon={SettingsIcon}
+                text="Settings"
+                alert={false}
+                href="/settings"
+              />
             </NavigationMenuList>
           </NavigationMenu>
         </SidebarContext.Provider>
@@ -406,7 +420,7 @@ const Sidebar = ({
                           setUserPopover(!userPopoverOpen);
                           signOut();
                         }}
-                        className="block text-left w-full px-4 py-1 transition-[color] hover:bg-slate-800 hover:text-white"
+                        className="block w-full px-4 py-1 text-left transition-[color] hover:bg-slate-800 hover:text-white"
                       >
                         Log out
                       </button>
@@ -537,7 +551,9 @@ function SidebarItem({
             <span
               className={`w-full text-left ${
                 Icon && 'ml-7'
-              } group-hover/trigger ${Icon && !expanded && 'invisible'}`}
+              } group-hover/trigger ${
+                Icon && !expanded && 'invisible'
+              }`}
             >
               {text}
             </span>
