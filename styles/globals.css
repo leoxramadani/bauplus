@@ -157,3 +157,7 @@
   width: 100%;
   height: 5px;
 }
+
+input {
+  @apply [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
+}

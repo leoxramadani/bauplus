@@ -141,20 +141,22 @@ export const financeColumnDef: ColumnDef<IInvoiceSchema>[] = [
 ];
 export const createBankAccountSchema = z.object({
   companyId: z.string().optional(),
-  employeeId: z.string(),
+  employeeId: z.string().min(1, 'Account Holder Name is required'),
   currencyId: z.string(), // Remove .optional() here
   bankAccountTypeId: z.string(),
-  bankAccountStatusId: z.string(),
+  bankAccountStatusId: z.string().min(1, 'Status is required'),
   accountName: z.string(),
   bankName: z.string(),
   accountNumber: z.string(),
-  balance: z.coerce.number(),
+  balance: z.coerce
+    .number()
+    .min(1, 'Balance is required')
+    .max(100000, 'Maximum allowed balance is 100,000'),
 });
 
 export type IcreateBankAccountSchema = z.infer<
   typeof createBankAccountSchema
 >;
-
 
 export const bankAccountSchemaCash = z.object({
   cashAccountHolderName: z.string(),

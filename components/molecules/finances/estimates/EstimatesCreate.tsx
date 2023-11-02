@@ -74,14 +74,6 @@ const EstimatesCreate = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">
-          Estimates
-        </h2>
-        <h3 className="text-lg font-normal text-gray-900">
-          Add an estimate
-        </h3>
-      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -335,10 +327,10 @@ const EstimatesCreate = () => {
               </FormItem>
             )}
           />
-          <hr />
+
           <Button
             className="flex w-max flex-none"
-            variant="outline"
+            variant="default"
             type="submit"
           >
             Submit

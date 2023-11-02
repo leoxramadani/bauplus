@@ -93,12 +93,6 @@ const ExpensesCreate = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div>
-        <h2 className="text-3xl font-bold text-blue-500">Expenses</h2>
-        <h3 className="text-lg font-normal text-gray-900">
-          Add an expense
-        </h3>
-      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -111,9 +105,7 @@ const ExpensesCreate = () => {
               name="itemName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Item Name <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Item Name</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Item Name" {...field} />
                   </FormControl>
@@ -128,9 +120,7 @@ const ExpensesCreate = () => {
               name="currency"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Currency <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Currency</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -159,10 +149,7 @@ const ExpensesCreate = () => {
               name="exchangeRate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Exchange Rate{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Exchange Rate </FormLabel>
                   <FormControl className="relative">
                     <Input
                       type="number"
@@ -181,9 +168,7 @@ const ExpensesCreate = () => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Price <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Price</FormLabel>
                   <FormControl className="relative">
                     <Input
                       type="number"
@@ -202,10 +187,7 @@ const ExpensesCreate = () => {
               name="purchaseDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Purchase Date{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Purchase Date </FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Purchase Date" {...field} />
                     {/* <Calendar
@@ -225,9 +207,7 @@ const ExpensesCreate = () => {
               name="employee"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>
-                    Employee <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Employee</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -525,7 +505,12 @@ const ExpensesCreate = () => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description{' '}
+                  <span className="text-muted-foreground">
+                    (optional)
+                  </span>
+                </FormLabel>
                 <FormControl className="relative">
                   <Textarea placeholder="Description" {...field} />
                 </FormControl>
@@ -536,7 +521,7 @@ const ExpensesCreate = () => {
 
           <Button
             className="flex w-max flex-none"
-            variant="outline"
+            variant="default"
             type="submit"
           >
             Submit

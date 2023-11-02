@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(data)
+  console.log(data);
 
   return (
     <div
@@ -173,66 +173,73 @@ export function DataTable<TData, TValue>({
                         ))}
                       </TableRow>
                       {row.getIsExpanded() && renderSubComponent && (
-                        <TableRow className=" bg-slate-50">
+                        <TableRow className=" bg-gray-100">
                           <TableCell
                             className="w-full"
                             colSpan={columns.length}
                           >
-                            {subtable
-                              .getHeaderGroups()
-                              .map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
-                                  {headerGroup.headers.map(
-                                    (header) => (
-                                      <TableHead key={header.id}>
-                                        <DataTableColumnHeader
-                                          column={header.column}
-                                          title={
-                                            header.column.columnDef
-                                              .header as string
-                                          }
-                                        />
-                                      </TableHead>
-                                    )
-                                  )}
-                                </TableRow>
-                              ))}
-
-                            {subtable.getRowModel().rows?.length ? (
-                              subtable
-                                .getRowModel()
-                                .rows.filter(
-                                  (rov) => rov.id === row.id
-                                ) // Filter only the selected row
-                                .map((selectedRow) => (
-                                  <TableRow key={selectedRow.id}>
-                                    {selectedRow
-                                      .getVisibleCells()
-                                      .map((cell) => (
-                                        <TableCell key={cell.id}>
-                                          {flexRender(
-                                            cell.column.columnDef
-                                              .cell,
-                                            cell.getContext()
-                                          )}
-                                        </TableCell>
-                                      ))}
+                            <Table>
+                              <TableHeader>
+                                {subtable
+                                  .getHeaderGroups()
+                                  .map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                      {headerGroup.headers.map(
+                                        (header) => (
+                                          <TableHead key={header.id}>
+                                            <DataTableColumnHeader
+                                              column={header.column}
+                                              title={
+                                                header.column
+                                                  .columnDef
+                                                  .header as string
+                                              }
+                                            />
+                                          </TableHead>
+                                        )
+                                      )}
+                                    </TableRow>
+                                  ))}
+                              </TableHeader>
+                              <TableBody>
+                                {subtable.getRowModel().rows
+                                  ?.length ? (
+                                  subtable
+                                    .getRowModel()
+                                    .rows.filter(
+                                      (rov) => rov.id === row.id
+                                    ) // Filter only the selected row
+                                    .map((selectedRow) => (
+                                      <TableRow key={selectedRow.id}>
+                                        {selectedRow
+                                          .getVisibleCells()
+                                          .map((cell) => (
+                                            <TableCell key={cell.id}>
+                                              {flexRender(
+                                                cell.column.columnDef
+                                                  .cell,
+                                                cell.getContext()
+                                              )}
+                                            </TableCell>
+                                          ))}
+                                      </TableRow>
+                                    ))
+                                ) : (
+                                  <TableRow>
+                                    <TableCell
+                                      colSpan={
+                                        subcolumns
+                                          ? subcolumns.length
+                                          : columns.length
+                                      }
+                                      className="h-24 text-center"
+                                    >
+                                      No results.
+                                    </TableCell>
                                   </TableRow>
-                                ))
-                            ) : (
-                              <TableRow>
-                                <TableCell
-                                  colSpan={
-                                    subcolumns
-                                      ? subcolumns.length
-                                      : columns.length
-                                  }
-                                  className="h-24 text-center"
-                                >
-                                  No results.
-                                </TableCell>
-                              </TableRow>
-                            )}
+                                )}
+                              </TableBody>
+                            </Table>
                           </TableCell>
                         </TableRow>
                       )}

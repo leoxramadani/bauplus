@@ -1,13 +1,12 @@
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
 import {
-  IInvoice,
-  financeColumnDef,
+  IBank,
+  bankAccountColumnDef,
 } from '@/lib/schema/Finance/bankaccounts';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
@@ -16,7 +15,7 @@ import { useEffect, useState } from 'react';
 const BankAccounts = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, isError, isLoading, error } = useData<IInvoice[]>(
+  const { data, isError, isLoading, error } = useData<IBank[]>(
     ['bank_accounts'],
     GET_ALL_BANKACCOUNTS
   );
@@ -68,7 +67,9 @@ const BankAccounts = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && <DataTable data={data} columns={financeColumnDef} />}
+        {data && (
+          <DataTable data={data} columns={bankAccountColumnDef} />
+        )}
         {isLoading && <p> Loading...</p>}
         {isError && (
           <p> There was something wrong, please try again later.</p>
