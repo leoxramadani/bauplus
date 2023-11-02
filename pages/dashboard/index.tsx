@@ -1,4 +1,3 @@
-import Topbar from '@/components/layout/Topbar';
 import dynamic from 'next/dynamic';
 
 const NoSSR = dynamic(
