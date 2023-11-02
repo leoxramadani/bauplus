@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import Topbar from '@/components/layout/Topbar';
-import ClientsForm from '@/components/molecules/clients/ClientsForm';
+import ClientsForm from '@/components/molecules/Clients/ClientsForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
