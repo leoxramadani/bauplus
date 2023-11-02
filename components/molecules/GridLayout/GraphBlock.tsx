@@ -43,12 +43,12 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
             category="sales"
             valueFormatter={dataFormatter}
             colors={[
-              'slate',
-              'violet',
-              'indigo',
-              'rose',
               'cyan',
-              'amber',
+              'lime',
+              'teal',
+              'indigo',
+              'violet',
+              'pink',
             ]}
             variant="pie"
           />
@@ -62,12 +62,12 @@ const GraphBlock: React.FC<GraphBlockProps> = ({
             category="sales"
             valueFormatter={dataFormatter}
             colors={[
-              'slate',
-              'violet',
-              'indigo',
-              'rose',
+              'lime',
+              'teal',
               'cyan',
-              'amber',
+              'indigo',
+              'violet',
+              'pink',
             ]}
             variant="donut"
           />

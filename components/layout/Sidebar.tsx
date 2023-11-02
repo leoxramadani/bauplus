@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ClipboardList,
+  FileSpreadsheet,
   FileText,
   Home,
   LayoutDashboard,
@@ -162,6 +163,13 @@ const Sidebar = ({
               text="PNL"
               alert={false}
               href="/pnl"
+            />
+
+            <SidebarItem
+              icon={<FileSpreadsheet size={20} strokeWidth={1.5} />}
+              text="Balance Sheet"
+              alert={false}
+              href="/balancesheet"
             />
 
             <SidebarItem
