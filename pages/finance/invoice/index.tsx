@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import CreateInvoiceForm from '@/components/molecules/finances/invoice/CreateInvoiceForm';
 import InvoiceForm from '@/components/molecules/finances/invoice/CreateInvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,7 @@ const Invoice = () => {
     data,
     isLoading,
     isError,
-    refetch: refetchEmployees,
+    refetch: refetchInvoices,
   } = useData<IInvoice[]>(['invoices'], INVOICE_GET_ALL);
 
   useEffect(() => {
@@ -51,11 +52,12 @@ const Invoice = () => {
             title="Create Invoice"
             description="Fill all the fields to create an invoice"
           >
-            <InvoiceForm
+            <CreateInvoiceForm
               setIsModalOpen={setIsModalOpen}
               invoiceNumber={
                 router.isReady ? router.query.id?.toString() : ''
               }
+              refetchInvoices={refetchInvoices}
             />
           </Modal.Content>
         </Modal>
@@ -72,12 +74,13 @@ const Invoice = () => {
             title="Register Invoice"
             description="Fill all the fields to register an invoice"
           >
-            <InvoiceForm
+            {/* <InvoiceForm
               setIsModalOpen={setIsModalOpen}
               invoiceNumber={
                 router.isReady ? router.query.id?.toString() : ''
               }
-            />
+            /> */}
+            a
           </Modal.Content>
         </Modal>
         <Button variant="outline" className="flex gap-2 ">

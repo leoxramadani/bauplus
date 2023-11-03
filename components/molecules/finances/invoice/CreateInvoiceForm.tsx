@@ -54,11 +54,13 @@ import { toast } from 'react-toastify';
 interface ICreateInvoice {
   setIsModalOpen(open: boolean): void;
   invoiceNumber?: string;
+  refetchInvoices:any
 }
 
-const InvoiceForm = ({
+const CreateInvoiceForm = ({
   setIsModalOpen,
   invoiceNumber,
+  refetchInvoices
 }: ICreateInvoice) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
@@ -132,6 +134,7 @@ const InvoiceForm = ({
             console.log('Successfully created invoice->', res);
             toast.success('Successfully added invoice');
             setIsModalOpen(false);
+            refetchInvoices();
           })
           .catch((error) => {
             console.error('Error creating invoice:', error);
@@ -474,7 +477,7 @@ const InvoiceForm = ({
   );
 };
 
-export default InvoiceForm;
+export default CreateInvoiceForm;
 
 const invoiceStatus = [
   {
