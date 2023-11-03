@@ -5,6 +5,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   ClipboardList,
+  FileBarChart,
   Home,
   LayoutDashboard,
   Settings,
@@ -196,6 +197,12 @@ const Sidebar = ({
                 text="Dashboard"
                 alert={false}
                 href="/dashboard"
+              />
+              <SidebarItem
+                Icon={FileBarChart}
+                text="PNL"
+                alert={false}
+                href="/pnl"
               />
               <SidebarItem
                 Icon={BookUserIcon}
