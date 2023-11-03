@@ -211,44 +211,44 @@ const Main = () => {
         <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5">
           <KpiCard
             title="Gross Revenue"
-            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
-            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
+            metric={AmountRecievablePastMonth?.toString() != undefined ? AmountRecievablePastMonth?.toString() : ""}
+            pastMonth={AmountRecievableCurrentMonth != undefined ? AmountRecievableCurrentMonth : 0}
             percentage="10.2"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
-          <KpiCard
+          {/* <KpiCard
             title="Total Cost of Sales"
-            metric={AmountRecievablePastMonth?.toString() != undefined ? AmountRecievablePastMonth?.toString() : ""}
-            pastMonth={AmountRecievableCurrentMonth != undefined ? AmountRecievableCurrentMonth : 0}
+            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
+            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
             percentage="7.5"
             delta="increase"
             icon={<HeartHandshake color="#fff" size={32} />}
-          />
+          /> */}
           <KpiCard
-            title="Gross Profit"
-            metric="€200,000"
-            pastMonth={0}
+            title="Gross Expenses"
+            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
+            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
             percentage="3.0"
             delta="increase"
             icon={<RefreshCcw color="#fff" size={32} />}
           />
           <KpiCard
             title="EBITDA"
-            metric="€100,000"
+            metric="€12,532"
             pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
           />
-          <KpiCard
+          {/* <KpiCard
             title="Net Revenue"
             metric="€50,000"
             pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
-          />
+          /> */}
         </div>
 
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
