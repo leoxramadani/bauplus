@@ -445,6 +445,31 @@ const Sidebar = ({
   );
 };
 
+function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
+  const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
+
+  return (
+    <>
+      {Icon && (
+        <Icon
+          size={20}
+          strokeWidth={1.5}
+          className="absolute left-2"
+        />
+      )}
+      <span
+        className={`w-full text-left transition-[opacity,transform] ${
+          Icon && 'ml-7'
+        } group-hover/trigger ${
+          Icon && !expanded && '-translate-x-4 opacity-0'
+        }`}
+      >
+        {text}
+      </span>
+    </>
+  );
+}
+
 function SidebarItem({
   Icon,
   text,
@@ -501,20 +526,7 @@ function SidebarItem({
               isInCurrentPath() && 'flex text-white'
             }`}
           >
-            {Icon && (
-              <Icon
-                size={20}
-                strokeWidth={1.5}
-                className="absolute left-2"
-              />
-            )}
-            <span
-              className={`group-hover/trigger ml-7 w-full text-left ${
-                !expanded && 'invisible'
-              }`}
-            >
-              {text}
-            </span>
+            <NavigationItem text={text} Icon={Icon} />
             <ChevronDown
               size={18}
               className={`absolute right-3 top-[1px] ml-1 h-full w-4 rotate-0 self-center duration-200 group-data-[state=open]:-rotate-90 ${
@@ -541,22 +553,7 @@ function SidebarItem({
               )
             }
           >
-            {Icon && (
-              <Icon
-                size={20}
-                strokeWidth={1.5}
-                className="absolute left-2"
-              />
-            )}
-            <span
-              className={`w-full text-left ${
-                Icon && 'ml-7'
-              } group-hover/trigger ${
-                Icon && !expanded && 'invisible'
-              }`}
-            >
-              {text}
-            </span>
+            <NavigationItem text={text} Icon={Icon} />
           </NavigationMenuLink>
         </Link>
       )}

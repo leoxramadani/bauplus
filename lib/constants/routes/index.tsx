@@ -1,6 +1,7 @@
 import {
   Calculator,
   ClipboardList,
+  FileBarChart,
   Home,
   LayoutDashboard,
   Settings,
@@ -100,5 +101,10 @@ export default [
     path: 'account',
     title: 'Account settings',
     icon: <Settings size={18} />,
+  },
+  {
+    path: 'P&L',
+    title: 'P&L',
+    icon: <FileBarChart size={18} />,
   },
 ];

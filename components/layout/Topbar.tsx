@@ -62,7 +62,7 @@ const Topbar: React.FC<TopbarProps> = ({
 
   return (
     <>
-      <div className="flex w-full items-center px-2 py-2">
+      <div className="z-50 flex w-full items-center justify-end py-2 self-end">
         {showForm && (
           <div className="flex flex-grow items-center gap-4">
             <Form {...form}>
@@ -117,7 +117,7 @@ const Topbar: React.FC<TopbarProps> = ({
             </Form>
           </div>
         )}
-        <div className="flex flex-none items-center gap-10">
+        <div className="flex flex-none justify-end items-center gap-10">
           {!isWindowSmall && status === 'authenticated' ? (
             <>
               <div className="flex items-center">
@@ -142,8 +142,8 @@ const Topbar: React.FC<TopbarProps> = ({
                     <ChevronDown size={18} />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent asChild side="top">
-                  <div className="relative w-full rounded-xl border-slate-700 !bg-[#141e29] px-0 py-2 text-sm leading-loose text-white">
+                <PopoverContent asChild side="top" className='z-50'>
+                  <div className="relative w-full rounded-xl border min-w-[200px] px-0 py-2 text-sm leading-loose">
                     <div
                       className={`
                   flex items-center transition-all ${
@@ -167,7 +167,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         <Link
                           href={'/account'}
                           onClick={() => setUserPopover(false)}
-                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-800"
+                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-100"
                         >
                           Settings
                           <Settings size={18} />
@@ -179,7 +179,7 @@ const Topbar: React.FC<TopbarProps> = ({
                             setUserPopover(!userPopoverOpen);
                             signOut();
                           }}
-                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-800"
+                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-100 focus:outline-none"
                         >
                           Log out
                         </button>
