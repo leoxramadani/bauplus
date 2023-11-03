@@ -118,7 +118,7 @@ const Generate = ({data}:IGenerateProps) => {
               name="date"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Due Date</FormLabel>
+                  <FormLabel>Invoice Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

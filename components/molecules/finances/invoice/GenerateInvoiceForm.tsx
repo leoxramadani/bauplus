@@ -58,11 +58,12 @@ const GenerateInvoiceForm = () => {
         },
       })
       .then((res)=>{
-        console.log("response=>",res.data); 
+        console.log("response=>",res.data);
+
         if (res.data) {
-          console.log(new Date(res.data.date ));        
+          console.log(new Date(res.data.date ) ?? new Date(''));        
           res.data.date = new Date(res.data.date );
-          res.data.payment_due_date= new Date(res.data.payment_due_date );
+          res.data.payment_due_date= new Date(res.data.payment_due_date ?? new Date('') );
         }
         setOcrData(res.data)
         // setOcrIsLoading(false)
