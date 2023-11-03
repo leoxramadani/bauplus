@@ -116,6 +116,19 @@ const MasterDetailTable = () => {
         </div>
       </div>
       <MasterDetailRow
+        title={'Gross Revenue'}
+        values={{
+          Q1: { Cash: 2000, Accrual: 2000 },
+          Q2: { Cash: 2500, Accrual: 2500 },
+          Q3: { Cash: 2200, Accrual: 2200 },
+          Q4: { Cash: 2700, Accrual: 2700 },
+        }}
+        checked={rowStates['Gross Revenue']}
+        onCheckboxChange={(newChecked) =>
+          handleRowCheckboxChange('Gross Revenue', newChecked)
+        }
+      />
+      <MasterDetailRow
         title={'Net Sales'}
         values={{
           Q1: { Cash: 1000, Accrual: 1000 },
@@ -422,19 +435,7 @@ const MasterDetailTable = () => {
           }
         />
       </MasterDetailRow>
-      <MasterDetailRow
-        title={'Gross Revenue'}
-        values={{
-          Q1: { Cash: 2000, Accrual: 2000 },
-          Q2: { Cash: 2500, Accrual: 2500 },
-          Q3: { Cash: 2200, Accrual: 2200 },
-          Q4: { Cash: 2700, Accrual: 2700 },
-        }}
-        checked={rowStates['Gross Revenue']}
-        onCheckboxChange={(newChecked) =>
-          handleRowCheckboxChange('Gross Revenue', newChecked)
-        }
-      />
+      
     </div>
   );
 };
