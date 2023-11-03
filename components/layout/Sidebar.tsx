@@ -477,7 +477,7 @@ function SidebarItem({
     const routeParts = route.split('/');
 
     for (let i = 0; i < routeParts.length; i++) {
-      console.log(routeParts.slice(0, i + 1).join('/'), href);
+      // console.log(routeParts.slice(0, i + 1).join('/'), href);
       if (routeParts.slice(0, i + 1).join('/') === href) {
         return true;
       }

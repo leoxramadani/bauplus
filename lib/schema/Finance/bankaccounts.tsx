@@ -102,7 +102,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
             description="Are you sure you want to delete this bank account?"
             className="max-w-lg"
           >
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2">
               <Modal.Close asChild>
                 <Button
                   variant="destructive"

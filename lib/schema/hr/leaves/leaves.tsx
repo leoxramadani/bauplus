@@ -242,16 +242,16 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuSeparator />
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
               Delete Leave
             </div>
           </Modal.Trigger>
           <Modal.Content
             title="Delete Leave"
             description="Are you sure you want to delete this leave?"
-            className="w-full max-w-sm"
+            className="w-full max-w-lg"
           >
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2">
               <Modal.Close asChild>
                 <Button
                   variant="destructive"
