@@ -200,9 +200,9 @@ const Sidebar = ({
               />
               <SidebarItem
                 Icon={FileBarChart}
-                text="P&L"
+                text="P&amp;L"
                 alert={false}
-                href="/P&L"
+                href="/P&amp;L"
               />
               <SidebarItem
                 Icon={BookUserIcon}

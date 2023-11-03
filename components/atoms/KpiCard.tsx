@@ -22,7 +22,7 @@ const KpiCard = ({
       <Flex alignItems="start">
         <div>
           <Text>{title}</Text>
-          <Metric className='text-[20px]'>This month: €{metric}</Metric>
+          <Metric className="text-[20px]">€{metric}</Metric>
           <Text>Past month: €{pastMonth}</Text>
           <BadgeDelta className="mt-4" deltaType={delta}>
             {percentage}%
