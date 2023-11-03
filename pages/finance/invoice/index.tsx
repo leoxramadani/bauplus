@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 const Invoice = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   const {
     data,
@@ -61,7 +62,9 @@ const Invoice = () => {
             />
           </Modal.Content>
         </Modal>
-        <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+
+
+        <Modal open={isRegisterModalOpen} onOpenChange={setIsRegisterModalOpen}>
           <Modal.Trigger asChild>
             <Button
               variant="outline"
@@ -83,6 +86,8 @@ const Invoice = () => {
             a
           </Modal.Content>
         </Modal>
+
+        
         <Button variant="outline" className="flex gap-2 ">
           <Plus size={20} /> <span>Create Time Log Invoice</span>
         </Button>
