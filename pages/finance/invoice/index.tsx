@@ -1,6 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import CreateInvoiceForm from '@/components/molecules/finances/invoice/CreateInvoiceForm';
 import InvoiceForm from '@/components/molecules/finances/invoice/CreateInvoiceForm';
+import GenerateInvoiceForm from '@/components/molecules/finances/invoice/GenerateInvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { INVOICE_GET_ALL } from '@/lib/constants/endpoints/finance/invoice';
@@ -43,9 +44,26 @@ const Invoice = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
+        <Modal open={isRegisterModalOpen} onOpenChange={setIsRegisterModalOpen}>
+          <Modal.Trigger asChild>
+            <Button
+              variant="default"
+              className="flex flex-row gap-2"
+            >
+              <Plus size={20} /> Register Invoice
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Register Invoice"
+            description="Fill all the fields to register an invoice"
+          >
+            <GenerateInvoiceForm/>
+          </Modal.Content>
+        </Modal>
+
         <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
-            <Button variant="default" className="flex flex-row gap-2">
+            <Button variant="outline"  className="flex flex-row gap-2 text-indigo-600">
               <Plus size={20} /> Create Invoice
             </Button>
           </Modal.Trigger>
@@ -64,28 +82,7 @@ const Invoice = () => {
         </Modal>
 
 
-        <Modal open={isRegisterModalOpen} onOpenChange={setIsRegisterModalOpen}>
-          <Modal.Trigger asChild>
-            <Button
-              variant="outline"
-              className="flex flex-row gap-2 text-indigo-600"
-            >
-              <Plus size={20} /> Register Invoice
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="Register Invoice"
-            description="Fill all the fields to register an invoice"
-          >
-            {/* <InvoiceForm
-              setIsModalOpen={setIsModalOpen}
-              invoiceNumber={
-                router.isReady ? router.query.id?.toString() : ''
-              }
-            /> */}
-            a
-          </Modal.Content>
-        </Modal>
+        
 
         
         <Button variant="outline" className="flex gap-2 ">
