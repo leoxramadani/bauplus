@@ -499,7 +499,7 @@ const MasterDetailRow = ({
           <div className="w-5 pl-5"></div>
         )}
         <div className="flex flex-row">
-          <div className="flex h-full flex-row items-center border-r p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
+          <div className="flex h-full flex-row items-center p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
             <p>{title}</p>
           </div>
         </div>
@@ -563,7 +563,7 @@ const MasterDetailSubRow = ({
         />
         <div className="w-5 pl-5"></div>
         <div className="flex flex-row">
-          <div className="flex h-full flex-row items-center border p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
+          <div className="flex h-full flex-row items-center p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
             <p>{title}</p>
           </div>
         </div>

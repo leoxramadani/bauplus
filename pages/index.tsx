@@ -21,10 +21,11 @@ import {
 } from '@tremor/react';
 import axios from 'axios';
 import {
-  HeartHandshake,
-  RefreshCcw,
+  BarChart3,
+  ShoppingCart,
   TrendingUp,
-  User2,
+  Wallet,
+  Wallet2,
 } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -224,7 +225,7 @@ const Main = () => {
             }
             percentage="10.2"
             delta="increase"
-            icon={<TrendingUp color="#fff" size={32} />}
+            icon={<Wallet color="#fff" size={32} />}
           />
           <KpiCard
             title="Total Cost of Sales"
@@ -240,7 +241,7 @@ const Main = () => {
             }
             percentage="7.5"
             delta="increase"
-            icon={<HeartHandshake color="#fff" size={32} />}
+            icon={<ShoppingCart color="#fff" size={32} />}
           />
           <KpiCard
             title="Gross Profit"
@@ -248,7 +249,7 @@ const Main = () => {
             pastMonth={120000}
             percentage="3.0"
             delta="increase"
-            icon={<RefreshCcw color="#fff" size={32} />}
+            icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
             title="EBITDA"
@@ -256,7 +257,7 @@ const Main = () => {
             pastMonth={80000}
             percentage="1.8"
             delta="increase"
-            icon={<User2 color="#fff" size={32} />}
+            icon={<BarChart3 color="#fff" size={32} />}
           />
           <KpiCard
             title="Net Revenue"
@@ -264,7 +265,7 @@ const Main = () => {
             pastMonth={30000}
             percentage="1.8"
             delta="increase"
-            icon={<User2 color="#fff" size={32} />}
+            icon={<Wallet2 color="#fff" size={32} />}
           />
         </div>
 

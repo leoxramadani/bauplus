@@ -8,7 +8,6 @@ import {
   FileBarChart,
   Home,
   LayoutDashboard,
-  Settings,
   SettingsIcon,
   ShoppingBasket,
   UserCircle,
@@ -16,7 +15,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -38,12 +37,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../ui/popover';
-import { Separator } from '../ui/separator';
 interface ListItem {
   icon?: React.JSX.Element;
   text?: string;
@@ -371,7 +364,7 @@ const Sidebar = ({
             </NavigationMenuList>
           </NavigationMenu>
         </SidebarContext.Provider>
-        <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-700 bg-inherit ">
+        {/* <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-700 bg-inherit ">
           {!isWindowSmall && status === 'authenticated' ? (
             <Popover
               open={userPopoverOpen}
@@ -440,13 +433,13 @@ const Sidebar = ({
             <div className="relative flex h-full w-full items-center justify-center">
               <Link
                 href={'/login'}
-                className="m-3 flex w-full items-center gap-1 rounded-lg px-2 py-2 text-white transition-all hover:bg-slate-800"
+                className="m-3 flex w-full items-center gap-1 rounded-lg px-2 py-2 font-semibold text-white transition-all hover:bg-slate-800"
               >
                 Login
               </Link>
             </div>
           )}{' '}
-        </div>
+        </div> */}
       </nav>
     </aside>
   );
