@@ -1,6 +1,7 @@
 'use client';
 import KpiCard from '@/components/atoms/KpiCard';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { GET_PAYABLE_CURRENT_MONTH, GET_PAYABLE_PAST_MONTH, GET_RECIEVABLE_CURRENT_MONTH, GET_RECIEVABLE_PAST_MONTH } from '@/lib/constants/endpoints/finance/invoice';
 import {
   IProject,
   projectColumnDef,
@@ -13,6 +14,7 @@ import {
   Subtitle,
   Title,
 } from '@tremor/react';
+import axios from 'axios';
 import {
   HeartHandshake,
   RefreshCcw,
@@ -121,6 +123,76 @@ const Main = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
+  const [AmountPayableCurrentMonth,setAmountPayableCurrentMonth] = useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_PAYABLE_CURRENT_MONTH)
+        .then((res) => {
+          setAmountPayableCurrentMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+        
+    }
+    getData();
+
+  }, []);
+
+  const [AmountPayablePastMonth,setAmountPayablePastMonth] = useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_PAYABLE_PAST_MONTH)
+        .then((res) => {
+          setAmountPayablePastMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+        
+    }
+    getData();
+
+  }, []);
+
+  const [AmountRecievablePastMonth,setAmountRecievablePastMonth] = useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_RECIEVABLE_PAST_MONTH)
+        .then((res) => {
+          setAmountRecievablePastMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+        
+    }
+    getData();
+
+  }, []);
+
+  const [AmountRecievableCurrentMonth,setAmountRecievableCurrentMonth] = useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_RECIEVABLE_CURRENT_MONTH)
+        .then((res) => {
+          setAmountRecievableCurrentMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+        
+    }
+    getData();
+
+  }, []);
+
+
+
   return (
     <>
       <Head>
@@ -139,14 +211,16 @@ const Main = () => {
         <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] lg:flex-row">
           <KpiCard
             title="Gross Revenue"
-            metric="€2,500,000"
+            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
+            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
             percentage="10.2"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
             title="Total Cost of Sales"
-            metric="€2,300,000"
+            metric={AmountRecievablePastMonth?.toString() != undefined ? AmountRecievablePastMonth?.toString() : ""}
+            pastMonth={AmountRecievableCurrentMonth != undefined ? AmountRecievableCurrentMonth : 0}
             percentage="7.5"
             delta="increase"
             icon={<HeartHandshake color="#fff" size={32} />}
@@ -154,6 +228,7 @@ const Main = () => {
           <KpiCard
             title="Gross Profit"
             metric="€200,000"
+            pastMonth={0}
             percentage="3.0"
             delta="increase"
             icon={<RefreshCcw color="#fff" size={32} />}
@@ -161,6 +236,7 @@ const Main = () => {
           <KpiCard
             title="EBITDA"
             metric="€100,000"
+            pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
@@ -168,6 +244,7 @@ const Main = () => {
           <KpiCard
             title="Net Revenue"
             metric="€50,000"
+            pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
