@@ -5,7 +5,6 @@ import Breadcrumbs from '../ui/breadcrumbs';
 import Loading from './Loading';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import Topbar from './Topbar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
