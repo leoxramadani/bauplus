@@ -17,17 +17,17 @@ export const invoiceSchema = z.object({
   clientId: z.string(),
   // companyID: z.string(), // this is the id for the company
   companyName: z.string().optional(),
-  invoiceTypeID: z.string(), //this is the id for the invoice type
+  invoiceTypeId: z.string(), //this is the id for the invoice type
   // invoiceTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
-  dueDate: z.string().optional(),
+  dueDate: z.coerce.date(),
   totalAmount: z.coerce.number(),
   paidAmount: z.coerce.number(),
-  invoiceStatusID: z.string(), //this is the id for the invoice type
+  invoiceStatusId: z.string(), //this is the id for the invoice type
   // invoiceStatus: z.string().optional(),
-  // paymentMethodID: z.string(), //this is the id for the payment method
+  paymentMethodId: z.string(), //this is the id for the payment method
   paymentMethod: z.string().optional(),
-  transactionID: z.string().optional(), //this is the id for the transaction this invoice was created from
+  // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
 export type IInvoice = z.infer<typeof invoiceSchema>;
 
