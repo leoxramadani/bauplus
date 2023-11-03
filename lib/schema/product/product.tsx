@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,19 +14,16 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import z from 'zod';
 export const productSchema = z.object({
   productId: z.string().optional(),
   productName: z.string(),
-  productCategory: z
-    .object({
-      categoryId: z.string().optional(),
-      categoryName: z.string().optional(),
-    })
-    .optional()
-    .nullable(),
+  categoryName: z.string().optional().nullable(),
   price: z.coerce.number(),
   categoryId: z.string(),
+  quantity: z.coerce.number(),
 });
 
 export type IProduct = z.infer<typeof productSchema>;
@@ -60,12 +58,16 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
     header: 'Product Name',
   },
   {
-    accessorKey: 'productCategory.categoryName',
+    accessorKey: 'categoryName',
     header: 'Product category',
   },
   {
     accessorKey: 'price',
     header: 'Price',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     id: 'actions',
@@ -75,6 +77,7 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -87,21 +90,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this invoice?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
-
-      await axios
-        .delete(DELETE_PRODUCT + `?productId=${id}`)
-        .then((res) => {
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
+    await axios
+      .delete(DELETE_PRODUCT, {
+        params: {
+          productId: id,
+        },
+      })
+      .then((res) => {
+        toast.success('Successfully deleted product.');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
         });
-    }
+      })
+      .catch((error) => {
+        console.log('Error deleting product->', error);
+      });
   };
 
   return (
@@ -129,11 +135,35 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.productId)}
-        >
-          Delete Row
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Product
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Product"
+            description="Are you sure you want to delete this product?"
+            className="w-full max-w-sm"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.productId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );

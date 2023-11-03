@@ -104,8 +104,8 @@ const Duration = ({ className }: IDuration) => {
     'Custom range',
   ];
 
-  console.log(date);
-  console.log('start: ', startDate);
+  // console.log(date);
+  // console.log('start: ', startDate);
   return (
     <div className={cn('absolute right-4', className)}>
       <div className="relative flex h-full  w-max flex-col">
@@ -146,7 +146,11 @@ const Duration = ({ className }: IDuration) => {
           </ul>
 
           {open && (
-            <DatePicker setDateRange={setDate} setOpen={setOpen} setDropDown={setDropDown} />
+            <DatePicker
+              setDateRange={setDate}
+              setOpen={setOpen}
+              setDropDown={setDropDown}
+            />
           )}
         </div>
       )}

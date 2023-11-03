@@ -23,26 +23,23 @@ declare module 'next-auth' {
   }
 
   interface Session extends DefaultSession {
-    refreshToken: string;
     accessToken: string;
     acessTokenExpires: number;
-    user: ArkivaUser;
+    user?: ArkivaUser | any;
   }
 
   interface User {
-    refreshToken: string;
     accessToken: string;
     accessTokenExpires: string;
-    user: ArkivaUser | any;
+    user?: ArkivaUser | any;
   }
 }
 
 declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
-    refreshToken: string;
     accessToken: string;
-    accessTokenExpires: number;
+    accessTokenExpires: string;
     exp?: number;
     iat?: number;
     jti?: string;

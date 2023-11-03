@@ -15,10 +15,12 @@ import { useEffect, useState } from 'react';
 const Product = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, refetch } = useData<IProduct[]>(
-    ['products'],
-    GET_ALL_PRODUCTS
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchProducts,
+  } = useData<IProduct[]>(['products'], GET_ALL_PRODUCTS);
 
   useEffect(() => {
     if (router.query.id) {
@@ -40,7 +42,7 @@ const Product = () => {
       <div className="flex flex-row gap-2">
         <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
           <Modal.Trigger asChild>
-            <Button variant="destructive" className="flex gap-2">
+            <Button variant="default" className="flex gap-2">
               <Plus size={20} /> <span>Add New Product</span>
             </Button>
           </Modal.Trigger>
@@ -53,6 +55,7 @@ const Product = () => {
               productId={
                 router.isReady ? router.query.id?.toString() : ''
               }
+              refetchProducts={refetchProducts}
             />
           </Modal.Content>
         </Modal>

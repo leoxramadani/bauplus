@@ -1,3 +1,5 @@
+import Modal from '@/components/atoms/Modal';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,27 +15,33 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 
-
 const MAX_FILE_SIZE = 2000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+];
 
 export enum leaveType {
-  casual = "Casual",
-  sick = "Sick",
-  earned = "Earned",
+  casual = 'Casual',
+  sick = 'Sick',
+  earned = 'Earned',
 }
-export enum leaveStatus{
-  pending="Pending",
-  approved="Approved"
+export enum leaveStatus {
+  pending = 'Pending',
+  approved = 'Approved',
 }
 
-export enum duration{
-  full="Full day",
-  multiple="Multiple days",
-  fh="First Half",
-  sh="Second Half" 
+export enum duration {
+  full = 'Full day',
+  multiple = 'Multiple days',
+  fh = 'First Half',
+  sh = 'Second Half',
 }
 
 export const leavesSchema = z.object({
@@ -46,21 +54,27 @@ export const leavesSchema = z.object({
   // // file: z.instanceof(File)
   leaveId: z.string().optional(),
   date: z.coerce.date(),
-  employeeId: z.string({required_error:"An employee is required to create a leave!"}),
-  employee:z.object({
-    firstName: z.string(),
-    lastName:z.string(),
-  }).optional(),
+  employeeId: z.string({
+    required_error: 'An employee is required to create a leave!',
+  }),
+  employee: z
+    .object({
+      firstName: z.string(),
+      lastName: z.string(),
+    })
+    .optional(),
   leaveType: z.string(),
-  leaveStatus:z.string(),
+  leaveStatus: z.string(),
   duration: z.string(),
   reason: z.string(),
   filePath: z.string().optional(),
-  companyId:z.string().optional(),
-  company:z.object({
-    companyId: z.string(),
-    companyName:z.string(),
-  }).optional(),
+  companyId: z.string().optional(),
+  company: z
+    .object({
+      companyId: z.string(),
+      companyName: z.string(),
+    })
+    .optional(),
   fileAttached: z.string().optional(),
   // file: z
   // .any()
@@ -128,6 +142,20 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
   {
     accessorKey: 'leaveStatus',
     header: 'Leave Status',
+    cell: ({ row }) => (
+      <Badge
+        variant={`${
+          row.original.leaveStatus == 'approved'
+            ? 'success'
+            : row.original.leaveStatus == 'pending'
+            ? 'pending'
+            : 'destructive'
+        }`}
+        className=" cursor-none"
+      >
+        {row.original.leaveStatus}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'duration',
@@ -161,7 +189,7 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
-
+  const [open, setOpen] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -173,21 +201,20 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this invoice?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
-
-      await axios
-        .delete(DELETE_LEAVE+ `?LeaveId=${id}`)
-        .then((res) => {
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
+    await axios
+      .delete(DELETE_LEAVE + `?LeaveId=${id}`)
+      .then((res) => {
+        toast.success('Successfully deleted leave.');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
         });
-    }
+      })
+      .catch((error) => {
+        console.log('Response after error:', error);
+      });
   };
 
   return (
@@ -204,24 +231,44 @@ const ActionsColumn = ({ item }: { item: any }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
-          onClick={() =>
-            navigator.clipboard.writeText(item.leaveId)
-          }
+          onClick={() => navigator.clipboard.writeText(item.leaveId)}
         >
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleEdit(item.leaveId)}
-        >
+        <DropdownMenuItem onClick={() => handleEdit(item.leaveId)}>
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.leaveId)}
-        >
-          Delete Row
-        </DropdownMenuItem>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Leave
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Leave"
+            description="Are you sure you want to delete this leave?"
+            className="w-full max-w-sm"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.leaveId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );

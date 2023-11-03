@@ -1,4 +1,4 @@
-import Btn from '@/components/Button';
+import {Button} from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -158,14 +158,14 @@ const Cash = () => {
           />
         </div>
 
-        <Btn
-          isProgress={test}
+        <Button
+          loading={test}
           className="w-max"
           type="submit"
           disabled={test}
         >
           Submit
-        </Btn>
+        </Button>
       </form>
     </Form>
   );

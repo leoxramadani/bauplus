@@ -1,3 +1,4 @@
+import Topbar from '@/components/layout/Topbar';
 import { Input } from '@/components/ui/input';
 
 const Companies = () => {

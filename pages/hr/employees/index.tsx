@@ -10,17 +10,23 @@ import {
 } from '@/lib/schema/hr/employee/employee';
 
 import { FileInput, FileUp, Plus } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import loadingGIF from '@/public/video/loading-mimiro.gif';
+
 const Employees = () => {
   const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, refetch:refetchEmployees } = useData<IEmployee[]>(
-    ['employees'],
-    GET_ALL_EMPLOYEES
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchEmployees,
+  } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
 
   console.log('data=', data);
   useEffect(() => {
@@ -44,10 +50,7 @@ const Employees = () => {
         <div className="flex flex-row gap-2">
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
-              <Button
-                variant="destructive"
-                className="flex gap-2"
-              >
+              <Button variant="default" className="flex gap-2">
                 <Plus size={20} /> <span>Add employee</span>
               </Button>
             </Modal.Trigger>
@@ -86,7 +89,24 @@ const Employees = () => {
             searchVal="firstName"
           />
         ) : (
-          <>{isError ? <div>No data.</div> : <div>Loading...</div>}</>
+          <>
+            {isError ? (
+              <div>No data.</div>
+            ) : (
+              <div>
+                {' '}
+                <p>Loading ...</p>
+                <Image
+                  src={loadingGIF}
+                  layout={'responsive'}
+                  height={175}
+                  width={175}
+                  alt={`A cute animal!`}
+                  unoptimized={true}
+                />
+              </div>
+            )}
+          </>
         )}
       </section>
 

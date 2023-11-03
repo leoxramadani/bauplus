@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import RightModal from '@/components/atoms/RightModal';
 import ExpensesCreate from '@/components/molecules/finances/expenses/ExpensesCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
@@ -14,13 +15,25 @@ const Expenses = () => {
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Button
-            variant="destructive"
-            className="flex gap-2"
-            onClick={() => setIsModalOpen(true)}
+        <Modal
+            open={isModalOpen}
+            onOpenChange={setIsModalOpen}
           >
-            <Plus size={20} /> <span>Add Expense</span>
-          </Button>
+            <Modal.Trigger asChild>
+              <Button
+                variant="default"
+                className="flex items-center justify-center gap-1"
+              >
+                <Plus size={20} /> Add Expenses
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content
+              title="Add an Expense"
+              description="Fill all the fields to add an expense"
+            >
+              <ExpensesCreate />
+            </Modal.Content>
+          </Modal>
           <Button variant="outline" className="flex gap-2">
             <RefreshCcw size={20} /> <span>Recurring Expenses</span>
           </Button>
@@ -35,12 +48,12 @@ const Expenses = () => {
         />
       </section>
 
-      <RightModal
+      {/* <RightModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       >
         <ExpensesCreate />
-      </RightModal>
+      </RightModal> */}
     </>
   );
 };

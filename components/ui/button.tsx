@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           'bg-primary text-destructive-foreground hover:bg-[#6265F9] active:bg-[#6265F9] focus:ring-4 focus:ring-[#6E71F1]/50',
         destructive:
-          'bg-primary text-destructive-foreground hover:bg-[#6265F9] active:bg-[#6265F9] focus:ring-4 focus:ring-[#6E71F1]/50',
+          'bg-[#FE464B] text-destructive-foreground hover:bg-[#FE464B] active:bg-[#FE464B] focus:ring-4 focus:ring-[#FE464B]/50',
         outline:
           'border border-input bg-background active:bg-gray-100 hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200',
         secondary:
@@ -50,17 +50,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(
           buttonVariants({ variant, size, className }),
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none',
           className
         )}
         ref={ref}
-        disabled={loading}
+        disabled={props.disabled ?? loading}
         {...props}
       >
         {loading === true && (
           <Loader2 className="mr-1 animate-spin" size={18} />
         )}
-        <span className={className}>{children}</span>
+        {children}
       </button>
     );
   }

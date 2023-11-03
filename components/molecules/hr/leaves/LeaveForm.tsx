@@ -1,30 +1,53 @@
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
 import {
-  CREATE_BANK_ACCOUNT,
-  GET_ONE_BANKACCOUNT,
-  UPDATE_BANK_ACCOUNT,
-} from '@/lib/constants/endpoints/finance';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { GET_EMPLOYEES_BY_COMPANY } from '@/lib/constants/endpoints/employee';
+import {
+  CREATE_LEAVE,
+  GET_SPECIFIC_LEAVE,
+  UPDATE_LEAVE,
+} from '@/lib/constants/endpoints/hr/leaves';
+import useData from '@/lib/hooks/useData';
+import { IEmployee } from '@/lib/schema/hr/employee/employee';
 import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves/leaves';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
+import format from 'date-fns/format';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import format from 'date-fns/format';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
-import Drop from '@/components/atoms/Drop';
-import { CREATE_LEAVE, GET_SPECIFIC_LEAVE, UPDATE_LEAVE } from '@/lib/constants/endpoints/hr/leaves';
-import { IEmployee } from '@/lib/schema/hr/employee/employee';
-import useData from '@/lib/hooks/useData';
-import { GET_EMPLOYEES_BY_COMPANY } from '@/lib/constants/endpoints/employee';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 interface ICreateLeave {
   setIsModalOpen(open: boolean): void;
   leaveId?: string;
@@ -57,8 +80,11 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
     data: employees,
     isError: employeesIsError,
     isLoading: employeesIsLoading,
-    error: employeesError,
-  } = useData<IEmployee[]>(['employees'],GET_EMPLOYEES_BY_COMPANY+`?companyId=${`145d8d93-7ff7-4a24-a184-aa4e010e7f37`}`);
+  } = useData<IEmployee[]>(
+    ['employees'],
+    GET_EMPLOYEES_BY_COMPANY +
+      `?companyId=${`145d8d93-7ff7-4a24-a184-aa4e010e7f37`}`
+  );
 
   useEffect(() => {
     async function getData(id: string) {
@@ -85,131 +111,72 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
 
   const onSubmit = useCallback(
     async (data: ILeaves) => {
-      console.log("form data=",data);
-      
+      console.log('form data=', data);
+
       setIsSubmitting(true);
-        if (leave) {
-          await axios.put(UPDATE_LEAVE, {
+      if (leave) {
+        await axios
+          .put(UPDATE_LEAVE, {
             ...data,
-            companyId: "145d8d93-7ff7-4a24-a184-aa4e010e7f37",
-            employeeId: "c8018547-7470-42d6-b1a7-269b0f4edb17",
-            filePath:"",
-              // employeeId
-              // leaveType
-              // leaveStatus
-              // duration
-              // reason
-              // filePath
-              // companyId
-              // isDeleted
-            
-          }).then((res)=>{
-            console.log("res from update =>",res);
-            
-          }).catch((error)=>{
-            console.error('Error:', error);
-            // toast.error('There was an issue! Please try again.');
-            
-          });
-          setIsSubmitting(false);
-          setIsModalOpen(false);
-        } else {
-          await axios.post(CREATE_LEAVE,{
-            ...data,
-            companyId: "145d8d93-7ff7-4a24-a184-aa4e010e7f37",
-            filePath:"",
-          }).then((res)=>{
-            console.log("res from create=>",res);
-            
-          }).catch((error)=>{
+            companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+            employeeId: 'c8018547-7470-42d6-b1a7-269b0f4edb17',
+            filePath: '',
+            // employeeId
+            // leaveType
+            // leaveStatus
+            // duration
+            // reason
+            // filePath
+            // companyId
+            // isDeleted
+          })
+          .then((res) => {
+            console.log('res from update =>', res);
+          })
+          .catch((error) => {
             console.error('Error:', error);
             // toast.error('There was an issue! Please try again.');
           });
-          
-          setIsSubmitting(false);
-          setIsModalOpen(false);
-        }
-      
+        setIsSubmitting(false);
+        setIsModalOpen(false);
+      } else {
+        await axios
+          .post(CREATE_LEAVE, {
+            ...data,
+            companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+            filePath: '',
+          })
+          .then((res) => {
+            console.log('res from create=>', res);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            // toast.error('There was an issue! Please try again.');
+          });
+
+        setIsSubmitting(false);
+        setIsModalOpen(false);
+      }
+
       setIsSubmitting(false);
     },
     [leave]
   );
 
-  const onError = (error:any)=>{
-    console.log("Error in leaves->",error);
-  }
-
+  const onError = (error: any) => {
+    console.log('Error in leaves->', error);
+  };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit,onError)}
+          onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
             {/* project */}
-            {/* <FormField
-              control={form.control}
-              name="member"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col">
-                  <FormLabel>Choose Member</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            'flex w-full items-center justify-between gap-1',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                          disabled={isSubmitting}
-                        >
-                          {field.value
-                            ? members.find(
-                                (member) =>
-                                  member.value === field.value
-                              )?.label
-                            : 'Choose member'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[250px] p-0">
-                      <Command>
-                        <CommandInput placeholder="Search language..." />
-                        <CommandEmpty>No member found.</CommandEmpty>
-                        <CommandGroup>
-                          {members.map((member) => (
-                            <CommandItem
-                              value={member.label}
-                              key={member.value}
-                              onSelect={() => {
-                                form.setValue('member', member.value);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  'mr-2 h-4 w-4 transition-all',
-                                  member.value === field.value
-                                    ? 'opacity-100'
-                                    : 'opacity-0'
-                                )}
-                              />
-                              {member.label}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             {/* Leave type */}
             <FormField
               control={form.control}
@@ -277,7 +244,6 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
                 </FormItem>
               )}
             />
-
 
             {/* duration */}
             <FormField
@@ -368,7 +334,7 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
               name="employeeId"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col">
-                  <FormLabel>Employee Name</FormLabel>
+                  <FormLabel>Employee</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -399,7 +365,9 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
                     <PopoverContent className="w-full p-0">
                       <Command>
                         <CommandInput placeholder="Search employee..." />
-                        <CommandEmpty>No employees found.</CommandEmpty>
+                        <CommandEmpty>
+                          No employees found.
+                        </CommandEmpty>
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (
                             <CommandItem

@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,6 +14,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const employeeSchema = z.object({
@@ -33,72 +36,6 @@ export const employeeSchema = z.object({
 });
 
 export type IEmployee = z.infer<typeof employeeSchema>;
-
-const ActionsColumn = ({ item }: { item: any }) => {
-  const router = useRouter();
-
-  const handleEdit = (id: string) => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    router.push({
-      query: {
-        ...router.query,
-        id: id,
-      },
-    });
-  };
-
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this invoice?'
-    );
-    if (confirmDelete) {
-      console.log('Delete row with id:', id);
-
-      await axios
-        .delete(DELETE_EMPLOYEES + `?employeeId=${id}`)
-        .then((res) => {
-          console.log('response after delete success =>', res);
-        })
-        .catch((error) => {
-          console.log('Response after error:', error);
-        });
-    }
-  };
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="flex h-8 w-8 items-center justify-center p-0"
-        >
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() =>
-            navigator.clipboard.writeText(item.employeeId)
-          }
-        >
-          Copy item id
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
-          Edit row
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => handleDelete(item.employeeId)}
-        >
-          Delete Row
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
 
 export const employeeColumnDef: ColumnDef<IEmployee>[] = [
   {
@@ -164,6 +101,96 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
+
+const ActionsColumn = ({ item }: { item: any }) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  const handleEdit = (id: string) => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    router.push({
+      query: {
+        ...router.query,
+        id: id,
+      },
+    });
+  };
+
+  const handleDelete = async (id: string) => {
+    await axios
+      .delete(DELETE_EMPLOYEES + `?employeeId=${id}`)
+      .then((res) => {
+        toast.success('Successfully deleted employee.');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log('Response after error:', error);
+      });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className="flex h-8 w-8 items-center justify-center p-0"
+        >
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() =>
+            navigator.clipboard.writeText(item.employeeId)
+          }
+        >
+          Copy item id
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleEdit(item.employeeId)}>
+          Edit row
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Employee
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Employee"
+            description="Are you sure you want to delete this employee?"
+            className="w-full max-w-sm"
+          >
+            <div className="flex flex-row gap-4">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.employeeId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const createEmployeeSchema = z.object({
   employeeId: z.string().optional(),

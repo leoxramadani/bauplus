@@ -96,6 +96,9 @@
             disabled:bg-slate-400;
   }
 
+  .button-outline {
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background active:bg-gray-100 hover:bg-accent hover:text-accent-foreground focus:ring-4 focus:ring-gray-200
+  }
   .button-secondary {
     @apply cursor-pointer rounded-sm border-2 border-red-500 bg-transparent
             px-3 py-2 text-center text-base font-normal text-red-500
@@ -122,23 +125,6 @@
   scrollbar-width: none;
 }
 
-/* Define scrollbar styles for Webkit browsers (Chrome, Safari, etc.) */
-::-webkit-scrollbar {
-  width: 4px; /* Width of the scrollbar */
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Color of the track */
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the thumb */
-  border-radius: 6px; /* Rounded corners of the thumb */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Color of the thumb on hover */
-}
 
 /* loading animation  */
 .loader {
@@ -170,4 +156,8 @@
 
   width: 100%;
   height: 5px;
+}
+
+input {
+  @apply [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
 }

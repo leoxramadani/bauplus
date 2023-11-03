@@ -1,10 +1,12 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -36,14 +38,30 @@ import { DataTableViewOptions } from './DataTableViewOptions';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
+  subcolumns?: ColumnDef<TData, TValue>[];
   data: TData[];
   searchVal?: string;
+  getRowCanExpand?: (row: Row<TData>) => boolean;
+  renderSubComponent?: (props: {
+    row: Row<TData>;
+  }) => React.ReactElement;
+  showPagination?: boolean;
+  showViewoptions?: boolean;
+  showSearchBar?: boolean;
+  showTitle?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchVal,
+  subcolumns,
+  getRowCanExpand,
+  renderSubComponent,
+  showPagination = true,
+  showViewoptions = true,
+  showSearchBar = true,
+  showTitle = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -66,6 +84,8 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    getRowCanExpand,
+    getExpandedRowModel: getExpandedRowModel(),
     state: {
       sorting,
       columnFilters,
@@ -74,33 +94,46 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const subtable = useReactTable({
+    data,
+    columns: subcolumns ? subcolumns : columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    getExpandedRowModel: getExpandedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
+  console.log(data);
+
   return (
-    <div className="my-3 flex flex-col gap-3">
+    <div
+      className={`flex flex-col
+    ${!showSearchBar ? `` : 'my-3 gap-3'}`}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex w-full flex-row items-center gap-2">
-          {/* Input for filterin are here */}
-          {/* <Input
-            placeholder="Search"
-            value={
-              (table
-                .getColumn(searchVal ?? 'id')
-                ?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn(searchVal ?? 'id')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-xl"
-          /> */}
           {/* dropdown view columns select */}
-          <DataTableColumnSearch table={table} />
+          {showSearchBar && <DataTableColumnSearch table={table} />}
         </div>
         {/* dropdown view columns select */}
-        <DataTableViewOptions table={table} />
+        {showViewoptions && <DataTableViewOptions table={table} />}
       </div>
       {/* The table component is here */}
       <div className="rounded-md border bg-white shadow-sm">
+        {showTitle && (
+          <h1 className="p-4 text-xl font-medium">Projects</h1>
+        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -125,20 +158,94 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <ContextMenu key={row.id}>
                   <ContextMenuTrigger asChild>
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
+                    <>
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                      {row.getIsExpanded() && renderSubComponent && (
+                        <TableRow className=" bg-gray-100">
+                          <TableCell
+                            className="w-full"
+                            colSpan={columns.length}
+                          >
+                            <Table>
+                              <TableHeader>
+                                {subtable
+                                  .getHeaderGroups()
+                                  .map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                      {headerGroup.headers.map(
+                                        (header) => (
+                                          <TableHead key={header.id}>
+                                            <DataTableColumnHeader
+                                              column={header.column}
+                                              title={
+                                                header.column
+                                                  .columnDef
+                                                  .header as string
+                                              }
+                                            />
+                                          </TableHead>
+                                        )
+                                      )}
+                                    </TableRow>
+                                  ))}
+                              </TableHeader>
+                              <TableBody>
+                                {subtable.getRowModel().rows
+                                  ?.length ? (
+                                  subtable
+                                    .getRowModel()
+                                    .rows.filter(
+                                      (rov) => rov.id === row.id
+                                    ) // Filter only the selected row
+                                    .map((selectedRow) => (
+                                      <TableRow key={selectedRow.id}>
+                                        {selectedRow
+                                          .getVisibleCells()
+                                          .map((cell) => (
+                                            <TableCell key={cell.id}>
+                                              {flexRender(
+                                                cell.column.columnDef
+                                                  .cell,
+                                                cell.getContext()
+                                              )}
+                                            </TableCell>
+                                          ))}
+                                      </TableRow>
+                                    ))
+                                ) : (
+                                  <TableRow>
+                                    <TableCell
+                                      colSpan={
+                                        subcolumns
+                                          ? subcolumns.length
+                                          : columns.length
+                                      }
+                                      className="h-24 text-center"
+                                    >
+                                      No results.
+                                    </TableCell>
+                                  </TableRow>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </>
                   </ContextMenuTrigger>
+
                   <ContextMenuContent className="rounded-lg border bg-white p-1 text-slate-900 shadow-md shadow-slate-300/30">
                     <ContextMenuItem className="flex w-60 cursor-pointer items-center justify-between rounded-md px-3 py-2 transition-colors duration-75 hover:bg-slate-200">
                       Copy ID
@@ -164,7 +271,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       {/* Buttons for pages are here */}
-      <DataTablePagination table={table} />
+      {showPagination && <DataTablePagination table={table} />}
     </div>
   );
 }
