@@ -156,7 +156,11 @@ export const clientsColumnDef: ColumnDef<IClients>[] = [
               style: { cursor: 'pointer' },
             }}
           >
-            {row.getIsExpanded() ? <ChevronUp /> : <ChevronDown />}
+            {row.getIsExpanded() ? (
+              <ChevronUp className="text-slate-400" />
+            ) : (
+              <ChevronDown className="text-slate-400" />
+            )}
           </button>
         ) : (
           '🔵'
