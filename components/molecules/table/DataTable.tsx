@@ -172,7 +172,7 @@ export function DataTable<TData, TValue>({
                           </TableCell>
                         ))}
                       </TableRow>
-                      {row.getIsExpanded() && renderSubComponent && (
+                      {row.getIsExpanded() && (
                         <TableRow className=" bg-gray-100">
                           <TableCell
                             className="w-full"

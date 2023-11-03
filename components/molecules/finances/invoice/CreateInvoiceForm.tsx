@@ -31,6 +31,7 @@ import {
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
   GET_SPECIFIC_INVOICE,
+  INVOICE_CREATE,
   INVOICE_REGISTER,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
@@ -53,11 +54,13 @@ import { toast } from 'react-toastify';
 interface ICreateInvoice {
   setIsModalOpen(open: boolean): void;
   invoiceNumber?: string;
+  refetchInvoices:any
 }
 
-const InvoiceForm = ({
+const CreateInvoiceForm = ({
   setIsModalOpen,
   invoiceNumber,
+  refetchInvoices
 }: ICreateInvoice) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
@@ -121,16 +124,17 @@ const InvoiceForm = ({
       } else {
         console.log('Creating invoice');
         await axios
-          .post(INVOICE_REGISTER, {
-            clientId: data.clientId,
-            totalAmount: data.totalAmount,
-            paidAmount: data.paidAmount,
-            // ...data
+          .post(INVOICE_CREATE, {
+            // clientId: data.clientId,
+            // totalAmount: data.totalAmount,
+            // paidAmount: data.paidAmount,
+            ...data
           })
           .then((res) => {
             console.log('Successfully created invoice->', res);
             toast.success('Successfully added invoice');
             setIsModalOpen(false);
+            refetchInvoices();
           })
           .catch((error) => {
             console.error('Error creating invoice:', error);
@@ -156,10 +160,42 @@ const InvoiceForm = ({
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
+            {/* Payment Method */}
+            <FormField
+              control={form.control}
+              name="paymentMethodId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Payment method</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select payment method" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {paymentMethods.map((invoice) => (
+                        <SelectItem
+                          value={invoice.value}
+                          key={invoice.value}
+                        >
+                          {invoice.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Invoice type */}
             <FormField
               control={form.control}
-              name="invoiceTypeID"
+              name="invoiceTypeId"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Invoice Type</FormLabel>
@@ -316,7 +352,7 @@ const InvoiceForm = ({
               name="invoiceDate"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Invoice Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -330,7 +366,51 @@ const InvoiceForm = ({
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick date on document</span>
+                            <span>Pick Invoice date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto p-0"
+                      align="start"
+                    >
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date > new Date()}
+                        //   initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/*Invoice Date */}
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Due Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'flex w-full items-center justify-between text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'PPP')
+                          ) : (
+                            <span>Pick Invoice date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -358,7 +438,7 @@ const InvoiceForm = ({
             {/* Invoice Status */}
             <FormField
               control={form.control}
-              name="invoiceStatusID"
+              name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Invoice Status</FormLabel>
@@ -397,7 +477,7 @@ const InvoiceForm = ({
   );
 };
 
-export default InvoiceForm;
+export default CreateInvoiceForm;
 
 const invoiceStatus = [
   {
@@ -423,3 +503,22 @@ const invoiceTypes = [
     value: 'ffb56872-a6ac-4d0a-b480-7dcf8c8538ea',
   },
 ] as const;
+
+const paymentMethods=[
+{
+  label:'Cash',
+  value:'06a85d6b-ed0f-48c7-aa67-72f18b3e6c77',
+},
+{
+  label:'Bank Transfer',
+  value:'f97247c7-95ec-4e17-839d-ad405ff29188',
+},
+{
+  label:'Credit Card',
+  value:'a0d7051c-21a9-43b7-964d-c16ba72437a8',
+},
+{
+  label:'PayPal',
+  value:'2c259366-e579-41bd-8c20-d96da50d4ab2',
+},
+]as const;

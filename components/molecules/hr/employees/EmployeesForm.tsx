@@ -1,6 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
   Form,
   FormControl,
   FormField,
@@ -36,9 +43,9 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 const EmployeesForm = ({
@@ -152,6 +159,13 @@ const EmployeesForm = ({
     console.log('Please check your input fields! ', error);
   };
 
+  const companies = [
+    {
+      label: 'Thor Industries',
+      companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+    },
+  ];
+
   return (
     <div className="flex w-full flex-col gap-4">
       <Form {...form}>
@@ -200,7 +214,7 @@ const EmployeesForm = ({
 
           <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Company Id */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="companyId"
               render={({ field }) => (
@@ -213,6 +227,73 @@ const EmployeesForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+
+            <FormField
+              control={form.control}
+              name="companyId"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col">
+                  <FormLabel>Company</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'flex w-full items-center justify-between gap-1',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                          disabled={isLoading}
+                        >
+                          {field.value
+                            ? companies?.find(
+                                (company) =>
+                                  company.companyId === field.value
+                              )?.label
+                            : 'Choose company'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search for a company..." />
+                        <CommandEmpty>No member found.</CommandEmpty>
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                          {companies?.map((comp, i: Key) => (
+                            <CommandItem
+                              value={comp.label}
+                              className="flex items-center"
+                              key={i}
+                              onSelect={() => {
+                                comp.companyId &&
+                                  form.setValue(
+                                    'companyId',
+                                    comp?.companyId
+                                  );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4 transition-all',
+                                  comp.companyId === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {`${comp.label}`}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
                   <FormMessage />
                 </FormItem>
               )}

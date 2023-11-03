@@ -1,5 +1,7 @@
 import { BASE_URL } from '..';
 
+export const INVOICE_CREATE = BASE_URL + `/api/Invoice/create`;
+
 export const INVOICE_GET_ALL = BASE_URL + `/api/Invoice/invoices`;
 export const INVOICE_REGISTER = BASE_URL + `/api/Invoice/register`;
 export const INVOICE_RECORD_PAYMENT =
