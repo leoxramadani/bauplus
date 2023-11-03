@@ -9,7 +9,6 @@ import {
   clientSubColumnDef,
   clientsColumnDef,
 } from '@/lib/schema/Clients/clients';
-import { Row } from '@tanstack/react-table';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -35,14 +34,6 @@ const Clients = () => {
       });
     }
   }, [isOpen]);
-
-  const renderSubComponent = ({ row }: { row: Row<IClients> }) => {
-    return (
-      <pre style={{ fontSize: '10px' }}>
-        <code>{JSON.stringify(row.original, null, 2)}</code>
-      </pre>
-    );
-  };
 
   return (
     <>
@@ -81,7 +72,6 @@ const Clients = () => {
             data={data}
             columns={clientsColumnDef}
             subcolumns={clientSubColumnDef}
-            renderSubComponent={renderSubComponent}
             getRowCanExpand={() => true}
           />
         )}
