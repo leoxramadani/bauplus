@@ -481,7 +481,7 @@ const MasterDetailRow = ({
           <div className="w-5 pl-5"></div>
         )}
         <div className="flex flex-row">
-          <div className="flex h-full w-[320px] flex-row items-center p-2">
+          <div className="flex h-full w-[322px] flex-row items-center p-2">
             <p>{title}</p>
           </div>
         </div>
