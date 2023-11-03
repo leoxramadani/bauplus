@@ -1,5 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import ClientsForm from '@/components/molecules/Clients/ClientsForm';
+import ClientsForm from '@/components/molecules/clients/ClientsForm1';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';

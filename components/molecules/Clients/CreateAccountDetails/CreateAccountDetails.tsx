@@ -16,7 +16,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { YourAccountDetailsType } from '../ClientsForm';
+import { YourAccountDetailsType } from '../ClientsForm1';
 
 interface ICreateAccount {
   setAccoundModal: React.Dispatch<SetStateAction<boolean>>;
