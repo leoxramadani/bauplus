@@ -240,15 +240,17 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                                 (employee) =>
                                   employee.employeeId === field.value
                               )?.lastName
-                            : 'Choose member'}
+                            : 'Choose employee'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search language..." />
-                        <CommandEmpty>No member found.</CommandEmpty>
+                        <CommandInput placeholder="Search for employee..." />
+                        <CommandEmpty>
+                          No employee found.
+                        </CommandEmpty>
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (
                             <CommandItem
@@ -298,7 +300,6 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter account number"
-                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       disabled={isSubmitting}
