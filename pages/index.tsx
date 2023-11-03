@@ -136,7 +136,7 @@ const Main = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen w-full flex-col gap-4">
-        <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] lg:flex-row">
+        <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5">
           <KpiCard
             title="Gross Revenue"
             metric="€2,500,000"
@@ -175,7 +175,7 @@ const Main = () => {
         </div>
 
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
-          <div className="flex w-full flex-col gap-4 lg:flex-row">
+          <div className="flex w-full flex-col gap-4 2xl:flex-row">
             <Card className="shadow-xl">
               <Title>Income and Expenses</Title>
               <AreaChart
@@ -187,10 +187,10 @@ const Main = () => {
                 valueFormatter={valueFormatter}
               />
             </Card>
-            <Card className="max-w-lg shadow-xl">
+            <Card className="shadow-xl 2xl:max-w-lg">
               <Title>Gross Revenue of Projects</Title>
               <DonutChart
-                className="h-[400px] w-full p-6 text-5xl font-medium tracking-tight"
+                className="h-[400px] w-full p-6 text-3xl font-medium tracking-tight md:text-5xl"
                 data={projects}
                 category="sales"
                 index="name"
@@ -206,8 +206,8 @@ const Main = () => {
               />
             </Card>
           </div>
-          <div className="flex w-full flex-col gap-4 lg:flex-row">
-            <Card className="max-w-2xl shadow-xl">
+          <div className="flex w-full flex-col gap-4 2xl:flex-row">
+            <Card className="shadow-xl 2xl:max-w-2xl">
               <Title>Financial Performance</Title>
               <Subtitle>
                 Revenue and Expenses by Quarter (2023)
