@@ -102,18 +102,16 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuSeparator />
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <Button
-              variant="destructive"
-              className="flex items-center justify-center gap-1"
-            >
+            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
               Delete Client
-            </Button>
+            </div>
           </Modal.Trigger>
           <Modal.Content
             title="Delete Client"
             description="Are you sure you want to delete this client?"
+            className="max-w-lg"
           >
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2">
               <Button
                 variant="destructive"
                 className="w-max"
@@ -122,7 +120,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
                 Delete
               </Button>
               <Modal.Close asChild>
-                <Button variant="default" className="w-max">
+                <Button variant="outline" className="w-max">
                   Close
                 </Button>
               </Modal.Close>
