@@ -42,7 +42,7 @@ const projectName = [
 interface TopbarProps {
   showForm?: boolean;
   isWindowSmall?: boolean;
-  expanded: boolean;
+  expanded?: boolean;
 }
 
 const Topbar: React.FC<TopbarProps> = ({
