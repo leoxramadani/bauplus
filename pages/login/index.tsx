@@ -9,6 +9,7 @@ import {
 import { ILogin, loginSchema } from '@/lib/schemas/auth';
 import { cn } from '@/lib/utils';
 import dashboard from '@/public/Dashboard.png';
+import azure from '@/public/azure.png';
 import binance from '@/public/binance.png';
 import google from '@/public/google.png';
 import mimiro from '@/public/mimiro-black.svg';
@@ -137,7 +138,7 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
             <Button
               variant="outline"
               type="button"
-              className="flex items-center w-full justify-center cursor-not-allowed"
+              className="flex w-full cursor-not-allowed items-center justify-center"
             >
               <svg
                 className="mr-2 h-4 w-4"
@@ -153,7 +154,7 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
               Google
             </Button>
           </TooltipTrigger>
-          <TooltipContent side='bottom'>
+          <TooltipContent side="bottom">
             <p>Not available yet.</p>
           </TooltipContent>
         </Tooltip>
@@ -228,7 +229,7 @@ const Login = () => {
                 <Image src={binance} alt="binance" />
               </div>
               <div className="w-[500px] sm:w-[100px]">
-                <Image src={google} alt="google" />
+                <Image src={azure} alt="google" />
               </div>
               <div className="w-[500px] sm:w-[100px]">
                 <Image src={stripe} alt="stripe" />

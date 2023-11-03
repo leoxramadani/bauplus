@@ -62,9 +62,9 @@ const Topbar: React.FC<TopbarProps> = ({
 
   return (
     <>
-      <div className="flex items-center justify-between py-2">
+      <div className="flex w-full items-center px-2 py-2">
         {showForm && (
-          <div className="flex items-center gap-4">
+          <div className="flex flex-grow items-center gap-4">
             <Form {...form}>
               <form className="flex items-center gap-4">
                 <div className="flex items-center justify-center gap-4">
@@ -73,36 +73,38 @@ const Topbar: React.FC<TopbarProps> = ({
                     name="projectId"
                     render={({ field }) => (
                       <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="All Projects" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {projectName ? (
-                              <>
-                                {projectName.map((x: any) => {
-                                  return (
-                                    <SelectItem
-                                      value={x.projectId}
-                                      key={x.projectId}
-                                    >
-                                      {x.projectName}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
+                        <div className="w-[200px]">
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            value={field.value || '1'}
+                            disabled={isSubmitting}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="All Projects" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {projectName ? (
+                                <>
+                                  {projectName.map((x: any) => {
+                                    return (
+                                      <SelectItem
+                                        value={x.projectId}
+                                        key={x.projectId}
+                                      >
+                                        {x.projectName}
+                                      </SelectItem>
+                                    );
+                                  })}
+                                </>
+                              ) : (
+                                <p>Loading...</p>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -115,7 +117,7 @@ const Topbar: React.FC<TopbarProps> = ({
             </Form>
           </div>
         )}
-        <div className="flex flex-row items-center gap-10">
+        <div className="flex flex-none items-center gap-10">
           {!isWindowSmall && status === 'authenticated' ? (
             <>
               <div className="flex items-center">
@@ -188,10 +190,10 @@ const Topbar: React.FC<TopbarProps> = ({
               </Popover>
             </>
           ) : (
-            <div className="relative flex h-full w-full items-center justify-center">
+            <div className="flex h-full w-full items-center">
               <Link
                 href={'/login'}
-                className="flex w-full items-center gap-1 rounded-lg px-2 py-2 font-semibold text-black transition-all hover:bg-slate-200"
+                className="flex w-full items-center rounded-lg px-2 py-2 font-semibold text-black transition-all hover:bg-slate-200"
               >
                 Login
               </Link>

@@ -209,7 +209,7 @@ const Main = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex h-screen w-full flex-col gap-4">
+      <main className="flex w-full flex-col gap-4">
         <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5">
           <KpiCard
             title="Gross Revenue"
