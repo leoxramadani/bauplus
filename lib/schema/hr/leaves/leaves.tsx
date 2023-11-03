@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -141,6 +142,20 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
   {
     accessorKey: 'leaveStatus',
     header: 'Leave Status',
+    cell: ({ row }) => (
+      <Badge
+        variant={`${
+          row.original.leaveStatus == 'approved'
+            ? 'success'
+            : row.original.leaveStatus == 'pending'
+            ? 'pending'
+            : 'destructive'
+        }`}
+        className=" cursor-none"
+      >
+        {row.original.leaveStatus}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'duration',

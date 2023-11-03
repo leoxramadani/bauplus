@@ -80,7 +80,6 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
     data: employees,
     isError: employeesIsError,
     isLoading: employeesIsLoading,
-    error: employeesError,
   } = useData<IEmployee[]>(
     ['employees'],
     GET_EMPLOYEES_BY_COMPANY +

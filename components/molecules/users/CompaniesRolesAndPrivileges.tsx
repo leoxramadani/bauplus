@@ -1,14 +1,14 @@
 import useTranslation from '@/lib/hooks/useTranslation';
-import { GET_ALL_COMPANIES_QUERY } from '@/lib/queries/company';
-import { useQuery } from '@apollo/client';
 import { Key } from 'react';
 import CompanyPrivileges from './CompanyWithPrivileges';
+import useData from '@/lib/hooks/useData';
 const CompaniesRolesAndPrivileges = ({
   companiesWithPrivileges,
   setCompaniesWithPrivileges,
   values,
 }: any) => {
-  const { data: companies } = useQuery(GET_ALL_COMPANIES_QUERY);
+  const companies:any = [];
+
   const { t } = useTranslation();
   return (
     <div className="flex flex-col">

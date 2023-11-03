@@ -1,4 +1,3 @@
-import Topbar from '@/components/layout/Topbar';
 import AppForm from '@/components/molecules/settings/AppForm';
 import CompanyForm from '@/components/molecules/settings/CompanyForm';
 import CurrencyForm from '@/components/molecules/settings/CurrencyForm';
@@ -54,7 +53,6 @@ const Settings = () => {
 
   return (
     <>
-      <Topbar />
       <div className="mt-6 flex flex-col items-center justify-center gap-8 rounded-xl bg-white p-8">
         <div className="flex flex-row gap-4">
           <Button

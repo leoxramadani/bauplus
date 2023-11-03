@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -17,7 +18,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
-export const invoiceSchema = z.object({
+export const bankAccountSchema = z.object({
   accountName: z.string(),
   accountNumber: z.string(),
   bankAccountStatus: z.object({
@@ -34,7 +35,7 @@ export const invoiceSchema = z.object({
   balance: z.number(),
 });
 
-export type IInvoice = z.infer<typeof invoiceSchema>;
+export type IBank = z.infer<typeof bankAccountSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -88,20 +89,18 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuItem
           onClick={() => handleEdit(item.bankAccountId)}
         >
-          Edit row
+          Edit
         </DropdownMenuItem>
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <Button
-              variant="destructive"
-              className="flex items-center justify-center gap-1"
-            >
-              Delete Client
-            </Button>
+            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete
+            </div>
           </Modal.Trigger>
           <Modal.Content
-            title="Delete Client"
-            description="Are you sure you want to delete this client?"
+            title="Delete Bank Account"
+            description="Are you sure you want to delete this bank account?"
+            className="max-w-lg"
           >
             <div className="flex flex-row gap-4">
               <Modal.Close asChild>
@@ -114,20 +113,19 @@ const ActionsColumn = ({ item }: { item: any }) => {
                 </Button>
               </Modal.Close>
               <Modal.Close asChild>
-                <Button variant="default" className="w-max">
+                <Button variant="outline" className="w-max">
                   Close
                 </Button>
               </Modal.Close>
             </div>
           </Modal.Content>
         </Modal>
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
 
-export const financeColumnDef: ColumnDef<IInvoice>[] = [
+export const bankAccountColumnDef: ColumnDef<IBank>[] = [
   {
     accessorKey: 'accountName',
     header: 'Account name',
@@ -136,10 +134,10 @@ export const financeColumnDef: ColumnDef<IInvoice>[] = [
     accessorKey: 'accountNumber',
     header: 'Account number',
   },
-  {
-    accessorKey: 'bankAccountStatus.statusName',
-    header: 'Status',
-  },
+  // {
+  //   accessorKey: 'bankAccountStatus.statusName',
+  //   header: 'Status',
+  // },
   {
     accessorKey: 'bankAccountType.bankAccountTypeName',
     header: 'Bank account type',
@@ -159,6 +157,22 @@ export const financeColumnDef: ColumnDef<IInvoice>[] = [
   {
     accessorKey: 'balance',
     header: 'Balance',
+  },
+  {
+    accessorKey: 'bankAccountStatus.statusName',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge
+        variant={`${
+          row.original.bankAccountStatus.statusName == 'Active'
+            ? 'success'
+            : 'destructive'
+        }`}
+        className=" cursor-none"
+      >
+        {row.original.bankAccountStatus.statusName}
+      </Badge>
+    ),
   },
   {
     id: 'actions',

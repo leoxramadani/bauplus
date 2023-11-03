@@ -35,7 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { IBankAccountCash } from '@/lib/schema/Finance/finance';
 import {
   IPayment,
   paymentSchema,
@@ -51,9 +50,6 @@ const CreatePayment = () => {
     resolver: zodResolver(paymentSchema),
   });
 
-  function onSubmitCash(data: IBankAccountCash) {
-    console.log('test');
-  }
   function onSubmit(data: IPayment) {
     console.log(data);
   }
@@ -85,12 +81,6 @@ const CreatePayment = () => {
     { label: 'Ден.', value: 'mkd' },
     { label: '$USD', value: 'usd' },
     { label: 'Eur', value: 'eur' },
-  ] as const;
-
-  const payment = [
-    { label: 'PAypal', value: 'paypal' },
-    { label: 'Offline Payment', value: 'op' },
-    { label: 'Bank', value: 'bank' },
   ] as const;
 
   return (
@@ -403,7 +393,6 @@ const CreatePayment = () => {
                   <FormControl className="relative">
                     <Input
                       placeholder="Enter transaction id"
-                      className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       autoComplete="off"
                       {...field}
@@ -427,7 +416,7 @@ const CreatePayment = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a Currency" />
+                        <SelectValue placeholder="Select payment gateway" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -466,14 +455,14 @@ const CreatePayment = () => {
                                 (bankAcc) =>
                                   bankAcc.value === field.value
                               )?.label
-                            : 'Select Invoice'}
+                            : 'Select Bank Account'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-[250px] p-0">
                       <Command>
-                        <CommandInput placeholder="Search language..." />
+                        <CommandInput placeholder="Search bank account..." />
                         <CommandEmpty>No invoice found.</CommandEmpty>
                         <CommandGroup>
                           {bankAccs.map((bankAcc) => (

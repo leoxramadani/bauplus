@@ -127,8 +127,8 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
     resolver: zodResolver(createClientSchema),
     values: {
       ...client,
-      clientBusinessIds: client?.clientBusinessIds[0],
-      clientContactInfos: client?.clientContactInfos[0],
+      clientBusinessIds: client?.clientBusinessIds,
+      clientContactInfos: client?.clientContactInfos,
     },
   });
 
@@ -139,6 +139,21 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
         .get(GET_SPECIFIC_CLIENT + Id)
         .then((res) => {
           setClient(res.data);
+          setAccountDetails(res.data.clientAccountNumbers);
+          form.setValue(
+            'clientAccountNumbers',
+            res.data.clientAccountNumbers
+          );
+          setBusinessDetails(res.data.clientBusinessIds);
+          form.setValue(
+            'clientBusinessIds',
+            res.data.clientBusinessIds
+          );
+          setClientInfos(res.data.clientContactInfos);
+          form.setValue(
+            'clientContactInfos',
+            res.data.clientContactInfos
+          );
         })
         .catch((error) => {
           console.log('error fetching employees->', error);
@@ -156,15 +171,33 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   useEffect(() => {
     form.setValue('clientBusinessIds', businessDetails);
   }, [businessDetails]);
+  useEffect(() => {
+    form.setValue('clientContactInfos', clientInfos);
+  }, [clientInfos]);
 
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
       setIsSubmitting(true);
-      try {
-        //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
-        //   console.log('submit:', data);
-        if (clientId && router.query.id) {
-          const res = await axios.put(
+
+      //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
+      //   console.log('submit:', data);
+      if (clientId && router.query.id) {
+        // const res = await axios.put(
+        //   UPDATE_SPECIFIC_CLIENTS,
+        //   {
+        //     ...data,
+        //     clientAccountNumbers: accountDetails,
+        //     clientBusinessIds: businessDetails,
+        //     clientContactInfos: clientInfos,
+        //   },
+        //   {
+        //     params: {
+        //       id: clientId,
+        //     },
+        //   }
+        // );
+        await axios
+          .put(
             UPDATE_SPECIFIC_CLIENTS,
             {
               ...data,
@@ -177,36 +210,61 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                 id: clientId,
               },
             }
-          );
-          console.log('Update response:', res);
-          toast.success('Successfully updated bank account!');
-          setIsSubmitting(false);
-          setModal(false);
-        } else {
-          const res = await axios.post(
-            CREATE_CLIENTS,
-            {
-              ...data,
-              clientAccountNumbers: accountDetails,
-              clientBusinessIds: businessDetails,
-              clientContactInfos: clientInfos,
-            },
-            {
-              params: {
-                clientTypeId: data.clientTypeId,
-              },
-            }
-          );
-          console.log('Create response:', res);
-          toast.success('Successfully created new client!');
-          setIsSubmitting(false);
-          setModal(false);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        toast.error('There was an issue! Please try again.');
-        setIsSubmitting(false);
+          )
+          .then((res) => {
+            console.log('UPDATED client->', res);
+            router.replace('/hr/employees', undefined, {
+              shallow: true,
+            });
+            setModal(false);
+            setIsSubmitting(false);
+            toast.success('Successfully updated client');
+            // refetchEmployees();
+          })
+          .catch((error) => {
+            console.log('Error UPDATING employee:', error);
+            toast.error(
+              'There was an issue updating client! Please try again.'
+            );
+          });
+      } else {
+        // const res = await axios.post(
+        //   CREATE_CLIENTS,
+        //   {
+        //     ...data,
+        //     clientAccountNumbers: accountDetails,
+        //     clientBusinessIds: businessDetails,
+        //     clientContactInfos: clientInfos,
+        //   },
+        //   {
+        //     params: {
+        //       clientTypeId: data.clientTypeId,
+        //     },
+        //   }
+        // );
+
+        await axios
+          .post(CREATE_CLIENTS, {
+            ...data,
+            clientAccountNumbers: accountDetails,
+            clientBusinessIds: businessDetails,
+            clientContactInfos: clientInfos,
+          })
+          .then((res) => {
+            console.log('Success->', res);
+            toast.success('Client added');
+            setModal(false);
+            setIsSubmitting(false);
+          })
+          .catch((error) => {
+            console.error('Error creating employee:', error);
+            toast.error(
+              'There was an issue adding employee! Please try again.'
+            );
+          });
       }
+
+      setIsSubmitting(false);
     },
     [client /*,accountDetails*/]
   );
@@ -215,14 +273,17 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
     console.log('error====> sadasda', error);
   };
 
-  const handleTrashClick = (indexToRemove: number) => {
+  const handleTrashClick = (
+    indexToRemove: number,
+    setDetails: any
+  ) => {
     // Create a new array with the item removed
     const updatedAccountDetails = accountDetails.filter(
       (_, index) => index !== indexToRemove
     );
 
     // Update the state with the new array
-    setAccountDetails(updatedAccountDetails);
+    setDetails(updatedAccountDetails);
   };
 
   return (
@@ -392,20 +453,6 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                               </TableHeader>
                               <TableBody>
                                 {accountDetails?.map((acc, i) => (
-                                  // <CommandItem
-                                  //   value={
-                                  //     acc.accountNumber +
-                                  //     ' ' +
-                                  //     acc.country
-                                  //   }
-                                  //   className="flex items-center"
-                                  //   key={i}
-                                  //   onSelect={() => {
-                                  //     alert('test');
-                                  //   }}
-                                  // >
-                                  //   {`${acc.accountNumber} ${acc.country}`}
-                                  // </CommandItem>
                                   <TableRow key={i}>
                                     <TableCell>
                                       {acc.accountNumber}
@@ -427,7 +474,10 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         strokeWidth={1.5}
                                         className="h-full cursor-pointer rounded-lg p-1 hover:bg-slate-200 "
                                         onClick={() =>
-                                          handleTrashClick(i)
+                                          handleTrashClick(
+                                            i,
+                                            setAccountDetails
+                                          )
                                         }
                                       />
                                     </TableCell>
@@ -539,7 +589,10 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         strokeWidth={1.5}
                                         className="h-full cursor-pointer rounded-lg p-1 hover:bg-slate-200 "
                                         onClick={() =>
-                                          handleTrashClick(i)
+                                          handleTrashClick(
+                                            i,
+                                            setBusinessDetails
+                                          )
                                         }
                                       />
                                     </TableCell>
@@ -649,7 +702,10 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         strokeWidth={1.5}
                                         className="h-full cursor-pointer rounded-lg p-1 hover:bg-slate-200 "
                                         onClick={() =>
-                                          handleTrashClick(i)
+                                          handleTrashClick(
+                                            i,
+                                            setClientInfos
+                                          )
                                         }
                                       />
                                     </TableCell>

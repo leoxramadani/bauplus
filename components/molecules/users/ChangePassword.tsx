@@ -4,7 +4,6 @@ import {
   IChangePassword,
   changePasswordSchema,
 } from '@/lib/schemas/user';
-import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -12,9 +11,8 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Modal from '../Modal';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '../../ui/input';
 
 const ChangePassword = ({ username }: { username?: string }) => {
   const router = useRouter();
@@ -38,45 +36,28 @@ const ChangePassword = ({ username }: { username?: string }) => {
     resolver: zodResolver(changePasswordSchema),
   });
 
-  const [changePassword, { loading }] = useMutation(
-    CHANGE_PASSWORD_QUERY
-  );
 
   // If validation passes successfully, i.e formState is valid, then the below callback is executed.
   const onSubmit = useCallback(
     async (data: IChangePassword) => {
       try {
-        const result = await changePassword({
-          variables: {
-            username: username ?? session?.user.username,
-            ...data,
-          },
-        });
-
-        if (result.data.changePassword.status === 200) {
-          setIsSaving(false);
-          toast.success(result.data.changePassword.message);
-          setOpen(false);
-        } else {
-          setIsSaving(false);
-          toast.error(result.data.changePassword.message);
-        }
+        console.log('try')
       } catch (e) {
         toast.error(e?.toString());
         setIsSaving(false);
       }
     },
-    [changePassword, router]
+    [router]
   );
 
   // Handles errors coming from GraphQL server after executing onSubmit
   const onError = (errors: any, e: any) => console.log(errors, e);
 
   return (
-    <Modal
+    <div
       className="button cursor-pointer"
-      value={t('Change password')}
-      done={t('Close')}
+      // value={t('Change password')}
+      // done={t('Close')}
     >
       <h2 className="mb-6 mt-10 text-center text-xl font-medium">
         {username
@@ -143,7 +124,7 @@ const ChangePassword = ({ username }: { username?: string }) => {
           <Button>Save</Button>
         </div>
       </form>
-    </Modal>
+    </div>
   );
 };
 

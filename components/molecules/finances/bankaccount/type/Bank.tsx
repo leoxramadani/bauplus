@@ -202,7 +202,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
 
                   <FormControl className="relative">
                     <Input
-                      placeholder="Bank Name"
+                      placeholder="Account Name"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -477,11 +477,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
             />
           </div>
 
-          <Button
-            variant="destructive"
-            loading={isSubmitting}
-            className="w-max"
-          >
+          <Button loading={isSubmitting} className="w-max">
             Submit
           </Button>
         </form>

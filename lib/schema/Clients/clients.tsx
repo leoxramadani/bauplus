@@ -28,7 +28,7 @@ export const clientsSchema = z.object({
   companyName: z.string(),
   clientAccountNumbers: z
     .object({
-      accountNumber: z.string().optional(),
+      accountNumber: z.string(),
       country: z.string().optional(),
     })
     .array(),
@@ -311,11 +311,14 @@ export const createClientSchema = z.object({
       country: z.string().optional(),
     })
     .array(),
-  clientContactInfos: z.object({
-    email: z.string().optional(),
-    phone: z.string().optional(),
-    address: z.string().optional(),
-  }),
+  clientContactInfos: z
+    .object({
+      email: z.string().optional(),
+      phone: z.string().optional(),
+      address: z.string().optional(),
+    })
+    .array()
+    .optional(),
 });
 
 export type ICreateClientSchema = z.infer<typeof createClientSchema>;

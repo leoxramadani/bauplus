@@ -4,6 +4,8 @@ export const LOGIN = BASE_URL + `/api/AuthController/Auth/Login`;
 export const REGISTER =
   BASE_URL + `/api/AuthController/Auth/Register`;
 
+export const REFRESH_TOKEN = 
+  BASE_URL + `/api/AuthController/Auth/RefreshToken`;
 export const RESET_USER_PASSWORD =
   BASE_URL + `/api/AuthController/Auth/ResetUserPassword`;
 export const DISABLE_TWO_FACTOR =

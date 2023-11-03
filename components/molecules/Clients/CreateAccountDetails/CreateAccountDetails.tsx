@@ -110,6 +110,7 @@ const CreateAccountDetails = ({
                       {...field}
                       disabled={isSubmitting}
                       type="number"
+                      
                       className="w-full"
                     />
                   </FormControl>

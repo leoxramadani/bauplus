@@ -5,6 +5,7 @@ import Breadcrumbs from '../ui/breadcrumbs';
 import Loading from './Loading';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Topbar from './Topbar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
@@ -85,7 +86,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             !isWindowSmall &&
             (expanded
               ? `duration-[250ms] ml-[15rem] transition-all`
-              : `duration-[250ms] transition-all md:ml-[4.5rem]`)
+              : `duration-[250ms] transition-all md:ml-[3.5rem]`)
           }`}
         >
           <Breadcrumbs />

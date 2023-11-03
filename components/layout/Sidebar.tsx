@@ -1,26 +1,25 @@
-import mimiroArrow from '@/public/Arrow-M.svg';
-import mimiro from '@/public/mimiro-white.svg';
+import { cn } from '@/lib/utils';
 import {
-  Building,
   Calculator,
-  ChevronRight,
+  ChevronDown,
   ChevronsLeft,
+  ChevronsRight,
   ClipboardList,
-  FileSpreadsheet,
-  FileText,
   Home,
   LayoutDashboard,
   Settings,
+  SettingsIcon,
   ShoppingBasket,
   UserCircle,
   Users,
   Wallet,
   X,
 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import mimiro from 'public/mimiro-new-9.svg';
 import {
   Dispatch,
   ReactNode,
@@ -29,8 +28,22 @@ import {
   useContext,
   useState,
 } from 'react';
-
-interface SidebarItem {
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '../ui/navigation-menu';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../ui/popover';
+import { Separator } from '../ui/separator';
+interface ListItem {
   icon?: React.JSX.Element;
   text?: string;
   alert?: boolean;
@@ -49,10 +62,42 @@ interface Sidebar {
   expanded: boolean;
 }
 
+interface SidebarItem {
+  Icon?: any;
+  text: string;
+  alert?: boolean;
+  href?: string;
+  asDropdown?: boolean;
+  toggleSidebar?: () => void;
+  children?: ReactNode;
+  setOffset?: any;
+  value?: string;
+  list?: any;
+}
+
 const SidebarContext = createContext<any>({
   expanded: false,
   isWindowSmall: false,
 });
+
+const BookUserIcon = ({ className, size }: any): any => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={'lucide-book-user absolute ' + className}
+  >
+    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+    <circle cx="12" cy="8" r="2" />
+    <path d="M15 13a3 3 0 1 0-6 0" />
+  </svg>
+);
 
 const Sidebar = ({
   isOpen,
@@ -63,18 +108,26 @@ const Sidebar = ({
   expanded,
 }: Sidebar) => {
   const { data: session, status } = useSession();
-  const router = useRouter();
+
+  const [userPopoverOpen, setUserPopover] = useState(false);
+
+  const [offset, setOffset] = useState<number | null>(null);
+  const [list, setList] = useState<any>();
+  const [value, setValue] = useState<any>();
+  const [activeTrigger, setActiveTrigger] =
+    useState<HTMLButtonElement | null>(null);
+
   return (
     <aside
       className={`group/sidebar fixed left-0 top-0 z-50 h-full w-full ${
         !isWindowSmall
           ? expanded
             ? `duration-[250ms] max-w-[15rem] transition-all`
-            : 'duration-[250ms] max-w-[4.5rem] transition-all'
+            : 'duration-[250ms] max-w-[3.5rem] transition-all'
           : `duration-[250ms] max-w-[15rem] transition-all`
       }`}
     >
-      <nav className="relative z-50 flex h-full w-full flex-col border-r bg-sidebar shadow-sm">
+      <nav className="relative z-50 flex h-full w-full flex-col bg-sidebar shadow-sm">
         <div className="flex items-center justify-between p-3.5">
           {expanded && (
             <Link
@@ -82,30 +135,19 @@ const Sidebar = ({
               onClick={() =>
                 isWindowSmall ? setIsOpen(false) : null
               }
-              className="px-3"
+              className=""
             >
-              {/* <Image
-              src={Logo}
-              alt="Arkiva Logo"
-              className={`overflow-hidden transition-all ${
-                !isWindowSmall ? (expanded ? `w-32` : `w-0`) : `w-32`
-              } hover:cursor-pointer`}
-            /> */}
               <Image
                 src={mimiro}
                 alt="logo"
                 width={110}
-                height={100}
+                height={110}
               />
-              {/* <h1 className="ml-2 flex w-full items-center justify-center gap-2 text-xl font-bold text-white">
-                <Square strokeWidth={10} size={18} radius={0} />
-                Mimiro
-              </h1> */}
             </Link>
           )}
 
           <button
-            className={`flex items-center justify-center rounded-full p-2 text-white transition-all hover:bg-slate-800 ${
+            className={`flex items-center justify-center rounded-full p-0.5 text-white transition-all hover:bg-slate-800 ${
               !isWindowSmall && !expanded ? 'w-full' : 'w-fit'
             }`}
           >
@@ -119,121 +161,109 @@ const Sidebar = ({
               <ChevronsLeft
                 onClick={() => toggleSidebar()}
                 strokeWidth={1.5}
-                width={30}
-                height={30}
+                size={30}
               />
             ) : (
-              <Image
-                alt="right-arrow-to-open-sidebar"
-                src={mimiroArrow}
-                width={19}
-                height={18}
+              <ChevronsRight
                 onClick={() => toggleSidebar()}
+                strokeWidth={1.5}
+                size={30}
               />
             )}
           </button>
         </div>
 
         <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
-          <ul
-            className="sidebar mb-20 flex flex-col overflow-y-auto px-3 sm:flex-1"
+          <NavigationMenu
+            onValueChange={setValue}
+            orientation="vertical"
+            className="left-0 mb-20 h-full w-full max-w-full items-start px-2"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
+            offset={offset}
           >
-            <SidebarItem
-              icon={<Home size={20} strokeWidth={1.5} />}
-              text="Main"
-              alert={false}
-              href="/"
-            />
-            <SidebarItem
-              icon={<LayoutDashboard size={20} strokeWidth={1.5} />}
-              text="Dashboard"
-              alert={false}
-              href="/dashboard"
-            />
-
-            {/* <SidebarItem
-              icon={<UserCircle size={20} strokeWidth={1.5} />}
-              text="Employees"
-              href="/employees"
-            /> */}
-
-            <SidebarItem
-              icon={<FileText size={20} strokeWidth={1.5} />}
-              text="PNL"
-              alert={false}
-              href="/pnl"
-            />
-
-            <SidebarItem
-              icon={<FileSpreadsheet size={20} strokeWidth={1.5} />}
-              text="Balance Sheet"
-              alert={false}
-              href="/balancesheet"
-            />
-
-            <SidebarItem
-              icon={<Building size={20} strokeWidth={1.5} />}
-              text="Clients"
-              alert={false}
-              href="/clients"
-            />
-
-            {/* Finance */}
-            <SidebarItem
-              icon={<Calculator size={20} strokeWidth={1.5} />}
-              text="Finance"
-              asDropdown
-              toggleSidebar={toggleSidebar}
+            <NavigationMenuList
+              ref={setList}
+              className="h-full w-full flex-col justify-start gap-1 text-sm"
             >
-              {expanded && (
-                <>
-                  <SidebarItem
-                    text="Bank accounts"
-                    alert={false}
-                    href="/finance/bankaccounts"
-                  />
-                  <SidebarItem
-                    text="Credit note"
-                    alert={false}
-                    href="/finance/creditnote"
-                  />
-                  <SidebarItem
-                    text="Estimates"
-                    alert={false}
-                    href="/finance/estimates"
-                  />
-                  <SidebarItem
-                    text="Expenses"
-                    alert={false}
-                    href="/finance/expenses"
-                  />
-                  <SidebarItem
-                    text="Invoice"
-                    alert={false}
-                    href="/finance/invoice"
-                  />
-                  <SidebarItem
-                    text="Payments"
-                    alert={false}
-                    href="/finance/payments"
-                  />
-                  <SidebarItem
-                    text="Proposal"
-                    alert={false}
-                    href="/finance/proposal"
-                  />
-                </>
-              )}
-            </SidebarItem>
-            {/* HR */}
-            <SidebarItem
-              icon={<Users size={20} strokeWidth={1.5} />}
-              text="HR"
-              asDropdown
-              toggleSidebar={toggleSidebar}
-            >
-              {expanded && (
+              <SidebarItem
+                Icon={Home}
+                text="Main"
+                alert={false}
+                href="/"
+              />
+              <SidebarItem
+                Icon={LayoutDashboard}
+                text="Dashboard"
+                alert={false}
+                href="/dashboard"
+              />
+              <SidebarItem
+                Icon={BookUserIcon}
+                text="Clients"
+                alert={false}
+                href="/clients"
+              />
+
+              {/* Finance */}
+              <SidebarItem
+                Icon={Calculator}
+                text="Finance"
+                href="/finance"
+                asDropdown
+                setOffset={setOffset}
+                value={value}
+                list={list}
+              >
+                {
+                  <>
+                    <SidebarItem
+                      text="Bank accounts"
+                      alert={false}
+                      href="/finance/bankaccounts"
+                    />
+                    <SidebarItem
+                      text="Credit note"
+                      alert={false}
+                      href="/finance/creditnote"
+                    />
+                    <SidebarItem
+                      text="Estimates"
+                      alert={false}
+                      href="/finance/estimates"
+                    />
+                    <SidebarItem
+                      text="Expenses"
+                      alert={false}
+                      href="/finance/expenses"
+                    />
+                    <SidebarItem
+                      text="Invoice"
+                      alert={false}
+                      href="/finance/invoice"
+                    />
+                    <SidebarItem
+                      text="Payments"
+                      alert={false}
+                      href="/finance/payments"
+                    />
+                    <SidebarItem
+                      text="Proposal"
+                      alert={false}
+                      href="/finance/proposal"
+                    />
+                  </>
+                }
+              </SidebarItem>
+              {/* HR */}
+              <SidebarItem
+                Icon={Users}
+                text="HR"
+                href="/hr"
+                asDropdown
+                setOffset={setOffset}
+                value={value}
+                list={list}
+              >
                 <>
                   <SidebarItem
                     text="Employees"
@@ -276,18 +306,19 @@ const Sidebar = ({
                     href="/hr/appreciation"
                   />
                 </>
-              )}
-            </SidebarItem>
-            {/* Payroll */}
+              </SidebarItem>
+              {/* Payroll */}
 
-            <SidebarItem
-              icon={<Wallet size={20} strokeWidth={1.5} />}
-              text="Payroll"
-              alert
-              asDropdown
-              toggleSidebar={toggleSidebar}
-            >
-              {expanded && (
+              <SidebarItem
+                Icon={Wallet}
+                text="Payroll"
+                alert
+                href="/payroll"
+                asDropdown
+                setOffset={setOffset}
+                value={value}
+                list={list}
+              >
                 <>
                   <SidebarItem
                     text="Payroll"
@@ -300,197 +331,237 @@ const Sidebar = ({
                     href="/payroll/employee-salary"
                   />
                 </>
-              )}
-            </SidebarItem>
+              </SidebarItem>
 
-            {/* Users */}
-            <SidebarItem
-              icon={<UserCircle size={20} strokeWidth={1.5} />}
-              text="Users"
-              alert={false}
-              href="/users"
-            />
-            {/* Products */}
-            <SidebarItem
-              icon={<ShoppingBasket size={20} strokeWidth={1.5} />}
-              text="Products"
-              alert={false}
-              href="/products"
-            />
-
-            <SidebarItem
-              icon={<ClipboardList size={20} strokeWidth={1.5} />}
-              text="Notice Board"
-              alert
-              href="/notices"
-            ></SidebarItem>
-
-            <SidebarItem
-              icon={<Settings size={20} strokeWidth={1.5} />}
-              text="Settings"
-              alert={false}
-              href="/settings"
-            ></SidebarItem>
-
-            {/* {!isWindowSmall && (
-              <>
-                <hr className="my-3 border-slate-600" />
-                <SidebarItem
-                  icon={<Settings size={20} strokeWidth={1.5} />}
-                  text="Settings"
-                  alert={false}
-                  href="/settings"
-                />
-              </>
-            )} */}
-          </ul>
-        </SidebarContext.Provider>
-        <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-600 bg-inherit">
-          {!isWindowSmall && status === 'authenticated' ? (
-            <div className="flex h-full w-full cursor-pointer p-3 text-gray-50 hover:bg-slate-700">
-              <Image
-                src={`https://ui-avatars.com/api/?name=${
-                  session.user.firstName.charAt(0) +
-                  session.user.lastName.charAt(0)
-                }&background=c7d2fe&color=3730a3&bold=true`}
-                alt=""
-                width={100}
-                height={100}
-                className="mx-auto h-10 w-10 rounded-md "
+              {/* Users */}
+              <SidebarItem
+                Icon={UserCircle}
+                text="Users"
+                alert={false}
+                href="/users"
               />
-              <div
-                className={`
+              {/* Products */}
+              <SidebarItem
+                Icon={ShoppingBasket}
+                text="Products"
+                alert={false}
+                href="/products"
+              />
+
+              <SidebarItem
+                Icon={ClipboardList}
+                text="Notice Board"
+                alert
+                href="/notices"
+              ></SidebarItem>
+
+              <SidebarItem
+                Icon={SettingsIcon}
+                text="Settings"
+                alert={false}
+                href="/settings"
+              />
+            </NavigationMenuList>
+          </NavigationMenu>
+        </SidebarContext.Provider>
+        <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-700 bg-inherit ">
+          {!isWindowSmall && status === 'authenticated' ? (
+            <Popover
+              open={userPopoverOpen}
+              onOpenChange={setUserPopover}
+            >
+              <PopoverTrigger asChild>
+                <div className="flex h-full w-full cursor-pointer p-3 text-gray-50 transition-all hover:bg-slate-800">
+                  <Image
+                    src={`https://ui-avatars.com/api/?name=${
+                      session.user.firstName.charAt(0) +
+                      session.user.lastName.charAt(0)
+                    }&background=c7d2fe&color=3730a3&bold=true`}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="mx-auto h-10 w-10 rounded-md "
+                  />
+                  <div
+                    className={`
                   flex items-center justify-between
                   overflow-hidden transition-all ${
                     expanded ? 'ml-3 w-full' : 'w-0'
                   }
                 `}
-                onClick={() => router.push('/account')}
-              >
-                <div className="leading-4 ">
-                  <h4 className="font-semibold ">
-                    {session.user.firstName} {session.user.lastName}
-                  </h4>
-                  <span className="text-xs">
-                    {session?.user.email}
-                  </span>
+                  >
+                    <div className="leading-4 ">
+                      <h4 className="font-semibold ">
+                        {session.user.firstName}{' '}
+                        {session.user.lastName}
+                      </h4>
+                    </div>
+                  </div>
                 </div>
-                {/* <MoreVertical size={20} /> */}
-              </div>
-            </div>
+              </PopoverTrigger>
+              <PopoverContent asChild side="top">
+                <div className="relative w-[200px] rounded-xl border-slate-700 !bg-[#141e29] px-0 py-2 text-sm leading-loose text-slate-300">
+                  <span className="px-4">{session?.user.email}</span>
+                  <Separator className="mx-auto my-2 w-[calc(100%-32px)] bg-slate-700" />
+                  <ul className="my-2 flex flex-col bg-[#141e29]">
+                    <li>
+                      <Link
+                        href={'/account'}
+                        onClick={() => setUserPopover(false)}
+                        className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-800 hover:text-white"
+                      >
+                        Settings
+                        <Settings size={18} />
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          setUserPopover(!userPopoverOpen);
+                          signOut();
+                        }}
+                        className="block w-full px-4 py-1 text-left transition-[color] hover:bg-slate-800 hover:text-white"
+                      >
+                        Log out
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </PopoverContent>
+            </Popover>
           ) : (
-            <>
-              <Link href={'/login'} className="p-3 text-white">
+            <div className="relative flex h-full w-full items-center justify-center">
+              <Link
+                href={'/login'}
+                className="m-3 flex w-full items-center gap-1 rounded-lg px-2 py-2 text-white transition-all hover:bg-slate-800"
+              >
                 Login
               </Link>
-            </>
+            </div>
           )}{' '}
         </div>
       </nav>
     </aside>
   );
 };
-export default Sidebar;
 
-export function SidebarItem({
-  icon,
+function SidebarItem({
+  Icon,
   text,
   alert,
   href = '#',
   children,
-  toggleSidebar = () => {},
+  setOffset,
+  value,
+  list,
   asDropdown = false,
 }: SidebarItem) {
-  const router = useRouter();
+  const { route } = useRouter();
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const onNodeUpdate = (
+    trigger: HTMLButtonElement | null,
+    itemValue: string
+  ) => {
+    if (trigger && list && value === itemValue) {
+      const triggerRect = trigger.getBoundingClientRect();
+      const listRect = list.getBoundingClientRect();
 
-  const isActive = router.pathname === href;
+      setOffset(Math.round(triggerRect.top - listRect.top));
+    } else if (value === '') {
+      setOffset(null);
+    }
+    return trigger;
+  };
 
-  const handleClick = () => {
-    if (asDropdown) {
-      setIsOpen(!isOpen);
-      if (expanded == false) toggleSidebar();
-    } else router.push(href);
+  const isInCurrentPath = () => {
+    const routeParts = route.split('/');
+
+    for (let i = 0; i < routeParts.length; i++) {
+      console.log(routeParts.slice(0, i + 1).join('/'), href);
+      if (routeParts.slice(0, i + 1).join('/') === href) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
   return (
-    <>
-      <button
-        onClick={handleClick}
-        className={`relative z-50 my-1 flex w-full items-center justify-center gap-4 rounded-md px-[10px] py-[8px]  ${
-          !isWindowSmall ? `` : ``
-        } group cursor-pointer  transition-colors 
-        ${
-          isActive
-            ? 'bg-slate-700 text-white'
-            : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-        }`}
-      >
-        {asDropdown && expanded && (
-          <span
-            className={`absolute right-2 flex h-full items-center`}
+    <NavigationMenuItem
+      className={`focus relative w-full focus:outline-none`}
+      key={text}
+      value={text}
+    >
+      {asDropdown ? (
+        <>
+          <NavigationMenuTrigger
+            key={text}
+            ref={(node) => onNodeUpdate(node, text)}
+            className={` group/trigger outline-transparent ${
+              isInCurrentPath() && 'flex text-white'
+            }`}
           >
-            <ChevronRight
-              size={20}
-              strokeWidth={2}
-              className={`transition-all ${isOpen && '-rotate-90'}`}
+            {Icon && (
+              <Icon
+                size={20}
+                strokeWidth={1.5}
+                className="absolute left-2"
+              />
+            )}
+            <span
+              className={`group-hover/trigger ml-7 w-full text-left ${
+                !expanded && 'invisible'
+              }`}
+            >
+              {text}
+            </span>
+            <ChevronDown
+              size={18}
+              className={`absolute right-3 top-[1px] ml-1 h-full w-4 rotate-0 self-center duration-200 group-data-[state=open]:-rotate-90 ${
+                !expanded && 'hidden'
+              }`}
+              aria-hidden="true"
             />
-          </span>
-        )}
-        {icon ? (
-          <div
-            className=" w-[20px] text-gray-300
-          transition-all group-hover:text-white "
+          </NavigationMenuTrigger>
+          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-4">
+            {children}
+          </NavigationMenuContent>
+        </>
+      ) : (
+        <Link href={href} legacyBehavior passHref>
+          <NavigationMenuLink
+            className={
+              'outline-transparent focus:ring-0 ' +
+              cn(
+                navigationMenuTriggerStyle(),
+                `group/trigger ${
+                  isInCurrentPath() &&
+                  'group/trigger pointer-events-none text-white'
+                }`
+              )
+            }
           >
-            {icon}
-          </div>
-        ) : (
-          <div className=" h-[20px] w-[20px]"></div>
-        )}
-
-        {alert && (
-          <div
-            className={`absolute flex w-full justify-end pr-3 
-            ${
-              !expanded
-                ? `left-2 top-1`
-                : asDropdown
-                ? `-left-6`
-                : `left-0`
-            }`}
-          >
-            <div className={`h-1.5 w-1.5 rounded-full bg-red-500`} />
-          </div>
-        )}
-
-        {!expanded ? (
-          <div
-            className={`
-                          invisible absolute left-full  ml-2 flex h-full  w-full max-w-xs -translate-x-1/2 items-center rounded-md
-                          bg-slate-500 px-2 py-1 text-white opacity-0 transition-all group-hover:visible
-                           group-hover:translate-x-0 group-hover:opacity-100
-                      `}
-          ></div>
-        ) : (
-          <span
-            className={` overflow-hidden text-left transition-all  ${
-              !isWindowSmall
-                ? expanded
-                  ? 'w-full'
-                  : 'w-0'
-                : `w-full`
-            }`}
-          >
-            {text}
-          </span>
-        )}
-      </button>
-      {asDropdown && isOpen && (
-        <div className="flex gap-2">
-          <div className="w-full">{children}</div>
-        </div>
+            {Icon && (
+              <Icon
+                size={20}
+                strokeWidth={1.5}
+                className="absolute left-2"
+              />
+            )}
+            <span
+              className={`w-full text-left ${
+                Icon && 'ml-7'
+              } group-hover/trigger ${
+                Icon && !expanded && 'invisible'
+              }`}
+            >
+              {text}
+            </span>
+          </NavigationMenuLink>
+        </Link>
       )}
-    </>
+    </NavigationMenuItem>
   );
 }
+
+export default Sidebar;
