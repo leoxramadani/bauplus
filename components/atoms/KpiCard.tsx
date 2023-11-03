@@ -3,6 +3,7 @@ import { BadgeDelta, Card, Flex, Metric, Text } from '@tremor/react';
 interface IKpiCard {
   title: string;
   metric: string;
+  pastMonth: number;
   delta: 'increase' | 'decrease';
   percentage: string;
   icon: React.ReactNode; // Add the icon prop
@@ -11,6 +12,7 @@ interface IKpiCard {
 const KpiCard = ({
   title,
   metric,
+  pastMonth,
   delta,
   percentage,
   icon,
@@ -20,7 +22,8 @@ const KpiCard = ({
       <Flex alignItems="start">
         <div>
           <Text>{title}</Text>
-          <Metric>{metric}</Metric>
+          <Metric className="text-[20px]">€{metric}</Metric>
+          <Text>Past month: €{pastMonth}</Text>
           <BadgeDelta className="mt-4" deltaType={delta}>
             {percentage}%
           </BadgeDelta>

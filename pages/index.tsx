@@ -2,6 +2,12 @@
 import KpiCard from '@/components/atoms/KpiCard';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import {
+  GET_PAYABLE_CURRENT_MONTH,
+  GET_PAYABLE_PAST_MONTH,
+  GET_RECIEVABLE_CURRENT_MONTH,
+  GET_RECIEVABLE_PAST_MONTH,
+} from '@/lib/constants/endpoints/finance/invoice';
+import {
   IProject,
   projectColumnDef,
 } from '@/lib/schema/projects/projects';
@@ -13,11 +19,13 @@ import {
   Subtitle,
   Title,
 } from '@tremor/react';
+import axios from 'axios';
 import {
-  HeartHandshake,
-  RefreshCcw,
+  BarChart3,
+  ShoppingCart,
   TrendingUp,
-  User2,
+  Wallet,
+  Wallet2,
 } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -121,6 +129,72 @@ const Main = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
+  const [AmountPayableCurrentMonth, setAmountPayableCurrentMonth] =
+    useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_PAYABLE_CURRENT_MONTH)
+        .then((res) => {
+          setAmountPayableCurrentMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+    }
+    getData();
+  }, []);
+
+  const [AmountPayablePastMonth, setAmountPayablePastMonth] =
+    useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_PAYABLE_PAST_MONTH)
+        .then((res) => {
+          setAmountPayablePastMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+    }
+    getData();
+  }, []);
+
+  const [AmountRecievablePastMonth, setAmountRecievablePastMonth] =
+    useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_RECIEVABLE_PAST_MONTH)
+        .then((res) => {
+          setAmountRecievablePastMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+    }
+    getData();
+  }, []);
+
+  const [
+    AmountRecievableCurrentMonth,
+    setAmountRecievableCurrentMonth,
+  ] = useState<number>();
+  useEffect(() => {
+    async function getData() {
+      await axios
+        .get(GET_RECIEVABLE_CURRENT_MONTH)
+        .then((res) => {
+          setAmountRecievableCurrentMonth(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching finances->', error);
+        });
+    }
+    getData();
+  }, []);
+
   return (
     <>
       <Head>
@@ -136,46 +210,67 @@ const Main = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen w-full flex-col gap-4">
-        <div className="flex w-full flex-col gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] lg:flex-row">
+        <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5">
           <KpiCard
             title="Gross Revenue"
-            metric="€2,500,000"
+            metric={
+              AmountPayableCurrentMonth?.toString() != undefined
+                ? AmountPayableCurrentMonth?.toString()
+                : ''
+            }
+            pastMonth={
+              AmountPayablePastMonth != undefined
+                ? AmountPayablePastMonth
+                : 0
+            }
             percentage="10.2"
+            delta="increase"
+            icon={<Wallet color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="Total Cost of Sales"
+            metric={
+              AmountRecievablePastMonth?.toString() != undefined
+                ? AmountRecievablePastMonth?.toString()
+                : ''
+            }
+            pastMonth={
+              AmountRecievableCurrentMonth != undefined
+                ? AmountRecievableCurrentMonth
+                : 0
+            }
+            percentage="7.5"
+            delta="increase"
+            icon={<ShoppingCart color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="Gross Profit"
+            metric="200,000"
+            pastMonth={120000}
+            percentage="3.0"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
-            title="Total Cost of Sales"
-            metric="€2,300,000"
-            percentage="7.5"
-            delta="increase"
-            icon={<HeartHandshake color="#fff" size={32} />}
-          />
-          <KpiCard
-            title="Gross Profit"
-            metric="€200,000"
-            percentage="3.0"
-            delta="increase"
-            icon={<RefreshCcw color="#fff" size={32} />}
-          />
-          <KpiCard
             title="EBITDA"
-            metric="€100,000"
+            metric="100,000"
+            pastMonth={80000}
             percentage="1.8"
             delta="increase"
-            icon={<User2 color="#fff" size={32} />}
+            icon={<BarChart3 color="#fff" size={32} />}
           />
           <KpiCard
             title="Net Revenue"
-            metric="€50,000"
+            metric="50,000"
+            pastMonth={30000}
             percentage="1.8"
             delta="increase"
-            icon={<User2 color="#fff" size={32} />}
+            icon={<Wallet2 color="#fff" size={32} />}
           />
         </div>
 
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
-          <div className="flex w-full flex-col gap-4 lg:flex-row">
+          <div className="flex w-full flex-col gap-4 2xl:flex-row">
             <Card className="shadow-xl">
               <Title>Income and Expenses</Title>
               <AreaChart
@@ -187,10 +282,10 @@ const Main = () => {
                 valueFormatter={valueFormatter}
               />
             </Card>
-            <Card className="max-w-lg shadow-xl">
+            <Card className="shadow-xl 2xl:max-w-lg">
               <Title>Gross Revenue of Projects</Title>
               <DonutChart
-                className="h-[400px] w-full p-6 text-5xl font-medium tracking-tight"
+                className="h-[400px] w-full p-6 text-3xl font-medium tracking-tight md:text-5xl"
                 data={projects}
                 category="sales"
                 index="name"
@@ -206,8 +301,8 @@ const Main = () => {
               />
             </Card>
           </div>
-          <div className="flex w-full flex-col gap-4 lg:flex-row">
-            <Card className="max-w-2xl shadow-xl">
+          <div className="flex w-full flex-col gap-4 2xl:flex-row">
+            <Card className="shadow-xl 2xl:max-w-2xl">
               <Title>Financial Performance</Title>
               <Subtitle>
                 Revenue and Expenses by Quarter (2023)
