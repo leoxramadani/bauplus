@@ -1,3 +1,4 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,13 +11,18 @@ import { FILE } from "dns";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Generate from './Generate';
 
 const GenerateInvoiceForm = () => {
+  const [generateModalOpen,setGenerateModalOpen]=useState(false)
   const [file,setFile]=useState<any>();
+
+  const [ocrData,setOcrData]=useState<any>()
 
   const form = useForm<IGenerateInvoice>({
     resolver: zodResolver(generateInvoiceSchema),
   });
+
   const handleUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -48,7 +54,9 @@ const GenerateInvoiceForm = () => {
         },
       })
       .then((res)=>{
-        console.log("response=>",res);       
+        console.log("response=>",res.data); 
+        setOcrData(res.data)
+        setGenerateModalOpen(true)
       }).catch((error)=>{
         console.log("error=>",error);        
       })
@@ -58,23 +66,33 @@ const GenerateInvoiceForm = () => {
 
   const onError=(error:any)=>{
     console.log("error generate->",error);
-    
   }
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      {/* <Label htmlFor="picture">Image file</Label>
+      <form onSubmit={form.handleSubmit(onSubmit,onError)} className="flex flex-col gap-4">
+      {/* 
       <Input id="picture" type="file" value={file}/> */}
-<div className="flex flex-col gap-1">
-            <label htmlFor="fiscal.nrExtern">
+          <div className="flex flex-col gap-1">
+            {/* <label htmlFor="fiscal.nrExtern">
               Image
               <span className="text-red-600">*</span>
-            </label>
-            <input type="file" onChange={handleUpload} />
+            </label> */}
+            <Label htmlFor="picture">Image</Label>
+            <Input type="file" onChange={handleUpload} />
           </div>
       <Button type="submit">Submit</Button>
       </form>
+
+
+      {
+        ocrData &&
+        <Modal open={generateModalOpen} onOpenChange={setGenerateModalOpen}>
+        <Modal.Content className="w-full max-w-3xl">
+          <Generate data={ocrData}/>
+        </Modal.Content>
+      </Modal>
+      }
     </div>
   );
 };
