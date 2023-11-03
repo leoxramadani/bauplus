@@ -217,38 +217,42 @@ const Main = () => {
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
-          {/* <KpiCard
-            title="Total Cost of Sales"
-            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
-            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
-            percentage="7.5"
-            delta="increase"
-            icon={<HeartHandshake color="#fff" size={32} />}
-          /> */}
+
           <KpiCard
-            title="Gross Expenses"
-            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
-            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
+            title="COGS"
+            // metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
+            // pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
+            metric="120,053"
+            pastMonth={0}
             percentage="3.0"
             delta="increase"
             icon={<RefreshCcw color="#fff" size={32} />}
           />
           <KpiCard
+            title="EBIT"
+            metric={AmountPayableCurrentMonth?.toString() != undefined ? AmountPayableCurrentMonth?.toString() : ""}
+            pastMonth={AmountPayablePastMonth != undefined ? AmountPayablePastMonth : 0}
+            percentage="7.5"
+            delta="increase"
+            icon={<HeartHandshake color="#fff" size={32} />}
+          />
+          <KpiCard
             title="EBITDA"
-            metric="€12,532"
+            metric="532"
             pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
           />
-          {/* <KpiCard
-            title="Net Revenue"
-            metric="€50,000"
+
+          <KpiCard
+            title="Net Income"
+            metric="0"
             pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<User2 color="#fff" size={32} />}
-          /> */}
+          />
         </div>
 
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
