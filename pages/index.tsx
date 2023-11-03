@@ -214,22 +214,6 @@ const Main = () => {
           <KpiCard
             title="Gross Revenue"
             metric={
-              AmountPayableCurrentMonth?.toString() != undefined
-                ? AmountPayableCurrentMonth?.toString()
-                : ''
-            }
-            pastMonth={
-              AmountPayablePastMonth != undefined
-                ? AmountPayablePastMonth
-                : 0
-            }
-            percentage="10.2"
-            delta="increase"
-            icon={<Wallet color="#fff" size={32} />}
-          />
-          <KpiCard
-            title="Total Cost of Sales"
-            metric={
               AmountRecievablePastMonth?.toString() != undefined
                 ? AmountRecievablePastMonth?.toString()
                 : ''
@@ -244,25 +228,41 @@ const Main = () => {
             icon={<ShoppingCart color="#fff" size={32} />}
           />
           <KpiCard
-            title="Gross Profit"
-            metric="200,000"
-            pastMonth={120000}
+            title="EBIT"
+            metric={
+              AmountPayableCurrentMonth?.toString() != undefined
+                ? AmountPayableCurrentMonth?.toString()
+                : ''
+            }
+            pastMonth={
+              AmountPayablePastMonth != undefined
+                ? AmountPayablePastMonth
+                : 0
+            }
+            percentage="10.2"
+            delta="increase"
+            icon={<Wallet color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="COGs"
+            metric="120053"
+            pastMonth={20625}
             percentage="3.0"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
             title="EBITDA"
-            metric="100,000"
-            pastMonth={80000}
+            metric="532"
+            pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<BarChart3 color="#fff" size={32} />}
           />
           <KpiCard
             title="Net Revenue"
-            metric="50,000"
-            pastMonth={30000}
+            metric="0"
+            pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<Wallet2 color="#fff" size={32} />}

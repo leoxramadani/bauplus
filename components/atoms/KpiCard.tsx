@@ -17,13 +17,15 @@ const KpiCard = ({
   percentage,
   icon,
 }: IKpiCard) => {
+  const formattedMetric = Number(metric).toLocaleString();
+  const formattedPastMonth = Number(pastMonth).toLocaleString();
   return (
     <Card className="mx-auto max-w-sm rounded-none">
       <Flex alignItems="start">
         <div>
           <Text>{title}</Text>
-          <Metric className="text-[20px]">€{metric}</Metric>
-          <Text>Past month: €{pastMonth}</Text>
+          <Metric className="text-[20px]">€{formattedMetric}</Metric>
+          <Text>Past month: €{formattedPastMonth}</Text>
           <BadgeDelta className="mt-4" deltaType={delta}>
             {percentage}%
           </BadgeDelta>
