@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Document,
   Font,
@@ -6,11 +7,10 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer';
-import React, { useEffect, useState } from 'react';
-import { generalStyle } from './styles';
-import { ThorLogo } from './ThorLogo';
+import React, { useState } from 'react';
+import Modal from '../Modal';
 import { EverestLogo } from './EverestLogo';
-import { Button } from '@/components/ui/button';
+import { generalStyle } from './styles';
 Font.register({
   family: 'Roboto',
   src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf',
@@ -63,6 +63,7 @@ interface pdfInputs {
   companyName: string;
   totalAmount: string;
   invoiceDate: Date;
+  dueDate: Date;
   // Add more parameters as needed
 }
 
@@ -70,42 +71,30 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   companyName,
   totalAmount,
   invoiceDate,
+  dueDate = new Date(new Date().getDate() + 15),
 }) => {
-  const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [subject, setSubject] = useState('');
-  const [dueDate, setDueDate] = useState(new Date(invoiceDate?.getDate() + 15));
-
+  const [invoiceNumber, setInvoiceNumber] = useState('#TestNumber');
+  const [subject, setSubject] = useState('Everest XH.D.');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   // Transform the values into an array
 
   const [pdfData, setPdfData] = useState<React.ReactElement | null>(
     null
   );
 
-  useEffect(() => {
-    if (invoiceDate) {
-      // Parse the issueDate to a Date object
-      const issueDateObj = new Date(invoiceDate);
-
-      // Calculate the dueDate by adding 15 days to issueDate
-      issueDateObj.setDate(issueDateObj.getDate() + 15);
-
-      // Set the dueDate state variable
-      setDueDate(issueDateObj);
-    }
-  }, [invoiceDate]);
-
   const [selectedLogo, setSelectedLogo] = useState('1');
 
-  const handleLogoChange = (event: { target: { value: any } }) => {
-    const logoId = event.target.value;
-    setSelectedLogo(logoId);
-  };
-
   const generatePDF = () => {
-    if (companyName || subject || invoiceDate || totalAmount || dueDate !== null) {
+    if (
+      companyName ||
+      subject ||
+      invoiceDate ||
+      totalAmount ||
+      dueDate !== null
+    ) {
       // Create the PDF content
       const selectedLogoComponent =
-        selectedLogo === '1' ? <ThorLogo /> : <EverestLogo />;
+        selectedLogo === '1' ? <EverestLogo /> : <EverestLogo />;
 
       const totalWithoutVAT = Number(totalAmount) / (1 + 0.18);
 
@@ -202,7 +191,11 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                     БРОЈ НА ФАКТУРА / NUMRI FATURËS
                   </Text>
                   <Text
-                    style={{ fontSize: 10, fontWeight: 'semibold' }}
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 'semibold',
+                      marginTop: 5,
+                    }}
                   >
                     {invoiceNumber}
                   </Text>
@@ -256,6 +249,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                         style={{
                           fontSize: 10,
                           fontWeight: 600,
+                          marginTop: 10,
                         }}
                       >
                         {invoiceDate.toDateString()}
@@ -278,240 +272,242 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                         style={{
                           fontSize: 10,
                           fontWeight: 600,
+                          marginTop: 10,
                         }}
                       >
-                        {dueDate.toDateString()}
+                        {dueDate?.toDateString()}
                       </Text>
                     </View>
                   </View>
                 </View>
 
                 {/* tabela */}
-                
 
-                  <View>
+                <View>
+                  <View
+                    style={[
+                      generalStyle.tableRow,
+                      {
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        marginTop: 10,
+                      },
+                    ]}
+                  >
                     <View
                       style={[
-                        generalStyle.tableRow,
+                        generalStyle.tableCell,
                         {
+                          width: '70%',
+                          alignItems: 'flex-end',
                           justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          marginTop: 10,
+                          flexDirection: 'row',
                         },
                       ]}
                     >
+                      <Text style={[generalStyle.tableCellRow]}>
+                        Цена без ДДВ / Çmimi pa TVSH{' '}
+                      </Text>
                       <View
                         style={[
                           generalStyle.tableCell,
                           {
-                            width: '70%',
+                            width: '30%',
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
-                            flexDirection: 'row',
                           },
                         ]}
                       >
-                        <Text style={[generalStyle.tableCellRow]}>
-                          Цена без ДДВ / Çmimi pa TVSH{' '}
-                        </Text>
-                        <View
-                          style={[
-                            generalStyle.tableCell,
-                            {
-                              width: '30%',
-                              alignItems: 'flex-end',
-                              justifyContent: 'flex-end',
-                            },
-                          ]}
+                        <Text
+                          style={{
+                            ...generalStyle.tableCellRow,
+                            textTransform: 'lowercase',
+                          }}
                         >
-                          <Text
-                            style={{
-                              ...generalStyle.tableCellRow,
-                              textTransform: 'lowercase',
-                            }}
-                          >
-                            {totalWithoutVAT.toFixed(2)} ден.
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-
-                    <View
-                      style={[
-                        generalStyle.tableRow,
-                        {
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          marginBottom: '10px',
-                        },
-                      ]}
-                    >
-                      <View
-                        style={[
-                          generalStyle.tableCell,
-                          {
-                            width: '70%',
-                            alignItems: 'flex-end',
-                            justifyContent: 'flex-end',
-                            flexDirection: 'row',
-                          },
-                        ]}
-                      >
-                        <Text style={[generalStyle.tableCellRow]}>
-                          ДДВ / TVSH-ja{' '}
+                          {totalWithoutVAT.toFixed(2)} ден.
                         </Text>
-                        <View
-                          style={[
-                            generalStyle.tableCell,
-                            {
-                              width: '30%',
-                              alignItems: 'flex-end',
-                              justifyContent: 'flex-end',
-                            },
-                          ]}
-                        >
-                          <Text
-                            style={{
-                              ...generalStyle.tableCellRow,
-                              textTransform: 'lowercase',
-                            }}
-                          >
-                            {vatAmount.toFixed(2)} ден.
-                          </Text>
-                        </View>
                       </View>
                     </View>
                   </View>
 
-                  <View>
+                  <View
+                    style={[
+                      generalStyle.tableRow,
+                      {
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        marginBottom: '10px',
+                      },
+                    ]}
+                  >
                     <View
                       style={[
-                        generalStyle.tableRow,
+                        generalStyle.tableCell,
                         {
+                          width: '70%',
+                          alignItems: 'flex-end',
                           justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          borderTop: 0.3,
+                          flexDirection: 'row',
                         },
                       ]}
                     >
+                      <Text style={[generalStyle.tableCellRow]}>
+                        ДДВ / TVSH-ja{' '}
+                      </Text>
                       <View
                         style={[
                           generalStyle.tableCell,
                           {
-                            width: '70%',
+                            width: '30%',
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
-                            flexDirection: 'row',
                           },
                         ]}
                       >
-                        <Text style={[generalStyle.tableCellRow]}>
-                          Вкупно / Totali{' '}
-                        </Text>
-                        <View
-                          style={[
-                            generalStyle.tableCell,
-                            {
-                              width: '30%',
-                              alignItems: 'flex-end',
-                              justifyContent: 'flex-end',
-                            },
-                          ]}
+                        <Text
+                          style={{
+                            ...generalStyle.tableCellRow,
+                            textTransform: 'lowercase',
+                          }}
                         >
-                          <Text
-                            style={{
-                              ...generalStyle.tableCellRow,
-                              textTransform: 'lowercase',
-                            }}
-                          >
-                            {totalAmount} ден.
-                          </Text>
-                        </View>
+                          {vatAmount.toFixed(2)} ден.
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+
+                <View>
+                  <View
+                    style={[
+                      generalStyle.tableRow,
+                      {
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        borderTop: 0.3,
+                      },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        generalStyle.tableCell,
+                        {
+                          width: '70%',
+                          alignItems: 'flex-end',
+                          justifyContent: 'flex-end',
+                          flexDirection: 'row',
+                        },
+                      ]}
+                    >
+                      <Text style={[generalStyle.tableCellRow]}>
+                        Вкупно / Totali{' '}
+                      </Text>
+                      <View
+                        style={[
+                          generalStyle.tableCell,
+                          {
+                            width: '30%',
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-end',
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            ...generalStyle.tableCellRow,
+                            textTransform: 'lowercase',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {totalAmount} ден.
+                        </Text>
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
+            </View>
 
-              {/* date, received, director */}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  padding: 17,
-                  borderRadius: 12,
-                  backgroundColor: 'white',
-                  marginTop: 12,
-                  border: 1,
-                  margin: 10,
-                  borderColor: '#DCDCDC',
-                }}
-              >
-                {/* date */}
-                <View style={{ borderBottom: 0.4 }}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      paddingBottom: 25,
-                      paddingHorizontal: 15,
-                      fontFamily: 'Inter'
-                    }}
-                  >
-                    Датум / Data
-                  </Text>
-                </View>
-
-                {/* received */}
-                <View style={{ borderBottom: 0.4 }}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      paddingBottom: 25,
-                      paddingHorizontal: 15,
-                      fontFamily: 'Inter'
-                    }}
-                  >
-                    Примил / Marrë nga
-                  </Text>
-                </View>
-
-                {/* director */}
-                <View style={{ borderBottom: 0.4 }}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      paddingBottom: 25,
-                      paddingHorizontal: 15,
-                      fontFamily: 'Inter'
-                    }}
-                  >
-                    Управител / Drejtor
-                  </Text>
-                </View>
-              </View>
-
-              {/* footer */}
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                }}
-              >
+            {/* date, received, director */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: 17,
+                borderRadius: 12,
+                backgroundColor: 'white',
+                marginTop: 5,
+                border: 1,
+                marginHorizontal: 27,
+                borderColor: '#DCDCDC',
+              }}
+            >
+              {/* date */}
+              <View style={{ borderBottom: 0.4 }}>
                 <Text
                   style={{
                     fontSize: 10,
-                    borderTop: 1,
-                    paddingTop: 7,
-                    borderStyle: 'dashed',
-                    paddingHorizontal: 10,
-                    fontFamily: 'Inter'
+                    paddingBottom: 25,
+                    paddingHorizontal: 15,
+                    fontFamily: 'Inter',
                   }}
                 >
-                  Платете во рок од 15 дена од добивањето на оваа
-                  фактура. / Ju lutemi që ta paguani faturën brenda 15
-                  ditëve nga marrja e saj.
+                  Датум / Data
                 </Text>
               </View>
+
+              {/* received */}
+              <View style={{ borderBottom: 0.4 }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    paddingBottom: 25,
+                    paddingHorizontal: 15,
+                    fontFamily: 'Inter',
+                  }}
+                >
+                  Примил / Marrë nga
+                </Text>
+              </View>
+
+              {/* director */}
+              <View style={{ borderBottom: 0.4 }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    paddingBottom: 25,
+                    paddingHorizontal: 15,
+                    fontFamily: 'Inter',
+                  }}
+                >
+                  Управител / Drejtor
+                </Text>
+              </View>
+            </View>
+
+            {/* footer */}
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 10,
+                  borderTop: 1,
+                  paddingTop: 7,
+                  borderStyle: 'dashed',
+                  paddingHorizontal: 10,
+                  fontFamily: 'Inter',
+                  marginBottom: 10,
+                }}
+              >
+                Платете во рок од 15 дена од добивањето на оваа
+                фактура. / Ju lutemi që ta paguani faturën brenda 15
+                ditëve nga marrja e saj.
+              </Text>
+            </View>
             {/* end - whole page */}
           </Page>
         </Document>
@@ -530,17 +526,37 @@ const PDFRenderer: React.FC<pdfInputs> = ({
 
   return (
     <>
-      <div>
-      <Button onClick={handleButtonClick}>
-        Generate Invoice
-      </Button>
-
-        {pdfData ? (
-          <PDFViewer width="100%" height={800}>
-            {pdfData}
-          </PDFViewer>
-        ) : null}
-      </div>
+      {companyName !== undefined &&
+      totalAmount !== undefined &&
+      totalAmount !== '' &&
+      invoiceDate &&
+      invoiceDate.getTime() !== 0 ? (
+        <Modal
+          open={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+        >
+          <Modal.Trigger asChild>
+            <Button
+              onClick={handleButtonClick}
+              className="inline w-max bg-red-500"
+            >
+              Generate the invoice as PDF
+            </Button>
+          </Modal.Trigger>
+          <Modal.Content
+            title="PDF Preview"
+            description="You can go back and change the inputs if you don't like something."
+          >
+            {pdfData ? (
+              <PDFViewer width="100%" height={500}>
+                {pdfData}
+              </PDFViewer>
+            ) : null}
+          </Modal.Content>
+        </Modal>
+      ) : (
+        ''
+      )}
     </>
   );
 };
