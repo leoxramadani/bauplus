@@ -194,6 +194,28 @@ const Main = () => {
     }
     getData();
   }, []);
+  const [COGsCalculatedCurrentMonth,setCOGsCalculatedCurrentMonth] = useState<number>(0);
+  const [COGsCalculatedPastMonth,setCOGsCalculatedPastMonth] = useState<number>(0);
+  useEffect(()=>{
+
+    if(AmountRecievableCurrentMonth != undefined || AmountPayableCurrentMonth != undefined)
+    {
+      const x1 = AmountRecievableCurrentMonth
+      const x2 = AmountPayableCurrentMonth
+      const y = (x1 != undefined ? x1 : 0) -(x2 != undefined ? x2 : 0);
+      setCOGsCalculatedCurrentMonth(y);
+    }
+    if(AmountRecievableCurrentMonth != undefined || AmountPayableCurrentMonth != undefined)
+    {
+      const x1 = AmountRecievablePastMonth
+      const x2 = AmountPayablePastMonth
+      const y = (x1 != undefined ? x1 : 0) -(x2 != undefined ? x2 : 0);
+      setCOGsCalculatedPastMonth(y);
+    }
+
+  },[AmountRecievableCurrentMonth,AmountPayableCurrentMonth,AmountRecievablePastMonth,AmountPayablePastMonth])
+
+
 
   return (
     <>
@@ -214,13 +236,13 @@ const Main = () => {
           <KpiCard
             title="Gross Revenue"
             metric={
-              AmountRecievablePastMonth?.toString() != undefined
-                ? AmountRecievablePastMonth?.toString()
-                : ''
+              AmountRecievableCurrentMonth?.toString() != undefined
+              ? AmountRecievableCurrentMonth?.toString()
+              : '0'
             }
             pastMonth={
-              AmountRecievableCurrentMonth != undefined
-                ? AmountRecievableCurrentMonth
+              AmountRecievablePastMonth != undefined
+                ? AmountRecievablePastMonth
                 : 0
             }
             percentage="7.5"
@@ -245,8 +267,8 @@ const Main = () => {
           />
           <KpiCard
             title="COGs"
-            metric="120053"
-            pastMonth={20625}
+            metric={COGsCalculatedCurrentMonth.toString() != undefined ? COGsCalculatedCurrentMonth.toString() : '0'}
+            pastMonth={COGsCalculatedPastMonth != undefined ? COGsCalculatedPastMonth : 0}
             percentage="3.0"
             delta="increase"
             icon={<TrendingUp color="#fff" size={32} />}
