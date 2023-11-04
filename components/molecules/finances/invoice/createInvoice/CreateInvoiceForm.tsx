@@ -45,7 +45,6 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
-//import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
@@ -171,10 +170,6 @@ const CreateInvoiceForm = ({
     } else {
       setDueDate(form.getValues().dueDate);
     }
-
-    console.log(
-      `Company name ${companyName}, Invoice Date ${invoiceDate}, Total Amount: ${totalAmount}, Due Date: ${dueDate}`
-    );
   }, [
     form.watch('clientId'),
     form.watch('invoiceDate'),
