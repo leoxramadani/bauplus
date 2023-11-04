@@ -29,10 +29,14 @@ const GeneratedForm = ({data}:IGenerateProps) => {
 
   const onSubmit = useCallback(
     async (data: IgeneratedInvoice) => {
+
+      const paidAmount = parseFloat(data.total_amount)-parseFloat(data.total_vat);
+      console.log("paid=>",paidAmount);
+      
     axios.post(INVOICE_REGISTER+
       `?clientId=${`f231d0e8-0ae8-49dd-bdc2-c10db7d70259`}
-      &totalAmount=${Number(data.total_amount)}
-      &paidAmount=${Number(data.total_amount)-Number(data.total_vat)}`
+      &totalAmount=${parseFloat(data.total_amount)}
+      &paidAmount=${parseFloat(`${paidAmount}`)}`
 
     ).then((res)=>{
       console.log("Successfully created generated invoice=>",res.data);
