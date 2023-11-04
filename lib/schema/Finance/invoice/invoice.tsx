@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
+import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +9,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
+import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
-import axios from 'axios';
-import { MoreHorizontal } from 'lucide-react';
+import { FileText, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as z from 'zod';
+import { IClients } from '../../Clients/clients';
 
 // export const invoiceSchema = z.object({
 //   invoiceId: z.string().optional(),
@@ -193,7 +195,61 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
+  {
+    id: 'pdfInvoice',
+    cell: ({ row }) => <GeneratePDF item={row.original} />,
+  },
 ];
+
+const GeneratePDF = ({ item }: { item: any }) => {
+  const {
+    data: clients,
+    isError: clientsIsError,
+    isLoading: clientsIsLoading,
+  } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
+
+  if (clientsIsLoading) {
+    // While data is loading, you can display a loading indicator
+    return <div>Loading clients data...</div>;
+  }
+
+  if (clientsIsError) {
+    // Handle error, you can display an error message or take appropriate action
+    return <div>Error loading clients data.</div>;
+  }
+
+  if (!clients || clients.length === 0) {
+    // Handle the case when clients data is empty
+    return <div>No clients data available.</div>;
+  }
+
+  // Find the client with the matching clientId
+  const clientWithMatchingId = clients.find(
+    (client) => client.clientId === item.clientId
+  );
+
+  if (!clientWithMatchingId) {
+    // Handle the case when no matching client is found
+    return <div>No client data found for this invoice.</div>;
+  }
+
+  const companyName = clientWithMatchingId.companyName;
+
+  return (
+    <PDFRenderer
+      companyName={String(companyName)}
+      totalAmount={String(item.totalAmount)}
+      invoiceDate={new Date(item.invoiceDate)}
+      dueDate={new Date(item.dueDate)}
+      content={
+        <Button className="p-2">
+          <FileText className="w-4" />
+        </Button>
+      }
+    />
+  );
+};
+
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);

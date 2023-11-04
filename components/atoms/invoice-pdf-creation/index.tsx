@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Document,
   Font,
@@ -9,6 +8,7 @@ import {
 } from '@react-pdf/renderer';
 import React, { useState } from 'react';
 import Modal from '../Modal';
+import ButtonElement from './ButtonElement';
 import { EverestLogo } from './EverestLogo';
 import { generalStyle } from './styles';
 Font.register({
@@ -64,6 +64,7 @@ interface pdfInputs {
   totalAmount: string;
   invoiceDate: Date;
   dueDate: Date;
+  content: JSX.Element;
   // Add more parameters as needed
 }
 
@@ -72,6 +73,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   totalAmount,
   invoiceDate,
   dueDate = new Date(new Date().getDate() + 15),
+  content,
 }) => {
   const [invoiceNumber, setInvoiceNumber] = useState('#TestNumber');
   const [subject, setSubject] = useState('Everest XH.D.');
@@ -526,37 +528,30 @@ const PDFRenderer: React.FC<pdfInputs> = ({
 
   return (
     <>
-      {companyName !== undefined &&
-      totalAmount !== undefined &&
-      totalAmount !== '' &&
-      invoiceDate &&
-      invoiceDate.getTime() !== 0 ? (
-        <Modal
-          open={isCreateModalOpen}
-          onOpenChange={setIsCreateModalOpen}
-        >
-          <Modal.Trigger asChild>
-            <Button
-              onClick={handleButtonClick}
-              className="inline w-max bg-red-500"
-            >
-              Generate the invoice as PDF
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="PDF Preview"
-            description="You can go back and change the inputs if you don't like something."
+      <Modal
+        open={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+      >
+        <Modal.Trigger asChild>
+          {/* <Button
+            onClick={handleButtonClick}
+            className="inline w-max bg-red-500"
           >
-            {pdfData ? (
-              <PDFViewer width="100%" height={500}>
-                {pdfData}
-              </PDFViewer>
-            ) : null}
-          </Modal.Content>
-        </Modal>
-      ) : (
-        ''
-      )}
+            Generate the invoice as PDF
+          </Button> */}
+          <ButtonElement onClick={generatePDF} content={content} />
+        </Modal.Trigger>
+        <Modal.Content
+          title="PDF Preview"
+          description="You can go back and change the inputs if you don't like something."
+        >
+          {pdfData ? (
+            <PDFViewer width="100%" height={500}>
+              {pdfData}
+            </PDFViewer>
+          ) : null}
+        </Modal.Content>
+      </Modal>
     </>
   );
 };
