@@ -12,7 +12,7 @@ import {
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
-import { FileText, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as z from 'zod';
@@ -195,13 +195,12 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
-  {
-    id: 'pdfInvoice',
-    cell: ({ row }) => <GeneratePDF item={row.original} />,
-  },
 ];
 
-const GeneratePDF = ({ item }: { item: any }) => {
+const ActionsColumn = ({ item }: { item: any }) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   const {
     data: clients,
     isError: clientsIsError,
@@ -234,25 +233,6 @@ const GeneratePDF = ({ item }: { item: any }) => {
   }
 
   const companyName = clientWithMatchingId.companyName;
-
-  return (
-    <PDFRenderer
-      companyName={String(companyName)}
-      totalAmount={String(item.totalAmount)}
-      invoiceDate={new Date(item.invoiceDate)}
-      dueDate={new Date(item.dueDate)}
-      content={
-        <Button className="p-2">
-          <FileText className="w-4" />
-        </Button>
-      }
-    />
-  );
-};
-
-const ActionsColumn = ({ item }: { item: any }) => {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -334,6 +314,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
               </Modal.Close>
             </div>
           </Modal.Content>
+          <DropdownMenuSeparator />
+          <PDFRenderer
+            companyName={String(companyName)}
+            totalAmount={String(item.totalAmount)}
+            invoiceDate={new Date(item.invoiceDate)}
+            dueDate={new Date(item.dueDate)}
+            content="PDF of Invoice"
+          />
         </Modal>
       </DropdownMenuContent>
     </DropdownMenu>

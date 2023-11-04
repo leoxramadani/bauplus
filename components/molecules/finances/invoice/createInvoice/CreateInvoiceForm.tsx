@@ -512,11 +512,6 @@ const CreateInvoiceForm = ({
                 totalAmount={String(totalAmount)}
                 invoiceDate={invoiceDate}
                 dueDate={dueDate}
-                content={
-                  <Button className="inline w-max bg-red-500">
-                    Generate the invoice as PDF
-                  </Button>
-                }
               />
             )}
           </div>

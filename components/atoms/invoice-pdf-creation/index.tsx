@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Document,
   Font,
@@ -64,7 +65,7 @@ interface pdfInputs {
   totalAmount: string;
   invoiceDate: Date;
   dueDate: Date;
-  content: JSX.Element;
+  content?: String;
   // Add more parameters as needed
 }
 
@@ -533,13 +534,19 @@ const PDFRenderer: React.FC<pdfInputs> = ({
         onOpenChange={setIsCreateModalOpen}
       >
         <Modal.Trigger asChild>
-          {/* <Button
-            onClick={handleButtonClick}
-            className="inline w-max bg-red-500"
-          >
-            Generate the invoice as PDF
-          </Button> */}
-          <ButtonElement onClick={generatePDF} content={content} />
+          {!content ? (
+            <Button
+              onClick={handleButtonClick}
+              className="inline w-max bg-red-500"
+            >
+              Generate the invoice as PDF
+            </Button>
+          ) : (
+            <ButtonElement
+              onClick={generatePDF}
+              content={content || ''}
+            />
+          )}
         </Modal.Trigger>
         <Modal.Content
           title="PDF Preview"
