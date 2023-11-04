@@ -16,137 +16,60 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as z from 'zod';
 
-// export const invoiceSchema = z.object({
-//   invoiceId: z.string().optional(),
-//   clientId: z.string(),
-//   // companyID: z.string(), // this is the id for the company
-//   clientCompanyName: z.string().optional(),
-//   invoiceTypeId: z.string(), //this is the id for the invoice type
-//   invoiceTypeName: z.string().optional(),
-//   invoiceDate: z.coerce.date(),
-//   dueDate: z.coerce.date(),
-//   totalAmount: z.coerce.number(),
-//   paidAmount: z.coerce.number(),
-//   invoiceStatusId: z.string(), //this is the id for the invoice type
-//   invoiceStatusName: z.string().optional(),
-//   paymentMethodId: z.string(), //this is the id for the payment method
-//   paymentMethodName: z.string().optional(),
-//   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
-// });
-// export type IInvoice = z.infer<typeof invoiceSchema>;
-
-// export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
-//   // {
-//   //   accessorKey: 'invoiceId',
-//   //   header: 'Invoice Id',
-//   // },
-//   {
-//     id: 'select',
-//     header: ({ table }) => (
-//       <Checkbox
-//         checked={table.getIsAllPageRowsSelected()}
-//         onCheckedChange={(value: boolean) =>
-//           // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
-//           table.toggleAllRowsSelected(!!value)
-//         }
-//         aria-label="Select all"
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <Checkbox
-//         checked={row.getIsSelected()}
-//         onCheckedChange={(value: boolean) =>
-//           row.toggleSelected(!!value)
-//         }
-//         aria-label="Select row"
-//       />
-//     ),
-//     enableSorting: false,
-//     enableHiding: false,
-//   },
-//   {
-//     accessorKey: 'clientCompanyName',
-//     header: 'Client',
-//   },
-//   {
-//     accessorKey: 'invoiceTypeName',
-//     header: 'Invoice Type',
-//   },
-//   {
-//     accessorKey: 'invoiceDate',
-//     header: 'Invoice Date',
-//     cell({ row }) {
-//       const formatedDate = new Date(
-//         row.getValue('invoiceDate')
-//       ).toLocaleDateString('en-GB');
-//       return <div>{formatedDate}</div>;
-//     },
-//   },
-//   {
-//     accessorKey: 'dueDate',
-//     header: 'Due Date',
-//     cell({ row }) {
-//       const formatedDate = new Date(
-//         row.getValue('dueDate')
-//       ).toLocaleDateString('en-GB');
-//       return <div>{formatedDate}</div>;
-//     },
-//   },
-//   {
-//     accessorKey: 'totalAmount',
-//     header: 'Total Amount',
-//   },
-//   {
-//     accessorKey: 'paidAmount',
-//     header: 'Paid Amount',
-//   },
-//   {
-//     accessorKey: 'invoiceStatusName',
-//     header: 'Invoice Status',
-//   },
-//   {
-//     accessorKey: 'paymentMethodName',
-//     header: 'Payment Method',
-//   },
-//   // {
-//   //   accessorKey: 'transactionId',
-//   //   header: 'transaction Id',
-//   // },
-//   {
-//     id: 'actions',
-//     cell: ({ row }) => <ActionsColumn item={row.original} />,
-//   },
-// ];
-
 export const invoiceSchema = z.object({
   invoiceId: z.string().optional(),
   clientId: z.string(),
   // companyID: z.string(), // this is the id for the company
-  companyName: z.string().optional(),
+  clientCompanyName: z.string().optional(),
   invoiceTypeId: z.string(), //this is the id for the invoice type
-  // invoiceTypeName: z.string().optional(),
+  invoiceTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
   dueDate: z.coerce.date(),
   totalAmount: z.coerce.number(),
   paidAmount: z.coerce.number(),
   invoiceStatusId: z.string(), //this is the id for the invoice type
-  // invoiceStatus: z.string().optional(),
+  invoiceStatusName: z.string().optional(),
   paymentMethodId: z.string(), //this is the id for the payment method
-  paymentMethod: z.string().optional(),
+  paymentMethodName: z.string().optional(),
   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
 export type IInvoice = z.infer<typeof invoiceSchema>;
+
 export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
+  // {
+  //   accessorKey: 'invoiceId',
+  //   header: 'Invoice Id',
+  // },
   {
-    accessorKey: 'invoiceID',
-    header: 'Invoice Id',
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: boolean) =>
+          row.toggleSelected(!!value)
+        }
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
-    accessorKey: 'clientId',
-    header: 'Client Id',
+    accessorKey: 'clientCompanyName',
+    header: 'Client',
   },
   {
-    accessorKey: 'invoiceType',
+    accessorKey: 'invoiceTypeName',
     header: 'Invoice Type',
   },
   {
@@ -178,22 +101,101 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     header: 'Paid Amount',
   },
   {
-    accessorKey: 'invoiceStatusId',
-    header: 'invoice Status Id',
+    accessorKey: 'invoiceStatusName',
+    header: 'Invoice Status',
   },
   {
-    accessorKey: 'paymentMethodId',
-    header: 'payment Method Id',
+    accessorKey: 'paymentMethodName',
+    header: 'Payment Method',
   },
-  {
-    accessorKey: 'transactionId',
-    header: 'transaction Id',
-  },
+  // {
+  //   accessorKey: 'transactionId',
+  //   header: 'transaction Id',
+  // },
   {
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
+
+// export const invoiceSchema = z.object({
+//   invoiceId: z.string().optional(),
+//   clientId: z.string(),
+//   // companyID: z.string(), // this is the id for the company
+//   companyName: z.string().optional(),
+//   invoiceTypeId: z.string(), //this is the id for the invoice type
+//   // invoiceTypeName: z.string().optional(),
+//   invoiceDate: z.coerce.date(),
+//   dueDate: z.coerce.date(),
+//   totalAmount: z.coerce.number(),
+//   paidAmount: z.coerce.number(),
+//   invoiceStatusId: z.string(), //this is the id for the invoice type
+//   // invoiceStatus: z.string().optional(),
+//   paymentMethodId: z.string(), //this is the id for the payment method
+//   paymentMethod: z.string().optional(),
+//   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
+// });
+// export type IInvoice = z.infer<typeof invoiceSchema>;
+// export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
+//   {
+//     accessorKey: 'invoiceID',
+//     header: 'Invoice Id',
+//   },
+//   {
+//     accessorKey: 'clientId',
+//     header: 'Client Id',
+//   },
+//   {
+//     accessorKey: 'invoiceType',
+//     header: 'Invoice Type',
+//   },
+//   {
+//     accessorKey: 'invoiceDate',
+//     header: 'Invoice Date',
+//     cell({ row }) {
+//       const formatedDate = new Date(
+//         row.getValue('invoiceDate')
+//       ).toLocaleDateString('en-GB');
+//       return <div>{formatedDate}</div>;
+//     },
+//   },
+//   {
+//     accessorKey: 'dueDate',
+//     header: 'Due Date',
+//     cell({ row }) {
+//       const formatedDate = new Date(
+//         row.getValue('dueDate')
+//       ).toLocaleDateString('en-GB');
+//       return <div>{formatedDate}</div>;
+//     },
+//   },
+//   {
+//     accessorKey: 'totalAmount',
+//     header: 'Total Amount',
+//   },
+//   {
+//     accessorKey: 'paidAmount',
+//     header: 'Paid Amount',
+//   },
+//   {
+//     accessorKey: 'invoiceStatusId',
+//     header: 'invoice Status Id',
+//   },
+//   {
+//     accessorKey: 'paymentMethodId',
+//     header: 'payment Method Id',
+//   },
+//   {
+//     accessorKey: 'transactionId',
+//     header: 'transaction Id',
+//   },
+//   {
+//     id: 'actions',
+//     cell: ({ row }) => <ActionsColumn item={row.original} />,
+//   },
+// ];
+
+
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
