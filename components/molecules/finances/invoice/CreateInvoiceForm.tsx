@@ -1,3 +1,4 @@
+import PDFRenderer from '@/components/atoms/pdfrenderer';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -44,7 +45,8 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
+//import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
@@ -54,25 +56,28 @@ import { toast } from 'react-toastify';
 interface ICreateInvoice {
   setIsModalOpen(open: boolean): void;
   invoiceNumber?: string;
-  refetchInvoices:any
+  refetchInvoices:any;
 }
 
 const CreateInvoiceForm = ({
   setIsModalOpen,
   invoiceNumber,
-  refetchInvoices
+  refetchInvoices,
 }: ICreateInvoice) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [invoiceDate, setInvoiceDate] = useState(new Date())
   const {
     data: clients,
     isError: clientsIsError,
     isLoading: clientsIsLoading,
   } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
-
+  const [showPDF, setShowPDF] = useState(false);
   useEffect(() => {
     async function getData(Id: string) {
       console.log('inside getData');
@@ -147,6 +152,13 @@ const CreateInvoiceForm = ({
     },
     [invoiceData]
   );
+
+useEffect(() => {
+    setCompanyName(String(form.getValues().companyName));
+        setInvoiceDate(form.getValues().invoiceDate);
+        setTotalAmount(form.getValues().totalAmount)
+}, [form.watch('companyName'), form.watch('invoiceDate'), form.watch('totalAmount')])
+
 
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
@@ -410,7 +422,7 @@ const CreateInvoiceForm = ({
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick Due Date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -424,7 +436,7 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
+                        
                         //   initialFocus
                       />
                     </PopoverContent>
@@ -473,6 +485,8 @@ const CreateInvoiceForm = ({
           </Button>
         </form>
       </Form>
+
+  <PDFRenderer companyName={companyName} totalAmount={String(totalAmount)} invoiceDate={invoiceDate} />
     </div>
   );
 };
@@ -521,4 +535,4 @@ const paymentMethods=[
   label:'PayPal',
   value:'2c259366-e579-41bd-8c20-d96da50d4ab2',
 },
-]as const;
+] as const;
