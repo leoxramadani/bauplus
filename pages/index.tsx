@@ -250,6 +250,14 @@ const Main = () => {
             icon={<ShoppingCart color="#fff" size={32} />}
           />
           <KpiCard
+            title="COGs"
+            metric={COGsCalculatedCurrentMonth.toString() != undefined ? COGsCalculatedCurrentMonth.toString() : '0'}
+            pastMonth={COGsCalculatedPastMonth != undefined ? COGsCalculatedPastMonth : 0}
+            percentage="3.0"
+            delta="increase"
+            icon={<TrendingUp color="#fff" size={32} />}
+          />
+          <KpiCard
             title="EBIT"
             metric={
               AmountPayableCurrentMonth?.toString() != undefined
@@ -264,14 +272,6 @@ const Main = () => {
             percentage="10.2"
             delta="increase"
             icon={<Wallet color="#fff" size={32} />}
-          />
-          <KpiCard
-            title="COGs"
-            metric={COGsCalculatedCurrentMonth.toString() != undefined ? COGsCalculatedCurrentMonth.toString() : '0'}
-            pastMonth={COGsCalculatedPastMonth != undefined ? COGsCalculatedPastMonth : 0}
-            percentage="3.0"
-            delta="increase"
-            icon={<TrendingUp color="#fff" size={32} />}
           />
           <KpiCard
             title="EBITDA"
