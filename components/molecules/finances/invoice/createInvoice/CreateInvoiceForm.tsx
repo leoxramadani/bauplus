@@ -1,3 +1,4 @@
+import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -32,7 +33,6 @@ import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
   GET_SPECIFIC_INVOICE,
   INVOICE_CREATE,
-  INVOICE_REGISTER,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
 import useData from '@/lib/hooks/useData';
@@ -44,7 +44,7 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
@@ -54,25 +54,28 @@ import { toast } from 'react-toastify';
 interface ICreateInvoice {
   setIsModalOpen(open: boolean): void;
   invoiceNumber?: string;
-  refetchInvoices:any
+  refetchInvoices: any;
 }
 
 const CreateInvoiceForm = ({
   setIsModalOpen,
   invoiceNumber,
-  refetchInvoices
+  refetchInvoices,
 }: ICreateInvoice) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [totalAmount, setTotalAmount] = useState('');
+  const [invoiceDate, setInvoiceDate] = useState(new Date());
+  const [dueDate, setDueDate] = useState(new Date());
   const {
     data: clients,
     isError: clientsIsError,
     isLoading: clientsIsLoading,
   } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
-
   useEffect(() => {
     async function getData(Id: string) {
       console.log('inside getData');
@@ -128,7 +131,7 @@ const CreateInvoiceForm = ({
             // clientId: data.clientId,
             // totalAmount: data.totalAmount,
             // paidAmount: data.paidAmount,
-            ...data
+            ...data,
           })
           .then((res) => {
             console.log('Successfully created invoice->', res);
@@ -148,9 +151,40 @@ const CreateInvoiceForm = ({
     [invoiceData]
   );
 
+  useEffect(() => {
+    const selectedClient = clients?.find(
+      (client) => client.clientId === form.watch('clientId')
+    );
+
+    setCompanyName(String(selectedClient?.companyName));
+    setInvoiceDate(form.getValues().invoiceDate);
+    setTotalAmount(String(form.getValues().totalAmount));
+
+    // Calculate the due date as 15 days after the invoice date
+    const invoiceDate = form.getValues().invoiceDate;
+    const dueDate = new Date(invoiceDate);
+
+    if (form.getValues().dueDate == undefined) {
+      dueDate.setDate(invoiceDate?.getDate() + 15);
+      setDueDate(dueDate);
+    } else {
+      setDueDate(form.getValues().dueDate);
+    }
+  }, [
+    form.watch('clientId'),
+    form.watch('invoiceDate'),
+    form.watch('totalAmount'),
+    form.watch('dueDate'),
+  ]);
+
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
+
+  const isDataComplete =
+    form.getValues().clientId &&
+    form.getValues().totalAmount &&
+    form.getValues().invoiceDate;
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
@@ -410,7 +444,7 @@ const CreateInvoiceForm = ({
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick Due Date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -424,7 +458,7 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
+
                         //   initialFocus
                       />
                     </PopoverContent>
@@ -467,10 +501,20 @@ const CreateInvoiceForm = ({
               )}
             />
           </div>
+          <div className="flex flex-row gap-2">
+            <Button className="w-max" type="submit">
+              Submit
+            </Button>
 
-          <Button className="w-max" type="submit">
-            Submit
-          </Button>
+            {isDataComplete && (
+              <PDFRenderer
+                companyName={companyName}
+                totalAmount={String(totalAmount)}
+                invoiceDate={invoiceDate}
+                dueDate={dueDate}
+              />
+            )}
+          </div>
         </form>
       </Form>
     </div>
@@ -504,21 +548,21 @@ const invoiceTypes = [
   },
 ] as const;
 
-const paymentMethods=[
-{
-  label:'Cash',
-  value:'06a85d6b-ed0f-48c7-aa67-72f18b3e6c77',
-},
-{
-  label:'Bank Transfer',
-  value:'f97247c7-95ec-4e17-839d-ad405ff29188',
-},
-{
-  label:'Credit Card',
-  value:'a0d7051c-21a9-43b7-964d-c16ba72437a8',
-},
-{
-  label:'PayPal',
-  value:'2c259366-e579-41bd-8c20-d96da50d4ab2',
-},
-]as const;
+const paymentMethods = [
+  {
+    label: 'Cash',
+    value: '06a85d6b-ed0f-48c7-aa67-72f18b3e6c77',
+  },
+  {
+    label: 'Bank Transfer',
+    value: 'f97247c7-95ec-4e17-839d-ad405ff29188',
+  },
+  {
+    label: 'Credit Card',
+    value: 'a0d7051c-21a9-43b7-964d-c16ba72437a8',
+  },
+  {
+    label: 'PayPal',
+    value: '2c259366-e579-41bd-8c20-d96da50d4ab2',
+  },
+] as const;
