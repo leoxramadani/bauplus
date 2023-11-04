@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PROCESS_INVOICE } from "@/lib/constants/endpoints/ocr/ocr";
@@ -11,9 +11,15 @@ import { FILE } from "dns";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Generate from './Generate';
+import GeneratedForm from './GeneratedForm';
 import Image from 'next/image';
 import logoLoading from '@/public/video/loading-mimiro.gif';
+
+
+function isValidDate(dateString:string) {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  return regex.test(dateString);
+}
 
 const GenerateInvoiceForm = () => {
   const [generateModalOpen,setGenerateModalOpen]=useState(false)
@@ -59,34 +65,26 @@ const GenerateInvoiceForm = () => {
       })
       .then((res)=>{
         console.log("response=>",res.data);
-
-        if (res.data) {
-          console.log(new Date(res.data.date ) ?? new Date(''));        
-          res.data.date = new Date(res.data.date );
-          res.data.payment_due_date= new Date(res.data.payment_due_date ?? new Date('') );
+        const ocrReturn:IgeneratedInvoice = res.data;
+        if (res.data) {      
+          res.data.date = isValidDate(res.data.date) ? new Date(res.data.date) : null;
+          res.data.payment_due_date = isValidDate(res.data.payment_due_date) ? new Date(res.data.payment_due_date) : null;
         }
         setOcrData(res.data)
-        // setOcrIsLoading(false)
         setGenerateModalOpen(true)
       }).catch((error)=>{
         console.log("error=>",error);        
       })
-      // setOcrIsLoading(false)
     },
     [file]
   );
 
-  // useEffect(()=>{
-  //   if (!ocrIsLoading) {
-  //     console.log("Inside useEffect");
-      
-  //     setOcrIsLoading(true)
-  //   }
-  // },[onSubmit])
 
   const onError=(error:any)=>{
     console.log("error generate->",error);
   }
+
+  // const fileRef = form.register('image', { required: true });
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
@@ -132,7 +130,7 @@ const GenerateInvoiceForm = () => {
         ocrData &&
       <Modal open={generateModalOpen} onOpenChange={setGenerateModalOpen}>
         <Modal.Content className="w-full max-w-3xl">
-          <Generate data={ocrData}/>
+          <GeneratedForm data={ocrData}/>
         </Modal.Content>
       </Modal>
       }

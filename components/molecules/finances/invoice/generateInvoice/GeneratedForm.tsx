@@ -18,8 +18,7 @@ import { useForm } from "react-hook-form";
 interface IGenerateProps{
   data:IgeneratedInvoice
 }
-const Generate = ({data}:IGenerateProps) => {
-  console.log("data inside Generated=>",data);
+const GeneratedForm = ({data}:IGenerateProps) => {
   
   const form = useForm<IgeneratedInvoice>({
     resolver: zodResolver(generatedInvoice),
@@ -30,11 +29,16 @@ const Generate = ({data}:IGenerateProps) => {
 
   const onSubmit = useCallback(
     async (data: IgeneratedInvoice) => {
-    axios.post(INVOICE_REGISTER,{
-      totalAmount:data.total_amount,
-      paidAmount:data.total_amount,
-      dueDate:data.payment_due_date,
-      invoiceDate:data.date
+    axios.post(INVOICE_REGISTER+
+      `?clientId=${`f231d0e8-0ae8-49dd-bdc2-c10db7d70259`}
+      &totalAmount=${Number(data.total_amount)}
+      &paidAmount=${Number(data.total_amount)-Number(data.total_vat)}`
+
+    ).then((res)=>{
+      console.log("Successfully created generated invoice=>",res.data);
+    }).catch((error)=>{
+      console.log("Error while creating generated invoice=>",error);
+      
     })
     },
     []
@@ -315,7 +319,7 @@ const Generate = ({data}:IGenerateProps) => {
   );
 };
 
-export default Generate;
+export default GeneratedForm;
 
 
 const invoiceStatus = [

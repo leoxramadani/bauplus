@@ -1,4 +1,6 @@
+import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +10,113 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import * as z from 'zod';
+
+// export const invoiceSchema = z.object({
+//   invoiceId: z.string().optional(),
+//   clientId: z.string(),
+//   // companyID: z.string(), // this is the id for the company
+//   clientCompanyName: z.string().optional(),
+//   invoiceTypeId: z.string(), //this is the id for the invoice type
+//   invoiceTypeName: z.string().optional(),
+//   invoiceDate: z.coerce.date(),
+//   dueDate: z.coerce.date(),
+//   totalAmount: z.coerce.number(),
+//   paidAmount: z.coerce.number(),
+//   invoiceStatusId: z.string(), //this is the id for the invoice type
+//   invoiceStatusName: z.string().optional(),
+//   paymentMethodId: z.string(), //this is the id for the payment method
+//   paymentMethodName: z.string().optional(),
+//   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
+// });
+// export type IInvoice = z.infer<typeof invoiceSchema>;
+
+// export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
+//   // {
+//   //   accessorKey: 'invoiceId',
+//   //   header: 'Invoice Id',
+//   // },
+//   {
+//     id: 'select',
+//     header: ({ table }) => (
+//       <Checkbox
+//         checked={table.getIsAllPageRowsSelected()}
+//         onCheckedChange={(value: boolean) =>
+//           // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+//           table.toggleAllRowsSelected(!!value)
+//         }
+//         aria-label="Select all"
+//       />
+//     ),
+//     cell: ({ row }) => (
+//       <Checkbox
+//         checked={row.getIsSelected()}
+//         onCheckedChange={(value: boolean) =>
+//           row.toggleSelected(!!value)
+//         }
+//         aria-label="Select row"
+//       />
+//     ),
+//     enableSorting: false,
+//     enableHiding: false,
+//   },
+//   {
+//     accessorKey: 'clientCompanyName',
+//     header: 'Client',
+//   },
+//   {
+//     accessorKey: 'invoiceTypeName',
+//     header: 'Invoice Type',
+//   },
+//   {
+//     accessorKey: 'invoiceDate',
+//     header: 'Invoice Date',
+//     cell({ row }) {
+//       const formatedDate = new Date(
+//         row.getValue('invoiceDate')
+//       ).toLocaleDateString('en-GB');
+//       return <div>{formatedDate}</div>;
+//     },
+//   },
+//   {
+//     accessorKey: 'dueDate',
+//     header: 'Due Date',
+//     cell({ row }) {
+//       const formatedDate = new Date(
+//         row.getValue('dueDate')
+//       ).toLocaleDateString('en-GB');
+//       return <div>{formatedDate}</div>;
+//     },
+//   },
+//   {
+//     accessorKey: 'totalAmount',
+//     header: 'Total Amount',
+//   },
+//   {
+//     accessorKey: 'paidAmount',
+//     header: 'Paid Amount',
+//   },
+//   {
+//     accessorKey: 'invoiceStatusName',
+//     header: 'Invoice Status',
+//   },
+//   {
+//     accessorKey: 'paymentMethodName',
+//     header: 'Payment Method',
+//   },
+//   // {
+//   //   accessorKey: 'transactionId',
+//   //   header: 'transaction Id',
+//   // },
+//   {
+//     id: 'actions',
+//     cell: ({ row }) => <ActionsColumn item={row.original} />,
+//   },
+// ];
 
 export const invoiceSchema = z.object({
   invoiceId: z.string().optional(),
@@ -30,7 +136,6 @@ export const invoiceSchema = z.object({
   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
 export type IInvoice = z.infer<typeof invoiceSchema>;
-
 export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
   {
     accessorKey: 'invoiceID',
@@ -89,9 +194,9 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
-
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -101,6 +206,23 @@ const ActionsColumn = ({ item }: { item: any }) => {
         id: id,
       },
     });
+  };
+
+  const handleDelete = async (id: string) => {
+    // await axios
+    //   .delete(INVOICE_DELETE + `?invoiceId=${id}`)
+    //   .then((res) => {
+    //     toast.success('Successfully deleted invoice.');
+    //     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    //     router.push({
+    //       query: {
+    //         ...router.query,
+    //       },
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log('Response after error:', error);
+    //   });
   };
 
   return (
@@ -127,8 +249,36 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuItem onClick={() => handleEdit(item.invoiceId)}>
           Edit row
         </DropdownMenuItem>
-
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Invoice
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Invoice"
+            description="Are you sure you want to delete this invoice?"
+            className="w-full max-w-lg"
+          >
+            <div className="flex flex-row gap-2">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.invoiceId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
       </DropdownMenuContent>
     </DropdownMenu>
   );
