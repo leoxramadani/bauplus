@@ -8,9 +8,9 @@ import {
 
 const ProfileForm = () => {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border p-8">
+    <div className="flex flex-col gap-4 rounded-lg border p-8 bg-white">
       <div className="flex flex-col">
-        <h1 className="text-lg font-semibold">Profile settings</h1>
+        <h1 className="text-lg font-semibold">Account settings</h1>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-4">
@@ -55,9 +55,11 @@ const ProfileForm = () => {
             </div>
           </div>
         </div>
-        <Button className="flex flex-row items-center justify-center gap-1">
-          Save
-        </Button>
+        <div>
+          <Button className="flex flex-row items-center justify-center gap-1">
+            Save
+          </Button>
+        </div>
       </div>
     </div>
   );

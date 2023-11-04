@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 
 const AppForm = () => {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border p-8">
+    <div className="flex flex-col gap-4 rounded-lg border bg-white p-8">
       <div className="flex flex-col">
         <h1 className="text-lg font-semibold">App settings</h1>
       </div>
@@ -43,9 +43,11 @@ const AppForm = () => {
           </div>
         </div>
       </div>
-      <Button className="flex flex-row items-center justify-center gap-1">
-        Save
-      </Button>
+      <div>
+        <Button className="flex flex-row items-center justify-center gap-1">
+          Save
+        </Button>
+      </div>
     </div>
   );
 };

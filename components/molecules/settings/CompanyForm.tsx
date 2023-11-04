@@ -34,7 +34,7 @@ const CompanyForm = () => {
     }
   };
   return (
-    <div className="flex flex-col gap-4 rounded-lg border p-8">
+    <div className="flex flex-col gap-4 rounded-lg border p-8 bg-white">
       <div className="flex flex-col">
         <h1 className="text-lg font-semibold">Company settings</h1>
       </div>
@@ -94,12 +94,14 @@ const CompanyForm = () => {
             />
           </div>
         </div>
-        <Button
-          className="flex flex-row items-center justify-center gap-1"
-          onClick={handleSubmit}
-        >
-          Save
-        </Button>
+        <div>
+          <Button
+            className="flex flex-row items-center justify-center gap-1"
+            onClick={handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
       </div>
     </div>
   );

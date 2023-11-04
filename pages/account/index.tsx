@@ -28,10 +28,10 @@ const Settings = () => {
       <Tabs defaultValue="account" className="w-full p-0">
         <TabsList className="flex w-full justify-start gap-2">
           <TabsTrigger value="account">
-            <span className='group-hover/container:bg-slate-200 group-hover/container:text-black block p-1 px-3 w-full transition-all rounded-md'>General</span>
+            General
           </TabsTrigger>
           <TabsTrigger value="password" >
-            <span className='group-hover/container:bg-slate-200 group-hover/container:text-black block p-1 px-3 w-full transition-all rounded-md'>My Notifications</span>
+            My Notifications
           </TabsTrigger>
         </TabsList>
         <Separator className='bg-slate-300' />

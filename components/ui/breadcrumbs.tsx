@@ -57,8 +57,11 @@ const Breadcrumbs = () => {
   );
 
   return (
-    <nav className="flex items-center justify-between" aria-label="Breadcrumb">
-      <div className="flex items-center w-max">
+    <nav
+      className="flex items-center justify-between"
+      aria-label="Breadcrumb"
+    >
+      <div className="flex w-max whitespace-nowrap items-center">
         {breadcrumbs.map((crumb, i: Key) => {
           const isLast = i === breadcrumbs.length - 1;
 
@@ -75,7 +78,7 @@ const Breadcrumbs = () => {
           );
         })}
       </div>
-      <Topbar showForm={router.asPath === '/' } />
+      <Topbar showForm={router.asPath === '/'} />
     </nav>
   );
 };

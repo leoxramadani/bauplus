@@ -8,7 +8,6 @@ import {
   FileBarChart,
   Home,
   LayoutDashboard,
-  Settings,
   SettingsIcon,
   ShoppingBasket,
   UserCircle,
@@ -16,7 +15,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -38,12 +37,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../ui/popover';
-import { Separator } from '../ui/separator';
 interface ListItem {
   icon?: React.JSX.Element;
   text?: string;
@@ -200,9 +193,9 @@ const Sidebar = ({
               />
               <SidebarItem
                 Icon={FileBarChart}
-                text="PNL"
+                text="P&amp;L"
                 alert={false}
-                href="/pnl"
+                href="/P&amp;L"
               />
               <SidebarItem
                 Icon={BookUserIcon}
@@ -371,7 +364,7 @@ const Sidebar = ({
             </NavigationMenuList>
           </NavigationMenu>
         </SidebarContext.Provider>
-        <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-700 bg-inherit ">
+        {/* <div className="absolute bottom-0 left-0 h-max w-full border-t border-slate-700 bg-inherit ">
           {!isWindowSmall && status === 'authenticated' ? (
             <Popover
               open={userPopoverOpen}
@@ -440,17 +433,42 @@ const Sidebar = ({
             <div className="relative flex h-full w-full items-center justify-center">
               <Link
                 href={'/login'}
-                className="m-3 flex w-full items-center gap-1 rounded-lg px-2 py-2 text-white transition-all hover:bg-slate-800"
+                className="m-3 flex w-full items-center gap-1 rounded-lg px-2 py-2 font-semibold text-white transition-all hover:bg-slate-800"
               >
                 Login
               </Link>
             </div>
           )}{' '}
-        </div>
+        </div> */}
       </nav>
     </aside>
   );
 };
+
+function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
+  const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
+
+  return (
+    <>
+      {Icon && (
+        <Icon
+          size={20}
+          strokeWidth={1.5}
+          className="absolute left-2"
+        />
+      )}
+      <span
+        className={`w-full text-left transition-[opacity,transform] ${
+          Icon && 'ml-7'
+        } group-hover/trigger ${
+          Icon && !expanded && '-translate-x-4 opacity-0'
+        }`}
+      >
+        {text}
+      </span>
+    </>
+  );
+}
 
 function SidebarItem({
   Icon,
@@ -484,7 +502,7 @@ function SidebarItem({
     const routeParts = route.split('/');
 
     for (let i = 0; i < routeParts.length; i++) {
-      console.log(routeParts.slice(0, i + 1).join('/'), href);
+      // console.log(routeParts.slice(0, i + 1).join('/'), href);
       if (routeParts.slice(0, i + 1).join('/') === href) {
         return true;
       }
@@ -508,20 +526,7 @@ function SidebarItem({
               isInCurrentPath() && 'flex text-white'
             }`}
           >
-            {Icon && (
-              <Icon
-                size={20}
-                strokeWidth={1.5}
-                className="absolute left-2"
-              />
-            )}
-            <span
-              className={`group-hover/trigger ml-7 w-full text-left ${
-                !expanded && 'invisible'
-              }`}
-            >
-              {text}
-            </span>
+            <NavigationItem text={text} Icon={Icon} />
             <ChevronDown
               size={18}
               className={`absolute right-3 top-[1px] ml-1 h-full w-4 rotate-0 self-center duration-200 group-data-[state=open]:-rotate-90 ${
@@ -548,22 +553,7 @@ function SidebarItem({
               )
             }
           >
-            {Icon && (
-              <Icon
-                size={20}
-                strokeWidth={1.5}
-                className="absolute left-2"
-              />
-            )}
-            <span
-              className={`w-full text-left ${
-                Icon && 'ml-7'
-              } group-hover/trigger ${
-                Icon && !expanded && 'invisible'
-              }`}
-            >
-              {text}
-            </span>
+            <NavigationItem text={text} Icon={Icon} />
           </NavigationMenuLink>
         </Link>
       )}

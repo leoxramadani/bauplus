@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import {
   Tooltip,
@@ -9,6 +10,7 @@ import {
 import { ILogin, loginSchema } from '@/lib/schemas/auth';
 import { cn } from '@/lib/utils';
 import dashboard from '@/public/Dashboard.png';
+import azure from '@/public/azure.png';
 import binance from '@/public/binance.png';
 import google from '@/public/google.png';
 import mimiro from '@/public/mimiro-black.svg';
@@ -97,17 +99,15 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
               {...register('password')}
             />
           </div>
-          <div className="flex flex-row items-center gap-2 pb-2">
-            <Input
-              id="password"
-              placeholder="Password"
-              type="checkbox"
-              className="h-fit w-fit"
-            />
-            <p className="text-xs text-muted-foreground">
-              Rembember me
-            </p>
-          </div>
+          {/* <div className="flex flex-row items-center gap-2 pb-2">
+            <Checkbox id="remember-me" />
+            <label
+              htmlFor="remember-me"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Remember me
+            </label>
+          </div> */}
           {errors.password && (
             <p className="error">{errors.password.message}</p>
           )}
@@ -137,7 +137,7 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
             <Button
               variant="outline"
               type="button"
-              className="flex items-center w-full justify-center cursor-not-allowed"
+              className="flex w-full cursor-not-allowed items-center justify-center"
             >
               <svg
                 className="mr-2 h-4 w-4"
@@ -153,7 +153,7 @@ const AuthForm = ({ className, ...props }: AuthFormProps) => {
               Google
             </Button>
           </TooltipTrigger>
-          <TooltipContent side='bottom'>
+          <TooltipContent side="bottom">
             <p>Not available yet.</p>
           </TooltipContent>
         </Tooltip>
@@ -168,7 +168,7 @@ const Login = () => {
       <div className="flex h-full w-full flex-col md:flex-row">
         <div className="flex h-screen w-full flex-col">
           <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
-            <Image src={mimiro} alt="logo" width={160} height={100} />
+            <Image src={mimiro} alt="logo" width={110} height={100} />
             {/* <Square strokeWidth={10} size={40} />
             <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
               Mimiro
@@ -228,7 +228,7 @@ const Login = () => {
                 <Image src={binance} alt="binance" />
               </div>
               <div className="w-[500px] sm:w-[100px]">
-                <Image src={google} alt="google" />
+                <Image src={azure} alt="google" />
               </div>
               <div className="w-[500px] sm:w-[100px]">
                 <Image src={stripe} alt="stripe" />

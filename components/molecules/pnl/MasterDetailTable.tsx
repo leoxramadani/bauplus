@@ -59,44 +59,75 @@ const MasterDetailTable = () => {
   };
 
   return (
-    <div className="rounded-lg border bg-white">
+    <div className="overflow-x-auto rounded-lg border bg-white">
       <div className="flex flex-row">
         <div className="flex flex-col items-center justify-center">
-          <div className="flex h-full w-[380px] flex-row items-center border-b border-r pl-6">
-            <p className="text-lg font-bold">FYE December 31</p>
+          <div className="flex h-full w-[139px] flex-row items-center border-b border-r pl-6 md:w-[178px] lg:w-[239px] xl:w-[282px] 2xl:w-[380px]">
+            <p className="text-base font-bold lg:text-lg">
+              FYE December 31
+            </p>
           </div>
         </div>
         <div className="grid w-full grid-cols-4">
           <div className="flex w-full flex-col items-center gap-2 border-b border-r py-2">
-            <p className="text-lg font-bold">Q1</p>
+            <p className="text-base font-bold lg:text-lg">Q1</p>
             <div className="flex flex-row gap-4">
-              <p className="text-lg font-semibold">Cash</p>
-              <p className="text-lg font-semibold">Accrual</p>
+              <p className="text-base font-semibold lg:text-lg">
+                Cash
+              </p>
+              <p className="text-base font-semibold lg:text-lg">
+                Accrual
+              </p>
             </div>
           </div>
           <div className="flex w-full flex-col items-center gap-2 border-b border-r py-2">
-            <p className="text-lg font-bold">Q2</p>
+            <p className="text-base font-bold lg:text-lg">Q2</p>
             <div className="flex flex-row gap-4">
-              <p className="text-lg font-semibold">Cash</p>
-              <p className="text-lg font-semibold">Accrual</p>
+              <p className="text-base font-semibold lg:text-lg">
+                Cash
+              </p>
+              <p className="text-base font-semibold lg:text-lg">
+                Accrual
+              </p>
             </div>
           </div>
           <div className="flex w-full flex-col items-center gap-2 border-b border-r py-2">
-            <p className="text-lg font-bold">Q3</p>
+            <p className="text-base font-bold lg:text-lg">Q3</p>
             <div className="flex flex-row gap-4">
-              <p className="text-lg font-semibold">Cash</p>
-              <p className="text-lg font-semibold">Accrual</p>
+              <p className="text-base font-semibold lg:text-lg">
+                Cash
+              </p>
+              <p className="text-base font-semibold lg:text-lg">
+                Accrual
+              </p>
             </div>
           </div>
           <div className="flex w-full flex-col items-center gap-2 border-b py-2">
-            <p className="text-lg font-bold">Q4</p>
+            <p className="text-base font-bold lg:text-lg">Q4</p>
             <div className="flex flex-row gap-4">
-              <p className="text-lg font-semibold">Cash</p>
-              <p className="text-lg font-semibold">Accrual</p>
+              <p className="text-base font-semibold lg:text-lg">
+                Cash
+              </p>
+              <p className="text-base font-semibold lg:text-lg">
+                Accrual
+              </p>
             </div>
           </div>
         </div>
       </div>
+      <MasterDetailRow
+        title={'Gross Revenue'}
+        values={{
+          Q1: { Cash: 2000, Accrual: 2000 },
+          Q2: { Cash: 2500, Accrual: 2500 },
+          Q3: { Cash: 2200, Accrual: 2200 },
+          Q4: { Cash: 2700, Accrual: 2700 },
+        }}
+        checked={rowStates['Gross Revenue']}
+        onCheckboxChange={(newChecked) =>
+          handleRowCheckboxChange('Gross Revenue', newChecked)
+        }
+      />
       <MasterDetailRow
         title={'Net Sales'}
         values={{
@@ -404,19 +435,7 @@ const MasterDetailTable = () => {
           }
         />
       </MasterDetailRow>
-      <MasterDetailRow
-        title={'Gross Revenue'}
-        values={{
-          Q1: { Cash: 2000, Accrual: 2000 },
-          Q2: { Cash: 2500, Accrual: 2500 },
-          Q3: { Cash: 2200, Accrual: 2200 },
-          Q4: { Cash: 2700, Accrual: 2700 },
-        }}
-        checked={rowStates['Gross Revenue']}
-        onCheckboxChange={(newChecked) =>
-          handleRowCheckboxChange('Gross Revenue', newChecked)
-        }
-      />
+      
     </div>
   );
 };
@@ -433,7 +452,7 @@ const MasterDetailRow = ({
   checked: boolean;
   onCheckboxChange: (checked: boolean) => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSubrows = () => {
     setIsOpen(!isOpen);
@@ -481,7 +500,7 @@ const MasterDetailRow = ({
           <div className="w-5 pl-5"></div>
         )}
         <div className="flex flex-row">
-          <div className="flex h-full w-[322px] flex-row items-center p-2">
+          <div className="flex h-full flex-row items-center p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
             <p>{title}</p>
           </div>
         </div>
@@ -494,10 +513,10 @@ const MasterDetailRow = ({
               >
                 {typeof value === 'object' ? (
                   <div className="flex flex-row gap-4">
-                    <div className="text-base font-semibold">
+                    <div className="text-sm font-semibold md:text-base">
                       {value.Cash}
                     </div>
-                    <div className="text-base font-semibold">
+                    <div className="text-sm font-semibold md:text-base">
                       {value.Accrual}
                     </div>
                   </div>
@@ -545,7 +564,7 @@ const MasterDetailSubRow = ({
         />
         <div className="w-5 pl-5"></div>
         <div className="flex flex-row">
-          <div className="flex h-full w-[320px] flex-row items-center p-2">
+          <div className="flex h-full flex-row items-center p-2 text-sm sm:w-[82px] md:w-[122px] lg:w-[182px] lg:text-base xl:w-[282px] 2xl:w-[322px]">
             <p>{title}</p>
           </div>
         </div>
@@ -558,10 +577,10 @@ const MasterDetailSubRow = ({
               >
                 {typeof value === 'object' ? (
                   <div className="flex flex-row gap-4">
-                    <div className="text-base font-semibold">
+                    <div className="text-sm font-semibold md:text-base">
                       {value.Cash}
                     </div>
-                    <div className="text-base font-semibold">
+                    <div className="text-sm font-semibold md:text-base">
                       {value.Accrual}
                     </div>
                   </div>

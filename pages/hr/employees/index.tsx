@@ -101,7 +101,7 @@ const Employees = () => {
                   layout={'responsive'}
                   height={175}
                   width={175}
-                  alt={`A cute animal!`}
+                  alt={`Thor logo`}
                   unoptimized={true}
                 />
               </div>
