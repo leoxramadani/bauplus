@@ -1,6 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as z from 'zod';
+import { IClients } from '../../Clients/clients';
 
 export const invoiceSchema = z.object({
   invoiceId: z.string().optional(),
