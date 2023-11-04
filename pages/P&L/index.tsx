@@ -1,7 +1,7 @@
 import MasterDetailTable from '@/components/molecules/pnl/MasterDetailTable';
 import { BarChart, Card, Title } from '@tremor/react';
 
-const pnl = () => {
+const PnL = () => {
   const chartdata2 = [
     {
       name: 'January',
@@ -69,7 +69,7 @@ const pnl = () => {
     `$ ${new Intl.NumberFormat('us').format(number).toString()}`;
 
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4">
       <MasterDetailTable />
       <Card>
         <Title>Net Profit over the Year</Title>
@@ -94,4 +94,4 @@ const pnl = () => {
   );
 };
 
-export default pnl;
+export default PnL;

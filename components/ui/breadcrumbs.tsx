@@ -61,7 +61,7 @@ const Breadcrumbs = () => {
       className="flex items-center justify-between"
       aria-label="Breadcrumb"
     >
-      <div className="flex w-max items-center">
+      <div className="flex w-max whitespace-nowrap items-center">
         {breadcrumbs.map((crumb, i: Key) => {
           const isLast = i === breadcrumbs.length - 1;
 
