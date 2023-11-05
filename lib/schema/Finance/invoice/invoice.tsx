@@ -10,8 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import { INVOICE_DELETE } from '@/lib/constants/endpoints/finance/invoice';
+import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -340,7 +343,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
             totalAmount={String(item.totalAmount)}
             invoiceDate={new Date(item.invoiceDate)}
             dueDate={new Date(item.dueDate)}
-            content="PDF of Invoice"
+            content="Create as PDF"
           />
         </Modal>
       </DropdownMenuContent>
