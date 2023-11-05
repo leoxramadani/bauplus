@@ -10,9 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import { INVOICE_DELETE } from '@/lib/constants/endpoints/finance/invoice';
-import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
@@ -20,7 +18,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
-import { IClients } from '../../Clients/clients';
 
 export const invoiceSchema = z.object({
   invoiceNumber: z.string(),
@@ -147,39 +144,6 @@ const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const {
-    data: clients,
-    isError: clientsIsError,
-    isLoading: clientsIsLoading,
-  } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
-
-  if (clientsIsLoading) {
-    // While data is loading, you can display a loading indicator
-    return <div>Loading clients data...</div>;
-  }
-
-  if (clientsIsError) {
-    // Handle error, you can display an error message or take appropriate action
-    return <div>Error loading clients data.</div>;
-  }
-
-  if (!clients || clients.length === 0) {
-    // Handle the case when clients data is empty
-    return <div>No clients data available.</div>;
-  }
-
-  // Find the client with the matching clientId
-  const clientWithMatchingId = clients.find(
-    (client) => client.clientId === item.clientId
-  );
-
-  if (!clientWithMatchingId) {
-    // Handle the case when no matching client is found
-    return <div>No client data found for this invoice.</div>;
-  }
-
-  const companyName = clientWithMatchingId.companyName;
-
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -268,7 +232,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           <DropdownMenuSeparator />
           <PDFRenderer
             invoiceNumber={item.invoiceNumber}
-            companyName={String(companyName)}
+            companyName={String(item.clientCompanyName)}
             totalAmount={String(item.totalAmount)}
             invoiceDate={new Date(item.invoiceDate)}
             dueDate={new Date(item.dueDate)}
