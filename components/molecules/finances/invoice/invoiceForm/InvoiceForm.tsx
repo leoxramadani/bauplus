@@ -167,11 +167,16 @@ const InvoiceForm = ({
     const invoiceDate = form.getValues().invoiceDate;
     const dueDate = new Date(invoiceDate);
 
-    if (form.getValues().dueDate == undefined) {
-      dueDate.setDate(invoiceDate?.getDate() + 15);
-      setDueDate(dueDate);
-    } else {
-      setDueDate(form.getValues().dueDate);
+    if (
+      invoiceDate instanceof Date &&
+      !isNaN(invoiceDate.getTime())
+    ) {
+      if (form.getValues().dueDate == undefined) {
+        dueDate.setDate(invoiceDate?.getDate() + 15);
+        setDueDate(dueDate);
+      } else {
+        setDueDate(form.getValues().dueDate);
+      }
     }
   }, [
     form.watch('clientId'),
