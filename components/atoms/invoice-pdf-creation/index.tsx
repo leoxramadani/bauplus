@@ -9,7 +9,6 @@ import {
 } from '@react-pdf/renderer';
 import React, { useState } from 'react';
 import Modal from '../Modal';
-import ButtonElement from './ButtonElement';
 import { EverestLogo } from './EverestLogo';
 import { generalStyle } from './styles';
 Font.register({
@@ -527,40 +526,45 @@ const PDFRenderer: React.FC<pdfInputs> = ({
     generatePDF();
   };
 
-  return (
-    <>
-      <Modal
-        open={isCreateModalOpen}
-        onOpenChange={setIsCreateModalOpen}
-      >
-        <Modal.Trigger asChild>
-          {!content ? (
-            <Button
-              onClick={handleButtonClick}
-              className="inline w-max bg-red-500"
+  if (invoiceDate instanceof Date && !isNaN(invoiceDate.getTime())) {
+    const timeInMillis: number = invoiceDate.getTime();
+    if (
+      timeInMillis !== 0 &&
+      companyName !== undefined &&
+      totalAmount !== undefined &&
+      totalAmount !== ''
+    ) {
+      return (
+        <>
+          <Modal
+            open={isCreateModalOpen}
+            onOpenChange={setIsCreateModalOpen}
+          >
+            <Modal.Trigger asChild>
+              <Button
+                onClick={handleButtonClick}
+                className="inline w-max bg-red-500"
+              >
+                Generate the invoice as PDF
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content
+              title="PDF Preview"
+              description="You can go back and change the inputs if you don't like something."
             >
-              Generate the invoice as PDF
-            </Button>
-          ) : (
-            <ButtonElement
-              onClick={generatePDF}
-              content={content || ''}
-            />
-          )}
-        </Modal.Trigger>
-        <Modal.Content
-          title="PDF Preview"
-          description="You can go back and change the inputs if you don't like something."
-        >
-          {pdfData ? (
-            <PDFViewer width="100%" height={500}>
-              {pdfData}
-            </PDFViewer>
-          ) : null}
-        </Modal.Content>
-      </Modal>
-    </>
-  );
+              {pdfData ? (
+                <PDFViewer width="100%" height={500}>
+                  {pdfData}
+                </PDFViewer>
+              ) : null}
+            </Modal.Content>
+          </Modal>
+        </>
+      );
+    }
+  } else {
+    return;
+  }
 };
 
 export default PDFRenderer;

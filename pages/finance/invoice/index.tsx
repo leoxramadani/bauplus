@@ -1,7 +1,6 @@
 import Modal from '@/components/atoms/Modal';
-import CreateInvoiceForm from '@/components/molecules/finances/invoice/createInvoice/CreateInvoiceForm';
-import InvoiceForm from '@/components/molecules/finances/invoice/createInvoice/CreateInvoiceForm';
 import GenerateInvoiceForm from '@/components/molecules/finances/invoice/generateInvoice/GenerateInvoiceForm';
+import InvoiceForm from '@/components/molecules/finances/invoice/invoiceForm/InvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { INVOICE_GET_ALL } from '@/lib/constants/endpoints/finance/invoice';
@@ -16,7 +15,8 @@ import { useEffect, useState } from 'react';
 const Invoice = () => {
   const router = useRouter();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] =
+    useState(false);
 
   const {
     data,
@@ -44,27 +44,36 @@ const Invoice = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
-        
-        <Modal open={isRegisterModalOpen} onOpenChange={setIsRegisterModalOpen}>
+        <Modal
+          open={isRegisterModalOpen}
+          onOpenChange={setIsRegisterModalOpen}
+        >
           <Modal.Trigger asChild>
-            <Button
-              variant="default"
-              className="flex flex-row gap-2"
-            >
+            <Button variant="default" className="flex flex-row gap-2">
               <Plus size={20} /> Register Invoice
             </Button>
           </Modal.Trigger>
           <Modal.Content
             title="Register Invoice"
             description="Fill all the fields to register an invoice"
+            className="max-w-3xl"
           >
-            <GenerateInvoiceForm/>
+            <GenerateInvoiceForm
+              setIsRegisterModalOpen={setIsRegisterModalOpen}
+              refetchInvoices={refetchInvoices}
+            />
           </Modal.Content>
         </Modal>
 
-        <Modal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <Modal
+          open={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+        >
           <Modal.Trigger asChild>
-            <Button variant="outline"  className="flex flex-row gap-2 text-indigo-600">
+            <Button
+              variant="outline"
+              className="flex flex-row gap-2 text-indigo-600"
+            >
               <Plus size={20} /> Create Invoice
             </Button>
           </Modal.Trigger>
@@ -72,9 +81,9 @@ const Invoice = () => {
             title="Create Invoice"
             description="Fill all the fields to create an invoice"
           >
-            <CreateInvoiceForm
+            <InvoiceForm
               setIsModalOpen={setIsCreateModalOpen}
-              invoiceNumber={
+              invoiceId={
                 router.isReady ? router.query.id?.toString() : ''
               }
               refetchInvoices={refetchInvoices}
@@ -92,7 +101,6 @@ const Invoice = () => {
         >
           <FileInput /> <span>Export</span>
         </Button>
-
       </div>
 
       {data && !isLoading ? (

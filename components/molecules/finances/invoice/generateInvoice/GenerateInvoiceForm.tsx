@@ -11,7 +11,12 @@ import logoLoading from '@/public/video/loading-mimiro.gif';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import Image from 'next/image';
-import React, { useCallback, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import GeneratedForm from './GeneratedForm';
@@ -21,7 +26,15 @@ function isValidDate(dateString: string) {
   return regex.test(dateString);
 }
 
-const GenerateInvoiceForm = () => {
+interface IGenerateInvoiceForm {
+  setIsRegisterModalOpen: Dispatch<SetStateAction<boolean>>;
+  refetchInvoices: any;
+}
+
+const GenerateInvoiceForm = ({
+  setIsRegisterModalOpen,
+  refetchInvoices,
+}: IGenerateInvoiceForm) => {
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
   const [file, setFile] = useState<any>();
 
@@ -30,6 +43,7 @@ const GenerateInvoiceForm = () => {
 
   const form = useForm<IGenerateInvoice>({
     resolver: zodResolver(generateInvoiceSchema),
+    mode: 'onChange',
   });
 
   const handleUpload = (
@@ -50,12 +64,10 @@ const GenerateInvoiceForm = () => {
   const onSubmit = useCallback(async () => {
     setOcrIsLoading(true);
     const formData = new FormData();
-
     if (file) {
       formData.append('image', file);
     }
-
-    console.log('Inside on submit');
+    console.log('Inside of submit');
     axios
       .post(
         'https://mimiro-ai.azurewebsites.net/process-image',
@@ -78,6 +90,10 @@ const GenerateInvoiceForm = () => {
           )
             ? new Date(res.data.payment_due_date)
             : null;
+
+          if (isNaN(Number(res.data.total_amount))) {
+            res.data.total_amount = 0;
+          }
         }
         setOcrData(res.data);
         setGenerateModalOpen(true);
@@ -97,7 +113,7 @@ const GenerateInvoiceForm = () => {
   // const fileRef = form.register('image', { required: true });
 
   return (
-    <div className="z-0 flex w-full flex-col gap-4  ">
+    <div className="z-0 flex w-full flex-col gap-4">
       <form
         onSubmit={form.handleSubmit(onSubmit, onError)}
         className="flex flex-col gap-4"
@@ -112,7 +128,7 @@ const GenerateInvoiceForm = () => {
           <Label htmlFor="picture">Image</Label>
           <Input type="file" onChange={handleUpload} />
         </div>
-        <Button type="submit" disabled={ocrIsLoading}>
+        <Button type="submit" disabled={!form.formState.isValid}>
           Submit
         </Button>
       </form>
@@ -149,6 +165,8 @@ const GenerateInvoiceForm = () => {
             <GeneratedForm
               data={ocrData}
               setGenerateModalOpen={setGenerateModalOpen}
+              refetchInvoices={refetchInvoices}
+              setIsRegisterModalOpen={setIsRegisterModalOpen}
             />
           </Modal.Content>
         </Modal>

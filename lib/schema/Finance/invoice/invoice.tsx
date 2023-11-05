@@ -10,29 +10,43 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
-import useData from '@/lib/hooks/useData';
+import { INVOICE_DELETE } from '@/lib/constants/endpoints/finance/invoice';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 import { IClients } from '../../Clients/clients';
 
 export const invoiceSchema = z.object({
   invoiceId: z.string().optional(),
   clientId: z.string(),
-  // companyID: z.string(), // this is the id for the company
   clientCompanyName: z.string().optional(),
-  invoiceTypeId: z.string(), //this is the id for the invoice type
+  invoiceTypeId: z.string({
+    invalid_type_error: 'Invoice Type is required',
+    required_error: 'Invoice Type is required',
+  }),
   invoiceTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
   dueDate: z.coerce.date(),
-  totalAmount: z.coerce.number(),
-  paidAmount: z.coerce.number(),
-  invoiceStatusId: z.string(), //this is the id for the invoice type
+  totalAmount: z.coerce.number({
+    invalid_type_error: 'Total Amount is required',
+    required_error: 'Total Amount is required',
+  }),
+  paidAmount: z.coerce.number({
+    invalid_type_error: 'Paid Amount is required',
+    required_error: 'Paid Amount is required',
+  }),
+  invoiceStatusId: z.string({
+    invalid_type_error: 'Invoice Status is required',
+    required_error: 'Invoice Status is required',
+  }),
   invoiceStatusName: z.string().optional(),
-  paymentMethodId: z.string(), //this is the id for the payment method
+  paymentMethodId: z.string({
+    invalid_type_error: 'Payment Method is required',
+    required_error: 'Payment Method is required',
+  }),
   paymentMethodName: z.string().optional(),
   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
@@ -246,20 +260,24 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
-    // await axios
-    //   .delete(INVOICE_DELETE + `?invoiceId=${id}`)
-    //   .then((res) => {
-    //     toast.success('Successfully deleted invoice.');
-    //     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    //     router.push({
-    //       query: {
-    //         ...router.query,
-    //       },
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log('Response after error:', error);
-    //   });
+    await axios
+      .delete(INVOICE_DELETE + `?invoiceId=${id}`)
+      .then((res) => {
+        if (res.data == false) {
+          toast.info("Can't delete a Paid / Partially Paid Invoice");
+        } else {
+          toast.success('Successfully deleted invoice.');
+        }
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log('Response after error:', error);
+      });
   };
 
   return (
@@ -287,6 +305,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
             <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
@@ -296,7 +315,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           <Modal.Content
             title="Delete Invoice"
             description="Are you sure you want to delete this invoice?"
-            className="w-full max-w-lg"
+            className="max-w-xl"
           >
             <div className="flex flex-row gap-2">
               <Modal.Close asChild>
