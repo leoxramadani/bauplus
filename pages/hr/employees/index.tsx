@@ -76,9 +76,11 @@ const Employees = () => {
             <Plus size={20} />
             <span>Invite Employee</span>
           </Button>
+
           <Button variant="outline" className="flex gap-2">
             <FileUp size={20} /> <span>Import</span>
           </Button>
+
           <Button variant="outline" className="flex gap-2">
             <FileInput /> <span>Export</span>
           </Button>
