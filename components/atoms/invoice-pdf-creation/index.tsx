@@ -8,9 +8,12 @@ import {
   View,
 } from '@react-pdf/renderer';
 import React, { useState } from 'react';
+import { Resizable } from 'react-resizable';
+import 'react-resizable/css/styles.css';
 import Modal from '../Modal';
 import { EverestLogo } from './EverestLogo';
 import { generalStyle } from './styles';
+
 Font.register({
   family: 'Roboto',
   src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf',
@@ -51,19 +54,13 @@ Font.register({
   src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYMZg.ttf',
   fontWeight: 700,
 });
-const inputStyle =
-  'w-48 p-2 border rounded-md border-gray-300 focus:outline-none focus:border-blue-500';
-
-const buttonStyle =
-  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded';
-
-const centerDivStyle = 'flex justify-center items-center h-screen';
 
 interface pdfInputs {
   companyName: string;
   totalAmount: string;
   invoiceDate: Date;
   dueDate: Date;
+  content?: any;
   // Add more parameters as needed
 }
 
@@ -72,6 +69,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   totalAmount,
   invoiceDate,
   dueDate = new Date(new Date().getDate() + 15),
+  content,
 }) => {
   const [invoiceNumber, setInvoiceNumber] = useState('#TestNumber');
   const [subject, setSubject] = useState('Everest XH.D.');
@@ -83,6 +81,8 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   );
 
   const [selectedLogo, setSelectedLogo] = useState('1');
+
+  const [isResized, setIsResized] = useState(false);
 
   const generatePDF = () => {
     if (
@@ -543,19 +543,27 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                 onClick={handleButtonClick}
                 className="inline w-max bg-red-500"
               >
-                Generate the invoice as PDF
+                {content}
               </Button>
             </Modal.Trigger>
-            <Modal.Content
-              title="PDF Preview"
-              description="You can go back and change the inputs if you don't like something."
+            <Resizable
+              width={500} // Set the initial width as needed
+              height={500}
             >
-              {pdfData ? (
-                <PDFViewer width="100%" height={500}>
-                  {pdfData}
-                </PDFViewer>
-              ) : null}
-            </Modal.Content>
+              <Modal.Content
+                key="modal-content"
+                title="PDF Preview"
+                description="You can go back and change the inputs if you don't like something."
+              >
+                {pdfData ? (
+                  <PDFViewer
+                    style={{ width: '100%', height: '75vh' }}
+                  >
+                    {pdfData}
+                  </PDFViewer>
+                ) : null}
+              </Modal.Content>
+            </Resizable>
           </Modal>
         </>
       );

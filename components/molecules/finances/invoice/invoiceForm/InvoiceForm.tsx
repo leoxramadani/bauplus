@@ -553,6 +553,7 @@ const InvoiceForm = ({
                 totalAmount={String(totalAmount)}
                 invoiceDate={invoiceDate}
                 dueDate={dueDate}
+                content="Generate as PDF"
               />
             )}
           </div>
