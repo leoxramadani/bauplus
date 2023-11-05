@@ -91,10 +91,7 @@ const GenerateInvoiceForm = ({
             ? new Date(res.data.payment_due_date)
             : null;
 
-          if (
-            typeof res.data.total_amount !== 'number' ||
-            isNaN(Number(res.data.total_amount))
-          ) {
+          if (isNaN(Number(res.data.total_amount))) {
             res.data.total_amount = 0;
           }
         }
