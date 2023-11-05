@@ -28,7 +28,7 @@ export const generatedInvoice = z.object({
   }),
   description_of_itemservice: z.string().optional(),
   in_words: z.string().optional(),
-  invoice_number: z.string().optional(),
+  invoice_number: z.string(),
   location_address: z.string().optional(),
   organization_unit: z.string().optional(),
   payment_due_date: z.coerce.date(),

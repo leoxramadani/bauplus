@@ -202,6 +202,23 @@ const InvoiceForm = ({
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
+            {/* Invoice Number */}
+            <FormField
+              control={form.control}
+              name="invoiceNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Invoice Number
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Invoice Number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Invoice Status */}
             <FormField
               control={form.control}

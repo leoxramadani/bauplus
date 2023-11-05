@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const invoiceSchema = z.object({
+  invoiceNumber: z.string(),
   invoiceId: z.string().optional(),
   clientId: z.string(),
   clientCompanyName: z.string().optional(),
@@ -85,6 +86,10 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     header: 'Client',
   },
   {
+    accessorKey: 'invoiceNumber',
+    header: 'Invoice Number',
+  },
+  {
     accessorKey: 'invoiceTypeName',
     header: 'Invoice Type',
   },
@@ -133,83 +138,6 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     cell: ({ row }) => <ActionsColumn item={row.original} />,
   },
 ];
-
-// export const invoiceSchema = z.object({
-//   invoiceId: z.string().optional(),
-//   clientId: z.string(),
-//   // companyID: z.string(), // this is the id for the company
-//   companyName: z.string().optional(),
-//   invoiceTypeId: z.string(), //this is the id for the invoice type
-//   // invoiceTypeName: z.string().optional(),
-//   invoiceDate: z.coerce.date(),
-//   dueDate: z.coerce.date(),
-//   totalAmount: z.coerce.number(),
-//   paidAmount: z.coerce.number(),
-//   invoiceStatusId: z.string(), //this is the id for the invoice type
-//   // invoiceStatus: z.string().optional(),
-//   paymentMethodId: z.string(), //this is the id for the payment method
-//   paymentMethod: z.string().optional(),
-//   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
-// });
-// export type IInvoice = z.infer<typeof invoiceSchema>;
-// export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
-//   {
-//     accessorKey: 'invoiceID',
-//     header: 'Invoice Id',
-//   },
-//   {
-//     accessorKey: 'clientId',
-//     header: 'Client Id',
-//   },
-//   {
-//     accessorKey: 'invoiceType',
-//     header: 'Invoice Type',
-//   },
-//   {
-//     accessorKey: 'invoiceDate',
-//     header: 'Invoice Date',
-//     cell({ row }) {
-//       const formatedDate = new Date(
-//         row.getValue('invoiceDate')
-//       ).toLocaleDateString('en-GB');
-//       return <div>{formatedDate}</div>;
-//     },
-//   },
-//   {
-//     accessorKey: 'dueDate',
-//     header: 'Due Date',
-//     cell({ row }) {
-//       const formatedDate = new Date(
-//         row.getValue('dueDate')
-//       ).toLocaleDateString('en-GB');
-//       return <div>{formatedDate}</div>;
-//     },
-//   },
-//   {
-//     accessorKey: 'totalAmount',
-//     header: 'Total Amount',
-//   },
-//   {
-//     accessorKey: 'paidAmount',
-//     header: 'Paid Amount',
-//   },
-//   {
-//     accessorKey: 'invoiceStatusId',
-//     header: 'invoice Status Id',
-//   },
-//   {
-//     accessorKey: 'paymentMethodId',
-//     header: 'payment Method Id',
-//   },
-//   {
-//     accessorKey: 'transactionId',
-//     header: 'transaction Id',
-//   },
-//   {
-//     id: 'actions',
-//     cell: ({ row }) => <ActionsColumn item={row.original} />,
-//   },
-// ];
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
