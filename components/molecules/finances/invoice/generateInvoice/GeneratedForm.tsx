@@ -31,12 +31,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
 import { CalendarIcon } from 'lucide-react';
-import { useCallback } from 'react';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 interface IGenerateProps {
   data: IgeneratedInvoice;
   setGenerateModalOpen: any;
+  setIsRegisterModalOpen: Dispatch<SetStateAction<boolean>>;
+  refetchInvoices: any;
 }
 interface registerModel {
   invoiceId?: string;
@@ -56,6 +59,8 @@ interface registerModel {
 const GeneratedForm = ({
   data,
   setGenerateModalOpen,
+  refetchInvoices,
+  setIsRegisterModalOpen,
 }: IGenerateProps) => {
   const form = useForm<IgeneratedInvoice>({
     resolver: zodResolver(generatedInvoice),
@@ -70,7 +75,7 @@ const GeneratedForm = ({
         clientId: `f231d0e8-0ae8-49dd-bdc2-c10db7d70259`,
         invoiceDate: formData.date,
         dueDate: formData.payment_due_date,
-        totalAmount: parseFloat(formData.total_amount),
+        totalAmount: parseFloat(`${formData.total_amount}`),
         paidAmount: parseFloat(`0`),
         invoiceStatusId: formData.invoiceStatusId!,
         invoiceTypeId: formData.invoiceTypeId!,
@@ -83,12 +88,16 @@ const GeneratedForm = ({
             'Successfully created generated invoice=>',
             res.data
           );
+          toast.success('Successfully created invoice');
+          refetchInvoices();
+          setIsRegisterModalOpen(false);
         })
         .catch((error) => {
           console.log(
             'Error while creating generated invoice=>',
             error
           );
+          toast.error('Something went wrong creating the invoice');
         })
         .finally(() => {
           setGenerateModalOpen(false);
@@ -115,7 +124,10 @@ const GeneratedForm = ({
               name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Invoice Status</FormLabel>
+                  <FormLabel>
+                    Invoice Status{' '}
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -146,7 +158,10 @@ const GeneratedForm = ({
               name="invoiceTypeId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Invoice Type</FormLabel>
+                  <FormLabel>
+                    Invoice Type{' '}
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -177,7 +192,7 @@ const GeneratedForm = ({
               control={form.control}
               name="date"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="flex flex-col">
                   <FormLabel>Invoice Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -185,16 +200,16 @@ const GeneratedForm = ({
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -206,12 +221,16 @@ const GeneratedForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
-                        //   initialFocus
+                        disabled={(date) =>
+                          date < new Date('1900-01-01')
+                        }
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
-
+                  {/* <FormDescription>
+                    Your date of birth is used to calculate your age.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -225,7 +244,7 @@ const GeneratedForm = ({
                 <FormItem>
                   <FormLabel>
                     Invoice Number
-                    <span className="text-red-500">*</span>
+                    {/* <span className="text-red-500">*</span> */}
                   </FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Invoice Number" {...field} />
@@ -251,6 +270,7 @@ const GeneratedForm = ({
                 </FormItem>
               )}
             />
+
             {/* Total amount */}
             <FormField
               control={form.control}

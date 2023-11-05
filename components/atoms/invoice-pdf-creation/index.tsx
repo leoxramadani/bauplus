@@ -524,41 +524,45 @@ const PDFRenderer: React.FC<pdfInputs> = ({
     generatePDF();
   };
 
-  return (
-    <>
-      {companyName !== undefined &&
+  if (invoiceDate instanceof Date && !isNaN(invoiceDate.getTime())) {
+    const timeInMillis: number = invoiceDate.getTime();
+    if (
+      timeInMillis !== 0 &&
+      companyName !== undefined &&
       totalAmount !== undefined &&
-      totalAmount !== '' &&
-      invoiceDate &&
-      invoiceDate.getTime() !== 0 ? (
-        <Modal
-          open={isCreateModalOpen}
-          onOpenChange={setIsCreateModalOpen}
-        >
-          <Modal.Trigger asChild>
-            <Button
-              onClick={handleButtonClick}
-              className="inline w-max bg-red-500"
-            >
-              Generate the invoice as PDF
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="PDF Preview"
-            description="You can go back and change the inputs if you don't like something."
+      totalAmount !== ''
+    ) {
+      return (
+        <>
+          <Modal
+            open={isCreateModalOpen}
+            onOpenChange={setIsCreateModalOpen}
           >
-            {pdfData ? (
-              <PDFViewer width="100%" height={500}>
-                {pdfData}
-              </PDFViewer>
-            ) : null}
-          </Modal.Content>
-        </Modal>
-      ) : (
-        ''
-      )}
-    </>
-  );
+            <Modal.Trigger asChild>
+              <Button
+                onClick={handleButtonClick}
+                className="inline w-max bg-red-500"
+              >
+                Generate the invoice as PDF
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content
+              title="PDF Preview"
+              description="You can go back and change the inputs if you don't like something."
+            >
+              {pdfData ? (
+                <PDFViewer width="100%" height={500}>
+                  {pdfData}
+                </PDFViewer>
+              ) : null}
+            </Modal.Content>
+          </Modal>
+        </>
+      );
+    }
+  } else {
+    return;
+  }
 };
 
 export default PDFRenderer;

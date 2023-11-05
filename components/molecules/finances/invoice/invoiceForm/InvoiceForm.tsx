@@ -51,17 +51,17 @@ import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-interface ICreateInvoice {
+interface IInvoiceForm {
   setIsModalOpen(open: boolean): void;
-  invoiceNumber?: string;
+  invoiceId?: string;
   refetchInvoices: any;
 }
 
-const CreateInvoiceForm = ({
+const InvoiceForm = ({
   setIsModalOpen,
-  invoiceNumber,
+  invoiceId,
   refetchInvoices,
-}: ICreateInvoice) => {
+}: IInvoiceForm) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -80,9 +80,9 @@ const CreateInvoiceForm = ({
     async function getData(Id: string) {
       console.log('inside getData');
       await axios
-        .get(GET_SPECIFIC_INVOICE + `?id=${Id}`)
+        .get(GET_SPECIFIC_INVOICE + `?invoiceId=${Id}`)
         .then((res) => {
-          console.log('setting employee data -->', res);
+          console.log('setting employee data -->', res.data);
           setInvoiceData(res.data);
         })
         .catch((error) => {
@@ -90,13 +90,15 @@ const CreateInvoiceForm = ({
         });
     }
 
-    if (invoiceNumber) {
-      getData(invoiceNumber);
+    if (invoiceId) {
+      getData(invoiceId);
     }
-  }, [invoiceNumber]);
+  }, [invoiceId]);
 
   const form = useForm<IInvoice>({
     resolver: zodResolver(invoiceSchema),
+    values: { ...invoiceData },
+    // mode: 'onChange',
   });
 
   const onSubmit = useCallback(
@@ -194,24 +196,25 @@ const CreateInvoiceForm = ({
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
-            {/* Payment Method */}
+            {/* Invoice Status */}
             <FormField
               control={form.control}
-              name="paymentMethodId"
+              name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Payment method</FormLabel>
+                  <FormLabel>Invoice Status </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select payment method" />
+                        <SelectValue placeholder="Select invoice status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {paymentMethods.map((invoice) => (
+                      {invoiceStatus.map((invoice) => (
                         <SelectItem
                           value={invoice.value}
                           key={invoice.value}
@@ -236,6 +239,7 @@ const CreateInvoiceForm = ({
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -385,7 +389,7 @@ const CreateInvoiceForm = ({
               control={form.control}
               name="invoiceDate"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="flex flex-col">
                   <FormLabel>Invoice Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -393,16 +397,17 @@ const CreateInvoiceForm = ({
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -414,39 +419,44 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
-                        //   initialFocus
+                        disabled={(date) =>
+                          date < new Date('1900-01-01')
+                        }
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
-
+                  {/* <FormDescription>
+                    Your date of birth is used to calculate your age.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*Invoice Date */}
+            {/*Due Date */}
             <FormField
               control={form.control}
               name="dueDate"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Due Date</FormLabel>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Due date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
-                            <span>Pick Due Date</span>
+                            <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -458,35 +468,39 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-
-                        //   initialFocus
+                        disabled={(date) =>
+                          date < new Date('1900-01-01')
+                        }
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
-
+                  {/* <FormDescription>
+                    Your date of birth is used to calculate your age.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            {/* Invoice Status */}
+            {/* Payment Method */}
             <FormField
               control={form.control}
-              name="invoiceStatusId"
+              name="paymentMethodId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Invoice Status</FormLabel>
+                  <FormLabel>Payment method</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select invoice status" />
+                        <SelectValue placeholder="Select payment method" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {invoiceStatus.map((invoice) => (
+                      {paymentMethods.map((invoice) => (
                         <SelectItem
                           value={invoice.value}
                           key={invoice.value}
@@ -502,7 +516,11 @@ const CreateInvoiceForm = ({
             />
           </div>
           <div className="flex flex-row gap-2">
-            <Button className="w-max" type="submit">
+            <Button
+              className="w-max"
+              type="submit"
+              disabled={!form.formState.isValid}
+            >
               Submit
             </Button>
 
@@ -521,15 +539,15 @@ const CreateInvoiceForm = ({
   );
 };
 
-export default CreateInvoiceForm;
+export default InvoiceForm;
 
 const invoiceStatus = [
+  { label: 'Pending', value: 'cea6308a-d138-4977-8814-929bfb4b6ad8' },
   {
     label: 'Cancelled',
     value: '039e9103-4136-4961-afe2-496a0e58ec43',
   },
   { label: 'Paid', value: '809bcb94-3496-4a80-9566-900ce5f6e481' },
-  { label: 'Pending', value: 'cea6308a-d138-4977-8814-929bfb4b6ad8' },
   {
     label: 'Partially Paid',
     value: '482ec8b8-b321-4c06-905c-9cc89ba689a3',
