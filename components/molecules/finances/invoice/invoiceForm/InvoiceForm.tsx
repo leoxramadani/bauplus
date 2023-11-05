@@ -83,11 +83,11 @@ const InvoiceForm = ({
       await axios
         .get(GET_SPECIFIC_INVOICE + `?invoiceId=${Id}`)
         .then((res) => {
-          console.log('setting employee data -->', res.data);
+          console.log('setting invoice data -->', res.data);
           setInvoiceData(res.data);
         })
         .catch((error) => {
-          console.log('error fetching employees->', error);
+          console.log('error invoice employees->', error);
         });
     }
 
@@ -203,7 +203,7 @@ const InvoiceForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-6"
         >
           <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
             {/* Invoice Number */}

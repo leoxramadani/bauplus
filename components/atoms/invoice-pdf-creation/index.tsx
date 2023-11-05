@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Document,
   Font,
@@ -73,6 +72,8 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   dueDate = new Date(new Date().getDate() + 15),
   content,
 }) => {
+  console.log('inside pdfrenderere->', totalAmount);
+
   const [subject, setSubject] = useState('Everest XH.D.');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   // Transform the values into an array
@@ -538,12 +539,18 @@ const PDFRenderer: React.FC<pdfInputs> = ({
             onOpenChange={setIsCreateModalOpen}
           >
             <Modal.Trigger asChild>
-              <Button
+              {/* <Button
                 onClick={handleButtonClick}
                 className="inline w-max bg-red-500"
               >
                 {content}
-              </Button>
+              </Button> */}
+              <div
+                className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                onClick={handleButtonClick}
+              >
+                {content}
+              </div>
             </Modal.Trigger>
             <Resizable
               width={500} // Set the initial width as needed

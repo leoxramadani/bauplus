@@ -58,6 +58,7 @@ import CreateInfoDetails from './CreateInfoDetails/CreateInfoDetails';
 export interface IClientsCreate {
   setModal(open: boolean): void;
   clientId?: string;
+  refetchClients: any;
 }
 export interface YourAccountDetailsType {
   accountNumber: string;
@@ -74,7 +75,11 @@ export interface YourContactInfo {
   address: string;
 }
 
-const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
+const ClientsForm = ({
+  setModal,
+  clientId,
+  refetchClients,
+}: IClientsCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
@@ -219,7 +224,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
             setModal(false);
             setIsSubmitting(false);
             toast.success('Successfully updated client');
-            // refetchEmployees();
+            refetchClients();
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
@@ -255,11 +260,12 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
             toast.success('Client added');
             setModal(false);
             setIsSubmitting(false);
+            refetchClients();
           })
           .catch((error) => {
-            console.error('Error creating employee:', error);
+            console.error('Error creating client:', error);
             toast.error(
-              'There was an issue adding employee! Please try again.'
+              'There was an issue adding client! Please try again.'
             );
           });
       }
@@ -270,7 +276,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   );
 
   const onError = (error: any) => {
-    console.log('error====> sadasda', error);
+    console.log('error submiting client form --->', error);
   };
 
   const handleTrashClick = (
@@ -728,11 +734,14 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               variant="default"
               loading={isSubmitting}
               className="w-max"
+              disabled={!form.formState.isValid}
             >
               Submit
             </Button>
           </form>
         </Form>
+
+        {/* Modals for Details */}
 
         <Modal open={accountModal} onOpenChange={setAccoundModal}>
           <Modal.Content

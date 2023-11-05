@@ -72,6 +72,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
         console.log('response after delete success =>', res);
       })
       .catch((error) => {
+        toast.error('Error deleting client!');
         console.log('Response after error:', error);
       });
   };
@@ -100,25 +101,28 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
               Delete Client
             </div>
           </Modal.Trigger>
           <Modal.Content
             title="Delete Client"
             description="Are you sure you want to delete this client?"
-            className="max-w-lg"
+            className="max-w-xl"
           >
             <div className="flex flex-row gap-2">
-              <Button
-                variant="destructive"
-                className="w-max"
-                onClick={() => handleDelete(item.clientId)}
-              >
-                Delete
-              </Button>
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.clientId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
               <Modal.Close asChild>
                 <Button variant="outline" className="w-max">
                   Close
@@ -297,22 +301,24 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
 ];
 
 export const createClientSchema = z.object({
-  clientTypeId: z.string().optional(),
-  companyName: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  clientTypeId: z.string(),
+  companyName: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   clientAccountNumbers: z
     .object({
       accountNumber: z.string().optional(),
       country: z.string().optional(),
     })
-    .array(),
+    .array()
+    .optional(),
   clientBusinessIds: z
     .object({
       businessId: z.string().optional(),
       country: z.string().optional(),
     })
-    .array(),
+    .array()
+    .optional(),
   clientContactInfos: z
     .object({
       email: z.string().optional(),
