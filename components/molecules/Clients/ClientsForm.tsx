@@ -246,9 +246,9 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
         await axios
           .post(CREATE_CLIENTS, {
             ...data,
-            clientAccountNumbers: accountDetails,
-            clientBusinessIds: businessDetails,
-            clientContactInfos: clientInfos,
+            // clientAccountNumbers: accountDetails,
+            // clientBusinessIds: businessDetails,
+            // clientContactInfos: clientInfos,
           })
           .then((res) => {
             console.log('Success->', res);
