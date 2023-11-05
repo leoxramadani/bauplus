@@ -100,6 +100,7 @@ const GenerateInvoiceForm = ({
       })
       .catch((error) => {
         console.log('error=>', error);
+        toast.error('Failed to retrieve data from the OCR');
       })
       .finally(() => {
         setOcrIsLoading(false);
@@ -128,7 +129,7 @@ const GenerateInvoiceForm = ({
           <Label htmlFor="picture">Image</Label>
           <Input type="file" onChange={handleUpload} />
         </div>
-        <Button type="submit" disabled={!form.formState.isValid}>
+        <Button type="submit" disabled={ocrIsLoading}>
           Submit
         </Button>
       </form>
