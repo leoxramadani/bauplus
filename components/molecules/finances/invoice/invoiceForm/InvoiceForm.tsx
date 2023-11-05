@@ -119,6 +119,7 @@ const InvoiceForm = ({
             });
             setIsModalOpen(false);
             toast.success('Successfully updated invoice');
+            refetchInvoices();
           })
           .catch((error) => {
             console.log('Error UPDATING invoice:', error);
