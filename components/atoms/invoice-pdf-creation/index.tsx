@@ -56,6 +56,7 @@ Font.register({
 });
 
 interface pdfInputs {
+  invoiceNumber: number;
   companyName: string;
   totalAmount: string;
   invoiceDate: Date;
@@ -65,13 +66,13 @@ interface pdfInputs {
 }
 
 const PDFRenderer: React.FC<pdfInputs> = ({
+  invoiceNumber,
   companyName,
   totalAmount,
   invoiceDate,
   dueDate = new Date(new Date().getDate() + 15),
   content,
 }) => {
-  const [invoiceNumber, setInvoiceNumber] = useState('#TestNumber');
   const [subject, setSubject] = useState('Everest XH.D.');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   // Transform the values into an array
@@ -81,8 +82,6 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   );
 
   const [selectedLogo, setSelectedLogo] = useState('1');
-
-  const [isResized, setIsResized] = useState(false);
 
   const generatePDF = () => {
     if (
@@ -197,7 +196,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                       marginTop: 5,
                     }}
                   >
-                    {invoiceNumber}
+                    #{invoiceNumber}
                   </Text>
                 </View>
                 {/*end - invoice number*/}

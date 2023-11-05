@@ -70,6 +70,7 @@ const InvoiceForm = ({
   const [companyName, setCompanyName] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
   const [invoiceDate, setInvoiceDate] = useState(new Date());
+  const [invoiceNumber, setInvoiceNumber] = useState(0);
   const [dueDate, setDueDate] = useState(new Date());
   const {
     data: clients,
@@ -162,6 +163,7 @@ const InvoiceForm = ({
     setCompanyName(String(selectedClient?.companyName));
     setInvoiceDate(form.getValues().invoiceDate);
     setTotalAmount(String(form.getValues().totalAmount));
+    setInvoiceNumber(Number(form.getValues().invoiceNumber));
 
     // Calculate the due date as 15 days after the invoice date
     const invoiceDate = form.getValues().invoiceDate;
@@ -183,6 +185,7 @@ const InvoiceForm = ({
     form.watch('invoiceDate'),
     form.watch('totalAmount'),
     form.watch('dueDate'),
+    form.watch('invoiceNumber'),
   ]);
 
   const onError = (error: any) => {
@@ -192,7 +195,8 @@ const InvoiceForm = ({
   const isDataComplete =
     form.getValues().clientId &&
     form.getValues().totalAmount &&
-    form.getValues().invoiceDate;
+    form.getValues().invoiceDate &&
+    form.getValues().invoiceNumber;
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
@@ -549,6 +553,7 @@ const InvoiceForm = ({
 
             {isDataComplete && (
               <PDFRenderer
+                invoiceNumber={invoiceNumber}
                 companyName={companyName}
                 totalAmount={String(totalAmount)}
                 invoiceDate={invoiceDate}

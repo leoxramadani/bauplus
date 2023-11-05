@@ -267,6 +267,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           </Modal.Content>
           <DropdownMenuSeparator />
           <PDFRenderer
+            invoiceNumber={item.invoiceNumber}
             companyName={String(companyName)}
             totalAmount={String(item.totalAmount)}
             invoiceDate={new Date(item.invoiceDate)}
