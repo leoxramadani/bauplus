@@ -15,10 +15,13 @@ import { useEffect, useState } from 'react';
 const BankAccounts = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, isError, isLoading, error } = useData<IBank[]>(
-    ['bank_accounts'],
-    GET_ALL_BANKACCOUNTS
-  );
+  const {
+    data,
+    isError,
+    isLoading,
+    error,
+    refetch: bankRefetch,
+  } = useData<IBank[]>(['bank_accounts'], GET_ALL_BANKACCOUNTS);
 
   useEffect(() => {
     if (router.query.id) {
@@ -57,6 +60,7 @@ const BankAccounts = () => {
                   router.isReady ? router.query.id?.toString() : ''
                 }
                 setModal={setIsOpen}
+                bankRefetch={bankRefetch}
               />
             </Modal.Content>
           </Modal>
