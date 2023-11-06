@@ -1,5 +1,4 @@
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import NoticeForm from '@/components/molecules/notices/NoticeForm';
 import NoticesCard from '@/components/molecules/notices/NoticesCard';
 import { Button } from '@/components/ui/button';
@@ -24,10 +23,9 @@ interface Notice {
 const Notices = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { data: noticesData } = useData<Notice[]>(
-    ['notices'],
-    GET_ALL_NOTICES
-  );
+  const { data: noticesData, refetch: noticesRefetch } = useData<
+    Notice[]
+  >(['notices'], GET_ALL_NOTICES);
   useEffect(() => {
     if (router.query.id) {
       setOpen(true);
@@ -50,6 +48,7 @@ const Notices = () => {
             >
               <NoticeForm
                 setIsModalOpen={setOpen}
+                noticesRefetch={noticesRefetch}
                 noticeId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
