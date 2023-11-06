@@ -80,7 +80,6 @@ const GenerateInvoiceForm = ({
       )
       .then((res) => {
         console.log('response=>', res.data);
-        const ocrReturn: IgeneratedInvoice = res.data;
         if (res.data) {
           res.data.date = isValidDate(res.data.date)
             ? new Date(res.data.date)
@@ -91,8 +90,20 @@ const GenerateInvoiceForm = ({
             ? new Date(res.data.payment_due_date)
             : null;
 
-          if (isNaN(Number(res.data.total_amount))) {
-            res.data.total_amount = 0;
+          // if (isNaN(Number(res.data.total_amount))) {
+
+          //   res.data.total_amount = 0;
+
+          // }
+
+          if (res.data.total_in_denars) {
+            console.log(
+              'res.data.total_in_denars->',
+              res.data.total_in_denars
+            );
+            res.data.total_amount = swapCommaAndDot(
+              res.data.total_in_denars
+            );
           }
         }
         setOcrData(res.data);
@@ -177,3 +188,27 @@ const GenerateInvoiceForm = ({
 };
 
 export default GenerateInvoiceForm;
+
+function swapCommaAndDot(inputString: string): number | null {
+  let cleanedString = inputString.replace(/ /g, ''); // Remove spaces
+
+  const dotIndex = cleanedString.indexOf('.');
+  const commaIndex = cleanedString.indexOf(',');
+
+  if (dotIndex !== -1 && commaIndex !== -1 && dotIndex < commaIndex) {
+    // Case: 12.575,55 дen. => Swap comma and dot
+    cleanedString = cleanedString
+      .replace(/\./g, '') // Remove dots
+      .replace(',', '.'); // Replace comma with dot
+  } else if (commaIndex !== -1) {
+    // Case: 12,575.55 => Replace comma with dot
+    const reCleanString: string = cleanedString
+      .replace(/,/g, '')
+      .replace(' ', '');
+    const floatValue: number = parseFloat(reCleanString);
+    return floatValue;
+  }
+
+  const floatValue: number = parseFloat(cleanedString);
+  return floatValue;
+}
