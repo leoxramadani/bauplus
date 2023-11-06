@@ -6,7 +6,13 @@ import Image from 'next/image';
 import { useState } from 'react';
 import NoticeForm from './NoticeForm';
 
-const NoticesCard = ({ cardData }: { cardData: any }) => {
+const NoticesCard = ({
+  cardData,
+  noticesRefetch,
+}: {
+  cardData: any;
+  noticesRefetch: any;
+}) => {
   const [open, setOpen] = useState(false);
   const maxDescriptionLength = 100;
 
@@ -92,6 +98,7 @@ const NoticesCard = ({ cardData }: { cardData: any }) => {
                 <NoticeForm
                   setIsModalOpen={setOpen}
                   noticeId={cardData.noticeId}
+                  noticesRefetch={noticesRefetch}
                 />
               </Modal.Content>
             </Modal>
