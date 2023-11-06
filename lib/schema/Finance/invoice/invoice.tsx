@@ -143,7 +143,6 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -153,7 +152,6 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
-
   const handleDelete = async (id: string) => {
     await axios
       .delete(INVOICE_DELETE + `?invoiceId=${id}`)
@@ -171,10 +169,10 @@ const ActionsColumn = ({ item }: { item: any }) => {
         });
       })
       .catch((error) => {
+        toast.error('Error deleting invoice!');
         console.log('Response after error:', error);
       });
   };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -188,14 +186,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           onClick={() =>
             navigator.clipboard.writeText(item.invoiceId)
           }
         >
           Copy item id
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        </DropdownMenuItem> 
+        <DropdownMenuSeparator />*/}
         <DropdownMenuItem onClick={() => handleEdit(item.invoiceId)}>
           Edit row
         </DropdownMenuItem>
@@ -229,16 +227,16 @@ const ActionsColumn = ({ item }: { item: any }) => {
               </Modal.Close>
             </div>
           </Modal.Content>
-          <DropdownMenuSeparator />
-          <PDFRenderer
-            invoiceNumber={item.invoiceNumber}
-            companyName={String(item.clientCompanyName)}
-            totalAmount={String(item.totalAmount)}
-            invoiceDate={new Date(item.invoiceDate)}
-            dueDate={new Date(item.dueDate)}
-            content="Create as PDF"
-          />
         </Modal>
+        <DropdownMenuSeparator />
+        <PDFRenderer
+          invoiceNumber={item.invoiceNumber}
+          companyName={String(item.clientCompanyName)}
+          totalAmount={String(item.totalAmount)}
+          invoiceDate={new Date(item.invoiceDate)}
+          dueDate={new Date(item.dueDate)}
+          content="Create as PDF"
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

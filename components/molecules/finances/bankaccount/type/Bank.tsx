@@ -61,7 +61,11 @@ interface IEmployee {
   departmentId: string;
 }
 
-const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
+const Bank = ({
+  setModal,
+  bankAccountId,
+  bankRefetch,
+}: IBankAccountCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bankAccount, setBankAccount] = useState<any>();
@@ -139,6 +143,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
           toast.success('Successfully updated bank account!');
           setIsSubmitting(false);
           setModal(false);
+          bankRefetch();
         } else {
           // Bank account data is empty, perform create
           const res = await axios.post(CREATE_BANK_ACCOUNT, {
@@ -149,6 +154,7 @@ const Bank = ({ setModal, bankAccountId }: IBankAccountCreate) => {
           toast.success('Successfully created new bank account!');
           setIsSubmitting(false);
           setModal(false);
+          bankRefetch();
         }
       } catch (error) {
         console.error('Error:', error);

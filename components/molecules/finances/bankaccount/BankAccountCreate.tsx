@@ -14,10 +14,12 @@ import Cash from './type/Cash';
 export interface IBankAccountCreate {
   setModal(open: boolean): void;
   bankAccountId?: string;
+  bankRefetch: any;
 }
 
 const BankAccountCreate = ({
   setModal,
+  bankRefetch,
   bankAccountId,
 }: IBankAccountCreate) => {
   const [accountType, setAccountType] = useState<'Bank' | 'Cash'>(
@@ -65,6 +67,7 @@ const BankAccountCreate = ({
         <Bank
           bankAccountId={bankAccountId ? bankAccountId : ''}
           setModal={setModal}
+          bankRefetch={bankRefetch}
         />
       ) : (
         <Cash />
