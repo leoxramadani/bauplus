@@ -25,7 +25,6 @@ import {
   ShoppingCart,
   TrendingUp,
   Wallet,
-  Wallet2,
 } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -194,28 +193,37 @@ const Main = () => {
     }
     getData();
   }, []);
-  const [COGsCalculatedCurrentMonth,setCOGsCalculatedCurrentMonth] = useState<number>(0);
-  const [COGsCalculatedPastMonth,setCOGsCalculatedPastMonth] = useState<number>(0);
-  useEffect(()=>{
-
-    if(AmountRecievableCurrentMonth != undefined || AmountPayableCurrentMonth != undefined)
-    {
-      const x1 = AmountRecievableCurrentMonth
-      const x2 = AmountPayableCurrentMonth
-      const y = (x1 != undefined ? x1 : 0) -(x2 != undefined ? x2 : 0);
+  const [COGsCalculatedCurrentMonth, setCOGsCalculatedCurrentMonth] =
+    useState<number>(0);
+  const [COGsCalculatedPastMonth, setCOGsCalculatedPastMonth] =
+    useState<number>(0);
+  useEffect(() => {
+    if (
+      AmountRecievableCurrentMonth != undefined ||
+      AmountPayableCurrentMonth != undefined
+    ) {
+      const x1 = AmountRecievableCurrentMonth;
+      const x2 = AmountPayableCurrentMonth;
+      const y =
+        (x2 != undefined ? x2 : 0) - (x1 != undefined ? x1 : 0);
       setCOGsCalculatedCurrentMonth(y);
     }
-    if(AmountRecievableCurrentMonth != undefined || AmountPayableCurrentMonth != undefined)
-    {
-      const x1 = AmountRecievablePastMonth
-      const x2 = AmountPayablePastMonth
-      const y = (x1 != undefined ? x1 : 0) -(x2 != undefined ? x2 : 0);
+    if (
+      AmountRecievableCurrentMonth != undefined ||
+      AmountPayableCurrentMonth != undefined
+    ) {
+      const x1 = AmountRecievablePastMonth;
+      const x2 = AmountPayablePastMonth;
+      const y =
+        (x2 != undefined ? x2 : 0) - (x1 != undefined ? x1 : 0);
       setCOGsCalculatedPastMonth(y);
     }
-
-  },[AmountRecievableCurrentMonth,AmountPayableCurrentMonth,AmountRecievablePastMonth,AmountPayablePastMonth])
-
-
+  }, [
+    AmountRecievableCurrentMonth,
+    AmountPayableCurrentMonth,
+    AmountRecievablePastMonth,
+    AmountPayablePastMonth,
+  ]);
 
   return (
     <>
@@ -232,33 +240,9 @@ const Main = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex w-full flex-col gap-4">
-        <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5">
+        <div className="grid w-full gap-4 rounded-lg bg-gradient-to-b from-indigo-500 to-[#F5F7FA] to-85% p-8 pb-[200px] sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4">
           <KpiCard
             title="Gross Revenue"
-            metric={
-              AmountRecievableCurrentMonth?.toString() != undefined
-              ? AmountRecievableCurrentMonth?.toString()
-              : '0'
-            }
-            pastMonth={
-              AmountRecievablePastMonth != undefined
-                ? AmountRecievablePastMonth
-                : 0
-            }
-            percentage="7.5"
-            delta="increase"
-            icon={<ShoppingCart color="#fff" size={32} />}
-          />
-          <KpiCard
-            title="COGs"
-            metric={COGsCalculatedCurrentMonth.toString() != undefined ? COGsCalculatedCurrentMonth.toString() : '0'}
-            pastMonth={COGsCalculatedPastMonth != undefined ? COGsCalculatedPastMonth : 0}
-            percentage="3.0"
-            delta="increase"
-            icon={<TrendingUp color="#fff" size={32} />}
-          />
-          <KpiCard
-            title="EBIT"
             metric={
               AmountPayableCurrentMonth?.toString() != undefined
                 ? AmountPayableCurrentMonth?.toString()
@@ -267,6 +251,38 @@ const Main = () => {
             pastMonth={
               AmountPayablePastMonth != undefined
                 ? AmountPayablePastMonth
+                : 0
+            }
+            percentage="7.5"
+            delta="increase"
+            icon={<ShoppingCart color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="COGs"
+            metric={
+              AmountRecievableCurrentMonth?.toString() != undefined
+                ? AmountRecievableCurrentMonth?.toString()
+                : '0'
+            }
+            pastMonth={
+              AmountRecievablePastMonth != undefined
+                ? AmountRecievablePastMonth
+                : 0
+            }
+            percentage="3.0"
+            delta="increase"
+            icon={<TrendingUp color="#fff" size={32} />}
+          />
+          <KpiCard
+            title="EBIT"
+            metric={
+              COGsCalculatedCurrentMonth.toString() != undefined
+                ? COGsCalculatedCurrentMonth.toString()
+                : '0'
+            }
+            pastMonth={
+              COGsCalculatedPastMonth != undefined
+                ? COGsCalculatedPastMonth
                 : 0
             }
             percentage="10.2"
@@ -281,14 +297,14 @@ const Main = () => {
             delta="increase"
             icon={<BarChart3 color="#fff" size={32} />}
           />
-          <KpiCard
-            title="Net Revenue"
+          {/* <KpiCard
+            title="Net Income"
             metric="0"
             pastMonth={0}
             percentage="1.8"
             delta="increase"
             icon={<Wallet2 color="#fff" size={32} />}
-          />
+          /> */}
         </div>
 
         <div className="mt-[-170px] flex h-max w-full flex-col gap-10 px-8 pb-10">
