@@ -197,6 +197,7 @@ function swapCommaAndDot(inputString: string): number | null {
 
   if (dotIndex !== -1 && commaIndex !== -1 && dotIndex < commaIndex) {
     // Case: 12.575,55 дen. => Swap comma and dot
+    //
     cleanedString = cleanedString
       .replace(/\./g, '') // Remove dots
       .replace(',', '.'); // Replace comma with dot
