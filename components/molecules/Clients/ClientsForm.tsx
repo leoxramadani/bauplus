@@ -61,15 +61,18 @@ export interface IClientsCreate {
   refetchClients: any;
 }
 export interface YourAccountDetailsType {
+  id: string;
   accountNumber: string;
   country: string;
 }
 
 export interface YourBusinessDetails {
+  id: string;
   businessId: string;
   country: string;
 }
 export interface YourContactInfo {
+  id: string;
   email: string;
   phone: string;
   address: string;
@@ -87,6 +90,7 @@ const ClientsForm = ({
   const [businessModal, setBusinessModal] = useState<boolean>(false);
   const [clientModal, setClientModal] = useState<boolean>(false);
   const [accDetail, setAccDetail] = useState<YourAccountDetailsType>({
+    id: '',
     accountNumber: '',
     country: '',
   });
@@ -95,10 +99,13 @@ const ClientsForm = ({
   const [accountDetails, setAccountDetails] = useState<
     YourAccountDetailsType[]
   >([]);
+  console.log(accountDetails);
+
   const [businessDetails, setBusinessDetails] = useState<
     YourBusinessDetails[]
   >([]);
   const [bizDetail, setBizDetail] = useState<YourBusinessDetails>({
+    id: '',
     businessId: '',
     country: '',
   });
@@ -106,6 +113,7 @@ const ClientsForm = ({
     []
   );
   const [clientInfo, setClientInfo] = useState<YourContactInfo>({
+    id: '',
     email: '',
     phone: '',
     address: '',
@@ -187,20 +195,6 @@ const ClientsForm = ({
       //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
       //   console.log('submit:', data);
       if (clientId && router.query.id) {
-        // const res = await axios.put(
-        //   UPDATE_SPECIFIC_CLIENTS,
-        //   {
-        //     ...data,
-        //     clientAccountNumbers: accountDetails,
-        //     clientBusinessIds: businessDetails,
-        //     clientContactInfos: clientInfos,
-        //   },
-        //   {
-        //     params: {
-        //       id: clientId,
-        //     },
-        //   }
-        // );
         await axios
           .put(
             UPDATE_SPECIFIC_CLIENTS,
@@ -281,15 +275,16 @@ const ClientsForm = ({
 
   const handleTrashClick = (
     indexToRemove: number,
-    setDetails: any
+    setDetails: any,
+    details: any
   ) => {
     // Create a new array with the item removed
-    const updatedAccountDetails = accountDetails.filter(
-      (_, index) => index !== indexToRemove
+    const updatedDetails = details.filter(
+      (_: any, index: number) => index !== indexToRemove
     );
 
     // Update the state with the new array
-    setDetails(updatedAccountDetails);
+    setDetails(updatedDetails);
   };
 
   return (
@@ -482,7 +477,8 @@ const ClientsForm = ({
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setAccountDetails
+                                            setAccountDetails,
+                                            accountDetails
                                           )
                                         }
                                       />
@@ -597,7 +593,8 @@ const ClientsForm = ({
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setBusinessDetails
+                                            setBusinessDetails,
+                                            businessDetails
                                           )
                                         }
                                       />
@@ -710,7 +707,8 @@ const ClientsForm = ({
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setClientInfos
+                                            setClientInfos,
+                                            clientInfos
                                           )
                                         }
                                       />
@@ -734,7 +732,7 @@ const ClientsForm = ({
               variant="default"
               loading={isSubmitting}
               className="w-max"
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid || isSubmitting}
             >
               Submit
             </Button>
