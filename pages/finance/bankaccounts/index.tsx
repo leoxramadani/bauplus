@@ -1,6 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
@@ -70,7 +71,7 @@ const BankAccounts = () => {
         {data && (
           <DataTable data={data} columns={bankAccountColumnDef} />
         )}
-        {isLoading && <p> Loading...</p>}
+        {isLoading && <DataTableLoading columnCount={bankAccountColumnDef.length} />}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}

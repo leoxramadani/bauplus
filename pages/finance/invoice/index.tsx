@@ -3,6 +3,7 @@ import CreateInvoiceForm from '@/components/molecules/finances/invoice/CreateInv
 import InvoiceForm from '@/components/molecules/finances/invoice/CreateInvoiceForm';
 import GenerateInvoiceForm from '@/components/molecules/finances/invoice/GenerateInvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { INVOICE_GET_ALL } from '@/lib/constants/endpoints/finance/invoice';
 import useData from '@/lib/hooks/useData';
@@ -107,10 +108,7 @@ const Invoice = () => {
           {isError ? (
             <div>No data.</div>
           ) : (
-            <div>
-              {' '}
-              <p>Loading ...</p>
-            </div>
+            <DataTableLoading columnCount={invoiceColumnDef.length} />
           )}
         </>
       )}

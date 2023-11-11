@@ -23,7 +23,7 @@ const Settings = () => {
   return (
     <>
       <div className="">
-        <Tabs defaultValue="account" className="w-full p-0">
+        <Tabs defaultValue="company" className="w-full p-0">
           <TabsList className="flex w-full justify-start gap-2">
             <TabsTrigger value="company">Company</TabsTrigger>
             <TabsTrigger value="app">App</TabsTrigger>

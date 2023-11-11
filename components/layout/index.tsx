@@ -40,7 +40,7 @@ const Layout = ({ children }: PropsWithChildren) => {
     console.log('Toggle sidebar here:');
   };
   if (status === 'loading') return <Loading />;
-  if (router.asPath === '/login') return children;
+  if (router.asPath === '/login' || router.asPath === '/signup') return children;
 
   return (
     <>
