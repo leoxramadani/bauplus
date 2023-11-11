@@ -467,7 +467,7 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
         className={`w-full text-left transition-[opacity,transform] ${
           Icon && 'ml-7'
         } group-hover/trigger ${
-          Icon && !expanded && 'opacity-0'
+          Icon && !expanded && 'opacity-0 pointer-events-none'
         }`}
       >
         {text}
@@ -532,6 +532,8 @@ function SidebarItem({
               isInCurrentPath() && 'flex text-white'
             }`}
           >
+                        {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
+
             <NavigationItem text={text} Icon={Icon} />
             <ChevronDown
               size={18}
@@ -559,6 +561,7 @@ function SidebarItem({
               )
             }
           >
+            {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger

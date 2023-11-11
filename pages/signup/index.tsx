@@ -12,6 +12,7 @@ import stripe from '@/public/stripe.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -42,10 +43,27 @@ const SignupForm = ({ className, ...props }: SignupFormProps) => {
   });
 
   const onSubmit: SubmitHandler<ISignUp> = async (data) => {
-    await signup(data).then((res) => {
-      console.log(res);
-      toast.success('Sign up successful!');
-    });
+    await signup(data)
+      .then((res) => {
+        signIn('credentials', {
+          redirect: false,
+          ...data,
+        }).then((res) => {
+          if (res?.ok) {
+            setIsLoading(false);
+            router.push('/');
+          } else {
+            setIsLoading(false);
+            console.error("Couldn't log in automatically.", res);
+            router.push('/login');
+          }
+        });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error('Something went wrong.', error);
+        toast.error('Something went wrong, please try again later.');
+      });
   };
 
   const onError = (errors: any) => console.error(errors);
@@ -55,38 +73,38 @@ const SignupForm = ({ className, ...props }: SignupFormProps) => {
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label className="sr-only" htmlFor="email">
+            <label className="sr-only" htmlFor="firstName">
               First name
             </label>
             <Input
-              id="email"
-              placeholder="Email"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="on"
-              autoCorrect="off"
-              disabled={isLoading}
-              required
-              {...register('email')}
-            />
-            {errors.firstName && (
-              <p className="error">{errors.firstName.message}</p>
-            )}
-          </div>
-          <div className="grid gap-1">
-            <label className="sr-only" htmlFor="email">
-              Last name
-            </label>
-            <Input
-              id="email"
-              placeholder="Email"
-              type="email"
+              id="firstName"
+              placeholder="First name"
+              type="text"
               autoCapitalize="none"
               autoComplete="on"
               autoCorrect="off"
               disabled={isLoading}
               required
               {...register('firstName')}
+            />
+            {errors.firstName && (
+              <p className="error">{errors.firstName.message}</p>
+            )}
+          </div>
+          <div className="grid gap-1">
+            <label className="sr-only" htmlFor="lastName">
+              Last name
+            </label>
+            <Input
+              id="lastName"
+              placeholder="Last name"
+              type="text"
+              autoCapitalize="none"
+              autoComplete="on"
+              autoCorrect="off"
+              disabled={isLoading}
+              required
+              {...register('lastName')}
             />
             {errors.lastName && (
               <p className="error">{errors.lastName.message}</p>
@@ -187,7 +205,7 @@ const SignupForm = ({ className, ...props }: SignupFormProps) => {
           )}
           <Button
             disabled={isLoading}
-            loading={isSignupLoading}
+            loading={isLoading}
             className="bg-primary"
             type="submit"
           >
