@@ -1,3 +1,4 @@
+import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -32,7 +33,6 @@ import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
   GET_SPECIFIC_INVOICE,
   INVOICE_CREATE,
-  INVOICE_REGISTER,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
 import useData from '@/lib/hooks/useData';
@@ -44,56 +44,62 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-interface ICreateInvoice {
+interface IInvoiceForm {
   setIsModalOpen(open: boolean): void;
-  invoiceNumber?: string;
-  refetchInvoices:any
+  invoiceId?: string;
+  refetchInvoices: any;
 }
 
-const CreateInvoiceForm = ({
+const InvoiceForm = ({
   setIsModalOpen,
-  invoiceNumber,
-  refetchInvoices
-}: ICreateInvoice) => {
+  invoiceId,
+  refetchInvoices,
+}: IInvoiceForm) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [totalAmount, setTotalAmount] = useState('');
+  const [invoiceDate, setInvoiceDate] = useState(new Date());
+  const [invoiceNumber, setInvoiceNumber] = useState(0);
+  const [dueDate, setDueDate] = useState(new Date());
   const {
     data: clients,
     isError: clientsIsError,
     isLoading: clientsIsLoading,
   } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
-
   useEffect(() => {
     async function getData(Id: string) {
       console.log('inside getData');
       await axios
-        .get(GET_SPECIFIC_INVOICE + `?id=${Id}`)
+        .get(GET_SPECIFIC_INVOICE + `?invoiceId=${Id}`)
         .then((res) => {
-          console.log('setting employee data -->', res);
+          console.log('setting invoice data -->', res.data);
           setInvoiceData(res.data);
         })
         .catch((error) => {
-          console.log('error fetching employees->', error);
+          console.log('error invoice employees->', error);
         });
     }
 
-    if (invoiceNumber) {
-      getData(invoiceNumber);
+    if (invoiceId) {
+      getData(invoiceId);
     }
-  }, [invoiceNumber]);
+  }, [invoiceId]);
 
   const form = useForm<IInvoice>({
     resolver: zodResolver(invoiceSchema),
+    values: { ...invoiceData },
+    // mode: 'onChange',
   });
 
   const onSubmit = useCallback(
@@ -114,6 +120,7 @@ const CreateInvoiceForm = ({
             });
             setIsModalOpen(false);
             toast.success('Successfully updated invoice');
+            refetchInvoices();
           })
           .catch((error) => {
             console.log('Error UPDATING invoice:', error);
@@ -128,7 +135,7 @@ const CreateInvoiceForm = ({
             // clientId: data.clientId,
             // totalAmount: data.totalAmount,
             // paidAmount: data.paidAmount,
-            ...data
+            ...data,
           })
           .then((res) => {
             console.log('Successfully created invoice->', res);
@@ -148,36 +155,93 @@ const CreateInvoiceForm = ({
     [invoiceData]
   );
 
+  useEffect(() => {
+    const selectedClient = clients?.find(
+      (client) => client.clientId === form.watch('clientId')
+    );
+
+    setCompanyName(String(selectedClient?.companyName));
+    setInvoiceDate(form.getValues().invoiceDate);
+    setTotalAmount(String(form.getValues().totalAmount));
+    setInvoiceNumber(Number(form.getValues().invoiceNumber));
+
+    // Calculate the due date as 15 days after the invoice date
+    const invoiceDate = form.getValues().invoiceDate;
+    const dueDate = new Date(invoiceDate);
+
+    if (
+      invoiceDate instanceof Date &&
+      !isNaN(invoiceDate.getTime())
+    ) {
+      if (form.getValues().dueDate == undefined) {
+        dueDate.setDate(invoiceDate?.getDate() + 15);
+        setDueDate(dueDate);
+      } else {
+        setDueDate(form.getValues().dueDate);
+      }
+    }
+  }, [
+    form.watch('clientId'),
+    form.watch('invoiceDate'),
+    form.watch('totalAmount'),
+    form.watch('dueDate'),
+    form.watch('invoiceNumber'),
+  ]);
+
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
+
+  const isDataComplete =
+    form.getValues().clientId &&
+    form.getValues().totalAmount &&
+    form.getValues().invoiceDate &&
+    form.getValues().invoiceNumber;
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-6"
         >
           <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
-            {/* Payment Method */}
+            {/* Invoice Number */}
             <FormField
               control={form.control}
-              name="paymentMethodId"
+              name="invoiceNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Invoice Number
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Invoice Number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Invoice Status */}
+            <FormField
+              control={form.control}
+              name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Payment method</FormLabel>
+                  <FormLabel>Invoice Status </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select payment method" />
+                        <SelectValue placeholder="Select invoice status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {paymentMethods.map((invoice) => (
+                      {invoiceStatus.map((invoice) => (
                         <SelectItem
                           value={invoice.value}
                           key={invoice.value}
@@ -202,6 +266,7 @@ const CreateInvoiceForm = ({
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -351,7 +416,7 @@ const CreateInvoiceForm = ({
               control={form.control}
               name="invoiceDate"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="flex flex-col">
                   <FormLabel>Invoice Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -359,16 +424,17 @@ const CreateInvoiceForm = ({
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -380,39 +446,44 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
-                        //   initialFocus
+                        disabled={(date) =>
+                          date < new Date('1900-01-01')
+                        }
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
-
+                  {/* <FormDescription>
+                    Your date of birth is used to calculate your age.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*Invoice Date */}
+            {/*Due Date */}
             <FormField
               control={form.control}
               name="dueDate"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Due Date</FormLabel>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Due date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'group flex w-full items-center justify-between gap-1',
                             !field.value && 'text-muted-foreground'
                           )}
+                          disabled={isLoading}
                         >
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(new Date(field.value), 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -424,35 +495,39 @@ const CreateInvoiceForm = ({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
-                        //   initialFocus
+                        disabled={(date) =>
+                          date < new Date('1900-01-01')
+                        }
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
-
+                  {/* <FormDescription>
+                    Your date of birth is used to calculate your age.
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            {/* Invoice Status */}
+            {/* Payment Method */}
             <FormField
               control={form.control}
-              name="invoiceStatusId"
+              name="paymentMethodId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Invoice Status</FormLabel>
+                  <FormLabel>Payment method</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select invoice status" />
+                        <SelectValue placeholder="Select payment method" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {invoiceStatus.map((invoice) => (
+                      {paymentMethods.map((invoice) => (
                         <SelectItem
                           value={invoice.value}
                           key={invoice.value}
@@ -467,25 +542,41 @@ const CreateInvoiceForm = ({
               )}
             />
           </div>
+          <div className="flex flex-row gap-2">
+            <Button
+              className="w-max"
+              type="submit"
+              disabled={!form.formState.isValid}
+            >
+              Submit
+            </Button>
 
-          <Button className="w-max" type="submit">
-            Submit
-          </Button>
+            {isDataComplete && (
+              <PDFRenderer
+                invoiceNumber={invoiceNumber}
+                companyName={companyName}
+                totalAmount={String(totalAmount)}
+                invoiceDate={invoiceDate}
+                dueDate={dueDate}
+                content="Generate as PDF"
+              />
+            )}
+          </div>
         </form>
       </Form>
     </div>
   );
 };
 
-export default CreateInvoiceForm;
+export default InvoiceForm;
 
 const invoiceStatus = [
+  { label: 'Pending', value: 'cea6308a-d138-4977-8814-929bfb4b6ad8' },
   {
     label: 'Cancelled',
     value: '039e9103-4136-4961-afe2-496a0e58ec43',
   },
   { label: 'Paid', value: '809bcb94-3496-4a80-9566-900ce5f6e481' },
-  { label: 'Pending', value: 'cea6308a-d138-4977-8814-929bfb4b6ad8' },
   {
     label: 'Partially Paid',
     value: '482ec8b8-b321-4c06-905c-9cc89ba689a3',
@@ -504,21 +595,21 @@ const invoiceTypes = [
   },
 ] as const;
 
-const paymentMethods=[
-{
-  label:'Cash',
-  value:'06a85d6b-ed0f-48c7-aa67-72f18b3e6c77',
-},
-{
-  label:'Bank Transfer',
-  value:'f97247c7-95ec-4e17-839d-ad405ff29188',
-},
-{
-  label:'Credit Card',
-  value:'a0d7051c-21a9-43b7-964d-c16ba72437a8',
-},
-{
-  label:'PayPal',
-  value:'2c259366-e579-41bd-8c20-d96da50d4ab2',
-},
-]as const;
+const paymentMethods = [
+  {
+    label: 'Cash',
+    value: '06a85d6b-ed0f-48c7-aa67-72f18b3e6c77',
+  },
+  {
+    label: 'Bank Transfer',
+    value: 'f97247c7-95ec-4e17-839d-ad405ff29188',
+  },
+  {
+    label: 'Credit Card',
+    value: 'a0d7051c-21a9-43b7-964d-c16ba72437a8',
+  },
+  {
+    label: 'PayPal',
+    value: '2c259366-e579-41bd-8c20-d96da50d4ab2',
+  },
+] as const;

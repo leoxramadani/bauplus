@@ -58,23 +58,31 @@ import CreateInfoDetails from './CreateInfoDetails/CreateInfoDetails';
 export interface IClientsCreate {
   setModal(open: boolean): void;
   clientId?: string;
+  refetchClients: any;
 }
 export interface YourAccountDetailsType {
+  id: string;
   accountNumber: string;
   country: string;
 }
 
 export interface YourBusinessDetails {
+  id: string;
   businessId: string;
   country: string;
 }
 export interface YourContactInfo {
+  id: string;
   email: string;
   phone: string;
   address: string;
 }
 
-const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
+const ClientsForm = ({
+  setModal,
+  clientId,
+  refetchClients,
+}: IClientsCreate) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
@@ -82,6 +90,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   const [businessModal, setBusinessModal] = useState<boolean>(false);
   const [clientModal, setClientModal] = useState<boolean>(false);
   const [accDetail, setAccDetail] = useState<YourAccountDetailsType>({
+    id: '',
     accountNumber: '',
     country: '',
   });
@@ -90,10 +99,13 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   const [accountDetails, setAccountDetails] = useState<
     YourAccountDetailsType[]
   >([]);
+  console.log(accountDetails);
+
   const [businessDetails, setBusinessDetails] = useState<
     YourBusinessDetails[]
   >([]);
   const [bizDetail, setBizDetail] = useState<YourBusinessDetails>({
+    id: '',
     businessId: '',
     country: '',
   });
@@ -101,6 +113,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
     []
   );
   const [clientInfo, setClientInfo] = useState<YourContactInfo>({
+    id: '',
     email: '',
     phone: '',
     address: '',
@@ -182,20 +195,6 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
       //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
       //   console.log('submit:', data);
       if (clientId && router.query.id) {
-        // const res = await axios.put(
-        //   UPDATE_SPECIFIC_CLIENTS,
-        //   {
-        //     ...data,
-        //     clientAccountNumbers: accountDetails,
-        //     clientBusinessIds: businessDetails,
-        //     clientContactInfos: clientInfos,
-        //   },
-        //   {
-        //     params: {
-        //       id: clientId,
-        //     },
-        //   }
-        // );
         await axios
           .put(
             UPDATE_SPECIFIC_CLIENTS,
@@ -219,7 +218,7 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
             setModal(false);
             setIsSubmitting(false);
             toast.success('Successfully updated client');
-            // refetchEmployees();
+            refetchClients();
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
@@ -246,20 +245,21 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
         await axios
           .post(CREATE_CLIENTS, {
             ...data,
-            clientAccountNumbers: accountDetails,
-            clientBusinessIds: businessDetails,
-            clientContactInfos: clientInfos,
+            // clientAccountNumbers: accountDetails,
+            // clientBusinessIds: businessDetails,
+            // clientContactInfos: clientInfos,
           })
           .then((res) => {
             console.log('Success->', res);
             toast.success('Client added');
             setModal(false);
             setIsSubmitting(false);
+            refetchClients();
           })
           .catch((error) => {
-            console.error('Error creating employee:', error);
+            console.error('Error creating client:', error);
             toast.error(
-              'There was an issue adding employee! Please try again.'
+              'There was an issue adding client! Please try again.'
             );
           });
       }
@@ -270,20 +270,21 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
   );
 
   const onError = (error: any) => {
-    console.log('error====> sadasda', error);
+    console.log('error submiting client form --->', error);
   };
 
   const handleTrashClick = (
     indexToRemove: number,
-    setDetails: any
+    setDetails: any,
+    details: any
   ) => {
     // Create a new array with the item removed
-    const updatedAccountDetails = accountDetails.filter(
-      (_, index) => index !== indexToRemove
+    const updatedDetails = details.filter(
+      (_: any, index: number) => index !== indexToRemove
     );
 
     // Update the state with the new array
-    setDetails(updatedAccountDetails);
+    setDetails(updatedDetails);
   };
 
   return (
@@ -476,7 +477,8 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setAccountDetails
+                                            setAccountDetails,
+                                            accountDetails
                                           )
                                         }
                                       />
@@ -591,7 +593,8 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setBusinessDetails
+                                            setBusinessDetails,
+                                            businessDetails
                                           )
                                         }
                                       />
@@ -704,7 +707,8 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
                                         onClick={() =>
                                           handleTrashClick(
                                             i,
-                                            setClientInfos
+                                            setClientInfos,
+                                            clientInfos
                                           )
                                         }
                                       />
@@ -728,11 +732,14 @@ const ClientsForm = ({ setModal, clientId }: IClientsCreate) => {
               variant="default"
               loading={isSubmitting}
               className="w-max"
+              disabled={!form.formState.isValid || isSubmitting}
             >
               Submit
             </Button>
           </form>
         </Form>
+
+        {/* Modals for Details */}
 
         <Modal open={accountModal} onOpenChange={setAccoundModal}>
           <Modal.Content

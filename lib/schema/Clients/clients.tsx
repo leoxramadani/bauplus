@@ -9,7 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DELETE_CLIENT } from '@/lib/constants/endpoints/clients';
+import {
+  DELETE_CLIENT,
+  GET_ALL_CLIENTS,
+} from '@/lib/constants/endpoints/clients';
+import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
@@ -34,7 +38,7 @@ export const clientsSchema = z.object({
     .array(),
   clientBusinessIds: z
     .object({
-      businessId: z.string().optional(),
+      businessId: z.string(),
       country: z.string().optional(),
     })
     .array(),
@@ -44,13 +48,19 @@ export const clientsSchema = z.object({
       phone: z.string().optional(),
       address: z.string().optional(),
     })
-    .array(),
+    .array()
+    .optional(),
 });
 
 export type IClients = z.infer<typeof clientsSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const { refetch: refetchClients } = useData<IClients[]>(
+    ['clients'],
+    GET_ALL_CLIENTS
+  );
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -63,16 +73,19 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
+    setIsLoading(true);
     console.log('Delete row with id:', id);
 
     await axios
       .delete(DELETE_CLIENT + '/' + id)
-      .then((res) => {
+      .then(() => {
         toast.success('Successfully deleted a client.');
-        console.log('response after delete success =>', res);
+        setIsLoading(false);
+        refetchClients();
       })
-      .catch((error) => {
-        console.log('Response after error:', error);
+      .catch(() => {
+        toast.error('Error deleting client!');
+        setIsLoading(false);
       });
   };
 
@@ -100,25 +113,30 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
               Delete Client
             </div>
           </Modal.Trigger>
           <Modal.Content
             title="Delete Client"
             description="Are you sure you want to delete this client?"
-            className="max-w-lg"
+            className="max-w-xl"
           >
             <div className="flex flex-row gap-2">
-              <Button
-                variant="destructive"
-                className="w-max"
-                onClick={() => handleDelete(item.clientId)}
-              >
-                Delete
-              </Button>
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  loading={isLoading}
+                  disabled={isLoading}
+                  onClick={() => handleDelete(item.clientId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
               <Modal.Close asChild>
                 <Button variant="outline" className="w-max">
                   Close
@@ -231,7 +249,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
 
     cell: ({ row }) => (
       <ul>
-        {row.original.clientAccountNumbers.map((client, i: Key) => (
+        {row.original.clientAccountNumbers?.map((client, i: Key) => (
           <li key={i}>{client.country}</li>
         ))}
       </ul>
@@ -243,7 +261,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
 
     cell: ({ row }) => (
       <ul>
-        {row.original.clientBusinessIds.map((client, i: Key) => (
+        {row.original.clientBusinessIds?.map((client, i: Key) => (
           <li key={i}>{client.businessId}</li>
         ))}
       </ul>
@@ -255,7 +273,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
 
     cell: ({ row }) => (
       <ul>
-        {row.original.clientBusinessIds.map((client, i: Key) => (
+        {row.original.clientBusinessIds?.map((client, i: Key) => (
           <li key={i}>{client.country}</li>
         ))}
       </ul>
@@ -266,7 +284,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
     header: 'Email',
     cell: ({ row }) => (
       <ul>
-        {row.original.clientContactInfos.map((client, i: Key) => (
+        {row.original.clientContactInfos?.map((client, i: Key) => (
           <li key={i}>{client.email}</li>
         ))}
       </ul>
@@ -277,7 +295,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
     header: 'Phone',
     cell: ({ row }) => (
       <ul>
-        {row.original.clientContactInfos.map((client, i: Key) => (
+        {row.original.clientContactInfos?.map((client, i: Key) => (
           <li key={i}>{client.phone}</li>
         ))}
       </ul>
@@ -288,7 +306,7 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
     header: 'Address',
     cell: ({ row }) => (
       <ul>
-        {row.original.clientContactInfos.map((client, i: Key) => (
+        {row.original.clientContactInfos?.map((client, i: Key) => (
           <li key={i}>{client.address}</li>
         ))}
       </ul>
@@ -297,22 +315,24 @@ export const clientSubColumnDef: ColumnDef<IClients>[] = [
 ];
 
 export const createClientSchema = z.object({
-  clientTypeId: z.string().optional(),
-  companyName: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  clientTypeId: z.string(),
+  companyName: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   clientAccountNumbers: z
     .object({
       accountNumber: z.string().optional(),
       country: z.string().optional(),
     })
-    .array(),
+    .array()
+    .optional(),
   clientBusinessIds: z
     .object({
       businessId: z.string().optional(),
       country: z.string().optional(),
     })
-    .array(),
+    .array()
+    .optional(),
   clientContactInfos: z
     .object({
       email: z.string().optional(),
@@ -328,6 +348,7 @@ export type ICreateClientSchema = z.infer<typeof createClientSchema>;
 export const accountDetailSchema = z
   .object({
     clientAccountNumbers: z.object({
+      id: z.string().optional(),
       accountNumber: z.coerce
         .string()
         .min(1, 'Account Number is required'),
@@ -336,6 +357,7 @@ export const accountDetailSchema = z
     accountDetails: z
       .array(
         z.object({
+          id: z.string().optional(),
           accountNumber: z.string(),
           country: z.string(),
         })
@@ -347,7 +369,8 @@ export const accountDetailSchema = z
       const accountNumberExists = accountDetails?.some(
         (account) =>
           account.accountNumber ===
-          String(clientAccountNumbers.accountNumber)
+            String(clientAccountNumbers.accountNumber) &&
+          account.id !== clientAccountNumbers.id
       );
       return !accountNumberExists;
     },
@@ -364,6 +387,7 @@ export type iCreateAccountDetail = z.infer<
 export const businessDetailSchema = z
   .object({
     clientBusinessIds: z.object({
+      id: z.string().optional(),
       businessId: z.coerce
         .string()
         .min(1, 'Business number is required'),
@@ -372,6 +396,7 @@ export const businessDetailSchema = z
     businessDetails: z
       .array(
         z.object({
+          id: z.string().optional(),
           businessId: z.string(),
           country: z.string(),
         })
@@ -382,13 +407,15 @@ export const businessDetailSchema = z
     ({ clientBusinessIds, businessDetails }) => {
       const accountNumberExists = businessDetails?.some(
         (account) =>
-          account.businessId === String(clientBusinessIds.businessId)
+          account.businessId ===
+            String(clientBusinessIds.businessId) &&
+          account.id !== clientBusinessIds.id
       );
       return !accountNumberExists;
     },
     {
-      message: 'Account number must be unique',
-      path: ['clientAccountNumbers', 'accountNumber'],
+      message: 'Business number must be unique',
+      path: ['clientBusinessIds', 'businessId'],
     }
   );
 
@@ -396,6 +423,7 @@ export type ICreateBusiness = z.infer<typeof businessDetailSchema>;
 
 export const clientDetailSchema = z.object({
   clientContactInfos: z.object({
+    id: z.string().optional(),
     email: z.string().optional(),
     phone: z.string().optional(),
     address: z.string().optional(),
@@ -403,6 +431,7 @@ export const clientDetailSchema = z.object({
   clientDetails: z
     .array(
       z.object({
+        id: z.string().optional(),
         email: z.string(),
         phone: z.string(),
         address: z.string(),

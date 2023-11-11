@@ -43,9 +43,11 @@ import NoticeDelete from './NoticeDelete';
 const NoticeForm = ({
   setIsModalOpen,
   noticeId,
+  noticesRefetch,
 }: {
   setIsModalOpen: any;
   noticeId?: string;
+  noticesRefetch: any;
 }) => {
   const [open, setOpen] = useState(false);
   const [noticeData, setNoticeData] = useState<any>();
@@ -93,6 +95,7 @@ const NoticeForm = ({
             console.log('Notice updated successfully->', res);
             toast.success('Successfully updated the notice!');
             setIsModalOpen(false);
+            noticesRefetch();
           })
           .catch((error) => {
             console.log('Error updating notice -> ', error);
@@ -107,6 +110,7 @@ const NoticeForm = ({
             console.log('Notice created successfully->', res);
             toast.success('Successfully created the notice!');
             setIsModalOpen(false);
+            noticesRefetch();
           })
           .catch((error) => {
             console.log('Error creating notice -> ', error);

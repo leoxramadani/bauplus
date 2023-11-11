@@ -17,10 +17,13 @@ import { useEffect, useState } from 'react';
 const Clients = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, isError, isLoading, error } = useData<IClients[]>(
-    ['clients'],
-    GET_ALL_CLIENTS
-  );
+  const {
+    data,
+    isError,
+    isLoading,
+    error,
+    refetch: refetchClients,
+  } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
   useEffect(() => {
     if (router.query.id) {
       setIsOpen(true);
@@ -58,6 +61,7 @@ const Clients = () => {
                 clientId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
+                refetchClients={refetchClients}
               />
             </Modal.Content>
           </Modal>

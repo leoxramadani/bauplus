@@ -1,4 +1,7 @@
+import Modal from '@/components/atoms/Modal';
+import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,41 +10,88 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { INVOICE_DELETE } from '@/lib/constants/endpoints/finance/invoice';
 import { ColumnDef } from '@tanstack/react-table';
+import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as z from 'zod';
 
 export const invoiceSchema = z.object({
+  invoiceNumber: z.string(),
   invoiceId: z.string().optional(),
   clientId: z.string(),
-  // companyID: z.string(), // this is the id for the company
-  companyName: z.string().optional(),
-  invoiceTypeId: z.string(), //this is the id for the invoice type
-  // invoiceTypeName: z.string().optional(),
+  clientCompanyName: z.string().optional(),
+  invoiceTypeId: z.string({
+    invalid_type_error: 'Invoice Type is required',
+    required_error: 'Invoice Type is required',
+  }),
+  invoiceTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
   dueDate: z.coerce.date(),
-  totalAmount: z.coerce.number(),
-  paidAmount: z.coerce.number(),
-  invoiceStatusId: z.string(), //this is the id for the invoice type
-  // invoiceStatus: z.string().optional(),
-  paymentMethodId: z.string(), //this is the id for the payment method
-  paymentMethod: z.string().optional(),
+  totalAmount: z.coerce.number({
+    invalid_type_error: 'Total Amount is required',
+    required_error: 'Total Amount is required',
+  }),
+  paidAmount: z.coerce.number({
+    invalid_type_error: 'Paid Amount is required',
+    required_error: 'Paid Amount is required',
+  }),
+  invoiceStatusId: z.string({
+    invalid_type_error: 'Invoice Status is required',
+    required_error: 'Invoice Status is required',
+  }),
+  invoiceStatusName: z.string().optional(),
+  paymentMethodId: z.string({
+    invalid_type_error: 'Payment Method is required',
+    required_error: 'Payment Method is required',
+  }),
+  paymentMethodName: z.string().optional(),
   // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
 });
 export type IInvoice = z.infer<typeof invoiceSchema>;
 
 export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
+  // {
+  //   accessorKey: 'invoiceId',
+  //   header: 'Invoice Id',
+  // },
   {
-    accessorKey: 'invoiceID',
-    header: 'Invoice Id',
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: boolean) =>
+          row.toggleSelected(!!value)
+        }
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
-    accessorKey: 'clientId',
-    header: 'Client Id',
+    accessorKey: 'clientCompanyName',
+    header: 'Client',
   },
   {
-    accessorKey: 'invoiceType',
+    accessorKey: 'invoiceNumber',
+    header: 'Invoice Number',
+  },
+  {
+    accessorKey: 'invoiceTypeName',
     header: 'Invoice Type',
   },
   {
@@ -73,17 +123,17 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
     header: 'Paid Amount',
   },
   {
-    accessorKey: 'invoiceStatusId',
-    header: 'invoice Status Id',
+    accessorKey: 'invoiceStatusName',
+    header: 'Invoice Status',
   },
   {
-    accessorKey: 'paymentMethodId',
-    header: 'payment Method Id',
+    accessorKey: 'paymentMethodName',
+    header: 'Payment Method',
   },
-  {
-    accessorKey: 'transactionId',
-    header: 'transaction Id',
-  },
+  // {
+  //   accessorKey: 'transactionId',
+  //   header: 'transaction Id',
+  // },
   {
     id: 'actions',
     cell: ({ row }) => <ActionsColumn item={row.original} />,
@@ -92,7 +142,7 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
-
+  const [open, setOpen] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -102,7 +152,27 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
-
+  const handleDelete = async (id: string) => {
+    await axios
+      .delete(INVOICE_DELETE + `?invoiceId=${id}`)
+      .then((res) => {
+        if (res.data == false) {
+          toast.info("Can't delete a Paid / Partially Paid Invoice");
+        } else {
+          toast.success('Successfully deleted invoice.');
+        }
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        router.push({
+          query: {
+            ...router.query,
+          },
+        });
+      })
+      .catch((error) => {
+        toast.error('Error deleting invoice!');
+        console.log('Response after error:', error);
+      });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -116,19 +186,57 @@ const ActionsColumn = ({ item }: { item: any }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           onClick={() =>
             navigator.clipboard.writeText(item.invoiceId)
           }
         >
           Copy item id
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        </DropdownMenuItem> 
+        <DropdownMenuSeparator />*/}
         <DropdownMenuItem onClick={() => handleEdit(item.invoiceId)}>
           Edit row
         </DropdownMenuItem>
-
-        <DropdownMenuItem>View payment details</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        {/* Delete Modal */}
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Trigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Delete Invoice
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            title="Delete Invoice"
+            description="Are you sure you want to delete this invoice?"
+            className="max-w-xl"
+          >
+            <div className="flex flex-row gap-2">
+              <Modal.Close asChild>
+                <Button
+                  variant="destructive"
+                  className="w-max"
+                  onClick={() => handleDelete(item.invoiceId)}
+                >
+                  Delete
+                </Button>
+              </Modal.Close>
+              <Modal.Close asChild>
+                <Button variant="outline" className="w-max">
+                  Close
+                </Button>
+              </Modal.Close>
+            </div>
+          </Modal.Content>
+        </Modal>
+        <DropdownMenuSeparator />
+        <PDFRenderer
+          invoiceNumber={item.invoiceNumber}
+          companyName={String(item.clientCompanyName)}
+          totalAmount={String(item.totalAmount)}
+          invoiceDate={new Date(item.invoiceDate)}
+          dueDate={new Date(item.dueDate)}
+          content="Create as PDF"
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );
