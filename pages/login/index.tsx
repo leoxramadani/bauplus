@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import {
   Tooltip,
@@ -167,8 +166,11 @@ const Login = () => {
     <>
       <div className="flex h-full w-full flex-col md:flex-row">
         <div className="flex h-screen w-full flex-col">
-          <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
-            <Image src={mimiro} alt="logo" width={110} height={100} />
+          <Link
+            href="/"
+            className="flex w-fit flex-row gap-4 p-6 sm:p-8"
+          >
+            <Image src={mimiro} alt="logo" width={150} height={100} />
             {/* <Square strokeWidth={10} size={40} />
             <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
               Mimiro
