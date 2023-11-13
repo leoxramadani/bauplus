@@ -90,19 +90,13 @@ const GenerateInvoiceForm = ({
             ? new Date(res.data.payment_due_date)
             : null;
 
-          // if (isNaN(Number(res.data.total_amount))) {
-
-          //   res.data.total_amount = 0;
-
-          // }
-
-          if (res.data.total_in_denars) {
+          if (res.data.total_amount) {
             console.log(
-              'res.data.total_in_denars->',
-              res.data.total_in_denars
+              'res.data.total_amount->',
+              res.data.total_amount
             );
             res.data.total_amount = swapCommaAndDot(
-              res.data.total_in_denars
+              res.data.total_amount
             );
           }
         }
