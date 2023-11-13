@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import ClientsForm from '@/components/molecules/Clients/ClientsForm';
+import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
@@ -79,7 +80,7 @@ const Clients = () => {
             getRowCanExpand={() => true}
           />
         )}
-        {isLoading && <p> Loading...</p>}
+        {isLoading && <DataTableLoading columnCount={clientsColumnDef.length} />}
         {isError && (
           <p>
             {' '}

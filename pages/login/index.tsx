@@ -184,27 +184,16 @@ const Login = () => {
                 </h1>
               </div>
               <AuthForm />
-              <p className="px-8 text-center text-sm text-muted-foreground">
-                By clicking continue, you agree to our{' '}
-                <Link
-                  href="/terms"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link
-                  href="/privacy"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Privacy Policy
+              <p>
+                Don&apos;t have an account?{' '}
+                <Link href={'/signup'} className="text-primary">
+                  Sign up
                 </Link>
-                .
               </p>
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
+        <div className="flex w-full flex-col justify-center gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
           <div className="flex flex-col gap-10 p-6 sm:p-20">
             {/* <div className="flex flex-col gap-1">
               <h1 className="text-4xl font-semibold">

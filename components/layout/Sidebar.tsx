@@ -37,6 +37,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 interface ListItem {
   icon?: React.JSX.Element;
   text?: string;
@@ -461,7 +467,7 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
         className={`w-full text-left transition-[opacity,transform] ${
           Icon && 'ml-7'
         } group-hover/trigger ${
-          Icon && !expanded && '-translate-x-4 opacity-0'
+          Icon && !expanded && 'opacity-0 pointer-events-none'
         }`}
       >
         {text}
@@ -526,6 +532,8 @@ function SidebarItem({
               isInCurrentPath() && 'flex text-white'
             }`}
           >
+                        {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
+
             <NavigationItem text={text} Icon={Icon} />
             <ChevronDown
               size={18}
@@ -548,12 +556,27 @@ function SidebarItem({
                 navigationMenuTriggerStyle(),
                 `group/trigger ${
                   isInCurrentPath() &&
-                  'group/trigger pointer-events-none text-white'
+                  'group/trigger text-white'
                 }`
               )
             }
           >
-            <NavigationItem text={text} Icon={Icon} />
+            {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger
+                  className="w-full text-left"
+                  onPointerMove={(e) =>
+                    expanded && e.preventDefault()
+                  }
+                >
+                  <NavigationItem text={text} Icon={Icon} />
+                </TooltipTrigger>
+                <TooltipContent side="right" asChild>
+                  <p className="ml-3">{text}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </NavigationMenuLink>
         </Link>
       )}

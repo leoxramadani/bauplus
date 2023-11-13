@@ -9,17 +9,33 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Password is required!'),
 });
 
-export const registerSchema = z.object({
-  email: z.string().email({ message: 'Please write a valid email!' }),
-  username: z.string(),
-  password: z
-    .string()
-    .min(8, 'Your password must contain at least 8 characters!')
-    .refine(
-      (v) => PASSWORD_REGEX.test(v),
-      "Your password must contain at least one uppercase letter, one lowercase letter and one number, and shouldn't include any spaces."
-    ),
-});
+export const registerSchema = z
+  .object({
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z
+      .string()
+      .email({ message: 'Please write a valid email!' }),
+    username: z.string(),
+    phone: z.string(),
+    password: z
+      .string()
+      .min(8, 'Your password must contain at least 8 characters!')
+      .refine(
+        (v) => !PASSWORD_REGEX.test(v),
+        "Your password must contain at least one uppercase letter, one lowercase letter and one number, and shouldn't include any spaces."
+      ),
+    confirmPassword: z.string(),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        path: ['confirmPassword'],
+        code: 'custom',
+        message: 'The passwords do not match!',
+      });
+    }
+  });
 
 export type ILogin = z.infer<typeof loginSchema>;
 export type ISignUp = z.infer<typeof registerSchema>;
