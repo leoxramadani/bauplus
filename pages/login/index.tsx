@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import {
   Tooltip,
@@ -169,10 +168,6 @@ const Login = () => {
         <div className="flex h-screen w-full flex-col">
           <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
             <Image src={mimiro} alt="logo" width={110} height={100} />
-            {/* <Square strokeWidth={10} size={40} />
-            <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
-              Mimiro
-            </h1> */}
           </Link>
           <div className="flex h-screen w-full flex-col items-center justify-center p-4 sm:p-0">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -182,27 +177,14 @@ const Login = () => {
                 </h1>
               </div>
               <AuthForm />
-              <p className="px-8 text-center text-sm text-muted-foreground">
-                By clicking continue, you agree to our{' '}
-                <Link
-                  href="/terms"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link
-                  href="/privacy"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Privacy Policy
-                </Link>
-                .
+              <p>
+                Don&apos;t have an account?{' '}
+                <Link href={'/signup'} className='text-primary'>Sign up</Link>
               </p>
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
+        <div className="flex w-full flex-col justify-center gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
           <div className="flex flex-col gap-10 p-6 sm:p-20">
             {/* <div className="flex flex-col gap-1">
               <h1 className="text-4xl font-semibold">

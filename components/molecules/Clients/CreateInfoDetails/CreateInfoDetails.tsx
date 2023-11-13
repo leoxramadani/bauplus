@@ -40,6 +40,7 @@ const CreateInfoDetails = ({
     resolver: zodResolver(clientDetailSchema),
     defaultValues: {
       clientContactInfos: {
+        id: detail.id || '',
         email: detail?.email || '',
         phone: detail?.phone || '',
         address: detail?.address || '',
@@ -52,21 +53,38 @@ const CreateInfoDetails = ({
 
   const onSubmit = useCallback(
     async (data: ICreateClientInfo) => {
-      // Add a new account
-      setDetails((prev: any) => [
-        ...prev,
-        {
-          email: data.clientContactInfos.email,
-          phone: data.clientContactInfos.phone,
-          address: data.clientContactInfos.address,
-        },
-      ]);
+      if (isUpdate) {
+        // Update the existing account details
+        setDetails((prev: any) =>
+          prev.map((account: YourContactInfo) =>
+            account.id === detail?.id
+              ? {
+                  ...account,
+                  email: data.clientContactInfos.email,
+                  phone: data.clientContactInfos.phone,
+                  address: data.clientContactInfos.address,
+                }
+              : account
+          )
+        );
+      } else if (!isUpdate) {
+        // Add a new account
+        setDetails((prev: any) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            email: data.clientContactInfos.email,
+            phone: data.clientContactInfos.phone,
+            address: data.clientContactInfos.address,
+          },
+        ]);
+      }
 
       setOpen(false);
       setDetail({
-        email: '',
-        phone: '',
-        address: '',
+        id: '',
+        businessId: '',
+        country: '',
       });
     },
     [isUpdate, details, detail]

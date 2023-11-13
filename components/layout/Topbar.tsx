@@ -139,7 +139,7 @@ const Topbar: React.FC<TopbarProps> = ({
                       height={100}
                       className="mx-auto h-10 w-10 rounded-md"
                     />
-                    <ChevronDown size={18} />
+                    {/* <ChevronDown size={18} /> */}
                   </div>
                 </PopoverTrigger>
                 <PopoverContent asChild side="top" className='z-50'>
@@ -165,7 +165,7 @@ const Topbar: React.FC<TopbarProps> = ({
                     <ul className="my-2 flex flex-col">
                       <li>
                         <Link
-                          href={'/account'}
+                          href={'/settings'}
                           onClick={() => setUserPopover(false)}
                           className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-100"
                         >

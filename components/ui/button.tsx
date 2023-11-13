@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-destructive-foreground hover:bg-[#6265F9] active:bg-[#6265F9] focus:ring-4 focus:ring-[#6E71F1]/50',
+          'bg-primary text-destructive-foreground hover:bg-primary-foreground active:bg-primary focus:ring-4 focus:ring-primary/50',
         destructive:
           'bg-[#FE464B] text-destructive-foreground hover:bg-[#FE464B] active:bg-[#FE464B] focus:ring-4 focus:ring-[#FE464B]/50',
         outline:
@@ -21,9 +21,9 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-lg px-3',
-        lg: 'h-11 rounded-lg px-8',
+        default: 'px-4 py-2',
+        sm: 'h-9 rounded-xl px-3',
+        lg: 'h-11 rounded-xl px-8',
         icon: 'h-10 w-10',
       },
     },
@@ -50,7 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(
           buttonVariants({ variant, size, className }),
-          'disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none',
+          'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
         ref={ref}

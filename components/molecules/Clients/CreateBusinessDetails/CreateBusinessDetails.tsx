@@ -40,6 +40,7 @@ const CreateBusinessDetails = ({
     resolver: zodResolver(businessDetailSchema),
     defaultValues: {
       clientBusinessIds: {
+        id: detail.id || '',
         businessId: detail?.businessId || '',
         country: detail?.country || '',
       },
@@ -55,8 +56,9 @@ const CreateBusinessDetails = ({
         // Update the existing account details
         setDetails((prev: any) =>
           prev.map((account: YourBusinessDetails) =>
-            account.businessId === detail?.businessId
+            account.id === detail?.id
               ? {
+                  ...account,
                   businessId: data.clientBusinessIds.businessId,
                   country: data.clientBusinessIds.country,
                 }
@@ -68,6 +70,7 @@ const CreateBusinessDetails = ({
         setDetails((prev: any) => [
           ...prev,
           {
+            id: crypto.randomUUID(),
             businessId: data.clientBusinessIds.businessId,
             country: data.clientBusinessIds.country,
           },
@@ -76,7 +79,8 @@ const CreateBusinessDetails = ({
 
       setOpen(false);
       setDetail({
-        accountNumber: '',
+        id: '',
+        businessId: '',
         country: '',
       });
     },

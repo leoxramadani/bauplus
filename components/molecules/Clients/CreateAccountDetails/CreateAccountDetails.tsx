@@ -40,6 +40,7 @@ const CreateAccountDetails = ({
     resolver: zodResolver(accountDetailSchema),
     defaultValues: {
       clientAccountNumbers: {
+        id: accountDetail.id,
         accountNumber: accountDetail?.accountNumber || '',
         country: accountDetail?.country || '',
       },
@@ -55,8 +56,9 @@ const CreateAccountDetails = ({
         // Update the existing account details
         setAccountDetails((prev: any) =>
           prev.map((account: any) =>
-            account.accountNumber === accountDetail?.accountNumber
+            account.id === accountDetail?.id
               ? {
+                  id: account.id,
                   accountNumber:
                     data.clientAccountNumbers.accountNumber,
                   country: data.clientAccountNumbers.country,
@@ -69,6 +71,7 @@ const CreateAccountDetails = ({
         setAccountDetails((prev: any) => [
           ...prev,
           {
+            id: crypto.randomUUID(),
             accountNumber: data.clientAccountNumbers.accountNumber,
             country: data.clientAccountNumbers.country,
           },
@@ -77,6 +80,7 @@ const CreateAccountDetails = ({
 
       setAccoundModal(false);
       setAccountDetail({
+        id: '',
         accountNumber: '',
         country: '',
       });
@@ -110,7 +114,6 @@ const CreateAccountDetails = ({
                       {...field}
                       disabled={isSubmitting}
                       type="number"
-                      
                       className="w-full"
                     />
                   </FormControl>
