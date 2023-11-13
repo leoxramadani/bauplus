@@ -9,15 +9,21 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import Countries from '@/lib/constants/staticFiles/countries.json';
+import {
   accountDetailSchema,
   iCreateAccountDetail,
 } from '@/lib/schema/Clients/clients';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { YourAccountDetailsType } from '../ClientsForm';
-
 interface ICreateAccount {
   setAccoundModal: React.Dispatch<SetStateAction<boolean>>;
   accountDetails: YourAccountDetailsType[];
@@ -123,16 +129,36 @@ const CreateAccountDetails = ({
               control={form.control}
               name="clientAccountNumbers.country"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Account country</FormLabel>
-
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="Account country"
-                      {...field}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
+                <FormItem>
+                  <FormLabel>Account Country</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value ?? 'babastars'}
+                    value={field.value}
+                    disabled={isSubmitting}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Country " />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Countries ? (
+                        <div className="h-[200px]">
+                          {Countries.map((temp: any) => {
+                            return (
+                              <SelectItem
+                                value={temp.name}
+                                key={temp.code}
+                              >
+                                {temp.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p>Loading</p>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

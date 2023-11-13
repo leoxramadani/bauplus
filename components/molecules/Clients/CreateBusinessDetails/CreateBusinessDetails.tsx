@@ -9,10 +9,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import Countries from '@/lib/constants/staticFiles/countries.json';
+import {
   ICreateBusiness,
   businessDetailSchema,
 } from '@/lib/schema/Clients/clients';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { SetStateAction, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -115,8 +122,46 @@ const CreateBusinessDetails = ({
                 </FormItem>
               )}
             />
-
             <FormField
+              control={form.control}
+              name="clientBusinessIds.country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Country</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                    disabled={isSubmitting}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Country " />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Countries ? (
+                        <div className="h-[200px]">
+                          {Countries.map((temp: any) => {
+                            return (
+                              <SelectItem
+                                value={temp.name}
+                                key={temp.code}
+                              >
+                                {temp.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p>Loading</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
               control={form.control}
               name="clientBusinessIds.country"
               render={({ field }) => (
@@ -133,7 +178,7 @@ const CreateBusinessDetails = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
 
           <div className="flex flex-row items-center gap-2">
