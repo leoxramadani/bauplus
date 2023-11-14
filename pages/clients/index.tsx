@@ -72,7 +72,7 @@ const Clients = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && (
+        {data && !isLoading && (
           <DataTable
             data={data}
             columns={clientsColumnDef}
