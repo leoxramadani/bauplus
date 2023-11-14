@@ -36,7 +36,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 interface IGenerateProps {
-  data: IgeneratedInvoice;
+  data?: IgeneratedInvoice;
   setGenerateModalOpen: any;
   setIsRegisterModalOpen: Dispatch<SetStateAction<boolean>>;
   refetchInvoices: any;
@@ -64,9 +64,7 @@ const GeneratedForm = ({
 }: IGenerateProps) => {
   const form = useForm<IgeneratedInvoice>({
     resolver: zodResolver(generatedInvoice),
-    values: {
-      ...data,
-    },
+    values: data || undefined,
   });
 
   const onSubmit = useCallback(
@@ -336,9 +334,9 @@ const GeneratedForm = ({
               )}
             />
           </div>
-          <hr />
-          <h4>Other data genereated from the invoice:</h4>
-          <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
+          {/* <hr /> */}
+          {/* <h4>Other data genereated from the invoice:</h4> */}
+          {/* <div className="flex flex-col items-center justify-center gap-4 sm:grid sm:grid-cols-2">
             {data.bank_accounts && (
               <div className="flex flex-col text-sm text-slate-500">
                 <p className="flex">Bank account:</p>
@@ -389,7 +387,7 @@ const GeneratedForm = ({
                 <p className="text-slate-600">{data.address}</p>
               </div>
             )}
-          </div>
+          </div> */}
           <Button className="w-max" type="submit">
             Submit
           </Button>

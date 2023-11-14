@@ -1,16 +1,13 @@
-import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   IGenerateInvoice,
   IgeneratedInvoice,
   generateInvoiceSchema,
 } from '@/lib/schema/Finance/invoice/generateInvoice';
-import logoLoading from '@/public/video/loading-mimiro.gif';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 import React, {
   Dispatch,
   SetStateAction,
@@ -90,19 +87,13 @@ const GenerateInvoiceForm = ({
             ? new Date(res.data.payment_due_date)
             : null;
 
-          // if (isNaN(Number(res.data.total_amount))) {
-
-          //   res.data.total_amount = 0;
-
-          // }
-
-          if (res.data.total_in_denars) {
+          if (res.data.total_amount) {
             console.log(
-              'res.data.total_in_denars->',
-              res.data.total_in_denars
+              'res.data.total_amount->',
+              res.data.total_amount
             );
             res.data.total_amount = swapCommaAndDot(
-              res.data.total_in_denars
+              res.data.total_amount
             );
           }
         }
@@ -125,64 +116,93 @@ const GenerateInvoiceForm = ({
   // const fileRef = form.register('image', { required: true });
 
   return (
-    <div className="z-0 flex w-full flex-col gap-4">
+    <div className="z-0 flex w-full flex-col gap-2">
+      {ocrIsLoading && (
+        <div className="absolute inset-0 z-50 flex h-full w-full items-center justify-center rounded-lg bg-black/20">
+          <Loader2 className="h-14 w-14 animate-spin text-zinc-100" />
+        </div>
+      )}
+
       <form
         onSubmit={form.handleSubmit(onSubmit, onError)}
         className="flex flex-col gap-4"
       >
         {/* 
       <Input id="picture" type="file" value={file}/> */}
-        <div className="flex flex-col gap-1">
-          {/* <label htmlFor="fiscal.nrExtern">
-              Image
-              <span className="text-red-600">*</span>
-            </label> */}
-          <Label htmlFor="picture">Image</Label>
+        {/* <div className="flex flex-col gap-2">
+          
+          <Label htmlFor="picture">Image - Use our OCR</Label>
           <Input type="file" onChange={handleUpload} />
+        </div> */}
+
+        <div className="flex w-full items-center justify-center">
+          <label
+            htmlFor="dropzone-file"
+            className="dark:hover:bg-bray-800 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
+            <div className="flex flex-row items-center justify-center gap-2  ">
+              {file ? (
+                <p className=" text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">{file.name}</span>{' '}
+                </p>
+              ) : (
+                <>
+                  <svg
+                    className=" h-8 w-8 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 16"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                    />
+                  </svg>
+                  <p className=" text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">
+                      Click to upload
+                    </span>{' '}
+                  </p>
+                </>
+              )}
+              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
+                SVG, PNG, JPG or GIF (MAX. 800x400px)
+              </p> */}
+            </div>
+            <Input
+              type="file"
+              id="dropzone-file"
+              className="hidden"
+              onChange={handleUpload}
+            />
+          </label>
         </div>
-        <Button type="submit" disabled={ocrIsLoading}>
+        <Button
+          type="submit"
+          disabled={ocrIsLoading}
+          className="w-max"
+        >
           Submit
         </Button>
       </form>
-      {/* <Modal open={ocrIsLoading} onOpenChange={setOcrIsLoading}>
-          <Modal.Content className="w-full max-w-3xl">
-          <Image
-            src={logoLoading}
-            layout={'responsive'}
-            height={175}
-            width={175}
-            alt={`Thor logo`}
-            unoptimized={true}
-          />
-          </Modal.Content>
-        </Modal> */}
-      {ocrIsLoading && (
-        <div>
-          <Image
-            src={logoLoading}
-            layout={'responsive'}
-            height={175}
-            width={175}
-            alt={`Thor logo`}
-            unoptimized={true}
-          />
-        </div>
-      )}
-      {ocrData && (
-        <Modal
-          open={generateModalOpen}
-          onOpenChange={setGenerateModalOpen}
-        >
-          <Modal.Content className="w-full max-w-3xl">
-            <GeneratedForm
-              data={ocrData}
-              setGenerateModalOpen={setGenerateModalOpen}
-              refetchInvoices={refetchInvoices}
-              setIsRegisterModalOpen={setIsRegisterModalOpen}
-            />
-          </Modal.Content>
-        </Modal>
-      )}
+
+      <div className="relative flex w-full items-center justify-center">
+        <hr className="my-8 h-px w-full border-0 bg-gray-200 dark:bg-gray-700" />
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 font-medium text-gray-900 dark:bg-gray-900 dark:text-white">
+          or
+        </span>
+      </div>
+
+      <GeneratedForm
+        data={ocrData && ocrData}
+        setGenerateModalOpen={setGenerateModalOpen}
+        refetchInvoices={refetchInvoices}
+        setIsRegisterModalOpen={setIsRegisterModalOpen}
+      />
     </div>
   );
 };
