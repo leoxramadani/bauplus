@@ -6,11 +6,9 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer';
-import React, { useState } from 'react';
-import { Resizable } from 'react-resizable';
+import React, { useEffect, useState } from 'react';
 import 'react-resizable/css/styles.css';
-import Modal from '../Modal';
-import { EverestLogo } from './EverestLogo';
+import { Header } from './header';
 import { generalStyle } from './styles';
 
 Font.register({
@@ -82,7 +80,9 @@ const PDFRenderer: React.FC<pdfInputs> = ({
     null
   );
 
-  const [selectedLogo, setSelectedLogo] = useState('1');
+  useEffect(() => {
+    generatePDF();
+  }, [invoiceNumber, companyName, totalAmount, invoiceDate, dueDate]);
 
   const generatePDF = () => {
     if (
@@ -93,8 +93,6 @@ const PDFRenderer: React.FC<pdfInputs> = ({
       dueDate !== null
     ) {
       // Create the PDF content
-      const selectedLogoComponent =
-        selectedLogo === '1' ? <EverestLogo /> : <EverestLogo />;
 
       const totalWithoutVAT = Number(totalAmount) / (1 + 0.18);
 
@@ -117,63 +115,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
               </View>
               {/* end - invoice text */}
 
-              {/* header */}
-              <View style={generalStyle.header}>
-                {/* our company logo and information */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  {/* company logo */}
-                  <View>{selectedLogoComponent}</View>
-
-                  {/* company information */}
-                  <View style={{ marginLeft: 13, rowGap: 3 }}>
-                    <Text style={generalStyle.headerLeftTitle}>
-                      Everest XH.D.
-                    </Text>
-                    <Text style={generalStyle.headerLeftText}>
-                      Даночен Број / Numri Tatimor:{' '}
-                      <Text>MK4028005149980</Text>
-                    </Text>
-                    <Text style={generalStyle.headerLeftText}>
-                      Жиро сметка / Xhiro Llogaria:{' '}
-                      <Text>38017960411108</Text>
-                    </Text>
-                    <Text style={generalStyle.headerLeftText}>
-                      Aдреса / Adresa: Ул. Пример бр. 8/123, Скопје
-                    </Text>
-                    <Text style={generalStyle.headerLeftText}>
-                      service@everestxhd.com
-                    </Text>
-                  </View>
-                </View>
-                {/* end - our company logo and information */}
-
-                {/* billed company */}
-                <View
-                  style={{
-                    rowGap: 3,
-                  }}
-                >
-                  <Text style={generalStyle.headerRightTitle}>
-                    {companyName}
-                  </Text>
-                  <View>
-                    <Text style={generalStyle.headerRightText}>
-                      Address
-                    </Text>
-                    <Text style={generalStyle.headerRightText}>
-                      Email
-                    </Text>
-                  </View>
-                </View>
-                {/* end - billed company */}
-              </View>
-              {/* end - header*/}
-
+              <Header companyName={companyName} />
               {/* invoice information*/}
               <View
                 style={{
@@ -252,7 +194,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                           marginTop: 10,
                         }}
                       >
-                        {invoiceDate.toDateString()}
+                        {invoiceDate?.toDateString()}
                       </Text>
                     </View>
 
@@ -519,11 +461,6 @@ const PDFRenderer: React.FC<pdfInputs> = ({
     }
   };
 
-  const handleButtonClick = () => {
-    // Call the function from the prop
-    generatePDF();
-  };
-
   if (invoiceDate instanceof Date && !isNaN(invoiceDate.getTime())) {
     const timeInMillis: number = invoiceDate.getTime();
     if (
@@ -534,7 +471,20 @@ const PDFRenderer: React.FC<pdfInputs> = ({
     ) {
       return (
         <>
-          <Modal
+          {pdfData ? (
+            <>
+              <PDFViewer
+                style={{
+                  width: '100%',
+                  height: '75vh',
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                {pdfData}
+              </PDFViewer>
+            </>
+          ) : null}
+          {/* <Modal
             open={isCreateModalOpen}
             onOpenChange={setIsCreateModalOpen}
           >
@@ -544,7 +494,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                 className="inline w-max bg-red-500"
               >
                 {content}
-              </Button> */}
+              </Button>
               <div
                 className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                 onClick={handleButtonClick}
@@ -561,16 +511,10 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                 title="PDF Preview"
                 description="You can go back and change the inputs if you don't like something."
               >
-                {pdfData ? (
-                  <PDFViewer
-                    style={{ width: '100%', height: '75vh' }}
-                  >
-                    {pdfData}
-                  </PDFViewer>
-                ) : null}
+                
               </Modal.Content>
             </Resizable>
-          </Modal>
+          </Modal> */}
         </>
       );
     }
