@@ -1,6 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -126,6 +127,30 @@ const ActionsColumn = ({ item }: { item: any }) => {
 };
 
 export const bankAccountColumnDef: ColumnDef<IBank>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: boolean) =>
+          row.toggleSelected(!!value)
+        }
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'accountName',
     header: 'Account name',

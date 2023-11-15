@@ -57,7 +57,7 @@ const Invoice = () => {
           <Modal.Content
             title="Register Invoice"
             description="Fill all the fields to register an invoice"
-            className="max-w-3xl"
+            className="md:min-w-3xl md:max-w-[80%]"
           >
             <GenerateInvoiceForm
               setIsRegisterModalOpen={setIsRegisterModalOpen}
@@ -77,7 +77,7 @@ const Invoice = () => {
           <Modal.Trigger asChild>
             <Button
               variant="outline"
-              className="flex flex-row gap-2 text-indigo-600"
+              className="flex flex-row gap-2 text-primary"
             >
               <Plus size={20} /> Create Invoice
             </Button>

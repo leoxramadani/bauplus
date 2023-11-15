@@ -1,5 +1,12 @@
 import { Button } from '@/components/ui/button';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
   Form,
   FormControl,
   FormField,
@@ -9,12 +16,24 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { countries } from '@/lib/helper/helper';
+import {
   ICreateBusiness,
   businessDetailSchema,
 } from '@/lib/schema/Clients/clients';
-
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { SetStateAction, useCallback, useState } from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import React, {
+  Key,
+  SetStateAction,
+  useCallback,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { YourBusinessDetails } from '../ClientsForm';
 
@@ -104,7 +123,7 @@ const CreateBusinessDetails = ({
               control={form.control}
               name="clientBusinessIds.businessId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Business Number</FormLabel>
 
                   <FormControl className="relative">
@@ -124,6 +143,73 @@ const CreateBusinessDetails = ({
               control={form.control}
               name="clientBusinessIds.country"
               render={({ field }) => (
+                <FormItem className="flex w-full flex-col">
+                  <FormLabel>Business Country</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'flex w-full items-center justify-between gap-1 p-2.5',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                          disabled={isSubmitting}
+                        >
+                          {field.value
+                            ? countries?.find(
+                                (country) =>
+                                  country.name === field.value
+                              )?.name
+                            : 'Choose country'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search for employee..." />
+                        <CommandEmpty>No country found.</CommandEmpty>
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                          {countries?.map((country, i: Key) => (
+                            <CommandItem
+                              value={country.name}
+                              className="flex items-center"
+                              key={i}
+                              onSelect={() => {
+                                country.name &&
+                                  form.setValue(
+                                    'clientBusinessIds.country',
+                                    country?.name
+                                  );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4 transition-all',
+                                  country.name === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {`${country.name}`}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
+              control={form.control}
+              name="clientBusinessIds.country"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Business country</FormLabel>
 
@@ -137,7 +223,7 @@ const CreateBusinessDetails = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
 
           <div className="flex flex-row items-center gap-2">

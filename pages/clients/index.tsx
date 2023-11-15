@@ -1,7 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import ClientsForm from '@/components/molecules/Clients/ClientsForm';
-import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
@@ -29,7 +29,7 @@ const Clients = () => {
       setIsOpen(true);
     }
     // console.log('router==', router);
-  }, [router.query.id]);
+  }, [router.query.id, router]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -72,7 +72,7 @@ const Clients = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && (
+        {data && !isLoading && (
           <DataTable
             data={data}
             columns={clientsColumnDef}
@@ -80,7 +80,9 @@ const Clients = () => {
             getRowCanExpand={() => true}
           />
         )}
-        {isLoading && <DataTableLoading columnCount={clientsColumnDef.length} />}
+        {isLoading && (
+          <DataTableLoading columnCount={clientsColumnDef.length} />
+        )}
         {isError && (
           <p>
             {' '}
