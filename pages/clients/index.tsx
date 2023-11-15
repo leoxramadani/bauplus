@@ -29,7 +29,7 @@ const Clients = () => {
       setIsOpen(true);
     }
     // console.log('router==', router);
-  }, [router.query.id]);
+  }, [router.query.id, router]);
 
   useEffect(() => {
     if (!isOpen) {

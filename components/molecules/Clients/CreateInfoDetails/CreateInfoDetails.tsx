@@ -135,6 +135,7 @@ const CreateInfoDetails = ({
                       placeholder="Enter your phone number"
                       {...field}
                       disabled={isSubmitting}
+                      type="number"
                     />
                   </FormControl>
                   <FormMessage />
