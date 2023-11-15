@@ -64,9 +64,8 @@ const GenerateInvoiceForm = ({
 
         const formData = new FormData();
         formData.append('image', files![0]);
-
-
-        
+      } else if (files[0].type.includes('image')) {
+        console.log('Uploaded image');
       }
     }
   };
@@ -131,7 +130,7 @@ const GenerateInvoiceForm = ({
       className={`z-0 ${
         invoicePdf
           ? `grid gap-6 md:grid-cols-2 `
-          : `flex flex-col p-4 md:w-[650px] md:flex-row`
+          : `flex flex-col p-4 md:flex-row`
       } `}
     >
       <div className="">
@@ -141,72 +140,77 @@ const GenerateInvoiceForm = ({
           </div>
         )}
 
-        <form
-          onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4"
-        >
-          <div className="flex w-full items-center justify-center">
-            <label
-              htmlFor="dropzone-file"
-              className="dark:hover:bg-bray-800 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        {!invoicePdf && (
+          <>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, onError)}
+              className="flex flex-col gap-4"
             >
-              <div className="flex flex-row items-center justify-center gap-2  ">
-                {file ? (
-                  <p className=" text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">{file.name}</span>{' '}
-                  </p>
-                ) : (
-                  <>
-                    <svg
-                      className=" h-8 w-8 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p className=" text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">
-                        Click to upload
-                      </span>{' '}
-                    </p>
-                  </>
-                )}
-                {/* <p className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex w-full items-center justify-center">
+                <label
+                  htmlFor="dropzone-file"
+                  className="dark:hover:bg-bray-800 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                >
+                  <div className="flex flex-row items-center justify-center gap-2  ">
+                    {file ? (
+                      <p className=" text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold">
+                          {file.name}
+                        </span>{' '}
+                      </p>
+                    ) : (
+                      <>
+                        <svg
+                          className=" h-8 w-8 text-gray-500 dark:text-gray-400"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 16"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                          />
+                        </svg>
+                        <p className=" text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">
+                            Click to upload
+                          </span>{' '}
+                        </p>
+                      </>
+                    )}
+                    {/* <p className="text-xs text-gray-500 dark:text-gray-400">
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p> */}
+                  </div>
+                  <Input
+                    type="file"
+                    id="dropzone-file"
+                    className="hidden"
+                    onChange={handleUpload}
+                  />
+                </label>
               </div>
-              <Input
-                type="file"
-                id="dropzone-file"
-                className="hidden"
-                onChange={handleUpload}
-              />
-            </label>
-          </div>
-          {/* <Button
+              {/* <Button
             type="submit"
             disabled={ocrIsLoading}
             className="w-max"
           >
             Submit
           </Button> */}
-        </form>
+            </form>
 
-        <div className="relative flex w-full items-center justify-center">
-          <hr className="my-8 h-px w-full border-0 bg-gray-200 dark:bg-gray-700" />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 font-medium text-gray-900 dark:bg-gray-900 dark:text-white">
-            or
-          </span>
-        </div>
-
+            <div className="relative flex w-full items-center justify-center">
+              <hr className="my-8 h-px w-full border-0 bg-gray-200 dark:bg-gray-700" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 font-medium text-gray-900 dark:bg-gray-900 dark:text-white">
+                or
+              </span>
+            </div>
+          </>
+        )}
         <GeneratedForm
           data={ocrData && ocrData}
           setGenerateModalOpen={setGenerateModalOpen}
