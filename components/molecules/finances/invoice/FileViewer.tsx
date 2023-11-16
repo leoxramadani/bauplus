@@ -9,9 +9,10 @@ const FileViewer = ({
   setPreviewFile,
 }: FileViewerProps) => {
   if (previewFile) {
-    console.log('there is a preview file');
+    console.log('there is a preview file->', previewFile);
 
-    if (typeof previewFile === 'string') {
+    if (!previewFile.includes('blob')) {
+      console.log('the file is an image->', previewFile);
       return (
         <img
           src={previewFile}
@@ -20,7 +21,7 @@ const FileViewer = ({
         />
       );
     }
-    
+
     return <iframe src={previewFile} width="100%" height="100%" />;
   }
   return;

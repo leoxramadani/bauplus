@@ -34,7 +34,6 @@ const GenerateInvoiceForm = ({
 }: IGenerateInvoiceForm) => {
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
   const [file, setFile] = useState<any>();
-
   const [ocrData, setOcrData] = useState<IgeneratedInvoice>();
   const [ocrIsLoading, setOcrIsLoading] = useState(false);
   const [previewFile, setPreviewFile] = useState<any>();
