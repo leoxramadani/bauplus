@@ -1,4 +1,3 @@
-import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -101,7 +100,7 @@ const InvoiceForm = ({
   const form = useForm<IInvoice>({
     resolver: zodResolver(invoiceSchema),
     values: { ...invoiceData },
-    // mode: 'onChange',
+    mode: 'onChange',
   });
 
   const onSubmit = useCallback(
@@ -568,7 +567,7 @@ const InvoiceForm = ({
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date('1900-01-01')
+                          date < new Date(form.watch('invoiceDate'))
                         }
                         initialFocus
                       />
@@ -623,7 +622,7 @@ const InvoiceForm = ({
               Submit
             </Button>
 
-            {isDataComplete && (
+            {/* {isDataComplete && (
               <PDFRenderer
                 invoiceNumber={invoiceNumber}
                 companyName={companyName}
@@ -632,7 +631,7 @@ const InvoiceForm = ({
                 dueDate={dueDate}
                 content="Generate as PDF"
               />
-            )}
+            )} */}
           </div>
         </form>
       </Form>
