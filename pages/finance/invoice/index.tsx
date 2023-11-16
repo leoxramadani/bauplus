@@ -96,9 +96,9 @@ const Invoice = () => {
           </Modal.Content>
         </Modal> */}
 
-        <Button variant="outline" className="flex gap-2 ">
+        {/* <Button variant="outline" className="flex gap-2 ">
           <Plus size={20} /> <span>Create Time Log Invoice</span>
-        </Button>
+        </Button> */}
 
         <Button
           variant="outline"

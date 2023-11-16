@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DELETE_BANK_ACCOUNT } from '@/lib/constants/endpoints/finance';
+import {
+  DELETE_BANK_ACCOUNT,
+  GET_ALL_BANKACCOUNTS,
+} from '@/lib/constants/endpoints/finance';
+import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
@@ -40,6 +45,11 @@ export type IBank = z.infer<typeof bankAccountSchema>;
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
+  const { refetch: bankRefetch } = useData<IBank[]>(
+    ['bank_accounts'],
+    GET_ALL_BANKACCOUNTS
+  );
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -52,16 +62,19 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     try {
       await axios.delete(DELETE_BANK_ACCOUNT, {
         params: {
           bankAccountId: id,
         },
       });
-      toast.success('Successfully deleted bank account.');
+      toast.success('Bank account deleted successfully.');
+      bankRefetch();
     } catch (error) {
       console.log(error);
     }
+    setDeleting(false);
   };
 
   const [open, setOpen] = useState(false);
@@ -100,25 +113,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
           </Modal.Trigger>
           <Modal.Content
             title="Delete Bank Account"
-            description="Are you sure you want to delete this bank account?"
-            className="max-w-lg"
+            description="This will delete the selected bank account! Are you sure you want to continue?"
+            className=" max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.bankAccountId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.bankAccountId)}
+              id={item.bankAccountId}
+              deleting={deleting}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>

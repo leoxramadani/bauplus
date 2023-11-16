@@ -13,6 +13,10 @@ export const generatedInvoice = z.object({
     invalid_type_error: 'Invoice Type is required',
     required_error: 'Invoice Type is required',
   }),
+  invoiceInOutTypeId: z.string({
+    invalid_type_error: 'Invoice type is required',
+    required_error: 'Invoice Type is required',
+  }),
   invoiceStatusId: z.string({
     invalid_type_error: 'Invoice Status is required',
     required_error: 'Invoice Status is required',

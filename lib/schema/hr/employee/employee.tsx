@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -105,6 +106,7 @@ export const employeeColumnDef: ColumnDef<IEmployee>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -117,6 +119,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     await axios
       .delete(DELETE_EMPLOYEES + `?employeeId=${id}`)
       .then((res) => {
@@ -129,8 +132,11 @@ const ActionsColumn = ({ item }: { item: any }) => {
         });
       })
       .catch((error) => {
-        console.log('Response after error:', error);
+        toast.error(
+          'There was an error deleting employee! Please try again.'
+        );
       });
+    setDeleting(false);
   };
 
   return (
@@ -166,25 +172,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
           </Modal.Trigger>
           <Modal.Content
             title="Delete Employee"
-            description="Are you sure you want to delete this employee?"
-            className="w-full max-w-lg"
+            description="This will delete the selected employee! Are you sure you want to continue?"
+            className="max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.employeeId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.employeeId)}
+              id={item.employeeId}
+              deleting={deleting}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>

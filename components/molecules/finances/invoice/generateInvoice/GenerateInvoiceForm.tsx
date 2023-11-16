@@ -34,10 +34,9 @@ const GenerateInvoiceForm = ({
 }: IGenerateInvoiceForm) => {
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
   const [file, setFile] = useState<any>();
-
   const [ocrData, setOcrData] = useState<IgeneratedInvoice>();
   const [ocrIsLoading, setOcrIsLoading] = useState(false);
-  const [invoicePdf, setInvoicePdf] = useState<any>();
+  const [previewFile, setPreviewFile] = useState<any>();
 
   const form = useForm<IGenerateInvoice>({
     resolver: zodResolver(generateInvoiceSchema),
@@ -50,7 +49,8 @@ const GenerateInvoiceForm = ({
     const files = event.target.files;
     if (files && files.length > 0) {
       if (files[0].type === 'application/pdf') {
-        setInvoicePdf(URL.createObjectURL(files![0]));
+        console.log('PDF uploaded');
+        setPreviewFile(URL.createObjectURL(files![0]));
         // const reader = new FileReader();
         // reader.readAsDataURL(files[0]);
         // reader.onload = () => {
@@ -59,13 +59,28 @@ const GenerateInvoiceForm = ({
         //   file: reader.result!.toString(),
         // });
         // };
-
         console.log('file -->', URL.createObjectURL(files![0]));
-
+        console.log('file -->', files![0]);
         const formData = new FormData();
         formData.append('image', files![0]);
       } else if (files[0].type.includes('image')) {
-        console.log('Uploaded image');
+        console.log('IMAGE uploaded');
+        // setFileName(() => ['', files![0].name]);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const image = new Image();
+          image.src = e.target?.result as string;
+          // setFullFile({
+          //   imageName: files[0].name,
+          //   file: image.src,
+          // });
+          // setSelectedImage(image);
+          // setRecievedFile(true);
+          setPreviewFile(image.src);
+
+          console.log('image.src->', typeof image.src);
+        };
+        reader.readAsDataURL(files[0]);
       }
     }
   };
@@ -128,7 +143,7 @@ const GenerateInvoiceForm = ({
   return (
     <div
       className={`z-0 ${
-        invoicePdf
+        previewFile
           ? `grid gap-6 md:grid-cols-2 `
           : `flex flex-col p-4 md:flex-row`
       } `}
@@ -139,8 +154,7 @@ const GenerateInvoiceForm = ({
             <Loader2 className="h-14 w-14 animate-spin text-zinc-100" />
           </div>
         )}
-
-        {!invoicePdf && (
+        {!previewFile && (
           <>
             <form
               onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -169,9 +183,9 @@ const GenerateInvoiceForm = ({
                         >
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                           />
                         </svg>
@@ -211,6 +225,7 @@ const GenerateInvoiceForm = ({
             </div>
           </>
         )}
+
         <GeneratedForm
           data={ocrData && ocrData}
           setGenerateModalOpen={setGenerateModalOpen}
@@ -219,9 +234,9 @@ const GenerateInvoiceForm = ({
         />
       </div>
 
-      {invoicePdf && (
+      {previewFile && (
         <div className="">
-          <FileViewer invoicePdf={invoicePdf} />
+          <FileViewer previewFile={previewFile} />
         </div>
       )}
     </div>

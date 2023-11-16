@@ -15,8 +15,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
            py-2 text-sm ring-indigo-400 ring-offset-background transition-all 
            file:border-0 file:bg-transparent file:text-sm 
            file:font-medium placeholder:text-muted-foreground
-           hover:ring-1 hover:ring-indigo-400 
-           focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-400 focus-visible:ring-offset-0 
+           hover:ring-1 hover:ring-primary
+           focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 
            disabled:cursor-not-allowed disabled:opacity-50`,
           className
         )}

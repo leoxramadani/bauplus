@@ -21,7 +21,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { INVOICE_REGISTER } from '@/lib/constants/endpoints/finance/invoice';
+import {
+  GET_ALL_INVOICES_IN_OUT_TYPES,
+  GET_ALL_INVOICE_TYPES,
+  INVOICE_REGISTER,
+} from '@/lib/constants/endpoints/finance/invoice';
+import useData from '@/lib/hooks/useData';
 import {
   IgeneratedInvoice,
   generatedInvoice,
@@ -53,6 +58,7 @@ interface registerModel {
   paymentMethodId?: string;
   transactionId?: string;
   invoiceTypeId: string;
+  invoiceInOutTypeId?: string;
   // receiveDate?: string
 }
 
@@ -77,6 +83,7 @@ const GeneratedForm = ({
         paidAmount: parseFloat(`0`),
         invoiceStatusId: formData.invoiceStatusId!,
         invoiceTypeId: formData.invoiceTypeId!,
+        invoiceInOutTypeId: formData.invoiceInOutTypeId,
       };
 
       await axios
@@ -108,6 +115,18 @@ const GeneratedForm = ({
     console.log('Error Invoice ::', error);
   };
 
+  const {
+    data: invoiceTypes,
+    isLoading: invoiceIsLoading,
+    isError: invoiceIsError,
+  } = useData<any>(['invoiceTypes'], GET_ALL_INVOICE_TYPES);
+
+  const {
+    data: invoiceNostro,
+    isLoading,
+    isError,
+  } = useData<any>(['invoiceNostro'], GET_ALL_INVOICES_IN_OUT_TYPES);
+
   return (
     <div className="z-0 flex w-full flex-col gap-4 ">
       <Form {...form}>
@@ -122,10 +141,7 @@ const GeneratedForm = ({
               name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>
-                    Invoice Status{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Invoice Status </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -156,10 +172,7 @@ const GeneratedForm = ({
               name="invoiceTypeId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>
-                    Invoice Type{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Invoice Type </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -170,14 +183,47 @@ const GeneratedForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {invoiceTypes.map((invoice) => (
-                        <SelectItem
-                          value={invoice.value}
-                          key={invoice.value}
-                        >
-                          {invoice.label}
-                        </SelectItem>
-                      ))}
+                      {invoiceTypes &&
+                        invoiceTypes.map((invoice: any) => (
+                          <SelectItem
+                            value={invoice.invoiceTypeId}
+                            key={invoice.invoiceTypeId}
+                          >
+                            {invoice.invoiceTypeName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="invoiceInOutTypeId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Invoice Nostro / Loro</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select invoice type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {invoiceNostro &&
+                        invoiceNostro.map((invoice: any) => (
+                          <SelectItem
+                            value={invoice.invoiceInOutTypeId}
+                            key={invoice.invoiceInOutTypeId}
+                          >
+                            {invoice.invoiceInOutTypeName}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -258,9 +304,7 @@ const GeneratedForm = ({
               name="total_vat"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Total VAT<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Total VAT</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Total VAT" {...field} />
                   </FormControl>
@@ -275,10 +319,7 @@ const GeneratedForm = ({
               name="total_amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Total Amount
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Total Amount</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Total Amount" {...field} />
                   </FormControl>
@@ -307,7 +348,7 @@ const GeneratedForm = ({
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick Due date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -322,9 +363,9 @@ const GeneratedForm = ({
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date('1900-01-01')
+                          date < new Date(form.watch('date'))
                         }
-                        //   initialFocus
+                        
                       />
                     </PopoverContent>
                   </Popover>
@@ -413,13 +454,13 @@ const invoiceStatus = [
   { label: 'Overdue', value: '427e80ba-1e1c-45ce-8791-c59fa300559d' },
 ] as const;
 
-const invoiceTypes = [
-  {
-    label: 'Payable / Expense',
-    value: '196e2549-f1bb-4159-97dc-139e2285fa13',
-  },
-  {
-    label: 'Receivable / Income',
-    value: 'ffb56872-a6ac-4d0a-b480-7dcf8c8538ea',
-  },
-] as const;
+// const invoiceTypes = [
+//   {
+//     label: 'Payable / Expense',
+//     value: '196e2549-f1bb-4159-97dc-139e2285fa13',
+//   },
+//   {
+//     label: 'Receivable / Income',
+//     value: 'ffb56872-a6ac-4d0a-b480-7dcf8c8538ea',
+//   },
+// ] as const;

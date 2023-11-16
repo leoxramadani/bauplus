@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -9,7 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DELETE_DEPARTMENT } from '@/lib/constants/endpoints/hr/departments';
+import {
+  DELETE_DEPARTMENT,
+  GET_ALL_DEPARTMENTS,
+} from '@/lib/constants/endpoints/hr/departments';
+import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
@@ -93,6 +98,7 @@ export const departmentColumnDef: ColumnDef<IDepartment>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -102,8 +108,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
       },
     });
   };
+  const { refetch: refetchDepartments } = useData<IDepartment[]>(
+    ['departments'],
+    GET_ALL_DEPARTMENTS
+  );
 
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     await axios
       .delete(DELETE_DEPARTMENT + `?Id=${id}`)
       .then((res) => {
@@ -114,10 +125,15 @@ const ActionsColumn = ({ item }: { item: any }) => {
             ...router.query,
           },
         });
+        refetchDepartments();
       })
       .catch((error) => {
         console.log('Response after error:', error);
+        toast.error(
+          'There was an error deleting department! Please try again'
+        );
       });
+    setDeleting(false);
   };
 
   return (
@@ -155,25 +171,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
           </Modal.Trigger>
           <Modal.Content
             title="Delete Department"
-            description="Are you sure you want to delete this department?"
-            className="w-full max-w-lg"
+            description="This will delete the selected department! Are you sure you want to continue?"
+            className=" max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.departmentId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.departmentId)}
+              id={item.departmentId}
+              deleting={deleting}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>

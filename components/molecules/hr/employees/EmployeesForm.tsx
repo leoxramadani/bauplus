@@ -415,9 +415,10 @@ const EmployeesForm = ({
           </div>
           <Button
             className="flex w-max flex-none items-center justify-center"
-            // variant="outline"
+            variant="default"
             loading={isLoading}
             type="submit"
+            disabled={isLoading}
           >
             Submit
           </Button>
