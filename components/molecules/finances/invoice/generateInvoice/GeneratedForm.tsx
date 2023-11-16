@@ -122,10 +122,7 @@ const GeneratedForm = ({
               name="invoiceStatusId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>
-                    Invoice Status{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Invoice Status </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -156,10 +153,7 @@ const GeneratedForm = ({
               name="invoiceTypeId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>
-                    Invoice Type{' '}
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Invoice Type </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -258,9 +252,7 @@ const GeneratedForm = ({
               name="total_vat"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Total VAT<span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Total VAT</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Total VAT" {...field} />
                   </FormControl>
@@ -275,10 +267,7 @@ const GeneratedForm = ({
               name="total_amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Total Amount
-                    <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>Total Amount</FormLabel>
                   <FormControl className="relative">
                     <Input placeholder="Total Amount" {...field} />
                   </FormControl>
@@ -307,7 +296,7 @@ const GeneratedForm = ({
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick Invoice date</span>
+                            <span>Pick Due date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -322,9 +311,9 @@ const GeneratedForm = ({
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date('1900-01-01')
+                          date < new Date(form.watch('date'))
                         }
-                        //   initialFocus
+                        
                       />
                     </PopoverContent>
                   </Popover>

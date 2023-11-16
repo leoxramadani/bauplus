@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -190,6 +191,7 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -201,6 +203,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     await axios
       .delete(DELETE_LEAVE + `?LeaveId=${id}`)
       .then((res) => {
@@ -213,8 +216,12 @@ const ActionsColumn = ({ item }: { item: any }) => {
         });
       })
       .catch((error) => {
-        console.log('Response after error:', error);
+        // console.log('Response after error:', error);
+        toast.error(
+          'There was an error deleting the leave! Please try again.'
+        );
       });
+    setDeleting(false);
   };
 
   return (
@@ -249,24 +256,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
           <Modal.Content
             title="Delete Leave"
             description="Are you sure you want to delete this leave?"
-            className="w-full max-w-lg"
+            className="max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.leaveId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.leaveId)}
+              id={item.leaveId}
+              deleting={deleting}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>
