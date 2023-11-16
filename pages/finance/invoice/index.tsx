@@ -1,5 +1,3 @@
-import Modal from '@/components/atoms/Modal';
-import GenerateInvoiceForm from '@/components/molecules/finances/invoice/generateInvoice/GenerateInvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
@@ -45,7 +43,7 @@ const Invoice = () => {
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <Modal
+        {/* <Modal
           open={isRegisterModalOpen}
           onOpenChange={setIsRegisterModalOpen}
         >
@@ -64,19 +62,23 @@ const Invoice = () => {
               refetchInvoices={refetchInvoices}
             />
           </Modal.Content>
-        </Modal>
+        </Modal> */}
+
+        <Link href="./invoice/Register" className="flex">
+          <Button variant="default" className="flex flex-row gap-2">
+            <Plus size={20} /> Register Invoice
+          </Button>
+        </Link>
+
         <Link href="./invoice/CreateInvoice" className="flex">
           <Button variant="outline" className="flex flex-row gap-2">
             <Plus size={20} /> Create Invoice
           </Button>
         </Link>
+
         {/* <Modal
 
-        <Link href="./invoice/Register">
-          <Button variant="default" className="flex flex-row gap-2">
-            <Plus size={20} /> Register Invoice
-          </Button>
-        </Link>
+        
 
         <Modal
           open={isCreateModalOpen}
