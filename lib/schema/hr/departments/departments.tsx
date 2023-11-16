@@ -28,9 +28,9 @@ export const DepartmentSchema = z.object({
   departmentName: z.string({
     required_error: 'Department name is required',
   }),
-  companyId: z.string({
-    required_error: 'Company Id is required',
-  }),
+  companyId: z
+    .string()
+    .default('145d8d93-7ff7-4a24-a184-aa4e010e7f37'),
   parentDepartmentId: z.string().optional(),
   company: z
     .object({
