@@ -29,6 +29,10 @@ export const invoiceSchema = z.object({
     invalid_type_error: 'Invoice Type is required',
     required_error: 'Invoice Type is required',
   }),
+  invoiceInOutTypeId: z.string({
+    invalid_type_error: 'Invoice type is required',
+    required_error: 'Invoice Type is required',
+  }),
   invoiceTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
   dueDate: z.coerce.date(),

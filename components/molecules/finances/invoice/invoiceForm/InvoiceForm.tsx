@@ -31,6 +31,8 @@ import {
 } from '@/components/ui/select';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
+  GET_ALL_INVOICES_IN_OUT_TYPES,
+  GET_ALL_INVOICE_TYPES,
   GET_SPECIFIC_INVOICE,
   INVOICE_CREATE,
   UPDATE_INVOICE,
@@ -198,6 +200,42 @@ const InvoiceForm = ({
     form.getValues().invoiceDate &&
     form.getValues().invoiceNumber;
 
+  const [invoiceTypes, setInvoiceTypes] = useState<any[]>([]);
+  const [invoiceNostro, setInvoiceNostro] = useState<any[]>([]);
+  useEffect(() => {
+    const getInvoiceTypes = () => {
+      axios
+        .get(GET_ALL_INVOICE_TYPES)
+        .then((res) => {
+          setInvoiceTypes(res.data);
+        })
+        .catch((error) => {
+          console.log(
+            'error while fetching the invoice types=',
+            error
+          );
+        });
+    };
+    getInvoiceTypes();
+  }, [invoiceTypes]);
+
+  useEffect(() => {
+    const getInvoiceNostro = () => {
+      axios
+        .get(GET_ALL_INVOICES_IN_OUT_TYPES)
+        .then((res) => {
+          setInvoiceNostro(res.data);
+        })
+        .catch((error) => {
+          console.log(
+            'error while fetching the invoice types=',
+            error
+          );
+        });
+    };
+    getInvoiceNostro();
+  }, [invoiceNostro]);
+
   return (
     <div className="z-0 flex w-full flex-col gap-4">
       <Form {...form}>
@@ -274,14 +312,48 @@ const InvoiceForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {invoiceTypes.map((invoice) => (
-                        <SelectItem
-                          value={invoice.value}
-                          key={invoice.value}
-                        >
-                          {invoice.label}
-                        </SelectItem>
-                      ))}
+                      {invoiceTypes &&
+                        invoiceTypes.map((invoice) => (
+                          <SelectItem
+                            value={invoice.invoiceTypeId}
+                            key={invoice.invoiceTypeId}
+                          >
+                            {invoice.invoiceTypeName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="invoiceInOutTypeId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Invoice Nostro / Loro</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select invoice type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {invoiceNostro &&
+                        invoiceNostro.map((invoice) => (
+                          <SelectItem
+                            value={invoice.invoiceInOutTypeId}
+                            key={invoice.invoiceInOutTypeId}
+                          >
+                            {invoice.invoiceInOutTypeName}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -584,16 +656,16 @@ const invoiceStatus = [
   { label: 'Overdue', value: '427e80ba-1e1c-45ce-8791-c59fa300559d' },
 ] as const;
 
-const invoiceTypes = [
-  {
-    label: 'Payable / Expense',
-    value: '196e2549-f1bb-4159-97dc-139e2285fa13',
-  },
-  {
-    label: 'Receivable / Income',
-    value: 'ffb56872-a6ac-4d0a-b480-7dcf8c8538ea',
-  },
-] as const;
+// const invoiceTypes = [
+//   {
+//     label: 'Payable / Expense',
+//     value: '196e2549-f1bb-4159-97dc-139e2285fa13',
+//   },
+//   {
+//     label: 'Receivable / Income',
+//     value: 'ffb56872-a6ac-4d0a-b480-7dcf8c8538ea',
+//   },
+// ] as const;
 
 const paymentMethods = [
   {
