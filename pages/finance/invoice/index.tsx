@@ -71,6 +71,14 @@ const Invoice = () => {
           </Button>
         </Link>
         {/* <Modal
+
+        <Link href="./invoice/Register">
+          <Button variant="default" className="flex flex-row gap-2">
+            <Plus size={20} /> Register Invoice
+          </Button>
+        </Link>
+
+        <Modal
           open={isCreateModalOpen}
           onOpenChange={setIsCreateModalOpen}
         >
