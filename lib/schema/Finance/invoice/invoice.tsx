@@ -29,11 +29,12 @@ export const invoiceSchema = z.object({
     invalid_type_error: 'Invoice Type is required',
     required_error: 'Invoice Type is required',
   }),
+  invoiceTypeName: z.string().optional(),
   invoiceInOutTypeId: z.string({
     invalid_type_error: 'Invoice type is required',
     required_error: 'Invoice Type is required',
   }),
-  invoiceTypeName: z.string().optional(),
+  invoiceInOutTypeName: z.string().optional(),
   invoiceDate: z.coerce.date(),
   dueDate: z.coerce.date(),
   totalAmount: z.coerce.number({
@@ -98,6 +99,10 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
   {
     accessorKey: 'invoiceTypeName',
     header: 'Invoice Type',
+  },
+  {
+    accessorKey: 'invoiceInOutTypeName',
+    header: 'Nostro/Loro',
   },
   {
     accessorKey: 'invoiceDate',
