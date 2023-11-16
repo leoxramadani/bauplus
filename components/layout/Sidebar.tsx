@@ -228,17 +228,17 @@ const Sidebar = ({
                       href="/finance/bankaccounts"
                     />
                     <SidebarItem
-                      text="Credit note"
+                      text="Credit note (not finished)"
                       alert={false}
                       href="/finance/creditnote"
                     />
                     <SidebarItem
-                      text="Estimates"
+                      text="Estimates (not finished)"
                       alert={false}
                       href="/finance/estimates"
                     />
                     <SidebarItem
-                      text="Expenses"
+                      text="Expenses (not finished)"
                       alert={false}
                       href="/finance/expenses"
                     />
@@ -253,7 +253,7 @@ const Sidebar = ({
                       href="/finance/payments"
                     />
                     <SidebarItem
-                      text="Proposal"
+                      text="Proposal (not finished)"
                       alert={false}
                       href="/finance/proposal"
                     />
@@ -282,22 +282,22 @@ const Sidebar = ({
                     href="/hr/leaves"
                   />
                   <SidebarItem
-                    text="Shift Roster"
+                    text="Shift Roster (not finished)"
                     alert={false}
                     href="/hr/shiftroster"
                   />
                   <SidebarItem
-                    text="Attendace"
+                    text="Attendace (not finished)"
                     alert={false}
                     href="/hr/attendace"
                   />
                   <SidebarItem
-                    text="Holiday"
+                    text="Holiday (not finished)"
                     alert={false}
                     href="/hr/holiday"
                   />
                   <SidebarItem
-                    text="Designation"
+                    text="Designation (not finished)"
                     alert={false}
                     href="/hr/designation"
                   />
@@ -307,7 +307,7 @@ const Sidebar = ({
                     href="/hr/departments"
                   />
                   <SidebarItem
-                    text="Appreciation"
+                    text="Appreciation (not finished)"
                     alert={false}
                     href="/hr/appreciation"
                   />
@@ -327,12 +327,12 @@ const Sidebar = ({
               >
                 <>
                   <SidebarItem
-                    text="Payroll"
+                    text="Payroll (not finished)"
                     alert={false}
                     href="/payroll"
                   />
                   <SidebarItem
-                    text="Employee salary"
+                    text="Employee salary (not finished)"
                     alert={false}
                     href="/payroll/employee-salary"
                   />
@@ -467,7 +467,7 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
         className={`w-full text-left transition-[opacity,transform] ${
           Icon && 'ml-7'
         } group-hover/trigger ${
-          Icon && !expanded && 'opacity-0 pointer-events-none'
+          Icon && !expanded && 'pointer-events-none opacity-0'
         }`}
       >
         {text}
@@ -532,7 +532,9 @@ function SidebarItem({
               isInCurrentPath() && 'flex text-white'
             }`}
           >
-                        {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
+            {isInCurrentPath() && (
+              <div className="absolute left-0 -ml-2 h-full w-[2px] rounded-r-xl bg-white"></div>
+            )}
 
             <NavigationItem text={text} Icon={Icon} />
             <ChevronDown
@@ -555,13 +557,14 @@ function SidebarItem({
               cn(
                 navigationMenuTriggerStyle(),
                 `group/trigger ${
-                  isInCurrentPath() &&
-                  'group/trigger text-white'
+                  isInCurrentPath() && 'group/trigger text-white'
                 }`
               )
             }
           >
-            {isInCurrentPath() && <div className='absolute h-full bg-white w-[2px] left-0 -ml-2 rounded-r-xl'></div>}
+            {isInCurrentPath() && (
+              <div className="absolute left-0 -ml-2 h-full w-[2px] rounded-r-xl bg-white"></div>
+            )}
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger
