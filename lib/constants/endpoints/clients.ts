@@ -15,5 +15,3 @@ export const GET_SPECIFIC_CLIENT = BASE_URL + `/api/Client/`;
 
 export const UPDATE_SPECIFIC_CLIENTS =
   BASE_URL + `/api/Client/ClientWithHisInfos`;
-
-

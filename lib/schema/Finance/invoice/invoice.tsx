@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import PDFRenderer from '@/components/atoms/invoice-pdf-creation';
 import { Button } from '@/components/ui/button';
@@ -19,38 +20,60 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
-export const invoiceSchema = z.object({
-  invoiceNumber: z.string(),
-  invoiceId: z.string().optional(),
-  clientId: z.string(),
-  clientCompanyName: z.string().optional(),
-  invoiceTypeId: z.string({
-    invalid_type_error: 'Invoice Type is required',
-    required_error: 'Invoice Type is required',
-  }),
-  invoiceTypeName: z.string().optional(),
-  invoiceDate: z.coerce.date(),
-  dueDate: z.coerce.date(),
-  totalAmount: z.coerce.number({
-    invalid_type_error: 'Total Amount is required',
-    required_error: 'Total Amount is required',
-  }),
-  paidAmount: z.coerce.number({
-    invalid_type_error: 'Paid Amount is required',
-    required_error: 'Paid Amount is required',
-  }),
-  invoiceStatusId: z.string({
-    invalid_type_error: 'Invoice Status is required',
-    required_error: 'Invoice Status is required',
-  }),
-  invoiceStatusName: z.string().optional(),
-  paymentMethodId: z.string({
-    invalid_type_error: 'Payment Method is required',
-    required_error: 'Payment Method is required',
-  }),
-  paymentMethodName: z.string().optional(),
-  // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
-});
+export const invoiceSchema = z
+  .object({
+    invoiceNumber: z.string(),
+    invoiceId: z.string().optional(),
+    clientId: z.string(),
+    clientCompanyName: z.string().optional(),
+    invoiceTypeId: z.string({
+      invalid_type_error: 'Invoice Type is required',
+      required_error: 'Invoice Type is required',
+    }),
+    invoiceTypeName: z.string().optional(),
+    invoiceInOutTypeId: z.string({
+      invalid_type_error: 'Invoice type is required',
+      required_error: 'Invoice Type is required',
+    }),
+    invoiceInOutTypeName: z.string().optional(),
+    invoiceDate: z.coerce.date(),
+    dueDate: z.coerce.date(),
+    totalAmount: z.coerce.number({
+      invalid_type_error: 'Total Amount is required',
+      required_error: 'Total Amount is required',
+    }),
+    paidAmount: z.coerce.number({
+      invalid_type_error: 'Paid Amount is required',
+      required_error: 'Paid Amount is required',
+    }),
+    invoiceStatusId: z.string({
+      invalid_type_error: 'Invoice Status is required',
+      required_error: 'Invoice Status is required',
+    }),
+    invoiceStatusName: z.string().optional(),
+    paymentMethodId: z.string({
+      invalid_type_error: 'Payment Method is required',
+      required_error: 'Payment Method is required',
+    }),
+    paymentMethodName: z.string().optional(),
+    // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
+  })
+  .refine(
+    (data) => {
+      // const invoiceDate = new Date(data.invoiceDate);
+      // const dueDate = new Date(data.dueDate);
+
+      console.log('invoiceDate->', data.invoiceDate);
+      console.log('dueDate->', data.dueDate);
+
+      return data.dueDate >= data.invoiceDate;
+    },
+    {
+      message: "'Due Date' cannot be bigger than 'Invoice Date'",
+      path: ['dueDate'],
+      // path: ['dueDate', 'invoiceDate'],
+    }
+  );
 export type IInvoice = z.infer<typeof invoiceSchema>;
 
 export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
@@ -93,6 +116,10 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
   {
     accessorKey: 'invoiceTypeName',
     header: 'Invoice Type',
+  },
+  {
+    accessorKey: 'invoiceInOutTypeName',
+    header: 'Nostro/Loro',
   },
   {
     accessorKey: 'invoiceDate',
@@ -143,6 +170,8 @@ export const invoiceColumnDef: ColumnDef<IInvoice>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     router.push({
@@ -153,6 +182,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
     });
   };
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     await axios
       .delete(INVOICE_DELETE + `?invoiceId=${id}`)
       .then((res) => {
@@ -167,10 +197,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
             ...router.query,
           },
         });
+        setDeleting(false);
+        setConfirm(false);
       })
       .catch((error) => {
+        setDeleting(false);
         toast.error('Error deleting invoice!');
         console.log('Response after error:', error);
+        setConfirm(false);
       });
   };
   return (
@@ -207,25 +241,14 @@ const ActionsColumn = ({ item }: { item: any }) => {
           </Modal.Trigger>
           <Modal.Content
             title="Delete Invoice"
-            description="Are you sure you want to delete this invoice?"
+            description="This will delete the selected invoice! Are you sure you want to continue?"
             className="max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.invoiceId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.invoiceId)}
+              deleting={deleting}
+              id="id"
+            />
           </Modal.Content>
         </Modal>
         <DropdownMenuSeparator />

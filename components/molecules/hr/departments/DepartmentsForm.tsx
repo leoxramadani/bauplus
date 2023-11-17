@@ -50,7 +50,10 @@ const DepartmentsForm = ({
     data: parentDepartments,
     isLoading,
     isError,
-  } = useData<any>(['parentDepartments'], GET_ALL_DEPARTMENTS);
+  } = useData<IDepartment[]>(
+    ['parentDepartments'],
+    GET_ALL_DEPARTMENTS
+  );
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -134,27 +137,26 @@ const DepartmentsForm = ({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex w-full flex-col gap-4"
         >
-          {/* Department name */}
-          <FormField
-            control={form.control}
-            name="departmentName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Department Name
-                  <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl className="relative">
-                  <Input placeholder="Department Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
-            {/* Company Id --Like this for now! */}
+            {/* Department name */}
             <FormField
+              control={form.control}
+              name="departmentName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Department Name
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="relative">
+                    <Input placeholder="Department Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Company Id --Like this for now! */}
+            {/* <FormField
               control={form.control}
               name="companyId"
               render={({ field }) => (
@@ -168,7 +170,7 @@ const DepartmentsForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Department Id */}
             <FormField
