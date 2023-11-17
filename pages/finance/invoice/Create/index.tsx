@@ -69,11 +69,11 @@ const InvoiceForm = ({
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [companyName, setCompanyName] = useState('');
-  const [totalAmount, setTotalAmount] = useState('');
-  const [invoiceDate, setInvoiceDate] = useState(new Date());
-  const [invoiceNumber, setInvoiceNumber] = useState(0);
-  const [dueDate, setDueDate] = useState(new Date());
+  let companyName = '';
+  let totalAmount = '';
+  let invoiceDate = new Date();
+  let invoiceNumber = 0;
+  let dueDate = new Date();
   const {
     data: clients,
     isError: clientsIsError,
@@ -162,14 +162,10 @@ const InvoiceForm = ({
       (client) => client.clientId === form.watch('clientId')
     );
 
-    setCompanyName(String(selectedClient?.companyName));
-    setInvoiceDate(form.getValues().invoiceDate);
-    setTotalAmount(String(form.getValues().totalAmount));
-    setInvoiceNumber(Number(form.getValues().invoiceNumber));
-
-    // Calculate the due date as 15 days after the invoice date
-    const invoiceDate = form.getValues().invoiceDate;
-    const dueDate = new Date(invoiceDate);
+    companyName = String(selectedClient?.companyName);
+    invoiceDate = form.getValues().invoiceDate;
+    totalAmount = String(form.getValues().totalAmount);
+    invoiceNumber = Number(form.getValues().invoiceNumber);
 
     if (
       invoiceDate instanceof Date &&
@@ -177,9 +173,9 @@ const InvoiceForm = ({
     ) {
       if (form.getValues().dueDate == undefined) {
         dueDate.setDate(invoiceDate?.getDate() + 15);
-        setDueDate(dueDate);
+        dueDate = dueDate;
       } else {
-        setDueDate(form.getValues().dueDate);
+        dueDate = form.getValues().dueDate;
       }
     }
   }, [
@@ -193,12 +189,6 @@ const InvoiceForm = ({
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
-
-  const isDataComplete =
-    form.getValues().clientId &&
-    form.getValues().totalAmount &&
-    form.getValues().invoiceDate &&
-    form.getValues().invoiceNumber;
 
   const [invoiceTypes, setInvoiceTypes] = useState<any[]>([]);
   const [invoiceNostro, setInvoiceNostro] = useState<any[]>([]);
@@ -622,20 +612,17 @@ const InvoiceForm = ({
             >
               Submit
             </Button>
-
-            {isDataComplete && (
-              <PDFRenderer
-                invoiceNumber={invoiceNumber}
-                companyName={companyName}
-                totalAmount={String(totalAmount)}
-                invoiceDate={invoiceDate}
-                dueDate={dueDate}
-                content="Generate as PDF"
-              />
-            )}
           </div>
         </form>
       </Form>
+      <PDFRenderer
+        invoiceNumber={invoiceNumber}
+        companyName={companyName}
+        totalAmount={String(totalAmount)}
+        invoiceDate={invoiceDate}
+        dueDate={dueDate}
+        content="Generate as PDF"
+      />
     </div>
   );
 };

@@ -16,7 +16,6 @@ const Invoice = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] =
     useState(false);
-
   const {
     data,
     isLoading,
@@ -70,7 +69,7 @@ const Invoice = () => {
           </Button>
         </Link>
 
-        <Link href="./invoice/CreateInvoice" className="flex">
+        <Link href="./invoice/Create" className="flex">
           <Button variant="outline" className="flex flex-row gap-2">
             <Plus size={20} /> Create Invoice
           </Button>
