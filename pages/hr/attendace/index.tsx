@@ -16,7 +16,7 @@ const Attendance = () => {
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
-                <Plus size={20} /> <span>New Leave</span>
+                <Plus size={20} /> <span>New Attendance</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content
