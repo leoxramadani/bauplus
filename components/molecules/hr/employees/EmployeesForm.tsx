@@ -186,6 +186,8 @@ const EmployeesForm = ({
                       placeholder="First Name"
                       {...field}
                       disabled={isLoading}
+                      pattern={'/^[A-Za-z]+$/'}
+                      title="Please only use letters for the first name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -204,6 +206,9 @@ const EmployeesForm = ({
                       placeholder="Last Name"
                       {...field}
                       disabled={isLoading}
+                      pattern={'/^[A-Za-z]+$/'}
+                      title="Please only use letters for the first name"
+                      
                     />
                   </FormControl>
                   <FormMessage />

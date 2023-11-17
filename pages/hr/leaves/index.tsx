@@ -1,5 +1,4 @@
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import LeaveForm from '@/components/molecules/hr/leaves/LeaveForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -17,10 +16,12 @@ const Leaves = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isError, isLoading } = useData<ILeaves[]>(
-    ['leaves'],
-    GET_ALL_LEAVES
-  );
+  const {
+    data,
+    isError,
+    isLoading,
+    refetch: refetchLeaves,
+  } = useData<ILeaves[]>(['leaves'], GET_ALL_LEAVES);
 
   useEffect(() => {
     if (router.query.id) {
@@ -57,6 +58,7 @@ const Leaves = () => {
                 leaveId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
+                refetchLeaves={refetchLeaves}
               />
             </Modal.Content>
           </Modal>

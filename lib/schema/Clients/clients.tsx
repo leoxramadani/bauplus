@@ -321,7 +321,13 @@ export const createClientSchema = z.object({
   lastName: z.string(),
   clientAccountNumbers: z
     .object({
-      accountNumber: z.string().optional(),
+      accountNumber: z
+        .string()
+        .length(15, {
+          message:
+            'The account number field must have exactly 15 digits',
+        })
+        .optional(),
       country: z.string().optional(),
     })
     .array()
@@ -351,14 +357,21 @@ export const accountDetailSchema = z
       id: z.string().optional(),
       accountNumber: z.coerce
         .string()
-        .min(1, 'Account Number is required'),
+        // .min(1, 'Account Number is required'),
+        .length(15, {
+          message:
+            'The account number field must have exactly 15 digits',
+        }),
       country: z.string().min(1, 'Country is required'),
     }),
     accountDetails: z
       .array(
         z.object({
           id: z.string().optional(),
-          accountNumber: z.string(),
+          accountNumber: z.string().length(15, {
+            message:
+              'The account number field must have exactly 15 digits',
+          }),
           country: z.string(),
         })
       )
