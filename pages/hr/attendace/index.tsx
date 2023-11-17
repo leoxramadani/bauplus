@@ -1,6 +1,11 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
 import { Button } from '@/components/ui/button';
+import { GET_ALL_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
+import useData from '@/lib/hooks/useData';
+import { bankAccountColumnDef } from '@/lib/schema/Finance/bankaccounts';
+import { IAttendance, attendanceColumnDef } from '@/lib/schema/hr/attendance/attendance';
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -8,6 +13,14 @@ import { useState } from 'react';
 const Attendance = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+
+
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchAttendance,
+  } = useData<IAttendance[]>(['attendance'],GET_ALL_ATTENDANCE );
 
   return (
     <>
@@ -28,6 +41,7 @@ const Attendance = () => {
                 attendanceId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
+                refetchAttendance={refetchAttendance}
               />
             </Modal.Content>
           </Modal>
@@ -39,7 +53,21 @@ const Attendance = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {/* <DataTable data={data} columns={financeColumnDef} /> */}
+        {data && !isLoading ? (
+          <DataTable data={data} columns={attendanceColumnDef} pageCount={1}/>
+        ) : (
+          <>
+          {isError ? (
+            <div>No data.</div>
+          ) : (
+            <div>
+              {' '}
+              <p>Loading ...</p>
+            </div>
+          )}
+        </>
+      )}
+        
       </section>
     </>
   );

@@ -59,6 +59,7 @@ import { toast } from 'react-toastify';
 interface ICreateAttendance {
   setIsModalOpen(open: boolean): void;
   attendanceId?: string;
+  refetchAttendance:any;
 }
 
 const status = [
@@ -76,6 +77,7 @@ const duration = [
 const AttendanceForm = ({
   setIsModalOpen,
   attendanceId,
+  refetchAttendance
 }: ICreateAttendance) => {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -142,6 +144,7 @@ const AttendanceForm = ({
             console.log('res from update =>', res);
             toast.success('Attendance updated successfully!');
             setIsModalOpen(false);
+            refetchAttendance();
           })
           .catch((error) => {
             console.error('Error:', error);
@@ -173,6 +176,7 @@ const AttendanceForm = ({
             console.log('res from create=>', res);
             toast.success('Attendance registered successfully!');
             setIsModalOpen(false);
+            refetchAttendance();
           })
           .catch((error) => {
             console.error('Error:', error);
