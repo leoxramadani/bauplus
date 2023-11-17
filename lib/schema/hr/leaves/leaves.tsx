@@ -45,6 +45,14 @@ export enum duration {
   sh = 'Second Half',
 }
 
+export const leaveTypes = z.object({
+  leaveTypeId: z.string(),
+  title: z.string(),
+  description: z.string(),
+});
+
+export type ILeavesType = z.infer<typeof leaveTypes>;
+
 export const leavesSchema = z.object({
   // member: z.string(),
   // leaveType: z.string(),

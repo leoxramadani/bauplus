@@ -986,3 +986,13 @@ export const countries = [
     code: 'ZW',
   },
 ] as const;
+
+export const weekdays = [
+  { day: 'Monday', short: 'Mon' },
+  { day: 'Tuesday', short: 'Tue' },
+  { day: 'Wednesday', short: 'Wed' },
+  { day: 'Thursday', short: 'Thu' },
+  { day: 'Friday', short: 'Fri' },
+  { day: 'Saturday', short: 'Sat' },
+  { day: 'Sunday', short: 'Sun' },
+];
