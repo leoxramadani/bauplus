@@ -208,7 +208,6 @@ const EmployeesForm = ({
                       disabled={isLoading}
                       pattern={'/^[A-Za-z]+$/'}
                       title="Please only use letters for the first name"
-                      
                     />
                   </FormControl>
                   <FormMessage />
@@ -219,24 +218,6 @@ const EmployeesForm = ({
 
           <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
             {/* Company Id */}
-            {/* <FormField
-              control={form.control}
-              name="companyId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Id</FormLabel>
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="Company Id"
-                      {...field}
-                      disabled={isLoading}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
             <FormField
               control={form.control}
               name="companyId"

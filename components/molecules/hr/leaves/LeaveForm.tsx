@@ -78,7 +78,6 @@ const LeaveForm = ({
   leaveId,
   refetchLeaves,
 }: ILeavesProps) => {
-  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [leave, setLeave] = useState<any>();
 
@@ -126,14 +125,6 @@ const LeaveForm = ({
             ...data,
             companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
             filePath: '',
-            // employeeId
-            // leaveType
-            // leaveStatus
-            // duration
-            // reason
-            // filePath
-            // companyId
-            // isDeleted
           })
           .then(() => {
             toast.success('Successfully updated leave');
@@ -372,9 +363,9 @@ const LeaveForm = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search employee..." />
+                        <CommandInput placeholder="Search for an employee..." />
                         <CommandEmpty>
-                          No employees found.
+                          No employee found.
                         </CommandEmpty>
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (
