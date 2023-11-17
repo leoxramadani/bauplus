@@ -173,7 +173,6 @@ const InvoiceForm = ({
     ) {
       if (form.getValues().dueDate == undefined) {
         dueDate.setDate(invoiceDate?.getDate() + 15);
-        dueDate = dueDate;
       } else {
         dueDate = form.getValues().dueDate;
       }

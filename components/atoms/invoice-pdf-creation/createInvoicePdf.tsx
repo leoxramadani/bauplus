@@ -129,7 +129,7 @@ const generalInvoice = (
                 }}
               >{`Предмет\nSubjekti`}</Text>
               <Text style={{ fontSize: 10, fontWeight: 600 }}>
-                {subject}
+                subject
               </Text>
             </View>
 
@@ -232,7 +232,7 @@ const generalInvoice = (
                       textTransform: 'lowercase',
                     }}
                   >
-                    {totalWithoutVAT.toFixed(2)} ден.
+                    totalWithoutVAT.toFixed(2) ден.
                   </Text>
                 </View>
               </View>
@@ -278,7 +278,7 @@ const generalInvoice = (
                       textTransform: 'lowercase',
                     }}
                   >
-                    {vatAmount.toFixed(2)} ден.
+                    vatAmount.toFixed(2) ден.
                   </Text>
                 </View>
               </View>
@@ -439,7 +439,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
 
   const vatAmount = Number(totalAmount) - totalWithoutVAT;
 
-  setPdfData(generalInvoice);
+  //setPdfData(generalInvoice);
 
   if (invoiceDate instanceof Date && !isNaN(invoiceDate.getTime())) {
     const timeInMillis: number = invoiceDate.getTime();
