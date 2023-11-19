@@ -57,7 +57,6 @@ export function DataTableColumnSearch<TData>({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            size="sm"
             className="flex gap-2 p-2"
           >
             <div className="flex items-center">

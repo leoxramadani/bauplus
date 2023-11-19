@@ -114,8 +114,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(data);
-
   return (
     <div
       className={`flex flex-col
