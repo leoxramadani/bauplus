@@ -48,9 +48,11 @@ import format from 'date-fns/format';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-interface ICreateLeave {
+import { toast } from 'react-toastify';
+interface ILeavesProps {
   setIsModalOpen(open: boolean): void;
   leaveId?: string;
+  refetchLeaves: any;
 }
 
 const leaves = [
@@ -71,8 +73,11 @@ const duration = [
   { label: 'Second Half', value: 'sh' },
 ];
 
-const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
-  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const LeaveForm = ({
+  setIsModalOpen,
+  leaveId,
+  refetchLeaves,
+}: ILeavesProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [leave, setLeave] = useState<any>();
 
@@ -119,26 +124,18 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
           .put(UPDATE_LEAVE, {
             ...data,
             companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
-            employeeId: 'c8018547-7470-42d6-b1a7-269b0f4edb17',
             filePath: '',
-            // employeeId
-            // leaveType
-            // leaveStatus
-            // duration
-            // reason
-            // filePath
-            // companyId
-            // isDeleted
           })
-          .then((res) => {
-            console.log('res from update =>', res);
+          .then(() => {
+            toast.success('Successfully updated leave');
+            refetchLeaves();
           })
           .catch((error) => {
             console.error('Error:', error);
-            // toast.error('There was an issue! Please try again.');
+            toast.error(
+              'There was an issue updating leave! Please try again.'
+            );
           });
-        setIsSubmitting(false);
-        setIsModalOpen(false);
       } else {
         await axios
           .post(CREATE_LEAVE, {
@@ -146,17 +143,19 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
             companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
             filePath: '',
           })
-          .then((res) => {
-            console.log('res from create=>', res);
+          .then(() => {
+            toast.success('Successfully created leave');
+            refetchLeaves();
           })
           .catch((error) => {
             console.error('Error:', error);
-            // toast.error('There was an issue! Please try again.');
+            toast.error(
+              'There was an issue creating leave! Please try again.'
+            );
           });
-
-        setIsSubmitting(false);
-        setIsModalOpen(false);
       }
+      setIsSubmitting(false);
+      setIsModalOpen(false);
 
       setIsSubmitting(false);
     },
@@ -364,9 +363,9 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search employee..." />
+                        <CommandInput placeholder="Search for an employee..." />
                         <CommandEmpty>
-                          No employees found.
+                          No employee found.
                         </CommandEmpty>
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (

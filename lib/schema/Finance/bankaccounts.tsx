@@ -26,7 +26,11 @@ import * as z from 'zod';
 
 export const bankAccountSchema = z.object({
   accountName: z.string(),
-  accountNumber: z.string(),
+  accountNumber: z
+    .string()
+    .length(15, {
+      message: 'The account number field must have exactly 15 digits',
+    }),
   bankAccountStatus: z.object({
     statusName: z.string(),
   }),
