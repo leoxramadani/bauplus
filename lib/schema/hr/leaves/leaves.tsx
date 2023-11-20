@@ -62,7 +62,7 @@ export const leavesSchema = z.object({
   // reason: z.string(),
   // // file: z.instanceof(File)
   leaveId: z.string().optional(),
-  date: z.coerce.date(),
+  dateFrom: z.coerce.date(),
   employeeId: z.string({
     required_error: 'An employee is required to create a leave!',
   }),
@@ -137,8 +137,8 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
     header: 'Company name',
   },
   {
-    accessorKey: 'date',
-    header: 'Date',
+    accessorKey: 'dateFrom',
+    header: 'Date from',
   },
   // {
   //   accessorKey: 'employeeId',

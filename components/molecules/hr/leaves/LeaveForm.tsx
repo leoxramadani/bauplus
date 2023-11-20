@@ -282,7 +282,7 @@ const LeaveForm = ({
             {/* Date */}
             <FormField
               control={form.control}
-              name="date"
+              name="dateFrom"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Date</FormLabel>
