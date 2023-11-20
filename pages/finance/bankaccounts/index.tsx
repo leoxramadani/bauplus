@@ -28,7 +28,6 @@ const BankAccounts = () => {
     if (router.query.id) {
       setIsOpen(true);
     }
-    console.log('router==', router);
   }, [router.query.id]);
 
   useEffect(() => {
