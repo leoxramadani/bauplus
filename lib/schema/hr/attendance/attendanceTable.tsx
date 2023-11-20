@@ -147,13 +147,16 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
     accessorKey: 'checkIn',
     header: 'Check in',
     cell: ({ row }) =>
-      format(new Date(row.getValue('checkIn')), 'hh:mm a'),
+      format(new Date(`1970-01-01T${row.original.checkIn}`), 'HH:mm'),
   },
   {
     accessorKey: 'checkOut',
     header: 'Check out',
     cell: ({ row }) =>
-      format(new Date(row.getValue('checkOut')), 'hh:mm a '),
+      format(
+        new Date(`1970-01-01T${row.original.checkOut}`),
+        'HH:mm'
+      ),
   },
   {
     id: 'actions',
