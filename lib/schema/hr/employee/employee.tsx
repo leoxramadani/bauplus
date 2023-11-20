@@ -19,14 +19,28 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
+const NAME_REGEX = new RegExp('/^[A-Za-z]+$/'); // only letters
+
 export const employeeSchema = z.object({
   employeeId: z.string().optional(),
   companies: z.object({
     companyName: z.string().optional(),
   }),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
+  firstName: z
+    .string()
+    .regex(NAME_REGEX)
+    .refine(
+      (v) => NAME_REGEX.test(v),
+      'First name should only contain letters'
+    ),
+  lastName: z
+    .string()
+    .regex(NAME_REGEX)
+    .refine(
+      (v) => NAME_REGEX.test(v),
+      'Last name should only contain letters'
+    ),
+  email: z.string().email({ message: 'Invalid email address' }),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
   department: z

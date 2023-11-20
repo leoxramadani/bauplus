@@ -12,7 +12,6 @@ import {
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 const Employees = () => {
   const router = useRouter();
@@ -65,14 +64,15 @@ const Employees = () => {
             </Modal.Content>
           </Modal>
 
-          <Button
+          {/* This feature can be implemented in the future */}
+          {/* <Button
             variant="outline"
             className="flex gap-2"
             onClick={() => toast.success('test')}
           >
             <Plus size={20} />
             <span>Invite Employee</span>
-          </Button>
+          </Button> */}
 
           <Button variant="outline" className="flex gap-2">
             <FileUp size={20} /> <span>Import</span>
