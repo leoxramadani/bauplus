@@ -1,4 +1,3 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { z } from 'zod';
 
 export const AttendanceSchema = z.object({
@@ -7,8 +6,8 @@ export const AttendanceSchema = z.object({
   date: z.date(),
   weekDay: z.string().min(1, 'Select a week day'),
   shiftId: z.string().min(1, 'You must select a shift'),
-  checkIn: z.string(),
-  checkOut: z.string(),
+  checkIn: z.string().min(1, 'Check in is required'),
+  checkOut: z.string().min(1, 'Check out is required'),
   late: z.boolean().optional(),
   earlyLeave: z.boolean().optional(),
   attended: z.boolean().optional(),
@@ -42,24 +41,3 @@ export type IShifts = z.infer<typeof Shifts>;
 //   "break": 0,
 //   "leaveTypeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 //   "leave": 0
-
-
-export const attendanceColumnDef :ColumnDef<IAttendance>[] = [
-  {
-    accessorKey: 'employeeName',
-    header: 'Employee Name',
-  },
-  {
-    accessorKey: 'weekDay',
-    header: 'Weekday',
-  },
-  {
-    accessorKey: 'checkIn',
-    header: 'Check in', 
-  },
-  {
-    accessorKey: 'checkOut',
-    header: 'Check out'
-  }
-
-]
