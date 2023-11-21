@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Document,
   Font,
@@ -6,7 +8,7 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-resizable/css/styles.css';
 import Modal from '../Modal';
 import { Header } from './header';
@@ -59,31 +61,19 @@ interface pdfInputs {
   totalAmount: string;
   invoiceDate: Date;
   dueDate: Date;
-  content?: any;
+  content: string;
 }
 
-const PDFRenderer: React.FC<pdfInputs> = ({
-  invoiceNumber,
-  companyName,
-  totalAmount,
-  invoiceDate,
-  dueDate,
-  content,
-}) => {
-  console.log('inside pdfrenderere->', totalAmount);
-
-  const [subject, setSubject] = useState('Everest XH.D.');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-  const [pdfData, setPdfData] = useState<React.ReactElement | null>(
-    null
-  );
-
+const generalInvoice = (
+  invoiceNumber: number,
+  companyName: string,
+  totalAmount: string,
+  invoiceDate: Date,
+  dueDate: Date
+): React.ReactElement => {
   const totalWithoutVAT = Number(totalAmount) / (1 + 0.18);
-
   const vatAmount = Number(totalAmount) - totalWithoutVAT;
-
-  const generalInvoice = (
+  return (
     <Document>
       <Page size="LETTER">
         {/* whole page */}
@@ -146,7 +136,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
                   }}
                 >{`Предмет\nSubjekti`}</Text>
                 <Text style={{ fontSize: 10, fontWeight: 600 }}>
-                  {subject}
+                  subject
                 </Text>
               </View>
 
@@ -437,63 +427,106 @@ const PDFRenderer: React.FC<pdfInputs> = ({
       </Page>
     </Document>
   );
+};
 
-  if (invoiceDate instanceof Date && !isNaN(invoiceDate.getTime())) {
-    const timeInMillis: number = invoiceDate.getTime();
-    if (
-      timeInMillis !== 0 &&
-      companyName !== undefined &&
-      totalAmount !== undefined &&
-      totalAmount !== ''
-    ) {
-      return (
-        <>
-          <Modal
-            open={isCreateModalOpen}
-            onOpenChange={setIsCreateModalOpen}
-          >
-            <Modal.Trigger asChild>
-              {/* <Button
-                onClick={handleButtonClick}
-                className="inline w-max bg-red-500"
-              >
-                {content}
-              </Button> */}
-              <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                {content}
-              </div>
-            </Modal.Trigger>
-            <Modal.Content
-              key="modal-content"
-              title="PDF Preview"
-              description="You can go back and change the inputs if you don't like something."
-            >
-              {pdfData ? (
-                <PDFViewer style={{ width: '100%', height: '75vh' }}>
-                  {pdfData}
-                </PDFViewer>
-              ) : null}
-            </Modal.Content>
-          </Modal>
-        </>
-      );
+const initialDocument = (
+  <Document>
+    <Page>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      >
+        <Text>Fill the data to generate the invoice in PDF</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
+const PDFRenderer: React.FC<pdfInputs> = ({
+  invoiceNumber,
+  companyName,
+  totalAmount,
+  invoiceDate,
+  dueDate,
+  content,
+}) => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [pdfData, setPdfData] = useState<React.ReactElement | null>(
+    null
+  );
+  const [createAsPdf, setCreateAsPDF] = useState(false);
+
+  useEffect(() => {
+    if (createAsPdf) {
+      // Generate PDF data
+      if (
+        invoiceDate instanceof Date &&
+        !isNaN(invoiceDate.getTime()) &&
+        invoiceDate.getTime() !== 0 &&
+        companyName &&
+        totalAmount !== undefined &&
+        totalAmount !== ''
+      ) {
+        setPdfData(
+          generalInvoice(
+            invoiceNumber,
+            companyName,
+            totalAmount,
+            invoiceDate,
+            dueDate
+          )
+        );
+      }
     }
-  } else {
-    return (
-      <PDFViewer style={{ width: '100%', height: '75vh' }}>
-        <Document>
-          <Page
-            style={{ justifyContent: 'center', alignItems: 'center' }}
-            size="LETTER"
+  }, [createAsPdf]);
+
+  const createPdf = () => {
+    setCreateAsPDF(!createAsPdf);
+  };
+
+  return (
+    <div>
+      {content == 'Generate as PDF' ? (
+        <>
+          {pdfData ? (
+            <PDFViewer style={{ width: '100%', height: '75vh' }}>
+              {pdfData}
+            </PDFViewer>
+          ) : (
+            ''
+          )}
+        </>
+      ) : (
+        <Modal
+          open={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+        >
+          <Modal.Trigger asChild>
+            <div
+              onClick={createPdf}
+              className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+            >
+              {content}
+            </div>
+          </Modal.Trigger>
+          <Modal.Content
+            key="modal-content"
+            title="PDF Preview"
+            description="You can go back and change the inputs if you don't like something."
           >
-            <View>
-              <Text>Fill all the data to generate the invoice</Text>
-            </View>
-          </Page>
-        </Document>
-      </PDFViewer>
-    );
-  }
+            {pdfData ? (
+              <PDFViewer style={{ width: '100%', height: '75vh' }}>
+                {pdfData}
+              </PDFViewer>
+            ) : null}
+          </Modal.Content>
+        </Modal>
+      )}
+    </div>
+  );
 };
 
 export default PDFRenderer;
