@@ -158,6 +158,7 @@ const InvoiceForm = ({
   );
 
   useEffect(() => {
+    console.log('Form Watch');
     const selectedClient = clients?.find(
       (client) => client.clientId === form.watch('clientId')
     );

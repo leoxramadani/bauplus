@@ -460,28 +460,16 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   const [createAsPdf, setCreateAsPDF] = useState(false);
 
   useEffect(() => {
-    if (createAsPdf) {
-      // Generate PDF data
-      if (
-        invoiceDate instanceof Date &&
-        !isNaN(invoiceDate.getTime()) &&
-        invoiceDate.getTime() !== 0 &&
-        companyName &&
-        totalAmount !== undefined &&
-        totalAmount !== ''
-      ) {
-        setPdfData(
-          generalInvoice(
-            invoiceNumber,
-            companyName,
-            totalAmount,
-            invoiceDate,
-            dueDate
-          )
-        );
-      }
-    }
-  }, [createAsPdf]);
+    setPdfData(
+      generalInvoice(
+        invoiceNumber,
+        companyName,
+        totalAmount,
+        invoiceDate,
+        dueDate
+      )
+    );
+  }, []);
 
   const createPdf = () => {
     setCreateAsPDF(!createAsPdf);
@@ -495,9 +483,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
             <PDFViewer style={{ width: '100%', height: '75vh' }}>
               {pdfData}
             </PDFViewer>
-          ) : (
-            ''
-          )}
+          ) : null}
         </>
       ) : (
         <Modal
