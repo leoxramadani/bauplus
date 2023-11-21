@@ -1,5 +1,5 @@
 import Modal from '@/components/atoms/Modal';
-import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
+// import { DataTable } from '@/components/molecules/DataTable';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -9,11 +9,26 @@ import { IAttendance } from '@/lib/schema/hr/attendance/attendance';
 import { attendanceColumnDef } from '@/lib/schema/hr/attendance/attendanceTable';
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Attendance = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.id) {
+      setIsModalOpen(true);
+    }
+  }, [router.query.id]);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      console.log('test');
+      router.replace('/hr/attendace', undefined, {
+        shallow: true,
+      });
+    }
+  }, [isModalOpen]);
 
   const {
     data,
@@ -22,6 +37,7 @@ const Attendance = () => {
     refetch: refetchAttendance,
   } = useData<IAttendance[]>(['attendance'], GET_ALL_ATTENDANCE);
 
+  console.log(data);
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -56,11 +72,11 @@ const Attendance = () => {
         {data && (
           <DataTable data={data} columns={attendanceColumnDef} />
         )}
-        {isLoading && (
+        {/* {isLoading && (
           <DataTableLoading
             columnCount={attendanceColumnDef.length}
           />
-        )}
+        )} */}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}

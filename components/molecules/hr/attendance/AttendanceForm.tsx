@@ -35,12 +35,10 @@ import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 import {
   CREATE_ATTENDANCE,
   GET_ALL_SHIFTS,
+  GET_SPECIFIC_ATTENDANCE,
+  UPDATE_ATTENDANCE,
 } from '@/lib/constants/endpoints/hr/attendance';
-import {
-  GET_ALL_LEAVES_TYPE,
-  GET_SPECIFIC_LEAVE,
-  UPDATE_LEAVE,
-} from '@/lib/constants/endpoints/hr/leaves';
+import { GET_ALL_LEAVES_TYPE } from '@/lib/constants/endpoints/hr/leaves';
 import { weekdays } from '@/lib/helper/helper';
 import useData from '@/lib/hooks/useData';
 import {
@@ -54,7 +52,12 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import {
+  CalendarIcon,
+  Check,
+  ChevronsUpDown,
+  Loader2,
+} from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -100,7 +103,7 @@ const AttendanceForm = ({
   useEffect(() => {
     async function getData(id: string) {
       await axios
-        .get(GET_SPECIFIC_LEAVE + `?leaveId=${id}`)
+        .get(GET_SPECIFIC_ATTENDANCE + `?AttendanceRecordId=${id}`)
         .then((res) => {
           console.log('setting leave data -->', res);
           setAttendance(res.data);
@@ -119,21 +122,46 @@ const AttendanceForm = ({
     resolver: zodResolver(AttendanceSchema),
     values: {
       ...attendance,
+      date: attendance?.date ? new Date(attendance?.date) : undefined,
       checkIn: attendance?.checkIn || '00:00:00',
       checkOut: attendance?.checkOut || '00:00:00',
+      late: attendance?.late == 1 ? true : false,
+      earlyLeave: attendance?.earlyLeave == 1 ? true : false,
+      attended: attendance?.attended == 1 ? true : false,
+      worked: attendance?.worked == 1 ? true : false,
+      break: attendance?.break == 1 ? true : false,
     },
   });
 
+  console.log(attendance);
   const onSubmit = useCallback(
     async (data: IAttendance) => {
       console.log('form data=', data);
 
+      const updatedAttendanceData = {
+        ...data,
+        attendanceRecordId: attendanceId,
+        date: format(data.date, "yyyy-MM-dd'T'HH:mm:ss.SSSX"),
+        checkIn: format(
+          new Date(`1970-01-01T${data.checkIn}`),
+          'HH:mm:ss'
+        ),
+        checkOut: format(
+          new Date(`1970-01-01T${data.checkOut}`),
+          'HH:mm:ss'
+        ),
+        earlyLeave: data.earlyLeave ? 1 : 0,
+        attended: data.attended ? 1 : 0,
+        worked: data.worked ? 1 : 0,
+        break: data.break ? 1 : 0,
+        late: data.late ? 1 : 0,
+      };
+
+      console.log('update:', updatedAttendanceData);
       setIsSubmitting(true);
       if (attendance) {
         await axios
-          .put(UPDATE_LEAVE, {
-            ...data,
-          })
+          .put(UPDATE_ATTENDANCE, updatedAttendanceData)
           .then((res) => {
             console.log('res from update =>', res);
             toast.success('Attendance updated successfully!');
@@ -141,7 +169,7 @@ const AttendanceForm = ({
             refetchAttendance();
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.error('Error:', error.response);
             toast.error(
               'There was an issue updating attendance! Please try again.'
             );
@@ -192,24 +220,25 @@ const AttendanceForm = ({
     console.log('Error in leaves->', error);
   };
 
-  form.watch('checkIn') &&
-    console.log(
-      format(
-        new Date(`1970-01-01T${form.watch('checkIn')}`),
-        'HH:mm:ss'
-      )
-    );
-
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
+      {attendance &&
+        leaveTypesLoading &&
+        shiftsLoading &&
+        employees && (
+          <div
+            tabIndex={0}
+            className="absolute inset-0 z-50 flex h-full w-full items-center justify-center rounded-lg bg-black/30"
+          >
+            <Loader2 className="h-16 w-16 animate-spin text-slate-100" />
+          </div>
+        )}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
-            {/* project */}
-
             {/* Employee */}
             <FormField
               control={form.control}
@@ -311,7 +340,7 @@ const AttendanceForm = ({
                           disabled={isSubmitting}
                         >
                           {field.value ? (
-                            format(new Date(field.value), 'PPP')
+                            format(field.value, 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -328,7 +357,7 @@ const AttendanceForm = ({
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date('1900-01-01')
+                          date < new Date('2000-01-01')
                         }
                         initialFocus
                       />
@@ -457,6 +486,7 @@ const AttendanceForm = ({
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
                         />
                       </FormControl>
                       Late
@@ -474,6 +504,7 @@ const AttendanceForm = ({
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
                         />
                       </FormControl>
                       Early Leave
@@ -491,6 +522,7 @@ const AttendanceForm = ({
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
                         />
                       </FormControl>
                       Attended
@@ -508,6 +540,7 @@ const AttendanceForm = ({
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
                         />
                       </FormControl>
                       Worked
@@ -525,6 +558,7 @@ const AttendanceForm = ({
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
                         />
                       </FormControl>
                       Break
@@ -570,7 +604,8 @@ const AttendanceForm = ({
           </div>
 
           <Button
-            // loading={isSubmitting}
+            loading={isSubmitting}
+            disabled={isSubmitting}
             className="mt-8 w-max"
             type="submit"
           >
