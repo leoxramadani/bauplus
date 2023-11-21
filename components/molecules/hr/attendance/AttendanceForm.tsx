@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -59,25 +61,13 @@ import { toast } from 'react-toastify';
 interface ICreateAttendance {
   setIsModalOpen(open: boolean): void;
   attendanceId?: string;
-  refetchAttendance:any;
+  refetchAttendance: any;
 }
-
-const status = [
-  { label: 'Pending', value: 'pending' },
-  { label: 'Approved', value: 'approved' },
-] as const;
-
-const duration = [
-  { label: 'Full day', value: 'full' },
-  { label: 'Multiple days', value: 'multiple' },
-  { label: 'First Half', value: 'fh' },
-  { label: 'Second Half', value: 'sh' },
-];
 
 const AttendanceForm = ({
   setIsModalOpen,
   attendanceId,
-  refetchAttendance
+  refetchAttendance,
 }: ICreateAttendance) => {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -157,13 +147,14 @@ const AttendanceForm = ({
         await axios
           .post(CREATE_ATTENDANCE, {
             ...data,
-            // transfer time to iso string with date
-            date: new Date(data.date.toDateString()),
-            checkIn: new Date(
-              data.date.toDateString() + ' ' + data.checkIn
+            date: format(data.date, "yyyy-MM-dd'T'HH:mm:ss.SSSX"),
+            checkIn: format(
+              new Date(`1970-01-01T${data.checkIn}`),
+              'HH:mm:ss'
             ),
-            checkOut: new Date(
-              data.date.toDateString() + ' ' + data.checkOut
+            checkOut: format(
+              new Date(`1970-01-01T${data.checkOut}`),
+              'HH:mm:ss'
             ),
             late: data.late ? 1 : 0,
 
@@ -196,6 +187,14 @@ const AttendanceForm = ({
   const onError = (error: any) => {
     console.log('Error in leaves->', error);
   };
+
+  form.watch('checkIn') &&
+    console.log(
+      format(
+        new Date(`1970-01-01T${form.watch('checkIn')}`),
+        'HH:mm:ss'
+      )
+    );
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">

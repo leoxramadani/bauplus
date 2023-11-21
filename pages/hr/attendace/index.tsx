@@ -1,11 +1,12 @@
 import Modal from '@/components/atoms/Modal';
-import { DataTable } from '@/components/molecules/DataTable';
+import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
+import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
 import useData from '@/lib/hooks/useData';
-import { bankAccountColumnDef } from '@/lib/schema/Finance/bankaccounts';
-import { IAttendance, attendanceColumnDef } from '@/lib/schema/hr/attendance/attendance';
+import { IAttendance } from '@/lib/schema/hr/attendance/attendance';
+import { attendanceColumnDef } from '@/lib/schema/hr/attendance/attendanceTable';
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -14,13 +15,12 @@ const Attendance = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
-
   const {
     data,
     isLoading,
     isError,
     refetch: refetchAttendance,
-  } = useData<IAttendance[]>(['attendance'],GET_ALL_ATTENDANCE );
+  } = useData<IAttendance[]>(['attendance'], GET_ALL_ATTENDANCE);
 
   return (
     <>
@@ -29,7 +29,7 @@ const Attendance = () => {
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
-                <Plus size={20} /> <span>New Leave</span>
+                <Plus size={20} /> <span>New Attendance</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -53,21 +53,17 @@ const Attendance = () => {
             <FileInput /> <span>Export</span>
           </Button>
         </div>
-        {data && !isLoading ? (
-          <DataTable data={data} columns={attendanceColumnDef} pageCount={1}/>
-        ) : (
-          <>
-          {isError ? (
-            <div>No data.</div>
-          ) : (
-            <div>
-              {' '}
-              <p>Loading ...</p>
-            </div>
-          )}
-        </>
-      )}
-        
+        {data && (
+          <DataTable data={data} columns={attendanceColumnDef}  />
+        )}
+        {isLoading && (
+          <DataTableLoading
+            columnCount={attendanceColumnDef.length}
+          />
+        )}
+        {isError && (
+          <p> There was something wrong, please try again later.</p>
+        )}
       </section>
     </>
   );
