@@ -54,7 +54,7 @@ const Attendance = () => {
           </Button>
         </div>
         {data && (
-          <DataTable data={data} columns={attendanceColumnDef}  />
+          <DataTable data={data} columns={attendanceColumnDef} />
         )}
         {isLoading && (
           <DataTableLoading

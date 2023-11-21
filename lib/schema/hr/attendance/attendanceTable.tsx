@@ -117,10 +117,10 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value: boolean) =>
-          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
-          table.toggleAllRowsSelected(!!value)
+          table.toggleAllRowsSelected(!value)
         }
         aria-label="Select all"
+        className="self-center"
       />
     ),
     cell: ({ row }) => (
@@ -132,8 +132,6 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
         aria-label="Select row"
       />
     ),
-    // enableSorting: false,
-    // enableHiding: false,
   },
   {
     accessorKey: 'employeeName',

@@ -117,7 +117,11 @@ const AttendanceForm = ({
 
   const form = useForm<IAttendance>({
     resolver: zodResolver(AttendanceSchema),
-    values: { ...attendance },
+    values: {
+      ...attendance,
+      checkIn: attendance?.checkIn || '00:00:00',
+      checkOut: attendance?.checkOut || '00:00:00',
+    },
   });
 
   const onSubmit = useCallback(
