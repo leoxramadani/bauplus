@@ -435,7 +435,6 @@ const MasterDetailTable = () => {
           }
         />
       </MasterDetailRow>
-      
     </div>
   );
 };
