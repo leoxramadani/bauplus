@@ -33,13 +33,20 @@ const Employees = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
-  // useEffect(() => {
-  //   if (!isModalOpen) {
-  //     router.replace('/hr/employees', undefined, {
-  //       shallow: true,
-  //     });
-  //   }
-  // }, [isModalOpen]);
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.push(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      removeIdFromQuery();
+    }
+  }, [isModalOpen]);
 
   return (
     <>
@@ -95,11 +102,9 @@ const Employees = () => {
             {isError ? (
               <div>No data.</div>
             ) : (
-              <div>
-                <DataTableLoading
-                  columnCount={employeeColumnDef.length}
-                />
-              </div>
+              <DataTableLoading
+                columnCount={employeeColumnDef.length}
+              />
             )}
           </>
         )}

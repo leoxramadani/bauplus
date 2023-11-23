@@ -1,7 +1,9 @@
 import Modal from '@/components/atoms/Modal';
 import ClientsForm from '@/components/molecules/Clients/ClientsForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
-import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
+import { DataTable } from '@/components/molecules/DataTable';
+import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
+// import { DataTable } from '@/components/molecules/table/DataTable';
+// import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
@@ -19,6 +21,7 @@ const Clients = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const {
     data,
+    metadata,
     isError,
     isLoading,
     error,
@@ -75,6 +78,7 @@ const Clients = () => {
         {data && !isLoading && (
           <DataTable
             data={data}
+            metadata={metadata}
             columns={clientsColumnDef}
             subcolumns={clientSubColumnDef}
             getRowCanExpand={() => true}

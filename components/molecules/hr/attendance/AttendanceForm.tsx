@@ -52,12 +52,7 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
-import {
-  CalendarIcon,
-  Check,
-  ChevronsUpDown,
-  Loader2,
-} from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -76,6 +71,7 @@ const AttendanceForm = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attendance, setAttendance] = useState<any>();
+  const [attendanceLoading, setAttendanceLoading] = useState(false);
 
   const {
     data: employees,
@@ -102,14 +98,17 @@ const AttendanceForm = ({
 
   useEffect(() => {
     async function getData(id: string) {
+      setAttendanceLoading(true);
       await axios
         .get(GET_SPECIFIC_ATTENDANCE + `?AttendanceRecordId=${id}`)
         .then((res) => {
-          console.log('setting leave data -->', res);
+          setAttendanceLoading(false);
           setAttendance(res.data);
         })
-        .catch((error) => {
-          console.log('error fetching leave->', error);
+        .catch(() => {
+          toast.error(
+            'There was an issue getting the selected attendance!'
+          );
         });
     }
 
@@ -133,7 +132,8 @@ const AttendanceForm = ({
     },
   });
 
-  console.log(attendance);
+  console.log(attendanceLoading);
+
   const onSubmit = useCallback(
     async (data: IAttendance) => {
       console.log('form data=', data);
@@ -221,399 +221,406 @@ const AttendanceForm = ({
   };
 
   return (
-    <div className="z-0 flex w-full flex-col gap-4  ">
-      {attendance &&
-        leaveTypesLoading &&
-        shiftsLoading &&
-        employees && (
+    !employeesIsLoading &&
+    !leaveTypesLoading &&
+    !shiftsLoading && (
+      <div className="z-0 flex w-full flex-col gap-4  ">
+        {/* {attendance &&
+        attendanceLoading === true &&
+        !leaveTypesLoading &&
+        !shiftsLoading && (
           <div
             tabIndex={0}
             className="absolute inset-0 z-50 flex h-full w-full items-center justify-center rounded-lg bg-black/30"
           >
             <Loader2 className="h-16 w-16 animate-spin text-slate-100" />
           </div>
-        )}
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="flex flex-col gap-4"
-        >
-          <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
-            {/* Employee */}
-            <FormField
-              control={form.control}
-              name="employeeId"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col">
-                  <FormLabel>Employee</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            'flex w-full items-center justify-between gap-1',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                          disabled={isSubmitting}
-                        >
-                          {field.value
-                            ? employees?.find(
-                                (employee) =>
-                                  employee.employeeId === field.value
-                              )?.firstName +
-                              ' ' +
-                              employees?.find(
-                                (employee) =>
-                                  employee.employeeId === field.value
-                              )?.lastName
-                            : 'Choose employee'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search employee..." />
-                        <CommandEmpty>
-                          No employees found.
-                        </CommandEmpty>
-                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
-                          {employees?.map((employee, i: Key) => (
-                            <CommandItem
-                              value={
-                                employee.firstName +
+        )} */}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit, onError)}
+            className="flex flex-col gap-4"
+          >
+            <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
+              {/* Employee */}
+              <FormField
+                control={form.control}
+                name="employeeId"
+                render={({ field }) => (
+                  <FormItem className="flex w-full flex-col">
+                    <FormLabel>Employee</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'flex w-full items-center justify-between gap-1',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                            disabled={isSubmitting}
+                          >
+                            {field.value
+                              ? employees?.find(
+                                  (employee) =>
+                                    employee.employeeId ===
+                                    field.value
+                                )?.firstName +
                                 ' ' +
-                                employee.lastName
-                              }
-                              className="flex items-center"
-                              key={i}
-                              onSelect={() => {
-                                employee.employeeId &&
+                                employees?.find(
+                                  (employee) =>
+                                    employee.employeeId ===
+                                    field.value
+                                )?.lastName
+                              : 'Choose employee'}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Search employee..." />
+                          <CommandEmpty>
+                            No employees found.
+                          </CommandEmpty>
+                          <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                            {employees?.map((employee, i: Key) => (
+                              <CommandItem
+                                value={
+                                  employee.firstName +
+                                  ' ' +
+                                  employee.lastName
+                                }
+                                className="flex items-center"
+                                key={i}
+                                onSelect={() => {
+                                  employee.employeeId &&
+                                    form.setValue(
+                                      'employeeId',
+                                      employee?.employeeId
+                                    );
                                   form.setValue(
-                                    'employeeId',
-                                    employee?.employeeId
+                                    'employeeName',
+                                    `${employee.firstName} ${employee.lastName}`
                                   );
-                                form.setValue(
-                                  'employeeName',
-                                  `${employee.firstName} ${employee.lastName}`
-                                );
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  'mr-2 h-4 w-4 transition-all',
-                                  employee.employeeId === field.value
-                                    ? 'opacity-100'
-                                    : 'opacity-0'
-                                )}
-                              />
-                              {`${employee.firstName} ${employee.lastName}`}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4 transition-all',
+                                    employee.employeeId ===
+                                      field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                                {`${employee.firstName} ${employee.lastName}`}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col">
-                  <FormLabel>Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'group flex w-full items-center justify-between gap-1',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                          disabled={isSubmitting}
-                        >
-                          {field.value ? (
-                            format(field.value, 'PPP')
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date('2000-01-01')
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {/* <FormDescription>
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex w-full flex-col">
+                    <FormLabel>Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className={cn(
+                              'group flex w-full items-center justify-between gap-1',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                            disabled={isSubmitting}
+                          >
+                            {field.value ? (
+                              format(field.value, 'PPP')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50 group-disabled:cursor-not-allowed" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date < new Date('2000-01-01')
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {/* <FormDescription>
                     Your date of birth is used to calculate your age.
                   </FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Shifts */}
-            <FormField
-              control={form.control}
-              name="shiftId"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Shift</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
-                    disabled={isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select shift" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {shifts?.map((shift) => (
-                        <SelectItem
-                          value={shift.shiftId}
-                          key={shift.shiftId}
-                        >
-                          {shift.shiftName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* <div className="col-span-2 grid w-full grid-cols-1 gap-4 sm:grid-cols-3"> */}
-            <FormField
-              control={form.control}
-              name="weekDay"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Week day</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
-                    disabled={isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select week day" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {weekdays?.map((day, i: Key) => (
-                        <SelectItem value={day.short} key={i}>
-                          {day.day}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="checkIn"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Check In</FormLabel>
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="time"
-                      type="time"
+              {/* Shifts */}
+              <FormField
+                control={form.control}
+                name="shiftId"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Shift</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
                       disabled={isSubmitting}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select shift" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {shifts?.map((shift) => (
+                          <SelectItem
+                            value={shift.shiftId}
+                            key={shift.shiftId}
+                          >
+                            {shift.shiftName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="checkOut"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Check Out</FormLabel>
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="time"
-                      type="time"
+              {/* <div className="col-span-2 grid w-full grid-cols-1 gap-4 sm:grid-cols-3"> */}
+              <FormField
+                control={form.control}
+                name="weekDay"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Week day</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
                       disabled={isSubmitting}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* </div> */}
-            {/* different */}
-            <div className="col-span-2 grid w-full grid-cols-2 items-center gap-4 py-4 sm:grid-cols-5 sm:gap-2">
-              <FormField
-                control={form.control}
-                name="late"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2">
-                    <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                    >
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select week day" />
+                        </SelectTrigger>
                       </FormControl>
-                      Late
-                    </FormLabel>
+                      <SelectContent>
+                        {weekdays?.map((day, i: Key) => (
+                          <SelectItem value={day.short} key={i}>
+                            {day.day}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="earlyLeave"
+                name="checkIn"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2">
-                    <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      Early Leave
-                    </FormLabel>
+                  <FormItem className="w-full">
+                    <FormLabel>Check In</FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        placeholder="time"
+                        type="time"
+                        disabled={isSubmitting}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="attended"
+                name="checkOut"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2">
-                    <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      Attended
-                    </FormLabel>
+                  <FormItem className="w-full">
+                    <FormLabel>Check Out</FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        placeholder="time"
+                        type="time"
+                        disabled={isSubmitting}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+              {/* </div> */}
+              {/* different */}
+              <div className="col-span-2 grid w-full grid-cols-2 items-center gap-4 py-4 sm:grid-cols-5 sm:gap-2">
+                <FormField
+                  control={form.control}
+                  name="late"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center gap-2">
+                      <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        Late
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="earlyLeave"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center gap-2">
+                      <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        Early Leave
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="attended"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center gap-2">
+                      <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        Attended
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="worked"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center gap-2">
+                      <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        Worked
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="break"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center gap-2">
+                      <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        Break
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Leave type */}
               <FormField
                 control={form.control}
-                name="worked"
+                name="leaveTypeId"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2">
-                    <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
+                  <FormItem className="w-full">
+                    <FormLabel>Leave Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
+                      disabled={isSubmitting}
+                    >
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select leave type" />
+                        </SelectTrigger>
                       </FormControl>
-                      Worked
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="break"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2">
-                    <FormLabel className="flex w-full cursor-pointer flex-row items-center gap-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      Break
-                    </FormLabel>
+                      <SelectContent>
+                        {leaveTypes?.map((leave) => (
+                          <SelectItem
+                            value={leave.leaveTypeId}
+                            key={leave.leaveTypeId}
+                          >
+                            {leave.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            {/* Leave type */}
-            <FormField
-              control={form.control}
-              name="leaveTypeId"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Leave Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
-                    disabled={isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select leave type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {leaveTypes?.map((leave) => (
-                        <SelectItem
-                          value={leave.leaveTypeId}
-                          key={leave.leaveTypeId}
-                        >
-                          {leave.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <Button
-            loading={isSubmitting}
-            disabled={isSubmitting}
-            className="mt-8 w-max"
-            type="submit"
-          >
-            Submit
-          </Button>
-        </form>
-      </Form>
-    </div>
+            <Button
+              loading={isSubmitting}
+              disabled={isSubmitting}
+              className="mt-8 w-max"
+              type="submit"
+            >
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </div>
+    )
   );
 };
 

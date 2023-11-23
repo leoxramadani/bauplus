@@ -15,10 +15,7 @@ import {
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table';
-import {
-  usePathname,
-  useSearchParams,
-} from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import {
   ComponentType,
@@ -142,7 +139,7 @@ export function DataTable<TData, TValue = any>({
         }
       }
 
-      console.log('newsearchparams==', newSearchParams.toString()); 
+      console.log('newsearchparams==', newSearchParams.toString());
       return newSearchParams.toString();
     },
     [searchParams]
@@ -307,6 +304,7 @@ export function DataTable<TData, TValue = any>({
       rowSelection,
       columnFilters,
     },
+    getRowCanExpand,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
