@@ -22,15 +22,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-import { ContextMenuShortcut } from '@/components/ui/context-menu';
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from '@radix-ui/react-context-menu';
+  ContextMenuShortcut
+} from '@/components/ui/context-menu';
 import { DataTableColumnHeader } from './DataTableColumnHeader';
 import { DataTableColumnSearch } from './DataTableColumnSearch';
 import { DataTablePagination } from './DataTablePagination';

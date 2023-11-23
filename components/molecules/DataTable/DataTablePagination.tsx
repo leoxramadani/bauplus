@@ -22,20 +22,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Metadata } from '@/lib/hooks/useData';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  metadata: Metadata;
 }
 
 export function DataTablePagination<TData>({
   table,
+  metadata
 }: DataTablePaginationProps<TData>) {
   return (
     <div className="flex items-center justify-between px-2">
       {/*  *****SELECTED ROW(S)*****  */}
       <div className="flex text-xs text-muted-foreground min-[500px]:text-sm">
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {metadata?.TotalCount} row(s) selected.
       </div>
 
       <div className="flex items-center min-[500px]:gap-6 lg:space-x-8">
