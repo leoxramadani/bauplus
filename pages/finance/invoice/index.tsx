@@ -57,7 +57,7 @@ const Invoice = () => {
           <Modal.Content
             title="Register Invoice"
             description="Fill all the fields to register an invoice"
-            className="md:min-w-3xl md:max-w-[80%]"
+            className="h-auto w-auto"
           >
             <GenerateInvoiceForm
               setIsRegisterModalOpen={setIsRegisterModalOpen}
