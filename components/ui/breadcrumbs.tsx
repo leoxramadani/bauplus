@@ -2,7 +2,7 @@ import routes from '@/lib/constants/routes';
 import { capitalize } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Key, PropsWithChildren, useMemo } from 'react';
+import React, { Key, PropsWithChildren, useMemo } from 'react';
 import Topbar from '../layout/Topbar';
 
 const Crumb = ({
@@ -61,12 +61,12 @@ const Breadcrumbs = () => {
       className="flex items-center justify-between"
       aria-label="Breadcrumb"
     >
-      <div className="flex w-max whitespace-nowrap items-center">
+      <div className="flex w-max items-center whitespace-nowrap">
         {breadcrumbs.map((crumb, i: Key) => {
           const isLast = i === breadcrumbs.length - 1;
 
           return (
-            <>
+            <React.Fragment key={i}>
               <Crumb {...crumb} last={isLast}>
                 <div className="flex items-center gap-1">
                   {crumb?.icon && crumb.icon}
@@ -74,7 +74,7 @@ const Breadcrumbs = () => {
                 </div>
               </Crumb>
               {!isLast && <span className="mx-1">/</span>}
-            </>
+            </React.Fragment>
           );
         })}
       </div>

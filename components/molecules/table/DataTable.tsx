@@ -62,6 +62,7 @@ export function DataTable<TData, TValue>({
   showViewoptions = true,
   showSearchBar = true,
   showTitle = false,
+  
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
