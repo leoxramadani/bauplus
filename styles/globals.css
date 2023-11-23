@@ -82,6 +82,10 @@
   }
 }
 
+.rdp-vhidden {
+  @apply hidden;
+}
+
 @layer components {
   .button {
     @apply cursor-pointer rounded-sm bg-red-500

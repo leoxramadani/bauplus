@@ -354,17 +354,17 @@ const AttendanceForm = ({
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto p-0"
-                        align="start"
-                      >
+                      <PopoverContent className="p-0" align="start">
                         <Calendar
                           mode="single"
+                          captionLayout="dropdown-buttons"
                           selected={field.value}
                           onSelect={field.onChange}
                           disabled={(date) =>
-                            date < new Date('2000-01-01')
+                            date < new Date('2017-01-01')
                           }
+                          fromYear={1960}
+                          toYear={2030}
                           initialFocus
                         />
                       </PopoverContent>
