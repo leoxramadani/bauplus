@@ -80,7 +80,9 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Copy item id
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleEdit(item.clientId)}>
+        <DropdownMenuItem
+          onClick={() => handleEdit(item.attendanceRecordId)}
+        >
           Edit row
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -117,7 +119,6 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value: boolean) =>
-          // table.toggleAllPageRowsSelected(!!value) //This one only selects the rows of one table
           table.toggleAllRowsSelected(!!value)
         }
         aria-label="Select all"
@@ -132,8 +133,6 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
         aria-label="Select row"
       />
     ),
-    // enableSorting: false,
-    // enableHiding: false,
   },
   {
     accessorKey: 'employeeName',
