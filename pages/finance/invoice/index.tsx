@@ -1,7 +1,7 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import GenerateInvoiceForm from '@/components/molecules/finances/invoice/generateInvoice/GenerateInvoiceForm';
 import InvoiceForm from '@/components/molecules/finances/invoice/invoiceForm/InvoiceForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { INVOICE_GET_ALL } from '@/lib/constants/endpoints/finance/invoice';
@@ -21,6 +21,7 @@ const Invoice = () => {
 
   const {
     data,
+    metadata,
     isLoading,
     isError,
     refetch: refetchInvoices,
@@ -105,8 +106,9 @@ const Invoice = () => {
       </div>
 
       {data && !isLoading ? (
-        <DataTable
+        <DataTable<IInvoice>
           data={data}
+          metadata={metadata}
           columns={invoiceColumnDef}
           searchVal="invoiceNumber"
         />
