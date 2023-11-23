@@ -30,11 +30,18 @@ const Product = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.replace(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   useEffect(() => {
     if (!isModalOpen) {
-      router.replace('/products', undefined, {
-        shallow: true,
-      });
+      removeIdFromQuery();
     }
   }, [isModalOpen]);
 
