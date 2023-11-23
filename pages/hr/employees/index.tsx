@@ -35,7 +35,7 @@ const Employees = () => {
 
   const removeIdFromQuery = () => {
     const { id, ...queryWithoutId } = router.query;
-    router.push(
+    router.replace(
       { pathname: router.pathname, query: queryWithoutId },
       undefined,
       { shallow: true }

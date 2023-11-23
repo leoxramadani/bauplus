@@ -29,20 +29,25 @@ const Invoice = () => {
 
   useEffect(() => {
     if (router.query.id) {
-      console.log('Query changes here');
       setIsCreateModalOpen(true);
     }
     console.log('router==', router);
   }, [router.query.id]);
 
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.replace(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   useEffect(() => {
     if (!isCreateModalOpen) {
-      router.replace('/finance/invoice', undefined, {
-        shallow: true,
-      });
+      removeIdFromQuery();
     }
   }, [isCreateModalOpen]);
-
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
