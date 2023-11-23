@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import LeaveForm from '@/components/molecules/hr/leaves/LeaveForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_LEAVES } from '@/lib/constants/endpoints/hr/leaves';
 import useData from '@/lib/hooks/useData';
@@ -18,6 +18,7 @@ const Leaves = () => {
 
   const {
     data,
+    metadata,
     isError,
     isLoading,
     refetch: refetchLeaves,
@@ -36,8 +37,6 @@ const Leaves = () => {
       });
     }
   }, [isModalOpen]);
-
-  console.log('Data;', data);
 
   return (
     <>
@@ -68,8 +67,9 @@ const Leaves = () => {
           </Button>
         </div>
         {data && !isLoading ? (
-          <DataTable
+          <DataTable<ILeaves>
             data={data}
+            metadata={metadata}
             columns={leavesColumnDef}
             searchVal="employee.firstName"
           />

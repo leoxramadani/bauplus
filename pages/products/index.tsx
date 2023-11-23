@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import ProductForm from '@/components/molecules/product/ProductForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_PRODUCTS } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
@@ -17,6 +17,7 @@ const Product = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data,
+    metadata,
     isLoading,
     isError,
     refetch: refetchProducts,
@@ -65,8 +66,9 @@ const Product = () => {
         </Button>
       </div>
       {data && !isLoading ? (
-        <DataTable
+        <DataTable<IProduct>
           data={data}
+          metadata={metadata}
           columns={productColumnDef}
           searchVal="productName"
         />
