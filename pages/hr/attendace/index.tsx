@@ -1,7 +1,8 @@
 import Modal from '@/components/atoms/Modal';
-// import { DataTable } from '@/components/molecules/DataTable';
+import { DataTable } from '@/components/molecules/DataTable';
+import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
+// import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
 import useData from '@/lib/hooks/useData';
@@ -21,18 +22,25 @@ const Attendance = () => {
     }
   }, [router.query.id]);
 
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.push(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   useEffect(() => {
     if (!isModalOpen) {
-      console.log('test');
-      router.replace('/hr/attendace', undefined, {
-        shallow: true,
-      });
+      removeIdFromQuery();
     }
   }, [isModalOpen]);
 
   const {
     data,
     isLoading,
+    metadata,
     isError,
     refetch: refetchAttendance,
   } = useData<IAttendance[]>(['attendance'], GET_ALL_ATTENDANCE);
@@ -70,13 +78,17 @@ const Attendance = () => {
           </Button>
         </div>
         {data && (
-          <DataTable data={data} columns={attendanceColumnDef} />
+          <DataTable<IAttendance>
+            metadata={metadata}
+            data={data}
+            columns={attendanceColumnDef}
+          />
         )}
-        {/* {isLoading && (
+        {isLoading && (
           <DataTableLoading
             columnCount={attendanceColumnDef.length}
           />
-        )} */}
+        )}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}

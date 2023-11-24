@@ -115,14 +115,13 @@ const EmployeesForm = ({
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
-            // employeeId: employeeData.employeeId,
-            // dateOfBirth: new Date(data.dateOfBirth).toISOString(),
           })
           .then((res) => {
             console.log('UPDATED employee->', res);
             router.replace('/hr/employees', undefined, {
               shallow: true,
             });
+
             setIsModalOpen(false);
             toast.success('Successfully updated employee');
             refetchEmployees();
@@ -186,8 +185,8 @@ const EmployeesForm = ({
                       placeholder="First Name"
                       {...field}
                       disabled={isLoading}
-                      pattern={'/^[A-Za-z]+$/'}
-                      title="Please only use letters for the first name"
+                      // pattern={'/^[A-Za-z]+$/'}
+                      // title="Please only use letters for the first name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -206,8 +205,8 @@ const EmployeesForm = ({
                       placeholder="Last Name"
                       {...field}
                       disabled={isLoading}
-                      pattern={'/^[A-Za-z]+$/'}
-                      title="Please only use letters for the first name"
+                      // pattern={'/^[A-Za-z]+$/'}
+                      // title="Please only use letters for the last name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -387,6 +386,9 @@ const EmployeesForm = ({
                           date > new Date() ||
                           date < new Date('1900-01-01')
                         }
+                        captionLayout="dropdown-buttons"
+                        fromYear={1900}
+                        toYear={new Date().getFullYear()}
                         initialFocus
                       />
                     </PopoverContent>

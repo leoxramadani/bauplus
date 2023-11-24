@@ -1,8 +1,8 @@
-import * as React from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
+  Row,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
@@ -14,9 +14,28 @@ import {
   type PaginationState,
   type SortingState,
   type VisibilityState,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import {
+  ComponentType,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import { useDebounce } from "@/lib/hooks/useDebounce"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+
+import { DataTablePagination } from '@/components/molecules/DataTable/DataTablePagination';
 import {
   Table,
   TableBody,
@@ -24,201 +43,237 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { DataTablePagination } from "@/components/molecules/DataTable/DataTablePagination"
-import { DataTableToolbar } from "@/components/molecules/DataTable/DataTableToolbar"
+} from '@/components/ui/table';
+import { Metadata } from '@/lib/hooks/useData';
+import { useDebounce } from '@/lib/hooks/useDebounce';
+import { DataTableColumnHeader } from './DataTableColumnHeader';
+import { DataTableColumnSearch } from './DataTableColumnSearch';
+import { DataTableViewOptions } from './DataTableViewOptions';
 
 export type Option = {
-  label: string
-  value: string
-  icon?: React.ComponentType<{ className?: string }>
-}
+  label: string;
+  value: string;
+  icon?: ComponentType<{ className?: string }>;
+};
 
 export interface DataTableFilterOption<TData> {
-  label: string
-  value: keyof TData | string
-  items: Option[]
-  isAdvanced?: boolean
+  label: string;
+  value: keyof TData | string;
+  items: Option[];
+  isAdvanced?: boolean;
 }
 
 export interface DataTableSearchableColumn<TData> {
-  id: keyof TData
-  title: string
+  id: keyof TData;
+  title: string;
 }
 
 export interface DataTableFilterableColumn<TData>
   extends DataTableSearchableColumn<TData> {
-  options: Option[]
+  options: Option[];
 }
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  pageCount: number
-  filterableColumns?: DataTableFilterableColumn<TData>[]
-  searchableColumns?: DataTableSearchableColumn<TData>[]
-  advancedFilter?: boolean
+  columns: ColumnDef<TData, TValue>[];
+  subcolumns?: ColumnDef<TData, TValue>[];
+  data: TData[];
+  metadata: Metadata;
+  searchVal?: string;
+  getRowCanExpand?: (row: Row<TData>) => boolean;
+  renderSubComponent?: (props: { row: Row<TData> }) => ReactElement;
+  showPagination?: boolean;
+  showViewoptions?: boolean;
+  showSearchBar?: boolean;
+  showTitle?: boolean;
+  filterableColumns?: DataTableFilterableColumn<TData>[];
+  searchableColumns?: DataTableSearchableColumn<TData>[];
+  advancedFilter?: boolean;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData, TValue = any>({
   columns,
   data,
-  pageCount,
+  metadata,
+  searchVal,
+  subcolumns,
+  getRowCanExpand,
+  renderSubComponent,
+  showPagination = true,
+  showViewoptions = true,
+  showSearchBar = true,
+  showTitle = false,
   filterableColumns = [],
   searchableColumns = [],
   advancedFilter = false,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // Search params
-  const page = searchParams?.get("page") ?? "1"
-  const pageAsNumber = Number(page)
+  const page =
+    searchParams?.get('page') ?? metadata?.CurrentPage ?? '1';
+  const pageAsNumber = Number(page);
   const fallbackPage =
-    isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber
-  const per_page = searchParams?.get("per_page") ?? "10"
-  const perPageAsNumber = Number(per_page)
-  const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber
-  const sort = searchParams?.get("sort")
-  const [column, order] = sort?.split(".") ?? []
+    isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
+  const per_page = searchParams?.get('per_page') ?? '10';
+  const perPageAsNumber = Number(per_page);
+  const fallbackPerPage = isNaN(perPageAsNumber)
+    ? 10
+    : perPageAsNumber;
+  const sort = searchParams?.get('sort');
+  const [column, order] = sort?.split('.') ?? [];
 
   // Create query string
-  const createQueryString = React.useCallback(
+  const createQueryString = useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString())
+      const newSearchParams = new URLSearchParams(
+        searchParams?.toString()
+      );
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
-          newSearchParams.delete(key)
+          newSearchParams.delete(key);
         } else {
-          newSearchParams.set(key, String(value))
+          newSearchParams.set(key, String(value));
         }
       }
 
-      return newSearchParams.toString()
+      console.log('newsearchparams==', newSearchParams.toString());
+      return newSearchParams.toString();
     },
     [searchParams]
-  )
+  );
 
   // Table states
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>([]);
 
-  // Handle server-side pagination
+  // server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
+    useState<PaginationState>({
       pageIndex: fallbackPage - 1,
       pageSize: fallbackPerPage,
-    })
+    });
 
-  const pagination = React.useMemo(
+  const pagination = useMemo(
     () => ({
       pageIndex,
       pageSize,
     }),
     [pageIndex, pageSize]
-  )
+  );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPagination({
       pageIndex: fallbackPage - 1,
       pageSize: fallbackPerPage,
-    })
-  }, [fallbackPage, fallbackPerPage])
+    });
+  }, [fallbackPage, fallbackPerPage]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
+        ...router.query,
         page: pageIndex + 1,
         per_page: pageSize,
       })}`,
+      undefined,
       {
         scroll: false,
       }
-    )
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize])
+  }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
-  const [sorting, setSorting] = React.useState<SortingState>([
+  const [sorting, setSorting] = useState<SortingState>([
     {
-      id: column ?? "",
-      desc: order === "desc",
+      id: column ?? '',
+      desc: order === 'desc',
     },
-  ])
+  ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
         page,
         sort: sorting[0]?.id
-          ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}`
+          ? `${sorting[0]?.id}.${sorting[0]?.desc ? 'desc' : 'asc'}`
           : null,
       })}`
-    )
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting])
+  }, [sorting]);
 
-  // Handle server-side filtering
+  // server-side filtering
   const debouncedSearchableColumnFilters = JSON.parse(
     useDebounce(
       JSON.stringify(
         columnFilters.filter((filter) => {
-          return searchableColumns.find((column) => column.id === filter.id)
+          return searchableColumns.find(
+            (column) => column.id === filter.id
+          );
         })
       ),
       500
     )
-  ) as ColumnFiltersState
+  ) as ColumnFiltersState;
 
   const filterableColumnFilters = columnFilters.filter((filter) => {
-    return filterableColumns.find((column) => column.id === filter.id)
-  })
+    return filterableColumns.find(
+      (column) => column.id === filter.id
+    );
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
     for (const column of debouncedSearchableColumnFilters) {
-      if (typeof column.value === "string") {
+      if (typeof column.value === 'string') {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
-            [column.id]: typeof column.value === "string" ? column.value : null,
+            [column.id]:
+              typeof column.value === 'string' ? column.value : null,
           })}`
-        )
+        );
       }
     }
     //@ts-ignore
     for (const key of searchParams.keys()) {
       if (
         searchableColumns.find((column) => column.id === key) &&
-        !debouncedSearchableColumnFilters.find((column) => column.id === key)
+        !debouncedSearchableColumnFilters.find(
+          (column) => column.id === key
+        )
       ) {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
             [key]: null,
           })}`
-        )
+        );
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(debouncedSearchableColumnFilters)])
+  }, [JSON.stringify(debouncedSearchableColumnFilters)]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     for (const column of filterableColumnFilters) {
-      if (typeof column.value === "object" && Array.isArray(column.value)) {
+      if (
+        typeof column.value === 'object' &&
+        Array.isArray(column.value)
+      ) {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
-            [column.id]: column.value.join("."),
+            [column.id]: column.value.join('.'),
           })}`
-        )
+        );
       }
     }
     //@ts-ignore
@@ -232,16 +287,16 @@ export function DataTable<TData, TValue>({
             page: 1,
             [key]: null,
           })}`
-        )
+        );
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(filterableColumnFilters)])
+  }, [JSON.stringify(filterableColumnFilters)]);
 
   const table = useReactTable({
     data,
     columns,
-    pageCount: pageCount ?? -1,
+    pageCount: metadata.TotalPages,
     state: {
       pagination,
       sorting,
@@ -249,6 +304,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
+    getRowCanExpand,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
@@ -261,20 +317,50 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    getExpandedRowModel: getExpandedRowModel(),
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-  })
+  });
+
+  const subtable = useReactTable({
+    data,
+    columns: subcolumns ? subcolumns : columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    getExpandedRowModel: getExpandedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto py-3">
-      <DataTableToolbar
-        table={table}
-        filterableColumns={filterableColumns}
-        searchableColumns={searchableColumns}
-        advancedFilter={advancedFilter}
-      />
-      <div className="rounded-md border">
+    <div
+      className={`flex flex-col
+    ${!showSearchBar ? `` : 'my-3 gap-3'}`}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex w-full flex-row items-center gap-2">
+          {/* dropdown view columns select */}
+          {showSearchBar && <DataTableColumnSearch table={table} />}
+        </div>
+        {/* dropdown view columns select */}
+        {showViewoptions && <DataTableViewOptions table={table} />}
+      </div>
+      {/* The table component is here */}
+      <div className="rounded-md border bg-white shadow-sm">
+        {showTitle && (
+          <h1 className="p-4 text-xl font-medium">Projects</h1>
+        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -282,14 +368,14 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      <DataTableColumnHeader
+                        column={header.column}
+                        title={
+                          header.column.columnDef.header as string
+                        }
+                      />
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -297,19 +383,106 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                <ContextMenu key={row.id}>
+                  <ContextMenuTrigger asChild>
+                    <>
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                      {row.getIsExpanded() && (
+                        <TableRow className=" bg-gray-100">
+                          <TableCell
+                            className="w-full"
+                            colSpan={columns.length}
+                          >
+                            <Table>
+                              <TableHeader>
+                                {subtable
+                                  .getHeaderGroups()
+                                  .map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                      {headerGroup.headers.map(
+                                        (header) => (
+                                          <TableHead key={header.id}>
+                                            <DataTableColumnHeader
+                                              column={header.column}
+                                              title={
+                                                header.column
+                                                  .columnDef
+                                                  .header as string
+                                              }
+                                            />
+                                          </TableHead>
+                                        )
+                                      )}
+                                    </TableRow>
+                                  ))}
+                              </TableHeader>
+                              <TableBody>
+                                {subtable.getRowModel().rows
+                                  ?.length ? (
+                                  subtable
+                                    .getRowModel()
+                                    .rows.filter(
+                                      (rov) => rov.id === row.id
+                                    ) // Filter only the selected row
+                                    .map((selectedRow) => (
+                                      <TableRow key={selectedRow.id}>
+                                        {selectedRow
+                                          .getVisibleCells()
+                                          .map((cell) => (
+                                            <TableCell key={cell.id}>
+                                              {flexRender(
+                                                cell.column.columnDef
+                                                  .cell,
+                                                cell.getContext()
+                                              )}
+                                            </TableCell>
+                                          ))}
+                                      </TableRow>
+                                    ))
+                                ) : (
+                                  <TableRow>
+                                    <TableCell
+                                      colSpan={
+                                        subcolumns
+                                          ? subcolumns.length
+                                          : columns.length
+                                      }
+                                      className="h-24 text-center"
+                                    >
+                                      No results.
+                                    </TableCell>
+                                  </TableRow>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableCell>
+                        </TableRow>
                       )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                    </>
+                  </ContextMenuTrigger>
+
+                  <ContextMenuContent className="rounded-lg border bg-white p-1 text-slate-900 shadow-md shadow-slate-300/30">
+                    <ContextMenuItem className="flex w-60 cursor-pointer items-center justify-between rounded-md px-3 py-2 transition-colors duration-75 hover:bg-slate-200">
+                      Copy ID
+                      <ContextMenuShortcut>
+                        &#8984;C
+                      </ContextMenuShortcut>
+                    </ContextMenuItem>
+                    <ContextMenuSeparator />
+                  </ContextMenuContent>
+                </ContextMenu>
               ))
             ) : (
               <TableRow>
@@ -324,7 +497,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} metadata={metadata} />
     </div>
-  )
+  );
 }

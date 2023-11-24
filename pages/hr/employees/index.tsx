@@ -1,6 +1,7 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
+import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
 import EmployeesForm from '@/components/molecules/hr/employees/EmployeesForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 import useData from '@/lib/hooks/useData';
@@ -19,12 +20,12 @@ const Employees = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data,
+    metadata,
     isLoading,
     isError,
     refetch: refetchEmployees,
   } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
 
-  console.log('data=', data);
   useEffect(() => {
     if (router.query.id) {
       setIsModalOpen(true);
@@ -32,11 +33,18 @@ const Employees = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.replace(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   useEffect(() => {
     if (!isModalOpen) {
-      router.replace('/hr/employees', undefined, {
-        shallow: true,
-      });
+      removeIdFromQuery();
     }
   }, [isModalOpen]);
 
@@ -83,8 +91,9 @@ const Employees = () => {
           </Button>
         </div>
         {data && !isLoading ? (
-          <DataTable
+          <DataTable<IEmployee>
             data={data}
+            metadata={metadata}
             columns={employeeColumnDef}
             searchVal="firstName"
           />
@@ -93,10 +102,9 @@ const Employees = () => {
             {isError ? (
               <div>No data.</div>
             ) : (
-              <div>
-                {' '}
-                <p>Loading ...</p>
-              </div>
+              <DataTableLoading
+                columnCount={employeeColumnDef.length}
+              />
             )}
           </>
         )}

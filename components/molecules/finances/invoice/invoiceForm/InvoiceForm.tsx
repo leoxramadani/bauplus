@@ -494,6 +494,9 @@ const InvoiceForm = ({
                         disabled={(date) =>
                           date < new Date('1900-01-01')
                         }
+                        // captionLayout="dropdown-buttons"
+                        // fromYear={2000}
+                        // toYear={new Date().getFullYear()}
                         initialFocus
                       />
                     </PopoverContent>
@@ -543,6 +546,9 @@ const InvoiceForm = ({
                         disabled={(date) =>
                           date < new Date(form.watch('invoiceDate'))
                         }
+                        // captionLayout="dropdown-buttons"
+                        // fromYear={2000}
+                        // toYear={new Date().getFullYear()}
                         initialFocus
                       />
                     </PopoverContent>
