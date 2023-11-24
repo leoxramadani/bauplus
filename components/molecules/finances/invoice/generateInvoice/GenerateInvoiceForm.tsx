@@ -7,7 +7,8 @@ import {
 } from '@/lib/schema/Finance/invoice/generateInvoice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import React, {
+import { Loader2 } from 'lucide-react';
+import {
   Dispatch,
   SetStateAction,
   useCallback,
@@ -33,9 +34,9 @@ const GenerateInvoiceForm = ({
 }: IGenerateInvoiceForm) => {
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
   const [file, setFile] = useState<any>();
-
   const [ocrData, setOcrData] = useState<IgeneratedInvoice>();
   const [ocrIsLoading, setOcrIsLoading] = useState(false);
+  const [previewFile, setPreviewFile] = useState<any>();
 
   const form = useForm<IGenerateInvoice>({
     resolver: zodResolver(generateInvoiceSchema),
@@ -46,13 +47,40 @@ const GenerateInvoiceForm = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    //TODO: Mund edhe te shtojme nje kusht per file size limit
     if (files && files.length > 0) {
-      if (files[0].type.includes('image')) {
-        setFile(files?.[0]);
-        console.log(files?.[0]);
-      } else {
-        toast.error('Please upload only image files!');
+      if (files[0].type === 'application/pdf') {
+        console.log('PDF uploaded');
+        setPreviewFile(URL.createObjectURL(files![0]));
+        // const reader = new FileReader();
+        // reader.readAsDataURL(files[0]);
+        // reader.onload = () => {
+        // setFullFile({
+        //   imageName: files[0].name,
+        //   file: reader.result!.toString(),
+        // });
+        // };
+        console.log('file -->', URL.createObjectURL(files![0]));
+        console.log('file -->', files![0]);
+        const formData = new FormData();
+        formData.append('image', files![0]);
+      } else if (files[0].type.includes('image')) {
+        console.log('IMAGE uploaded');
+        // setFileName(() => ['', files![0].name]);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const image = new Image();
+          image.src = e.target?.result as string;
+          // setFullFile({
+          //   imageName: files[0].name,
+          //   file: image.src,
+          // });
+          // setSelectedImage(image);
+          // setRecievedFile(true);
+          setPreviewFile(image.src);
+
+          console.log('image.src->', typeof image.src);
+        };
+        reader.readAsDataURL(files[0]);
       }
     }
   };
@@ -86,19 +114,13 @@ const GenerateInvoiceForm = ({
             ? new Date(res.data.payment_due_date)
             : null;
 
-          // if (isNaN(Number(res.data.total_amount))) {
-
-          //   res.data.total_amount = 0;
-
-          // }
-
-          if (res.data.total_in_denars) {
+          if (res.data.total_amount) {
             console.log(
-              'res.data.total_in_denars->',
-              res.data.total_in_denars
+              'res.data.total_amount->',
+              res.data.total_amount
             );
             res.data.total_amount = swapCommaAndDot(
-              res.data.total_in_denars
+              res.data.total_amount
             );
           }
         }
@@ -117,8 +139,6 @@ const GenerateInvoiceForm = ({
   const onError = (error: any) => {
     console.log('error generate->', error);
   };
-
-  // const fileRef = form.register('image', { required: true });
 
   return (
     <div
