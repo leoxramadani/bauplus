@@ -21,12 +21,12 @@ export function DataTableLoading({
     <div className="w-full space-y-3 overflow-auto">
       <div className="flex w-full items-center justify-between space-x-2 overflow-auto p-1">
         <div className="flex flex-1 items-center space-x-2">
-          <Skeleton className="h-7 w-[150px] lg:w-[250px]" />
-          <Skeleton className="h-7 w-[70px] border-dashed" />
+          <Skeleton className="h-10 w-full max-w-xl lg:w-[250px]" />
+          <Skeleton className="h-10 w-[70px] border-dashed" />
         </div>
-        <Skeleton className="ml-auto hidden h-7 w-[70px] lg:flex" />
+        <Skeleton className="ml-auto hidden h-10 w-[70px] lg:flex" />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
             {Array.from({ length: 1 }).map((_, i) => (

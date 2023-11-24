@@ -1,6 +1,6 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
@@ -17,6 +17,7 @@ const Departments = () => {
   const [open, setOpen] = useState(false);
   const {
     data,
+    metadata,
     isError,
     isLoading,
     refetch: refetchDepartments,
@@ -30,11 +31,18 @@ const Departments = () => {
     console.log('router==', router);
   }, [router.query.id]);
 
+  const removeIdFromQuery = () => {
+    const { id, ...queryWithoutId } = router.query;
+    router.replace(
+      { pathname: router.pathname, query: queryWithoutId },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   useEffect(() => {
     if (!open) {
-      router.replace('/hr/departments', undefined, {
-        shallow: true,
-      });
+      removeIdFromQuery();
     }
   }, [open]);
 
@@ -69,8 +77,9 @@ const Departments = () => {
           </Button>
         </div>
         {data && !isLoading ? (
-          <DataTable
+          <DataTable<IDepartment>
             data={data}
+            metadata={metadata}
             columns={departmentColumnDef}
             searchVal="departmentName"
           />

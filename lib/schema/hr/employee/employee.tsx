@@ -124,7 +124,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    router.push({
+    router.replace({
       query: {
         ...router.query,
         id: id,

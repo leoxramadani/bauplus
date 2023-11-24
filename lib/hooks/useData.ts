@@ -1,13 +1,18 @@
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-export type StandardParameters = {
+export type Metadata = {
   TotalCount: number;
   PageSize: number;
   CurrentPage: number;
   TotalPages: number;
   HasNext: boolean;
   HasPrevious: boolean;
+};
+
+export type UseDataResult<TData> = UseQueryResult<TData> & {
+  metadata: Metadata;
 };
 
 /**
@@ -24,8 +29,15 @@ export const fetcher = (url: string, options: any) =>
     },
     ...options,
   })
-    .then((res) => res.json())
-    .then((data) => data);
+    .then(async (res) => {
+      return {
+        data: await res?.json(),
+        metadata: JSON.parse(res.headers.get('x-metadata') ?? '{}'),
+      };
+    })
+    .catch((error) => {
+      throw error;
+    });
 
 /**
  * Custom hook for fetching data with Tanstack's useQuery:
@@ -40,26 +52,31 @@ export default function useData<TData>(
   params?: any,
   enabled: boolean = true,
   options?: any
-): UseQueryResult<TData> {
-  const queryParams: string[] = [];
-  
-  // for (const key in params) {
-  //   if (params.hasOwnProperty(key)) {
-  //     const value = params[`${key}`];
-  //     // Check if the value is an array, and handle it accordingly
-  //     if (Array.isArray(value)) {
-  //       for (const item of value) {
-  //         queryParams.push(`${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`);
-  //       }
-  //     } else {
-  //       queryParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
-  //     }
-  //   }
-  // }
-  
+): UseDataResult<TData> {
+  const router = useRouter();
+  const [pageSize, setPageSize] = useState<number | undefined>();
+  const [page, setPage] = useState<number | undefined>();
+  const [fetchUrl, setUrl] = useState<string>(url);
+
+  useEffect(() => {
+    if (router.query.page && router.query.per_page) {
+      const params = new URLSearchParams(url.split('?')[1] || '');
+      params.set('pageNumber', String(router.query.page));
+      params.set('pageSize', String(router.query.per_page));
+      
+      const baseUrl = url.split('?')[0];
+
+      setUrl(`${baseUrl}?${params.toString()}`);
+    }
+  }, [router.query.page, router.query.per_page]);
+
   const result = useQuery({
-    queryKey: params ? keys.concat(params) : keys,
-    queryFn: () => fetcher(url + queryParams.join('&'), options),
+    queryKey: [fetchUrl],
+    queryFn: () =>
+      fetcher(
+        fetchUrl,
+        options
+      ),
     enabled: enabled,
   });
 
@@ -67,5 +84,11 @@ export default function useData<TData>(
     return;
   }, [keys, url, result]);
 
-  return result!;
+  // temporary
+  //@ts-ignore
+  return {
+    ...result,
+    data: result.data?.data,
+    metadata: result.data?.metadata as Metadata,
+  };
 }

@@ -15,6 +15,14 @@ import {
 import { useState } from 'react';
 
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+import {
   Table,
   TableBody,
   TableCell,
@@ -22,15 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-import { ContextMenuShortcut } from '@/components/ui/context-menu';
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from '@radix-ui/react-context-menu';
 import { DataTableColumnHeader } from './DataTableColumnHeader';
 import { DataTableColumnSearch } from './DataTableColumnSearch';
 import { DataTablePagination } from './DataTablePagination';
@@ -57,12 +56,11 @@ export function DataTable<TData, TValue>({
   searchVal,
   subcolumns,
   getRowCanExpand,
-  renderSubComponent,
+
   showPagination = true,
   showViewoptions = true,
   showSearchBar = true,
   showTitle = false,
-  
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
