@@ -56,6 +56,7 @@ export const invoiceSchema = z
       required_error: 'Payment Method is required',
     }),
     paymentMethodName: z.string().optional(),
+    productId: z.string().optional(),
     // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
   })
   .refine(

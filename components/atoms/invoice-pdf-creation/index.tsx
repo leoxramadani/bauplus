@@ -460,6 +460,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
   const [createAsPdf, setCreateAsPDF] = useState(false);
 
   useEffect(() => {
+    console.log('1213');
     setPdfData(
       generalInvoice(
         invoiceNumber,
@@ -469,7 +470,7 @@ const PDFRenderer: React.FC<pdfInputs> = ({
         dueDate
       )
     );
-  }, []);
+  }, [invoiceNumber, companyName, totalAmount, invoiceDate, dueDate]);
 
   const createPdf = () => {
     setCreateAsPDF(!createAsPdf);
@@ -477,40 +478,34 @@ const PDFRenderer: React.FC<pdfInputs> = ({
 
   return (
     <div>
-      {content == 'Generate as PDF' ? (
-        <>
-          {pdfData ? (
-            <PDFViewer style={{ width: '100%', height: '75vh' }}>
-              {pdfData}
-            </PDFViewer>
-          ) : null}
-        </>
-      ) : (
-        <Modal
-          open={isCreateModalOpen}
-          onOpenChange={setIsCreateModalOpen}
-        >
-          <Modal.Trigger asChild>
-            <div
-              onClick={createPdf}
-              className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-            >
-              {content}
-            </div>
-          </Modal.Trigger>
-          <Modal.Content
-            key="modal-content"
-            title="PDF Preview"
-            description="You can go back and change the inputs if you don't like something."
+      <>
+        {pdfData ? (
+          <Modal
+            open={isCreateModalOpen}
+            onOpenChange={setIsCreateModalOpen}
           >
-            {pdfData ? (
-              <PDFViewer style={{ width: '100%', height: '75vh' }}>
-                {pdfData}
-              </PDFViewer>
-            ) : null}
-          </Modal.Content>
-        </Modal>
-      )}
+            <Modal.Trigger asChild>
+              <div
+                onClick={createPdf}
+                className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+              >
+                {content}
+              </div>
+            </Modal.Trigger>
+            <Modal.Content
+              key="modal-content"
+              title="PDF Preview"
+              description="You can go back and change the inputs if you don't like something."
+            >
+              {pdfData ? (
+                <PDFViewer style={{ width: '100%', height: '75vh' }}>
+                  {pdfData}
+                </PDFViewer>
+              ) : null}
+            </Modal.Content>
+          </Modal>
+        ) : null}
+      </>
     </div>
   );
 };

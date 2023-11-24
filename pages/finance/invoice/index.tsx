@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import GenerateInvoiceForm from '@/components/molecules/finances/invoice/generateInvoice/GenerateInvoiceForm';
+import InvoiceForm from '@/components/molecules/finances/invoice/invoiceForm/InvoiceForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,6 @@ import {
   invoiceColumnDef,
 } from '@/lib/schema/Finance/invoice/invoice';
 import { FileInput, Plus } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 const Invoice = () => {
@@ -71,15 +71,11 @@ const Invoice = () => {
           </Button>
         </Link> */}
 
-        <Link href="./invoice/Create" className="flex">
+        {/* <Link href="./invoice/Create" className="flex">
           <Button variant="outline" className="flex flex-row gap-2">
             <Plus size={20} /> Create Invoice
           </Button>
-        </Link>
-
-        {/* <Modal
-
-        
+        </Link> */}
 
         <Modal
           open={isCreateModalOpen}
@@ -105,7 +101,7 @@ const Invoice = () => {
               refetchInvoices={refetchInvoices}
             />
           </Modal.Content>
-        </Modal> */}
+        </Modal>
 
         {/* <Button variant="outline" className="flex gap-2 ">
           <Plus size={20} /> <span>Create Time Log Invoice</span>

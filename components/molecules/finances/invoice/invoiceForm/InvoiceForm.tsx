@@ -36,12 +36,14 @@ import {
   INVOICE_CREATE,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
+import { GET_ALL_PRODUCTS } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
 import { IClients } from '@/lib/schema/Clients/clients';
 import {
   IInvoice,
   invoiceSchema,
 } from '@/lib/schema/Finance/invoice/invoice';
+import { IProduct } from '@/lib/schema/product/product';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -68,16 +70,20 @@ const InvoiceForm = ({
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [companyName, setCompanyName] = useState('');
-  const [totalAmount, setTotalAmount] = useState('');
-  const [invoiceDate, setInvoiceDate] = useState(new Date());
-  const [invoiceNumber, setInvoiceNumber] = useState(0);
-  const [dueDate, setDueDate] = useState(new Date());
+  const [selectedProduct, setSelectedProduct] =
+    useState<IProduct | null>(null);
+
   const {
     data: clients,
     isError: clientsIsError,
     isLoading: clientsIsLoading,
   } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
+  const {
+    data: products,
+    isError: productsIsError,
+    isLoading: productsIsLoading,
+  } = useData<IProduct[]>(['products'], GET_ALL_PRODUCTS);
+
   useEffect(() => {
     async function getData(Id: string) {
       console.log('inside getData');
@@ -102,6 +108,13 @@ const InvoiceForm = ({
     values: { ...invoiceData },
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    const selectedProductData = products?.find(
+      (product) => product.productId === form.watch('productId')
+    );
+    setSelectedProduct(selectedProductData || null);
+  }, [form.watch('productId'), products]);
 
   const onSubmit = useCallback(
     async (data: IInvoice) => {
@@ -156,48 +169,9 @@ const InvoiceForm = ({
     [invoiceData]
   );
 
-  useEffect(() => {
-    const selectedClient = clients?.find(
-      (client) => client.clientId === form.watch('clientId')
-    );
-
-    setCompanyName(String(selectedClient?.companyName));
-    setInvoiceDate(form.getValues().invoiceDate);
-    setTotalAmount(String(form.getValues().totalAmount));
-    setInvoiceNumber(Number(form.getValues().invoiceNumber));
-
-    // Calculate the due date as 15 days after the invoice date
-    const invoiceDate = form.getValues().invoiceDate;
-    const dueDate = new Date(invoiceDate);
-
-    if (
-      invoiceDate instanceof Date &&
-      !isNaN(invoiceDate.getTime())
-    ) {
-      if (form.getValues().dueDate == undefined) {
-        dueDate.setDate(invoiceDate?.getDate() + 15);
-        setDueDate(dueDate);
-      } else {
-        setDueDate(form.getValues().dueDate);
-      }
-    }
-  }, [
-    form.watch('clientId'),
-    form.watch('invoiceDate'),
-    form.watch('totalAmount'),
-    form.watch('dueDate'),
-    form.watch('invoiceNumber'),
-  ]);
-
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
-
-  const isDataComplete =
-    form.getValues().clientId &&
-    form.getValues().totalAmount &&
-    form.getValues().invoiceDate &&
-    form.getValues().invoiceNumber;
 
   const [invoiceTypes, setInvoiceTypes] = useState<any[]>([]);
   const [invoiceNostro, setInvoiceNostro] = useState<any[]>([]);
@@ -612,6 +586,39 @@ const InvoiceForm = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="productId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Product</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a product" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {products &&
+                        products.map((product) => (
+                          <SelectItem
+                            value={String(product.productId)}
+                            key={product.productId}
+                          >
+                            {product.productName}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className="flex flex-row gap-2">
             <Button
@@ -621,17 +628,6 @@ const InvoiceForm = ({
             >
               Submit
             </Button>
-
-            {/* {isDataComplete && (
-              <PDFRenderer
-                invoiceNumber={invoiceNumber}
-                companyName={companyName}
-                totalAmount={String(totalAmount)}
-                invoiceDate={invoiceDate}
-                dueDate={dueDate}
-                content="Generate as PDF"
-              />
-            )} */}
           </div>
         </form>
       </Form>
