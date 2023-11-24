@@ -1,6 +1,13 @@
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   IReports,
   reportsColumnDefBuilder,
 } from '@/lib/schema/reports/reports';
@@ -17,6 +24,9 @@ const Reports = () => {
   const [isAdding, setisAdding] = useState(false);
   const [selectedSection, setSelectedSection] =
     useState('Attendance');
+  const [selectedMonth, setSelectedMonth] = useState('Jan');
+  const [selectedFilter, setSelectedFilter] = useState('Yearly');
+  const [selectedYears, setSelectedYears] = useState('2023');
 
   useEffect(() => {
     if (router.query.id) {
@@ -33,6 +43,115 @@ const Reports = () => {
   }, [isModalOpen]);
 
   console.log('Data;', data);
+
+  const valueFormatter = (number: any) =>
+    `${new Intl.NumberFormat('us').format(number).toString()}`;
+
+  const handleSectionChange = (section: any) => {
+    setSelectedSection(section);
+  };
+
+  const salaryData = [
+    {
+      month: 'Jan',
+      Salary: 0,
+    },
+    {
+      month: 'Feb',
+      Salary: 0,
+    },
+    {
+      month: 'Mar',
+      Salary: 32750,
+    },
+    {
+      month: 'Apr',
+      Salary: 43750,
+    },
+    {
+      month: 'May',
+      Salary: 47750,
+    },
+    {
+      month: 'Jun',
+      Salary: 53750,
+    },
+    {
+      month: 'Jul',
+      Salary: 58750,
+    },
+    {
+      month: 'Aug',
+      Salary: 62750,
+    },
+    {
+      month: 'Sep',
+      Salary: 65750,
+    },
+    {
+      month: 'Oct',
+      Salary: 69750,
+    },
+    {
+      month: 'Nov',
+      Salary: 76750,
+    },
+    {
+      month: 'Dec',
+      Salary: 83750,
+    },
+  ];
+
+  const leavesData = [
+    {
+      month: 'Jan',
+      Leaves: 0,
+    },
+    {
+      month: 'Feb',
+      Leaves: 0,
+    },
+    {
+      month: 'Mar',
+      Leaves: 4,
+    },
+    {
+      month: 'Apr',
+      Leaves: 0,
+    },
+    {
+      month: 'May',
+      Leaves: 1,
+    },
+    {
+      month: 'Jun',
+      Leaves: 2,
+    },
+    {
+      month: 'Jul',
+      Leaves: 0,
+    },
+    {
+      month: 'Aug',
+      Leaves: 0,
+    },
+    {
+      month: 'Sep',
+      Leaves: 9,
+    },
+    {
+      month: 'Oct',
+      Leaves: 2,
+    },
+    {
+      month: 'Nov',
+      Leaves: 2,
+    },
+    {
+      month: 'Dec',
+      Leaves: 4,
+    },
+  ];
 
   const chartdata = [
     {
@@ -157,30 +276,269 @@ const Reports = () => {
     },
   ];
 
-  const valueFormatter = (number: any) =>
-    `${new Intl.NumberFormat('us').format(number).toString()}`;
+  const chartMonthsdata = [
+    {
+      date: 'Jan',
+      'Work hours': 0,
+    },
+    {
+      date: 'Feb',
+      'Work hours': 0,
+    },
+    {
+      date: 'Mar',
+      'Work hours': 180,
+    },
+    {
+      date: 'Apr',
+      'Work hours': 158,
+    },
+    {
+      date: 'May',
+      'Work hours': 162,
+    },
+    {
+      date: 'Jun',
+      'Work hours': 166,
+    },
+    {
+      date: 'Jul',
+      'Work hours': 157,
+    },
+    {
+      date: 'Aug',
+      'Work hours': 155,
+    },
+    {
+      date: 'Sep',
+      'Work hours': 170,
+    },
+    {
+      date: 'Oct',
+      'Work hours': 172,
+    },
+    {
+      date: 'Nov',
+      'Work hours': 175,
+    },
+    {
+      date: 'Dec',
+      'Work hours': 182,
+    },
+  ];
 
-  const handleSectionChange = (section: any) => {
-    setSelectedSection(section);
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  const filters = ['Yearly', 'Monthly'];
+
+  const years = ['2019', '2020', '2021', '2022', '2023'];
+
+  const renderYears = () => {
+    return (
+      <div>
+        <Select
+          onValueChange={(value) => {
+            setSelectedYears(value);
+          }}
+          value={selectedYears}
+        >
+          <SelectTrigger>
+            <SelectValue>{selectedYears}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {years.map((filter) => (
+              <SelectItem
+                key={filter}
+                value={filter}
+                onClick={() => setSelectedYears(filter)}
+              >
+                {filter}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  };
+
+  const renderFilters = () => {
+    return (
+      <div>
+        <Select
+          onValueChange={(value) => {
+            setSelectedFilter(value);
+          }}
+          value={selectedFilter}
+        >
+          <SelectTrigger>
+            <SelectValue>{selectedFilter}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {filters.map((filter) => (
+              <SelectItem
+                key={filter}
+                value={filter}
+                onClick={() => setSelectedFilter(filter)}
+              >
+                {filter}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      // <button
+      //   key={month}
+      //   className={`rounded px-4 py-2 font-medium ${
+      //     selectedMonth === month ? 'bg-blue-100' : ''
+      //   }`}
+      //   onClick={() => setSelectedMonth(month)}
+      // >
+      //   {month}
+      // </button>
+    );
+  };
+
+  const renderMonthButtons = () => {
+    return (
+      <div>
+        <Select
+          onValueChange={(value) => {
+            setSelectedMonth(value);
+          }}
+          value={selectedMonth}
+        >
+          <SelectTrigger>
+            <SelectValue>{selectedMonth}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {months.map((month) => (
+              <SelectItem
+                key={month}
+                value={month}
+                onClick={() => setSelectedMonth(month)}
+              >
+                {month}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      // <button
+      //   key={month}
+      //   className={`rounded px-4 py-2 font-medium ${
+      //     selectedMonth === month ? 'bg-blue-100' : ''
+      //   }`}
+      //   onClick={() => setSelectedMonth(month)}
+      // >
+      //   {month}
+      // </button>
+    );
   };
 
   const renderChartBasedOnSection = () => {
     if (selectedSection === 'Attendance') {
-      return (
-        <BarChart
-          className="mt-6"
-          data={chartdata}
-          index="date"
-          categories={['Work hours']}
-          colors={['blue']}
-          valueFormatter={valueFormatter}
-          yAxisWidth={48}
-        />
-      );
+      if (selectedFilter === 'Yearly') {
+        const yearlyChartData = months.map((month) => {
+          const dataPoint = chartMonthsdata.find(
+            (data) => data.date === month
+          );
+          return {
+            date: month,
+            'Work hours': dataPoint ? dataPoint['Work hours'] : 0,
+          };
+        });
+
+        return (
+          <>
+            <div className="flex flex-row gap-4 pt-2">
+              <Title className="w-32">{renderFilters()}</Title>
+              <Title className="w-32">{renderYears()}</Title>
+            </div>
+            <BarChart
+              className="mt-6"
+              data={yearlyChartData}
+              index="date"
+              categories={['Work hours']}
+              colors={['blue']}
+              valueFormatter={valueFormatter}
+              yAxisWidth={48}
+            />
+          </>
+        );
+      } else {
+        const daysInMonth = new Date(
+          new Date().getFullYear(),
+          months.indexOf(selectedMonth) + 1,
+          0
+        ).getDate();
+
+        const monthlyWorkHours = Array.from(
+          { length: daysInMonth },
+          (_, i) => ({
+            date: `${i + 1}`,
+            'Work hours': i < 31 ? (i + 1) * 0.5 : 0,
+          })
+        );
+
+        return (
+          <>
+            <div className="flex flex-row gap-4 pt-2">
+              <Title className="w-32">{renderFilters()}</Title>
+              <Title className="w-32">{renderMonthButtons()}</Title>
+            </div>
+            <BarChart
+              className="mt-6"
+              data={monthlyWorkHours}
+              index="date"
+              categories={['Work hours']}
+              colors={['blue']}
+              valueFormatter={valueFormatter}
+              yAxisWidth={48}
+            />
+          </>
+        );
+      }
     } else if (selectedSection === 'Leaves') {
-      return <div>Leaves content goes here</div>;
+      return (
+        <>
+          <BarChart
+            className="mt-6"
+            data={leavesData}
+            index="month"
+            categories={['Leaves']}
+            colors={['red']}
+            valueFormatter={valueFormatter}
+            yAxisWidth={48}
+          />
+        </>
+      );
     } else if (selectedSection === 'Salary') {
-      return <div>Salary content goes here</div>;
+      return (
+        <>
+          <BarChart
+            className="mt-6"
+            data={salaryData}
+            index="month"
+            categories={['Salary']}
+            colors={['emerald']}
+            valueFormatter={valueFormatter}
+            yAxisWidth={48}
+          />
+        </>
+      );
     }
   };
 
