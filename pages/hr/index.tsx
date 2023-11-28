@@ -1,10 +1,11 @@
-import Topbar from '@/components/layout/Topbar';
-import { Input } from '@/components/ui/input';
+// import FullCalendar from '@fullcalendar/react';
 
 const Companies = () => {
+  const events = [{ title: 'Meeting', start: new Date() }];
+
   return (
-    <div>
-      <Input value="besir" />
+    <div className="">
+      <p></p>
     </div>
   );
 };
