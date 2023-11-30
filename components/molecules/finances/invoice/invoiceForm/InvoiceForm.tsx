@@ -700,11 +700,11 @@ const InvoiceForm = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="productId"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="sm:col-span-2">
                   <FormLabel>Products</FormLabel>
                   <Popover>
                     <div className="flex gap-2">
@@ -739,7 +739,7 @@ const InvoiceForm = ({
                     </div>
                     <PopoverContent
                       align="start"
-                      className="my-1 h-[200px] w-[600px]  p-0 md:w-[600px] lg:w-[600px]"
+                      className="my-1 h-[200px] w-[600px]  p-0 md:w-[600px] lg:w-[920px]"
                     >
                       <Command>
                         <CommandGroup className="flex h-full max-h-[500px] flex-col gap-4 overflow-y-auto">
@@ -828,7 +828,79 @@ const InvoiceForm = ({
                   <FormMessage />
                 </FormItem>
               )}
+            /> */}
+
+            <FormField
+              control={form.control}
+              name="productId"
+              render={({ field }) => (
+                <FormItem className="sm:col-span-2">
+                  <FormLabel>Products</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'flex w-full items-center justify-between gap-1',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                          disabled={isSubmitting}
+                        >
+                          {field.value
+                            ? products?.find(
+                                (prod) =>
+                                  prod.productId === field.value
+                              )?.productName
+                            : 'Choose product'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search for product..." />
+                        <CommandEmpty>
+                          No product found.
+                        </CommandEmpty>
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                          {products?.map((prod, i: Key) => (
+                            <CommandItem
+                              value={
+                                prod.productName
+                              }
+                              className="flex items-center"
+                              key={i}
+                              onSelect={() => {
+                                prod.productId &&
+                                  form.setValue(
+                                    'productId',
+                                    prod?.productId
+                                  );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4 transition-all',
+                                  prod.productId === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {`${prod.productName}`}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+
           </div>
 
           {selectedProducts && selectedProducts.length > 0 && (
