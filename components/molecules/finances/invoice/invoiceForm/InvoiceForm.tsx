@@ -154,19 +154,17 @@ const InvoiceForm = ({
     );
 
     if (isSelected) {
-      // Product is already selected, do nothing or remove it if desired
       setSelectedProducts((prevSelected) =>
         prevSelected.filter((product) => product.productId !== id)
       );
     } else {
-      // Product is not selected, add it with quantity set to 1
       const selectedProduct = products?.find(
         (product) => product.productId === id
       );
       if (selectedProduct) {
         setSelectedProducts((prevSelected) => [
           ...prevSelected,
-          { ...selectedProduct, quantity: 1 }, // Set quantity to 1
+          { ...selectedProduct, quantity: 1 },
         ]);
       }
     }
@@ -176,7 +174,6 @@ const InvoiceForm = ({
     async (data: IInvoice) => {
       setIsLoading(true);
 
-      // Create a new array of products with quantities
       const productsWithQuantities = selectedProducts.map(
         (product) => ({
           productId: product.productId,
@@ -282,11 +279,9 @@ const InvoiceForm = ({
       products?.find((product) => product.productId === productId)
         ?.quantity || 0;
 
-    // Ensure that the new quantity is at least 1 if the input is left empty
     const adjustedQuantity =
       quantity === 0 ? 1 : Math.min(quantity, maxQuantityLeft);
 
-    // Validate that the entered value is a valid number greater than 0
     if (!isNaN(adjustedQuantity) && adjustedQuantity > 0) {
       setSelectedProducts((prevSelected) =>
         prevSelected.map((product) =>
@@ -298,14 +293,12 @@ const InvoiceForm = ({
     }
 
     if (quantity > 0) {
-      // Only handle product selection if quantity is greater than 0
       setSelectedProducts((prevSelected) => {
         const isSelected = prevSelected.some(
           (product) => product.productId === productId
         );
 
         if (!isSelected) {
-          // If the product is not already selected, select it
           const selectedProduct = products?.find(
             (product) => product.productId === productId
           );
@@ -322,24 +315,6 @@ const InvoiceForm = ({
       });
     }
   };
-
-  // const handleQuantityChange = (
-  //   productId: string | undefined,
-  //   quantity: number
-  // ) => {
-  //   setSelectedProducts((prevSelected) =>
-  //     prevSelected.map((product) =>
-  //       product.productId === productId
-  //         ? { ...product, quantity: quantity }
-  //         : product
-  //     )
-  //   );
-
-  //   // Only handle product selection if quantity is greater than 0
-  //   if (quantity > 0) {
-  //     handleProductSelection(productId);
-  //   }
-  // };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
@@ -832,7 +807,6 @@ const InvoiceForm = ({
                                               (prod.productId ?? '')
                                           )?.quantity === 0
                                         ) {
-                                          // Manually trigger the onBlur event to handle the product selection
                                           const productId =
                                             prod.productId;
                                           handleProductSelection(
