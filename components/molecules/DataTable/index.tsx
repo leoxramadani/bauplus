@@ -139,7 +139,6 @@ export function DataTable<TData, TValue = any>({
         }
       }
 
-      console.log('newsearchparams==', newSearchParams.toString());
       return newSearchParams.toString();
     },
     [searchParams]
@@ -183,6 +182,7 @@ export function DataTable<TData, TValue = any>({
       })}`,
       undefined,
       {
+        shallow: true,
         scroll: false,
       }
     );
@@ -205,7 +205,9 @@ export function DataTable<TData, TValue = any>({
         sort: sorting[0]?.id
           ? `${sorting[0]?.id}.${sorting[0]?.desc ? 'desc' : 'asc'}`
           : null,
-      })}`
+      })}`,
+      undefined,
+      { shallow: true }
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +241,11 @@ export function DataTable<TData, TValue = any>({
             page: 1,
             [column.id]:
               typeof column.value === 'string' ? column.value : null,
-          })}`
+          })}`,
+          undefined,
+          {
+            shallow: true
+          }
         );
       }
     }
@@ -255,7 +261,11 @@ export function DataTable<TData, TValue = any>({
           `${pathname}?${createQueryString({
             page: 1,
             [key]: null,
-          })}`
+          })}`,
+          undefined,
+          {
+            shallow: true
+          }
         );
       }
     }
@@ -272,7 +282,11 @@ export function DataTable<TData, TValue = any>({
           `${pathname}?${createQueryString({
             page: 1,
             [column.id]: column.value.join('.'),
-          })}`
+          })}`,
+          undefined,
+          {
+            shallow: true
+          }
         );
       }
     }
@@ -286,7 +300,11 @@ export function DataTable<TData, TValue = any>({
           `${pathname}?${createQueryString({
             page: 1,
             [key]: null,
-          })}`
+          })}`,
+          undefined,
+          {
+            shallow: true
+          }
         );
       }
     }

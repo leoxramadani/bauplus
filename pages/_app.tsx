@@ -16,12 +16,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const client = new QueryClient();
 
 NProgress.configure({ speed: 500 });
-Router.events.on('routeChangeStart', () => {
-  NProgress.start();
+Router.events.on('routeChangeStart', (url, { shallow }) => {
+  if (!shallow) NProgress.start();
 });
 
-Router.events.on('routeChangeComplete', () => {
-  NProgress.done();
+Router.events.on('routeChangeComplete', (url, { shallow }) => {
+  if (!shallow) NProgress.done();
 });
 
 Router.events.on('routeChangeError', () => {
@@ -36,26 +36,26 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-        <QueryClientProvider client={client}>
-          <LanguageProvider>
-            <Layout>
-              <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                hideProgressBar={true}
-                newestOnTop={true}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Slide}
-              />
-              <Component {...pageProps} />
-            </Layout>
-          </LanguageProvider>
-        </QueryClientProvider>
+      <QueryClientProvider client={client}>
+        <LanguageProvider>
+          <Layout>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={true}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Slide}
+            />
+            <Component {...pageProps} />
+          </Layout>
+        </LanguageProvider>
+      </QueryClientProvider>
     </SessionProvider>
   );
 };
