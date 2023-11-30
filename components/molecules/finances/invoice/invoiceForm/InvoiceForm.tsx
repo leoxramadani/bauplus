@@ -133,8 +133,8 @@ const InvoiceForm = ({
   useEffect(() => {
     {
       console.log(
-        selectedProducts.map((selprod) => (
-          <p>{selprod.productName}</p>
+        selectedProducts.map((selprod, i) => (
+          <p key={i}>{selprod.productName}</p>
         ))
       );
     }
