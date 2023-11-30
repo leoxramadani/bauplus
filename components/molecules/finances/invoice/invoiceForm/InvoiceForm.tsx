@@ -1,3 +1,5 @@
+import Modal from '@/components/atoms/Modal';
+import ProductForm from '@/components/molecules/product/ProductForm';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -28,6 +30,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import {
   GET_ALL_INVOICES_IN_OUT_TYPES,
@@ -36,7 +47,7 @@ import {
   INVOICE_CREATE,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
-import { GET_ALL_PRODUCTS } from '@/lib/constants/endpoints/products/products';
+import { GET_ALL_PRODUCTS_WOPAGINATION } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
 import { IClients } from '@/lib/schema/Clients/clients';
 import {
@@ -48,7 +59,12 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import {
+  CalendarIcon,
+  Check,
+  ChevronsUpDown,
+  Plus,
+} from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -70,8 +86,14 @@ const InvoiceForm = ({
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedProduct, setSelectedProduct] =
-    useState<IProduct | null>(null);
+  const [isModalOpenProducts, setIsModalOpenProducts] =
+    useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<
+    IProduct[]
+  >(invoiceData?.products || []);
+  const [productsModal, setProductsModal] = useState<boolean>(false);
+  const [isProductsUpdate, setIsProductsUpdate] =
+    useState<boolean>(false);
 
   const {
     data: clients,
@@ -81,8 +103,13 @@ const InvoiceForm = ({
   const {
     data: products,
     isError: productsIsError,
+    metadata,
     isLoading: productsIsLoading,
-  } = useData<IProduct[]>(['products'], GET_ALL_PRODUCTS);
+    refetch: refetchProducts,
+  } = useData<IProduct[]>(
+    ['products'],
+    GET_ALL_PRODUCTS_WOPAGINATION
+  );
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -103,70 +130,108 @@ const InvoiceForm = ({
     }
   }, [invoiceId]);
 
+  useEffect(() => {
+    {
+      console.log(
+        selectedProducts.map((selprod) => (
+          <p>{selprod.productName}</p>
+        ))
+      );
+    }
+  }, [selectedProducts]);
+
   const form = useForm<IInvoice>({
     resolver: zodResolver(invoiceSchema),
     values: { ...invoiceData },
     mode: 'onChange',
   });
 
-  useEffect(() => {
-    const selectedProductData = products?.find(
-      (product) => product.productId === form.watch('productId')
+  const handleProductSelection = (productId: string | undefined) => {
+    const id = productId ?? '';
+
+    const isSelected = selectedProducts.some(
+      (product) => product.productId === id
     );
-    setSelectedProduct(selectedProductData || null);
-  }, [form.watch('productId'), products]);
+
+    if (isSelected) {
+      // Product is already selected, do nothing or remove it if desired
+      setSelectedProducts((prevSelected) =>
+        prevSelected.filter((product) => product.productId !== id)
+      );
+    } else {
+      // Product is not selected, add it with quantity set to 1
+      const selectedProduct = products?.find(
+        (product) => product.productId === id
+      );
+      if (selectedProduct) {
+        setSelectedProducts((prevSelected) => [
+          ...prevSelected,
+          { ...selectedProduct, quantity: 1 }, // Set quantity to 1
+        ]);
+      }
+    }
+  };
 
   const onSubmit = useCallback(
     async (data: IInvoice) => {
       setIsLoading(true);
-      console.log('form data->', data);
+
+      // Create a new array of products with quantities
+      const productsWithQuantities = selectedProducts.map(
+        (product) => ({
+          productId: product.productId,
+          quantity: product.quantity,
+        })
+      );
+
+      // Include selected product information in the data payload
+      const requestData = {
+        ...data,
+        products: productsWithQuantities,
+      };
 
       if (invoiceData) {
-        console.log('Updating invoice');
-        await axios
-          .put(UPDATE_INVOICE, {
-            ...data,
-          })
-          .then((res) => {
-            console.log('UPDATED invoice->', res);
-            router.replace('/finance/invoice', undefined, {
-              shallow: true,
-            });
-            setIsModalOpen(false);
-            toast.success('Successfully updated invoice');
-            refetchInvoices();
-          })
-          .catch((error) => {
-            console.log('Error UPDATING invoice:', error);
-            toast.error(
-              'There was an issue updating invoice! Please try again.'
-            );
+        // Updating existing invoice
+        try {
+          const response = await axios.put(
+            UPDATE_INVOICE,
+            requestData
+          );
+          console.log('UPDATED invoice:', response);
+          router.replace('/finance/invoice', undefined, {
+            shallow: true,
           });
+          setIsModalOpen(false);
+          toast.success('Successfully updated invoice');
+          refetchInvoices();
+        } catch (error) {
+          console.error('Error UPDATING invoice:', error);
+          toast.error(
+            'There was an issue updating the invoice! Please try again.'
+          );
+        }
       } else {
-        console.log('Creating invoice');
-        await axios
-          .post(INVOICE_CREATE, {
-            // clientId: data.clientId,
-            // totalAmount: data.totalAmount,
-            // paidAmount: data.paidAmount,
-            ...data,
-          })
-          .then((res) => {
-            console.log('Successfully created invoice->', res);
-            toast.success('Successfully added invoice');
-            setIsModalOpen(false);
-            refetchInvoices();
-          })
-          .catch((error) => {
-            console.error('Error creating invoice:', error);
-            toast.error(
-              'There was an issue adding invoice! Please try again.'
-            );
-          });
+        // Creating a new invoice
+        try {
+          const response = await axios.post(
+            INVOICE_CREATE,
+            requestData
+          );
+          console.log('Successfully created invoice:', response);
+          toast.success('Successfully added invoice');
+          setIsModalOpen(false);
+          refetchInvoices();
+        } catch (error) {
+          console.error('Error creating invoice:', error);
+          toast.error(
+            'There was an issue adding the invoice! Please try again.'
+          );
+        }
       }
+
       setIsLoading(false);
     },
-    [invoiceData]
+    [invoiceData, selectedProducts, refetchInvoices]
   );
 
   const onError = (error: any) => {
@@ -208,6 +273,73 @@ const InvoiceForm = ({
     };
     getInvoiceNostro();
   }, [invoiceNostro]);
+
+  const handleQuantityChange = (
+    productId: string | undefined,
+    quantity: number
+  ) => {
+    const maxQuantityLeft =
+      products?.find((product) => product.productId === productId)
+        ?.quantity || 0;
+
+    // Ensure that the new quantity is at least 1 if the input is left empty
+    const adjustedQuantity =
+      quantity === 0 ? 1 : Math.min(quantity, maxQuantityLeft);
+
+    // Validate that the entered value is a valid number greater than 0
+    if (!isNaN(adjustedQuantity) && adjustedQuantity > 0) {
+      setSelectedProducts((prevSelected) =>
+        prevSelected.map((product) =>
+          product.productId === productId
+            ? { ...product, quantity: adjustedQuantity }
+            : product
+        )
+      );
+    }
+
+    if (quantity > 0) {
+      // Only handle product selection if quantity is greater than 0
+      setSelectedProducts((prevSelected) => {
+        const isSelected = prevSelected.some(
+          (product) => product.productId === productId
+        );
+
+        if (!isSelected) {
+          // If the product is not already selected, select it
+          const selectedProduct = products?.find(
+            (product) => product.productId === productId
+          );
+
+          if (selectedProduct) {
+            return [
+              ...prevSelected,
+              { ...selectedProduct, quantity: quantity },
+            ];
+          }
+        }
+
+        return prevSelected;
+      });
+    }
+  };
+
+  // const handleQuantityChange = (
+  //   productId: string | undefined,
+  //   quantity: number
+  // ) => {
+  //   setSelectedProducts((prevSelected) =>
+  //     prevSelected.map((product) =>
+  //       product.productId === productId
+  //         ? { ...product, quantity: quantity }
+  //         : product
+  //     )
+  //   );
+
+  //   // Only handle product selection if quantity is greater than 0
+  //   if (quantity > 0) {
+  //     handleProductSelection(productId);
+  //   }
+  // };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
@@ -598,34 +730,164 @@ const InvoiceForm = ({
               name="productId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Product</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a product" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {products &&
-                        products.map((product) => (
-                          <SelectItem
-                            value={String(product.productId)}
-                            key={product.productId}
+                  <FormLabel>Products</FormLabel>
+                  <Popover>
+                    <div className="flex gap-2">
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'flex w-full items-center justify-between gap-1',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                            disabled={isSubmitting}
                           >
-                            {product.productName}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                            Add Products
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <div
+                        className="button-outline flex items-center justify-center px-3 py-2  text-sm"
+                        onClick={() => {
+                          setProductsModal(true);
+                          setIsProductsUpdate(false);
+                        }}
+                      >
+                        <Plus
+                          size={20}
+                          className="text-slate-500 hover:text-slate-600"
+                        />
+                      </div>
+                    </div>
+                    <PopoverContent
+                      align="start"
+                      className="my-1 h-[200px] w-[600px]  p-0 md:w-[600px] lg:w-[600px]"
+                    >
+                      <Command>
+                        <CommandGroup className="flex h-full max-h-[500px] flex-col gap-4 overflow-y-auto">
+                          <Table className="w-full border">
+                            <TableCaption>
+                              List of Products
+                            </TableCaption>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Product Name</TableHead>
+                                <TableHead>Quantity Left</TableHead>
+                                <TableHead>Select</TableHead>
+                                <TableHead>Quantity</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {products?.map((prod, i) => (
+                                <TableRow key={i}>
+                                  <TableCell>
+                                    {prod.productName}
+                                  </TableCell>
+                                  <TableCell>
+                                    {prod.quantity}
+                                  </TableCell>
+                                  <TableCell>
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedProducts.some(
+                                        (selectedProd) =>
+                                          selectedProd.productId ===
+                                          (prod.productId ?? '')
+                                      )}
+                                      onChange={() =>
+                                        handleProductSelection(
+                                          prod.productId
+                                        )
+                                      }
+                                    />
+                                  </TableCell>
+                                  <TableCell>
+                                    <input
+                                      type="number"
+                                      max={prod.quantity}
+                                      value={
+                                        selectedProducts.find(
+                                          (selectedProd) =>
+                                            selectedProd.productId ===
+                                            (prod.productId ?? '')
+                                        )?.quantity || ''
+                                      }
+                                      onChange={(e) =>
+                                        handleQuantityChange(
+                                          prod.productId,
+                                          parseInt(e.target.value, 10)
+                                        )
+                                      }
+                                      onKeyDown={(e) => {
+                                        if (
+                                          e.key === 'Backspace' &&
+                                          e.currentTarget.value ===
+                                            '' &&
+                                          selectedProducts.find(
+                                            (selectedProd) =>
+                                              selectedProd.productId ===
+                                              (prod.productId ?? '')
+                                          )?.quantity === 0
+                                        ) {
+                                          // Manually trigger the onBlur event to handle the product selection
+                                          const productId =
+                                            prod.productId;
+                                          handleProductSelection(
+                                            productId
+                                          );
+                                        }
+                                      }}
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          {selectedProducts && selectedProducts.length > 0 && (
+            <FormField
+              name="selectedProducts"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Selected Products</FormLabel>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Product Name</TableHead>
+                        <TableHead>Quantity</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {selectedProducts.map((selectedProd, i) => (
+                        <TableRow key={i}>
+                          <TableCell>
+                            {selectedProd.productName}
+                          </TableCell>
+                          <TableCell>
+                            {selectedProd.quantity}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </FormItem>
+              )}
+            />
+          )}
+
           <div className="flex flex-row gap-2">
             <Button
               className="w-max"
@@ -637,6 +899,22 @@ const InvoiceForm = ({
           </div>
         </form>
       </Form>
+
+      <Modal open={productsModal} onOpenChange={setProductsModal}>
+        <Modal.Content
+          title="Add Products"
+          description="Fill the fields to add a product"
+          className="flex max-w-xl flex-col items-center justify-start sm:items-start"
+        >
+          <ProductForm
+            setIsModalOpen={setProductsModal}
+            productId={
+              router.isReady ? router.query.id?.toString() : ''
+            }
+            refetchProducts={refetchProducts}
+          />
+        </Modal.Content>
+      </Modal>
     </div>
   );
 };
