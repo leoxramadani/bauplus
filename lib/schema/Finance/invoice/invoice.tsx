@@ -23,19 +23,18 @@ import * as z from 'zod';
 export const productLineEntity = z
   .object({
     // productLineItemId: z.string().optional(),
-    productId: z.string().optional(),
+    productId: z.string(),
     // invoiceId: z.string().optional(),
     quantity: z.coerce.number({
       invalid_type_error: 'Quantity is required',
       required_error: 'Quantity is required',
     }),
+    productName:z.string(),
     // price: z.coerce.number({
     //   invalid_type_error: 'Price is required',
     //   required_error: 'Price is required',
     // }),
   })
-  .array()
-  .optional();
 
 export type IproductLineEntity = z.infer<typeof productLineEntity>;
 
@@ -75,15 +74,16 @@ export const invoiceSchema = z
       required_error: 'Payment Method is required',
     }),
     paymentMethodName: z.string().optional(),
-    productId: z.string().array(),
+    // productId: z.string().array(),
     // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
     productLineEntity: z
       .object({
-        productId: z.string().optional(),
+        productId: z.string(),
         quantity: z.coerce.number({
           invalid_type_error: 'Quantity is required',
           required_error: 'Quantity is required',
         }),
+        // productName:z.string(),
       })
       .array()
       .optional(),

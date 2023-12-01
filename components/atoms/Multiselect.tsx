@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { IproductLineEntity } from '@/lib/schema/Finance/invoice/invoice';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import * as React from 'react';
@@ -23,12 +24,10 @@ export type OptionType = {
 
 interface MultiSelectProps {
   options: any;
-  selected: string[];
+  selected: any;
   form: any;
-  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+  onChange: React.Dispatch<React.SetStateAction<IproductLineEntity[]>>;
   className?: string;
-  setProductLineItems: any;
-  productLineItems: any;
 }
 
 function MultiSelect({
@@ -42,41 +41,8 @@ function MultiSelect({
   const [open, setOpen] = React.useState(false);
   const [itemsSelected, setItemsSelected] = React.useState(false);
 
-  const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i !== item));
-  };
-
-  // Function to remove an object from the productLineEntity array
-  const removeObjectFromProductLineEntity = (objectToRemove: any) => {
-    const currentProductLineEntity = form.getValues(
-      'productLineEntity'
-    );
-    if (Array.isArray(currentProductLineEntity)) {
-      const updatedProductLineEntity =
-        currentProductLineEntity.filter(
-          (item: any) => item.productId !== objectToRemove.productId
-        );
-
-      // Set the updated array back to the form field
-      form.setValue('productLineEntity', updatedProductLineEntity);
-    }
-  };
-
-  const addObjectToProductLineEntity = (newObject: any) => {
-    const currentProductLineEntity = form.getValues(
-      'productLineEntity'
-    );
-
-    // Create a new array with the existing objects and the newObject
-    const updatedProductLineEntity = [
-      ...(Array.isArray(currentProductLineEntity)
-        ? currentProductLineEntity
-        : []),
-      newObject,
-    ];
-
-    // Set the updated array back to the form field
-    form.setValue('productLineEntity', updatedProductLineEntity);
+  const handleUnselect = (productId: string) => {
+    onChange(selected.filter((i:any) => i.productId !== productId));
   };
 
   return (
@@ -94,23 +60,23 @@ function MultiSelect({
               selected.map((item) => (
                 <Badge
                   variant="secondary"
-                  key={item}
+                  key={item.productId}
                   className="mb-1 mr-1"
-                  onClick={() => handleUnselect(item)}
+                  onClick={() => handleUnselect(item.productId)}
                 >
-                  {item}
+                  {item.productName}
                   <button
                     className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-                        handleUnselect(item);
+                        handleUnselect(item.productId);
                       }
                     }}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
-                    onClick={() => handleUnselect(item)}
+                    onClick={() => handleUnselect(item.productId)}
                   >
                     <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                   </button>
@@ -126,66 +92,34 @@ function MultiSelect({
           <CommandEmpty>No item found.</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-auto">
             {options &&
-              options.map((option: any) => (
+              options.map((option: IproductLineEntity) => (
                 <CommandItem
                   key={option.productId}
                   onSelect={() => {
+                    // const selectedProduct = {
+                    //   productId: option.productId,
+                    //   quantity: 1,
+                    //   productName: option.productName,
+                    // };
                     onChange(
                       Array.isArray(selected) &&
-                        selected.includes(option.productName)
+                        selected.some((item:IproductLineEntity)=>item?.productId === option.productId)
                         ? selected.filter(
-                            (item) => item !== option.productName
+                            (item) => item.productId !== option.productId
                           )
-                        : [...selected, option.productName]
+                        : [...selected, {
+                            productId: option.productId,
+                            quantity: 1,
+                            productName:option.productName,
+                        }]
                     );
-                    if (
-                      Array.isArray(selected) &&
-                      selected.includes(option.productName)
-                    ) {
-                      onChange(
-                        selected.filter(
-                          (item) => item !== option.productName
-                        )
-                      );
-
-                      console.log('INDSIDE IF');
-                      addObjectToProductLineEntity({
-                        productId: option.productId,
-                        quantity: 1,
-                      });
-                    } else {
-                      removeObjectFromProductLineEntity({
-                        productId: option.productId,
-                        quantity: 1,
-                      });
-                    }
-                    console.log('OOOUUUTTT');
-
                     setOpen(true);
-
-                    // const se = form.getValues('productLineEntity');
-
-                    // console.log(form.getValues('productLineEntity'));
-
-                    // const updatedProductLineEntity = [
-                    //   ...currentProductLineEntity,
-                    //   ,
-                    //   {
-                    //     productId: option.productId,
-                    //     quantity: 1,
-                    //   },
-                    // ];
-
-                    // form.setValue(
-                    //   'productLineEntity',
-                    //   updatedProductLineEntity
-                    // );
                   }}
                 >
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      selected.includes(option.productName)
+                      selected.some((item:IproductLineEntity)=>item?.productId === option.productId)
                         ? 'opacity-100'
                         : 'opacity-0'
                     )}
