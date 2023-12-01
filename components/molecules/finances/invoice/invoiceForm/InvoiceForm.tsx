@@ -1,4 +1,5 @@
 import Modal from '@/components/atoms/Modal';
+import { MultiSelect } from '@/components/atoms/Multiselect';
 import ProductForm from '@/components/molecules/product/ProductForm';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -33,7 +34,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -44,8 +44,6 @@ import {
   GET_ALL_INVOICES_IN_OUT_TYPES,
   GET_ALL_INVOICE_TYPES,
   GET_SPECIFIC_INVOICE,
-  INVOICE_CREATE,
-  UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
 import { GET_ALL_PRODUCTS_WOPAGINATION } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
@@ -59,16 +57,10 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import format from 'date-fns/format';
-import {
-  CalendarIcon,
-  Check,
-  ChevronsUpDown,
-  Plus,
-} from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 
 interface IInvoiceForm {
   setIsModalOpen(open: boolean): void;
@@ -94,6 +86,7 @@ const InvoiceForm = ({
   const [productsModal, setProductsModal] = useState<boolean>(false);
   const [isProductsUpdate, setIsProductsUpdate] =
     useState<boolean>(false);
+  const [productLineItems, setProductLineItems] = useState<any>();
 
   const {
     data: clients,
@@ -172,63 +165,65 @@ const InvoiceForm = ({
 
   const onSubmit = useCallback(
     async (data: IInvoice) => {
-      setIsLoading(true);
+      console.log('data', data);
+      console.log('productLineItems->', productLineItems);
+      // setIsLoading(true);
 
-      const productsWithQuantities = selectedProducts.map(
-        (product) => ({
-          productId: product.productId,
-          quantity: product.quantity,
-        })
-      );
+      // const productsWithQuantities = selectedProducts.map(
+      //   (product) => ({
+      //     productId: product.productId,
+      //     quantity: product.quantity,
+      //   })
+      // );
 
-      // Include selected product information in the data payload
-      const requestData = {
-        ...data,
-        products: productsWithQuantities,
-      };
+      // // Include selected product information in the data payload
+      // const requestData = {
+      //   ...data,
+      //   products: productsWithQuantities,
+      // };
 
-      if (invoiceData) {
-        // Updating existing invoice
-        try {
-          const response = await axios.put(
-            UPDATE_INVOICE,
-            requestData
-          );
-          console.log('UPDATED invoice:', response);
-          router.replace('/finance/invoice', undefined, {
-            shallow: true,
-          });
-          setIsModalOpen(false);
-          toast.success('Successfully updated invoice');
-          refetchInvoices();
-        } catch (error) {
-          console.error('Error UPDATING invoice:', error);
-          toast.error(
-            'There was an issue updating the invoice! Please try again.'
-          );
-        }
-      } else {
-        // Creating a new invoice
-        try {
-          const response = await axios.post(
-            INVOICE_CREATE,
-            requestData
-          );
-          console.log('Successfully created invoice:', response);
-          toast.success('Successfully added invoice');
-          setIsModalOpen(false);
-          refetchInvoices();
-        } catch (error) {
-          console.error('Error creating invoice:', error);
-          toast.error(
-            'There was an issue adding the invoice! Please try again.'
-          );
-        }
-      }
+      // if (invoiceData) {
+      //   // Updating existing invoice
+      //   try {
+      //     const response = await axios.put(
+      //       UPDATE_INVOICE,
+      //       requestData
+      //     );
+      //     console.log('UPDATED invoice:', response);
+      //     router.replace('/finance/invoice', undefined, {
+      //       shallow: true,
+      //     });
+      //     setIsModalOpen(false);
+      //     toast.success('Successfully updated invoice');
+      //     refetchInvoices();
+      //   } catch (error) {
+      //     console.error('Error UPDATING invoice:', error);
+      //     toast.error(
+      //       'There was an issue updating the invoice! Please try again.'
+      //     );
+      //   }
+      // } else {
+      //   // Creating a new invoice
+      //   try {
+      //     const response = await axios.post(
+      //       INVOICE_CREATE,
+      //       requestData
+      //     );
+      //     console.log('Successfully created invoice:', response);
+      //     toast.success('Successfully added invoice');
+      //     setIsModalOpen(false);
+      //     refetchInvoices();
+      //   } catch (error) {
+      //     console.error('Error creating invoice:', error);
+      //     toast.error(
+      //       'There was an issue adding the invoice! Please try again.'
+      //     );
+      //   }
+      // }
 
-      setIsLoading(false);
+      // setIsLoading(false);
     },
-    [invoiceData, selectedProducts, refetchInvoices]
+    [invoiceData, selectedProducts, productLineItems]
   );
 
   const onError = (error: any) => {
@@ -830,7 +825,7 @@ const InvoiceForm = ({
               )}
             /> */}
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="productId"
               render={({ field }) => (
@@ -899,8 +894,32 @@ const InvoiceForm = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
+            <FormField
+              control={form.control}
+              name="productId"
+              render={({ field }) => (
+                <FormItem className="sm:col-span-2">
+                  <FormLabel>Select Products</FormLabel>
+                  <MultiSelect
+                    // onChange={() =>
+                    //   handleProductSelection(
+                    //     prod.productId
+                    //   )
+                    // }
+                    productLineItems={productLineItems}
+                    setProductLineItems={setProductLineItems}
+                    selected={field.value}
+                    options={products}
+                    {...field}
+                    className="sm:w-[510px]"
+                    form={form}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {selectedProducts && selectedProducts.length > 0 && (
@@ -938,7 +957,7 @@ const InvoiceForm = ({
             <Button
               className="w-max"
               type="submit"
-              disabled={!form.formState.isValid}
+              // disabled={!form.formState.isValid}
             >
               Submit
             </Button>

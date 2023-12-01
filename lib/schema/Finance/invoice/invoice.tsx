@@ -20,6 +20,25 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
+export const productLineEntity = z
+  .object({
+    // productLineItemId: z.string().optional(),
+    productId: z.string().optional(),
+    // invoiceId: z.string().optional(),
+    quantity: z.coerce.number({
+      invalid_type_error: 'Quantity is required',
+      required_error: 'Quantity is required',
+    }),
+    // price: z.coerce.number({
+    //   invalid_type_error: 'Price is required',
+    //   required_error: 'Price is required',
+    // }),
+  })
+  .array()
+  .optional();
+
+export type IproductLineEntity = z.infer<typeof productLineEntity>;
+
 export const invoiceSchema = z
   .object({
     invoiceNumber: z.string(),
@@ -56,8 +75,40 @@ export const invoiceSchema = z
       required_error: 'Payment Method is required',
     }),
     paymentMethodName: z.string().optional(),
-    productId: z.string().optional(),
+    productId: z.string().array(),
     // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
+    productLineEntity: z
+      .object({
+        // productLineItemId: z.string().optional(),
+        productId: z.string().optional(),
+        // invoiceId: z.string().optional(),
+        quantity: z.coerce.number({
+          invalid_type_error: 'Quantity is required',
+          required_error: 'Quantity is required',
+        }),
+        // price: z.coerce.number({
+        //   invalid_type_error: 'Price is required',
+        //   required_error: 'Price is required',
+        // }),
+      })
+      .array()
+      .optional(),
+    // productLineEntity: z
+    //   .object({
+    //     productLineItemId: z.string().optional(),
+    //     productId: z.string().optional(),
+    //     invoiceId: z.string().optional(),
+    //     quantity: z.coerce.number({
+    //       invalid_type_error: 'Quantity is required',
+    //       required_error: 'Quantity is required',
+    //     }),
+    //     price: z.coerce.number({
+    //       invalid_type_error: 'Price is required',
+    //       required_error: 'Price is required',
+    //     }),
+    //   })
+    //   .array()
+    //   .optional(),
   })
   .refine(
     (data) => {
@@ -237,7 +288,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
         {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
               Delete Invoice
             </div>
           </Modal.Trigger>
