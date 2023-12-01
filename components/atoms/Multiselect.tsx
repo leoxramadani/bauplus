@@ -143,12 +143,9 @@ function MultiSelect({
                       selected.includes(option.productName)
                     ) {
                       onChange(
-                        Array.isArray(selected) &&
-                          selected.includes(option.productName)
-                          ? selected.filter(
-                              (item) => item !== option.productName
-                            )
-                          : [...selected, option.productName]
+                        selected.filter(
+                          (item) => item !== option.productName
+                        )
                       );
 
                       console.log('INDSIDE IF');
