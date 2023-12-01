@@ -7,7 +7,7 @@ const nextConfig = {
         hostname: 'ui-avatars.com',
       },
     ],
-  },
+  },   
   reactStrictMode: true,
 };
 

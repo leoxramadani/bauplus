@@ -166,8 +166,15 @@ const Login = () => {
     <>
       <div className="flex h-full w-full flex-col md:flex-row">
         <div className="flex h-screen w-full flex-col">
-          <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
-            <Image src={mimiro} alt="logo" width={110} height={100} />
+          <Link
+            href="/"
+            className="flex w-fit flex-row gap-4 p-6 sm:p-8"
+          >
+            <Image src={mimiro} alt="logo" width={150} height={100} />
+            {/* <Square strokeWidth={10} size={40} />
+            <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
+              Mimiro
+            </h1> */}
           </Link>
           <div className="flex h-screen w-full flex-col items-center justify-center p-4 sm:p-0">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -179,7 +186,9 @@ const Login = () => {
               <AuthForm />
               <p>
                 Don&apos;t have an account?{' '}
-                <Link href={'/signup'} className='text-primary'>Sign up</Link>
+                <Link href={'/signup'} className="text-primary">
+                  Sign up
+                </Link>
               </p>
             </div>
           </div>

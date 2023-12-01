@@ -1,4 +1,4 @@
-import Topbar from '@/components/layout/Topbar';
+import FullCalendar from '@/components/atoms/FullCalendar';
 import { Button } from '@/components/ui/button';
 import { Check, Plus } from 'lucide-react';
 
@@ -16,6 +16,7 @@ const Holiday = () => {
           </Button>
         </div>
         {/* <DataTable data={data} columns={financeColumnDef} /> */}
+        <FullCalendar />
       </section>
     </>
   );

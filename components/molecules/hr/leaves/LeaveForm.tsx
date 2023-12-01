@@ -21,10 +21,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/components/ui/radio-group';
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -97,7 +93,14 @@ const LeaveForm = ({
         .get(GET_SPECIFIC_LEAVE + `?leaveId=${id}`)
         .then((res) => {
           console.log('setting leave data -->', res);
-          setLeave(res.data);
+          setLeave({
+            ...res.data,
+            date: {
+              dateFrom: new Date(res.data.dateFrom),
+              dateTo: new Date(res.data.dateTo),
+            },
+          });
+          // setLeave(res.data);
         })
         .catch((error) => {
           console.log('error fetching leave->', error);
@@ -123,6 +126,7 @@ const LeaveForm = ({
         await axios
           .put(UPDATE_LEAVE, {
             ...data,
+            ...data.date,
             companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
             filePath: '',
           })
@@ -140,8 +144,11 @@ const LeaveForm = ({
         await axios
           .post(CREATE_LEAVE, {
             ...data,
+            ...data.date,
             companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
             filePath: '',
+            // dateFrom: data.dateFrom,
+            // dateTo: data.dateTo,
           })
           .then(() => {
             toast.success('Successfully created leave');
@@ -244,87 +251,84 @@ const LeaveForm = ({
               )}
             />
 
-            {/* duration */}
-            <FormField
-              control={form.control}
-              name="duration"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col justify-start gap-6">
-                  <FormLabel>Select Duration</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                      className="flex flex-row gap-4"
-                      disabled={isSubmitting}
-                    >
-                      {duration.map((s) => (
-                        <FormItem
-                          key={s.value}
-                          className="flex flex-row items-center gap-2"
-                        >
-                          <FormControl>
-                            <RadioGroupItem value={s.value} />
-                          </FormControl>
-                          <FormLabel className="cursor-pointer font-normal">
-                            {s.label}
-                          </FormLabel>
-                        </FormItem>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Date */}
             <FormField
               control={form.control}
-              name="dateFrom"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+              name="date"
+              render={({ field }) => {
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <Button
+                          id="date"
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'w-full justify-start text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}
-                          disabled={isSubmitting}
                         >
-                          {field.value ? (
-                            format(new Date(field.value), 'PPP')
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value?.dateFrom ? (
+                            field.value?.dateTo ? (
+                              <>
+                                {format(
+                                  leaves
+                                    ? new Date(field.value.dateFrom)
+                                    : field.value.dateFrom,
+                                  'LLL dd, y'
+                                )}{' '}
+                                -{' '}
+                                {format(
+                                  leaves
+                                    ? new Date(field.value.dateTo)
+                                    : field.value.dateTo,
+                                  'LLL dd, y'
+                                )}
+                              </>
+                            ) : (
+                              format(
+                                leaves
+                                  ? new Date(field.value.dateFrom)
+                                  : field.value.dateFrom,
+                                'LLL dd, y'
+                              )
+                            )
                           ) : (
                             <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        //   disabled={(date) =>
-                        //     date < form.getValues('paidOn')
-                        //   }
-                        //   initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          initialFocus
+                          mode="range"
+                          selected={{
+                            from: field.value?.dateFrom,
+                            to: field.value?.dateTo,
+                          }}
+                          onSelect={(range) => {
+                            field.onChange({
+                              target: {
+                                name: 'date',
+                                value: {
+                                  dateFrom: range?.from,
+                                  dateTo: range?.to,
+                                },
+                              },
+                            });
+                          }}
+                          numberOfMonths={1}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                );
+              }}
             />
 
             {/* Employee */}

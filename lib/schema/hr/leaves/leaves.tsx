@@ -38,12 +38,12 @@ export enum leaveStatus {
   approved = 'Approved',
 }
 
-export enum duration {
-  full = 'Full day',
-  multiple = 'Multiple days',
-  fh = 'First Half',
-  sh = 'Second Half',
-}
+// export enum duration {
+//   full = 'Full day',
+//   multiple = 'Multiple days',
+//   fh = 'First Half',
+//   sh = 'Second Half',
+// }
 
 export const leaveTypes = z.object({
   leaveTypeId: z.string(),
@@ -62,7 +62,10 @@ export const leavesSchema = z.object({
   // reason: z.string(),
   // // file: z.instanceof(File)
   leaveId: z.string().optional(),
-  dateFrom: z.coerce.date(),
+  date: z.object({
+    dateFrom: z.coerce.date(),
+    dateTo: z.coerce.date().optional(),
+  }),
   employeeId: z.string({
     required_error: 'An employee is required to create a leave!',
   }),
@@ -74,7 +77,7 @@ export const leavesSchema = z.object({
     .optional(),
   leaveType: z.string(),
   leaveStatus: z.string(),
-  duration: z.string(),
+  // duration: z.string(),
   reason: z.string(),
   filePath: z.string().optional(),
   companyId: z.string().optional(),
@@ -85,6 +88,8 @@ export const leavesSchema = z.object({
     })
     .optional(),
   fileAttached: z.string().optional(),
+  dateFrom: z.coerce.date().optional(),
+  dateTo: z.coerce.date().optional(),
   // file: z
   // .any()
   // .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 20MB.`)
@@ -139,11 +144,23 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
   {
     accessorKey: 'dateFrom',
     header: 'Date from',
+    cell({ row }) {
+      const formattedDate = new Date(
+        row.getValue('dateFrom')
+      ).toLocaleDateString('en-US');
+      return <div>{formattedDate}</div>;
+    },
   },
-  // {
-  //   accessorKey: 'employeeId',
-  //   header: 'Employee ID',
-  // },
+  {
+    accessorKey: 'dateTo',
+    header: 'Date to',
+    cell({ row }) {
+      const formattedDate = new Date(
+        row.getValue('dateTo')
+      ).toLocaleDateString('en-US');
+      return <div>{formattedDate}</div>;
+    },
+  },
   {
     accessorKey: 'leaveType',
     header: 'Leave Type',
@@ -165,10 +182,6 @@ export const leavesColumnDef: ColumnDef<ILeaves>[] = [
         {row.original.leaveStatus}
       </Badge>
     ),
-  },
-  {
-    accessorKey: 'duration',
-    header: 'Duration',
   },
   {
     accessorKey: 'reason',

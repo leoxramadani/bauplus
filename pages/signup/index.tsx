@@ -4,11 +4,7 @@ import { REGISTER } from '@/lib/constants/endpoints';
 import { ISignUp, registerSchema } from '@/lib/schemas/auth';
 import { cn } from '@/lib/utils';
 import dashboard from '@/public/Dashboard.png';
-import azure from '@/public/azure.png';
-import binance from '@/public/binance.png';
-import google from '@/public/google.png';
 import mimiro from '@/public/mimiro-black.svg';
-import stripe from '@/public/stripe.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -221,9 +217,28 @@ const Signup = () => {
   return (
     <>
       <div className="flex h-full w-full flex-col md:flex-row">
+        <div className="flex h-screen w-full flex-col bg-[#1A202E]">
+          <Link
+            href="/"
+            className="flex w-fit flex-row gap-4 p-6 sm:p-8"
+          >
+            <Image src={mimiro} alt="logo" width={150} height={100} />
+          </Link>
+          <div className="flex items-center justify-center px-20 py-20">
+            <Image
+              src={dashboard}
+              alt="dashboard"
+              width={1200}
+              height={1200}
+            />
+          </div>
+        </div>
         <div className="flex h-screen w-full flex-col">
-          <Link href="/" className="flex flex-row gap-4 p-6 sm:p-8">
-            <Image src={mimiro} alt="logo" width={110} height={100} />
+          <Link
+            href="/"
+            className="flex w-fit flex-row gap-4 p-6 sm:p-8"
+          >
+            <Image src={mimiro} alt="logo" width={150} height={100} />
             {/* <Square strokeWidth={10} size={40} />
               <h1 className="flex h-full items-center pb-1 text-3xl font-bold">
                 Mimiro
@@ -260,43 +275,6 @@ const Signup = () => {
                 </Link>
                 .
               </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex w-full flex-col justify-center gap-10 bg-[#1A202E] py-0 text-white sm:h-screen sm:py-8">
-          <div className="flex flex-col gap-10 p-6 sm:p-20">
-            {/* <div className="flex flex-col gap-1">
-              <h1 className="text-4xl font-semibold">
-                Simplify workforce management
-              </h1>
-            </div> */}
-            <div className="">
-              <Image
-                src={dashboard}
-                alt="dashboard"
-                width={1200}
-                height={1200}
-              />
-            </div>
-            <div className="flex flex-row items-center justify-center gap-4 pt-0 sm:gap-10 sm:pt-6">
-              <div className="w-[500px] sm:w-[100px]">
-                <Image src={google} alt="google" />
-              </div>
-              <div className="w-[500px] sm:w-[100px]">
-                <Image src={stripe} alt="stripe" />
-              </div>
-              <div className="w-[300px] sm:w-[50px]">
-                <Image src={binance} alt="binance" />
-              </div>
-              <div className="w-[500px] sm:w-[100px]">
-                <Image src={azure} alt="google" />
-              </div>
-              <div className="w-[500px] sm:w-[100px]">
-                <Image src={stripe} alt="stripe" />
-              </div>
-              <div className="w-[300px] sm:w-[50px]">
-                <Image src={binance} alt="binance" />
-              </div>
             </div>
           </div>
         </div>
