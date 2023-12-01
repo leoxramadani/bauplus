@@ -105,6 +105,16 @@ const InvoiceForm = ({
     ['products'],
     GET_ALL_PRODUCTS_WOPAGINATION
   );
+  const {
+    data: invoiceTypes,
+    isError: invoiceTypesIsError,
+    isLoading: invoiceTypesIsLoading,
+  } = useData<any>(['invoiceTypes'], GET_ALL_INVOICE_TYPES);
+  const {
+    data: invoiceNostro,
+    isError: invoiceNostroIsError,
+    isLoading: invoiceNostroIsLoading,
+  } = useData<any>(['invoiceNostro'], GET_ALL_INVOICES_IN_OUT_TYPES);
 
   useEffect(() => {
     async function getData(Id: string) {
@@ -169,14 +179,11 @@ const InvoiceForm = ({
     async (data: IInvoice) => {
       console.log('data', data);
       setIsLoading(true);
-  
+
       if (invoiceData) {
         // Updating existing invoice
         try {
-          const response = await axios.put(
-            UPDATE_INVOICE,
-            data
-          );
+          const response = await axios.put(UPDATE_INVOICE, data);
           console.log('UPDATED invoice:', response);
           router.replace('/finance/invoice', undefined, {
             shallow: true,
@@ -193,10 +200,7 @@ const InvoiceForm = ({
       } else {
         // Creating a new invoice
         try {
-          const response = await axios.post(
-            INVOICE_CREATE,
-            data
-          );
+          const response = await axios.post(INVOICE_CREATE, data);
           console.log('Successfully created invoice:', response);
           toast.success('Successfully added invoice');
           setIsModalOpen(false);
@@ -217,42 +221,6 @@ const InvoiceForm = ({
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
-
-  const [invoiceTypes, setInvoiceTypes] = useState<any[]>([]);
-  const [invoiceNostro, setInvoiceNostro] = useState<any[]>([]);
-  useEffect(() => {
-    const getInvoiceTypes = () => {
-      axios
-        .get(GET_ALL_INVOICE_TYPES)
-        .then((res) => {
-          setInvoiceTypes(res.data);
-        })
-        .catch((error) => {
-          console.log(
-            'error while fetching the invoice types=',
-            error
-          );
-        });
-    };
-    getInvoiceTypes();
-  }, [invoiceTypes]);
-
-  useEffect(() => {
-    const getInvoiceNostro = () => {
-      axios
-        .get(GET_ALL_INVOICES_IN_OUT_TYPES)
-        .then((res) => {
-          setInvoiceNostro(res.data);
-        })
-        .catch((error) => {
-          console.log(
-            'error while fetching the invoice types=',
-            error
-          );
-        });
-    };
-    getInvoiceNostro();
-  }, [invoiceNostro]);
 
   const handleQuantityChange = (
     productId: string | undefined,
@@ -376,7 +344,7 @@ const InvoiceForm = ({
                     </FormControl>
                     <SelectContent>
                       {invoiceTypes &&
-                        invoiceTypes.map((invoice) => (
+                        invoiceTypes.map((invoice: any) => (
                           <SelectItem
                             value={invoice.invoiceTypeId}
                             key={invoice.invoiceTypeId}
@@ -409,7 +377,7 @@ const InvoiceForm = ({
                     </FormControl>
                     <SelectContent>
                       {invoiceNostro &&
-                        invoiceNostro.map((invoice) => (
+                        invoiceNostro.map((invoice: any) => (
                           <SelectItem
                             value={invoice.invoiceInOutTypeId}
                             key={invoice.invoiceInOutTypeId}
