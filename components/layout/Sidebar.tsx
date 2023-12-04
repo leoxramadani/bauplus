@@ -465,15 +465,11 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
   return (
     <>
       {Icon && (
-        <Icon
-          size={20}
-          strokeWidth={1.5}
-          className="absolute left-2"
-        />
+        <Icon size={17} strokeWidth={2} className="absolute left-2" />
       )}
       <span
-        className={`w-full text-left transition-[opacity,transform] ${
-          Icon && 'ml-7'
+        className={`flex w-full items-center text-left text-sm transition-[opacity,transform] ${
+          Icon && 'ml-5'
         } group-hover/trigger ${
           Icon && !expanded && 'pointer-events-none opacity-0'
         }`}
@@ -527,7 +523,7 @@ function SidebarItem({
 
   return (
     <NavigationMenuItem
-      className={`focus relative w-full focus:outline-none`}
+      className={`focus relative flex h-[27px] w-full  text-sm focus:outline-none `}
       key={text}
       value={text}
     >
@@ -553,7 +549,7 @@ function SidebarItem({
               aria-hidden="true"
             />
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-4">
+          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-2">
             {children}
           </NavigationMenuContent>
         </>

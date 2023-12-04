@@ -15,19 +15,13 @@ import {
 import { createBankAccountSchema } from '@/lib/schema/Finance/finance';
 import { IProject } from '@/lib/schema/projects/projects';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Bell, ChevronDown, Plus, Settings } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
+import { Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import UserNav from '../atoms/User';
 import { Button } from '../ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../ui/popover';
-import { Separator } from '../ui/separator';
 
 const projectName = [
   { projectId: '1', projectName: 'All Projects' },
@@ -62,7 +56,7 @@ const Topbar: React.FC<TopbarProps> = ({
 
   return (
     <>
-      <div className="z-50 flex w-full items-center justify-end py-2 self-end">
+      <div className="z-50 flex w-full items-center justify-end self-end py-2">
         {showForm && (
           <div className="flex flex-grow items-center gap-4">
             <Form {...form}>
@@ -117,77 +111,10 @@ const Topbar: React.FC<TopbarProps> = ({
             </Form>
           </div>
         )}
-        <div className="flex flex-none justify-end items-center gap-10">
+        <div className="flex flex-none items-center justify-end gap-10">
           {!isWindowSmall && status === 'authenticated' ? (
             <>
-              <div className="flex items-center">
-                <Bell size={22} color="#374957" />
-              </div>
-              <Popover
-                open={userPopoverOpen}
-                onOpenChange={setUserPopover}
-              >
-                <PopoverTrigger asChild>
-                  <div className="flex h-full w-full cursor-pointer items-center gap-2 transition-all">
-                    <Image
-                      src={`https://ui-avatars.com/api/?name=${
-                        session.user.firstName.charAt(0) +
-                        session.user.lastName.charAt(0)
-                      }&background=c7d2fe&color=3730a3&bold=true`}
-                      alt=""
-                      width={100}
-                      height={100}
-                      className="mx-auto h-10 w-10 rounded-md"
-                    />
-                    {/* <ChevronDown size={18} /> */}
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent asChild side="top" className='z-50'>
-                  <div className="relative w-full rounded-xl border min-w-[200px] px-0 py-2 text-sm leading-loose">
-                    <div
-                      className={`
-                  flex items-center transition-all ${
-                    expanded ? 'ml-3 w-full' : ''
-                  }
-                `}
-                    >
-                      <div className="px-4 pt-2">
-                        <h1 className="text-base font-semibold">
-                          {session.user.firstName}{' '}
-                          {session.user.lastName}
-                        </h1>
-                      </div>
-                    </div>
-                    <span className="px-4">
-                      {session?.user.email}
-                    </span>
-                    <Separator className="mx-auto my-2 w-[calc(100%-32px)]" />
-                    <ul className="my-2 flex flex-col">
-                      <li>
-                        <Link
-                          href={'/settings'}
-                          onClick={() => setUserPopover(false)}
-                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-100"
-                        >
-                          Settings
-                          <Settings size={18} />
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => {
-                            setUserPopover(!userPopoverOpen);
-                            signOut();
-                          }}
-                          className="flex w-full items-center justify-between px-4 py-1 transition-[color] hover:bg-slate-100 focus:outline-none"
-                        >
-                          Log out
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <UserNav data={session.user} />
             </>
           ) : (
             <div className="flex h-full w-full items-center">
