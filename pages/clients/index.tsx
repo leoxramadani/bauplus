@@ -7,6 +7,7 @@ import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoad
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IClients,
   clientSubColumnDef,
@@ -14,11 +15,10 @@ import {
 } from '@/lib/schema/Clients/clients';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Clients = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { open, setOpen } = useModal();
   const {
     data,
     metadata,
@@ -27,26 +27,12 @@ const Clients = () => {
     error,
     refetch: refetchClients,
   } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
-  useEffect(() => {
-    if (router.query.id) {
-      setIsOpen(true);
-    }
-    // console.log('router==', router);
-  }, [router.query.id, router]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      router.replace('/clients', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isOpen]);
 
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal open={isOpen} onOpenChange={setIsOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
                 variant="default"
@@ -60,7 +46,7 @@ const Clients = () => {
               description="Fill all the fields to add a new client"
             >
               <ClientsForm
-                setModal={setIsOpen}
+                setModal={setOpen}
                 clientId={
                   router.isReady ? router.query.id?.toString() : ''
                 }

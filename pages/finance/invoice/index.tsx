@@ -6,16 +6,17 @@ import { DataTableLoading } from '@/components/molecules/table/DataTableLoading'
 import { Button } from '@/components/ui/button';
 import { INVOICE_GET_ALL } from '@/lib/constants/endpoints/finance/invoice';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IInvoice,
   invoiceColumnDef,
 } from '@/lib/schema/Finance/invoice/invoice';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const Invoice = () => {
   const router = useRouter();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { open, setOpen } = useModal();
   const [isRegisterModalOpen, setIsRegisterModalOpen] =
     useState(false);
   const {
@@ -26,27 +27,6 @@ const Invoice = () => {
     refetch: refetchInvoices,
   } = useData<IInvoice[]>(['invoices'], INVOICE_GET_ALL);
 
-  useEffect(() => {
-    if (router.query.id) {
-      setIsCreateModalOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-
-  const removeIdFromQuery = () => {
-    const { id, ...queryWithoutId } = router.query;
-    router.replace(
-      { pathname: router.pathname, query: queryWithoutId },
-      undefined,
-      { shallow: true }
-    );
-  };
-
-  useEffect(() => {
-    if (!isCreateModalOpen) {
-      removeIdFromQuery();
-    }
-  }, [isCreateModalOpen]);
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 sm:flex-row">
@@ -83,10 +63,7 @@ const Invoice = () => {
           </Button>
         </Link> */}
 
-        <Modal
-          open={isCreateModalOpen}
-          onOpenChange={setIsCreateModalOpen}
-        >
+        <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
             <Button
               variant="outline"
@@ -100,7 +77,7 @@ const Invoice = () => {
             description="Fill all the fields to create an invoice"
           >
             <InvoiceForm
-              setIsModalOpen={setIsCreateModalOpen}
+              setIsModalOpen={setOpen}
               invoiceId={
                 router.isReady ? router.query.id?.toString() : ''
               }

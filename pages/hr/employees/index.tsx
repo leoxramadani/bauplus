@@ -5,6 +5,7 @@ import EmployeesForm from '@/components/molecules/hr/employees/EmployeesForm';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_EMPLOYEES } from '@/lib/constants/endpoints/employee';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   employeeColumnDef,
   IEmployee,
@@ -12,12 +13,11 @@ import {
 
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Employees = () => {
   const router = useRouter();
+  const { open, setOpen } = useModal();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data,
     metadata,
@@ -26,33 +26,11 @@ const Employees = () => {
     refetch: refetchEmployees,
   } = useData<IEmployee[]>(['employees'], GET_ALL_EMPLOYEES);
 
-  useEffect(() => {
-    if (router.query.id) {
-      setIsModalOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-
-  const removeIdFromQuery = () => {
-    const { id, ...queryWithoutId } = router.query;
-    router.replace(
-      { pathname: router.pathname, query: queryWithoutId },
-      undefined,
-      { shallow: true }
-    );
-  };
-
-  useEffect(() => {
-    if (!isModalOpen) {
-      removeIdFromQuery();
-    }
-  }, [isModalOpen]);
-
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
                 <Plus size={20} /> <span>Add employee</span>
@@ -63,7 +41,7 @@ const Employees = () => {
               description="Fill all the fields to add employee"
             >
               <EmployeesForm
-                setIsModalOpen={setIsModalOpen}
+                setIsModalOpen={setOpen}
                 employeeId={
                   router.isReady ? router.query.id?.toString() : ''
                 }

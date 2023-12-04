@@ -4,17 +4,17 @@ import LeaveForm from '@/components/molecules/hr/leaves/LeaveForm';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_LEAVES } from '@/lib/constants/endpoints/hr/leaves';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   ILeaves,
   leavesColumnDef,
 } from '@/lib/schema/hr/leaves/leaves';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Leaves = () => {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { open, setOpen } = useModal();
 
   const {
     data,
@@ -24,25 +24,11 @@ const Leaves = () => {
     refetch: refetchLeaves,
   } = useData<ILeaves[]>(['leaves'], GET_ALL_LEAVES);
 
-  useEffect(() => {
-    if (router.query.id) {
-      setIsModalOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-  useEffect(() => {
-    if (!isModalOpen) {
-      router.replace('/hr/leaves', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isModalOpen]);
-
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
                 <Plus size={20} /> <span>New Leave</span>
@@ -53,7 +39,7 @@ const Leaves = () => {
               description="Assign Leave"
             >
               <LeaveForm
-                setIsModalOpen={setIsModalOpen}
+                setIsModalOpen={setOpen}
                 leaveId={
                   router.isReady ? router.query.id?.toString() : ''
                 }

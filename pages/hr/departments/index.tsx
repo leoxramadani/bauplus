@@ -4,17 +4,17 @@ import DepartmentsForm from '@/components/molecules/hr/departments/DepartmentsFo
 import { Button } from '@/components/ui/button';
 import { GET_ALL_DEPARTMENTS } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IDepartment,
   departmentColumnDef,
 } from '@/lib/schema/hr/departments/departments';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Departments = () => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useModal();
   const {
     data,
     metadata,
@@ -22,29 +22,6 @@ const Departments = () => {
     isLoading,
     refetch: refetchDepartments,
   } = useData<IDepartment[]>(['departments'], GET_ALL_DEPARTMENTS);
-  console.log('All departments:', data);
-
-  useEffect(() => {
-    if (router.query.id) {
-      setOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-
-  const removeIdFromQuery = () => {
-    const { id, ...queryWithoutId } = router.query;
-    router.replace(
-      { pathname: router.pathname, query: queryWithoutId },
-      undefined,
-      { shallow: true }
-    );
-  };
-
-  useEffect(() => {
-    if (!open) {
-      removeIdFromQuery();
-    }
-  }, [open]);
 
   return (
     <>

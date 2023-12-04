@@ -6,37 +6,15 @@ import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm'
 import { Button } from '@/components/ui/button';
 import { GET_ALL_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import { IAttendance } from '@/lib/schema/hr/attendance/attendance';
 import { attendanceColumnDef } from '@/lib/schema/hr/attendance/attendanceTable';
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Attendance = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (router.query.id) {
-      setIsModalOpen(true);
-    }
-  }, [router.query.id]);
-
-  const removeIdFromQuery = () => {
-    const { id, ...queryWithoutId } = router.query;
-    router.push(
-      { pathname: router.pathname, query: queryWithoutId },
-      undefined,
-      { shallow: true }
-    );
-  };
-
-  useEffect(() => {
-    if (!isModalOpen) {
-      removeIdFromQuery();
-    }
-  }, [isModalOpen]);
-
+  const { open, setOpen } = useModal();
   const {
     data,
     isLoading,
@@ -50,7 +28,7 @@ const Attendance = () => {
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
                 <Plus size={20} /> <span>New Attendance</span>
@@ -61,7 +39,7 @@ const Attendance = () => {
               description="Fill all the fields to register an attendance"
             >
               <AttendanceForm
-                setIsModalOpen={setIsModalOpen}
+                setIsModalOpen={setOpen}
                 attendanceId={
                   router.isReady ? router.query.id?.toString() : ''
                 }

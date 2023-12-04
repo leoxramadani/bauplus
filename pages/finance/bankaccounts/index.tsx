@@ -5,17 +5,17 @@ import { DataTableLoading } from '@/components/molecules/table/DataTableLoading'
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IBank,
   bankAccountColumnDef,
 } from '@/lib/schema/Finance/bankaccounts';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const BankAccounts = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { open, setOpen } = useModal();
   const {
     data,
     isError,
@@ -24,25 +24,11 @@ const BankAccounts = () => {
     refetch: bankRefetch,
   } = useData<IBank[]>(['bank_accounts'], GET_ALL_BANKACCOUNTS);
 
-  useEffect(() => {
-    if (router.query.id) {
-      setIsOpen(true);
-    }
-  }, [router.query.id]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      router.replace('/finance/bankaccounts', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isOpen]);
-
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal open={isOpen} onOpenChange={setIsOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
                 variant="default"
@@ -59,7 +45,7 @@ const BankAccounts = () => {
                 bankAccountId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
-                setModal={setIsOpen}
+                setModal={setOpen}
                 bankRefetch={bankRefetch}
               />
             </Modal.Content>
@@ -74,7 +60,11 @@ const BankAccounts = () => {
         {data && (
           <DataTable data={data} columns={bankAccountColumnDef} />
         )}
-        {isLoading && <DataTableLoading columnCount={bankAccountColumnDef.length} />}
+        {isLoading && (
+          <DataTableLoading
+            columnCount={bankAccountColumnDef.length}
+          />
+        )}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}
