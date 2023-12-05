@@ -83,7 +83,7 @@ export const invoiceSchema = z
           invalid_type_error: 'Quantity is required',
           required_error: 'Quantity is required',
         }),
-        // productName:z.string(),
+        productName:z.string(),
       })
       .array()
       .optional(),

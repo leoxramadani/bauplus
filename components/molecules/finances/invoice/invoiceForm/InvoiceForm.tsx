@@ -890,10 +890,14 @@ const InvoiceForm = ({
             />
           </div>
 
-          {selectedProducts && selectedProducts.length > 0 && (
-            <FormField
-              name="selectedProducts"
-              render={({ field }) => (
+          {/* {selectedProducts && selectedProducts.length > 0 && ( */}
+          <FormField
+            control={form.control}
+            name="productLineEntity"
+            render={({ field }) => {
+              // console.log('aaa', field.value![0].productId);
+
+              return (
                 <FormItem className="w-full">
                   <FormLabel>Selected Products</FormLabel>
                   <Table>
@@ -904,22 +908,20 @@ const InvoiceForm = ({
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {selectedProducts.map((selectedProd, i) => (
-                        <TableRow key={i}>
-                          <TableCell>
-                            {selectedProd.productName}
-                          </TableCell>
-                          <TableCell>
-                            {selectedProd.quantity}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {field.value &&
+                        field.value.map((item, i) => (
+                          <TableRow key={i}>
+                            <TableCell>{item.productName}</TableCell>
+                            <TableCell>{item.quantity}</TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </FormItem>
-              )}
-            />
-          )}
+              );
+            }}
+          />
+          {/* )} */}
 
           <div className="flex flex-row gap-2">
             <Button
