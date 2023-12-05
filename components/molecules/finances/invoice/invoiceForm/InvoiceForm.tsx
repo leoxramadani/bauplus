@@ -183,7 +183,17 @@ const InvoiceForm = ({
       if (invoiceData) {
         // Updating existing invoice
         try {
-          const response = await axios.put(UPDATE_INVOICE, data);
+          const response = await axios.put(UPDATE_INVOICE, {
+            ...data,
+            invoiceDate: format(
+              data.invoiceDate,
+              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            ),
+            dueDate: format(
+              data.dueDate,
+              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            ),
+          });
           console.log('UPDATED invoice:', response);
           router.replace('/finance/invoice', undefined, {
             shallow: true,
@@ -200,7 +210,17 @@ const InvoiceForm = ({
       } else {
         // Creating a new invoice
         try {
-          const response = await axios.post(INVOICE_CREATE, data);
+          const response = await axios.post(INVOICE_CREATE, {
+            ...data,
+            invoiceDate: format(
+              data.invoiceDate,
+              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            ),
+            dueDate: format(
+              data.dueDate,
+              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            ),
+          });
           console.log('Successfully created invoice:', response);
           toast.success('Successfully added invoice');
           setIsModalOpen(false);
