@@ -78,7 +78,6 @@ const InvoiceForm = ({
 }: IInvoiceForm) => {
   const router = useRouter();
   const [invoiceData, setInvoiceData] = useState<any>();
-  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpenProducts, setIsModalOpenProducts] =
