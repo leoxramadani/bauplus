@@ -80,14 +80,14 @@ const InvoiceForm = ({
   const [invoiceData, setInvoiceData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isModalOpenProducts, setIsModalOpenProducts] =
-    useState(false);
+  // const [isModalOpenProducts, setIsModalOpenProducts] =
+  //   useState(false);
   const [selectedProducts, setSelectedProducts] = useState<
     IProduct[]
   >(invoiceData?.products || []);
   const [productsModal, setProductsModal] = useState<boolean>(false);
-  const [isProductsUpdate, setIsProductsUpdate] =
-    useState<boolean>(false);
+  // const [isProductsUpdate, setIsProductsUpdate] =
+  //   useState<boolean>(false);
 
   const {
     data: clients,
@@ -134,15 +134,15 @@ const InvoiceForm = ({
     }
   }, [invoiceId]);
 
-  useEffect(() => {
-    {
-      console.log(
-        selectedProducts.map((selprod, i) => (
-          <p key={i}>{selprod.productName}</p>
-        ))
-      );
-    }
-  }, [selectedProducts]);
+  // useEffect(() => {
+  //   {
+  //     console.log(
+  //       selectedProducts.map((selprod, i) => (
+  //         <p key={i}>{selprod.productName}</p>
+  //       ))
+  //     );
+  //   }
+  // }, [selectedProducts]);
 
   const form = useForm<IInvoice>({
     resolver: zodResolver(invoiceSchema),
@@ -150,29 +150,29 @@ const InvoiceForm = ({
     mode: 'onChange',
   });
 
-  const handleProductSelection = (productId: string | undefined) => {
-    const id = productId ?? '';
+  // const handleProductSelection = (productId: string | undefined) => {
+  //   const id = productId ?? '';
 
-    const isSelected = selectedProducts.some(
-      (product) => product.productId === id
-    );
+  //   const isSelected = selectedProducts.some(
+  //     (product) => product.productId === id
+  //   );
 
-    if (isSelected) {
-      setSelectedProducts((prevSelected) =>
-        prevSelected.filter((product) => product.productId !== id)
-      );
-    } else {
-      const selectedProduct = products?.find(
-        (product) => product.productId === id
-      );
-      if (selectedProduct) {
-        setSelectedProducts((prevSelected) => [
-          ...prevSelected,
-          { ...selectedProduct, quantity: 1 },
-        ]);
-      }
-    }
-  };
+  //   if (isSelected) {
+  //     setSelectedProducts((prevSelected) =>
+  //       prevSelected.filter((product) => product.productId !== id)
+  //     );
+  //   } else {
+  //     const selectedProduct = products?.find(
+  //       (product) => product.productId === id
+  //     );
+  //     if (selectedProduct) {
+  //       setSelectedProducts((prevSelected) => [
+  //         ...prevSelected,
+  //         { ...selectedProduct, quantity: 1 },
+  //       ]);
+  //     }
+  //   }
+  // };
 
   const onSubmit = useCallback(
     async (data: IInvoice) => {
@@ -184,14 +184,14 @@ const InvoiceForm = ({
         try {
           const response = await axios.put(UPDATE_INVOICE, {
             ...data,
-            invoiceDate: format(
-              data.invoiceDate,
-              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-            ),
-            dueDate: format(
-              data.dueDate,
-              "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-            ),
+            // invoiceDate: format(
+            //   data.invoiceDate,
+            //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            // ),
+            // dueDate: format(
+            //   data.dueDate,
+            //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+            // ),
           });
           console.log('UPDATED invoice:', response);
           router.replace('/finance/invoice', undefined, {
@@ -234,57 +234,57 @@ const InvoiceForm = ({
 
       setIsLoading(false);
     },
-    [invoiceData, selectedProducts]
+    [invoiceData]
   );
 
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
   };
 
-  const handleQuantityChange = (
-    productId: string | undefined,
-    quantity: number
-  ) => {
-    const maxQuantityLeft =
-      products?.find((product) => product.productId === productId)
-        ?.quantity || 0;
+  // const handleQuantityChange = (
+  //   productId: string | undefined,
+  //   quantity: number
+  // ) => {
+  //   const maxQuantityLeft =
+  //     products?.find((product) => product.productId === productId)
+  //       ?.quantity || 0;
 
-    const adjustedQuantity =
-      quantity === 0 ? 1 : Math.min(quantity, maxQuantityLeft);
+  //   const adjustedQuantity =
+  //     quantity === 0 ? 1 : Math.min(quantity, maxQuantityLeft);
 
-    if (!isNaN(adjustedQuantity) && adjustedQuantity > 0) {
-      setSelectedProducts((prevSelected) =>
-        prevSelected.map((product) =>
-          product.productId === productId
-            ? { ...product, quantity: adjustedQuantity }
-            : product
-        )
-      );
-    }
+  //   if (!isNaN(adjustedQuantity) && adjustedQuantity > 0) {
+  //     setSelectedProducts((prevSelected) =>
+  //       prevSelected.map((product) =>
+  //         product.productId === productId
+  //           ? { ...product, quantity: adjustedQuantity }
+  //           : product
+  //       )
+  //     );
+  //   }
 
-    if (quantity > 0) {
-      setSelectedProducts((prevSelected) => {
-        const isSelected = prevSelected.some(
-          (product) => product.productId === productId
-        );
+  //   if (quantity > 0) {
+  //     setSelectedProducts((prevSelected) => {
+  //       const isSelected = prevSelected.some(
+  //         (product) => product.productId === productId
+  //       );
 
-        if (!isSelected) {
-          const selectedProduct = products?.find(
-            (product) => product.productId === productId
-          );
+  //       if (!isSelected) {
+  //         const selectedProduct = products?.find(
+  //           (product) => product.productId === productId
+  //         );
 
-          if (selectedProduct) {
-            return [
-              ...prevSelected,
-              { ...selectedProduct, quantity: quantity },
-            ];
-          }
-        }
+  //         if (selectedProduct) {
+  //           return [
+  //             ...prevSelected,
+  //             { ...selectedProduct, quantity: quantity },
+  //           ];
+  //         }
+  //       }
 
-        return prevSelected;
-      });
-    }
-  };
+  //       return prevSelected;
+  //     });
+  //   }
+  // };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4">
