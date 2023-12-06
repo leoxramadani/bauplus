@@ -434,12 +434,7 @@ const InvoiceForm = ({
                             ? clients?.find(
                                 (client) =>
                                   client.clientId === field.value
-                              )?.firstName +
-                              ' ' +
-                              clients?.find(
-                                (client) =>
-                                  client.clientId === field.value
-                              )?.lastName
+                              )?.companyName
                             : 'Choose client'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -452,11 +447,7 @@ const InvoiceForm = ({
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {clients?.map((client, i: Key) => (
                             <CommandItem
-                              value={
-                                client.firstName +
-                                ' ' +
-                                client.lastName
-                              }
+                              value={client.companyName}
                               className="flex items-center"
                               key={i}
                               onSelect={() => {
@@ -475,7 +466,7 @@ const InvoiceForm = ({
                                     : 'opacity-0'
                                 )}
                               />
-                              {`${client.firstName} ${client.lastName}`}
+                              {`${client.companyName}`}
                             </CommandItem>
                           ))}
                         </CommandGroup>
