@@ -1,6 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
   Form,
   FormControl,
   FormField,
@@ -36,19 +43,19 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 const EmployeesForm = ({
   setIsModalOpen,
   employeeId,
-  refetchEmployees
+  refetchEmployees,
 }: {
   setIsModalOpen: any;
   employeeId?: string;
-  refetchEmployees:any
+  refetchEmployees: any;
 }) => {
   const router = useRouter();
   const [employeeData, setEmployeeData] = useState<any>();
@@ -108,14 +115,13 @@ const EmployeesForm = ({
         await axios
           .put(UPDATE_EMPLOYEES, {
             ...data,
-            // employeeId: employeeData.employeeId,
-            // dateOfBirth: new Date(data.dateOfBirth).toISOString(),
           })
           .then((res) => {
             console.log('UPDATED employee->', res);
             router.replace('/hr/employees', undefined, {
               shallow: true,
             });
+
             setIsModalOpen(false);
             toast.success('Successfully updated employee');
             refetchEmployees();
@@ -152,6 +158,13 @@ const EmployeesForm = ({
     console.log('Please check your input fields! ', error);
   };
 
+  const companies = [
+    {
+      label: 'Thor Industries',
+      companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+    },
+  ];
+
   return (
     <div className="flex w-full flex-col gap-4">
       <Form {...form}>
@@ -172,6 +185,8 @@ const EmployeesForm = ({
                       placeholder="First Name"
                       {...field}
                       disabled={isLoading}
+                      // pattern={'/^[A-Za-z]+$/'}
+                      // title="Please only use letters for the first name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -190,6 +205,8 @@ const EmployeesForm = ({
                       placeholder="Last Name"
                       {...field}
                       disabled={isLoading}
+                      // pattern={'/^[A-Za-z]+$/'}
+                      // title="Please only use letters for the last name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -204,15 +221,64 @@ const EmployeesForm = ({
               control={form.control}
               name="companyId"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Id</FormLabel>
-                  <FormControl className="relative">
-                    <Input
-                      placeholder="Company Id"
-                      {...field}
-                      disabled={isLoading}
-                    />
-                  </FormControl>
+                <FormItem className="flex w-full flex-col">
+                  <FormLabel>Company</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'flex w-full items-center justify-between gap-1',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                          disabled={isLoading}
+                        >
+                          {field.value
+                            ? companies?.find(
+                                (company) =>
+                                  company.companyId === field.value
+                              )?.label
+                            : 'Choose company'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search for a company..." />
+                        <CommandEmpty>No member found.</CommandEmpty>
+                        <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
+                          {companies?.map((comp, i: Key) => (
+                            <CommandItem
+                              value={comp.label}
+                              className="flex items-center"
+                              key={i}
+                              onSelect={() => {
+                                comp.companyId &&
+                                  form.setValue(
+                                    'companyId',
+                                    comp?.companyId
+                                  );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4 transition-all',
+                                  comp.companyId === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {`${comp.label}`}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -320,6 +386,9 @@ const EmployeesForm = ({
                           date > new Date() ||
                           date < new Date('1900-01-01')
                         }
+                        captionLayout="dropdown-buttons"
+                        fromYear={1900}
+                        toYear={new Date().getFullYear()}
                         initialFocus
                       />
                     </PopoverContent>
@@ -334,9 +403,10 @@ const EmployeesForm = ({
           </div>
           <Button
             className="flex w-max flex-none items-center justify-center"
-            // variant="outline"
+            variant="default"
             loading={isLoading}
             type="submit"
+            disabled={isLoading}
           >
             Submit
           </Button>

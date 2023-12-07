@@ -26,7 +26,6 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
           className="flex w-24 gap-2 p-2"
         >
           <div className="flex items-center">

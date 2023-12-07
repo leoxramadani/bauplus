@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import Breadcrumbs from '../ui/breadcrumbs';
+import Loading from './Loading';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
@@ -9,6 +10,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
+
+  //this is temporary to test the loading screen
+  const [status, setStatus] = useState<string>('');
   //to open or not the sidebar
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -35,15 +39,16 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
   };
+  if (status === 'loading') return <Loading />;
+  if (router.asPath === '/login' || router.asPath === '/signup') return children;
 
-  if (router.asPath === '/login') return children;
   return (
     <>
       <Head>
-        <title>Arkiva</title>
+        <title>Mimiro</title>
       </Head>
       <div
-        className={`scroll flex min-h-screen w-full flex-col`}
+        className={`scroll flex min-h-screen w-full flex-col bg-[#F5F7FA]`}
         onClick={() => (isOpen ? setIsOpen(false) : null)}
       >
         {isWindowSmall ? (
@@ -76,10 +81,10 @@ const Layout = ({ children }: PropsWithChildren) => {
           </div>
         )}
         <main
-          className={`duration-[250ms] p-4 transition-all ${
+          className={`duration-[250ms] p-2 pr-6 transition-all ${
             !isWindowSmall &&
             (expanded
-              ? `duration-[250ms] ml-[15rem] transition-all`
+              ? `duration-[250ms] ml-[16rem] transition-all`
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
           }`}
         >

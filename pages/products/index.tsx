@@ -1,46 +1,34 @@
 import Modal from '@/components/atoms/Modal';
+import { DataTable } from '@/components/molecules/DataTable';
 import ProductForm from '@/components/molecules/product/ProductForm';
-import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_PRODUCTS } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IProduct,
   productColumnDef,
 } from '@/lib/schema/product/product';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const Product = () => {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, refetch } = useData<IProduct[]>(
-    ['products'],
-    GET_ALL_PRODUCTS
-  );
-
-  useEffect(() => {
-    if (router.query.id) {
-      setIsModalOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-
-  useEffect(() => {
-    if (!isModalOpen) {
-      router.replace('/products', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isModalOpen]);
+  const { open, setOpen } = useModal();
+  const {
+    data,
+    metadata,
+    isLoading,
+    isError,
+    refetch: refetchProducts,
+  } = useData<IProduct[]>(['products'], GET_ALL_PRODUCTS);
 
   return (
     <section className="flex flex-col gap-5">
       <div className="flex flex-row gap-2">
-        <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <Button variant="destructive" className="flex gap-2">
+            <Button variant="default" className="flex gap-2">
               <Plus size={20} /> <span>Add New Product</span>
             </Button>
           </Modal.Trigger>
@@ -49,10 +37,11 @@ const Product = () => {
             description="Add a product"
           >
             <ProductForm
-              setIsModalOpen={setIsModalOpen}
+              setIsModalOpen={setOpen}
               productId={
                 router.isReady ? router.query.id?.toString() : ''
               }
+              refetchProducts={refetchProducts}
             />
           </Modal.Content>
         </Modal>
@@ -62,8 +51,9 @@ const Product = () => {
         </Button>
       </div>
       {data && !isLoading ? (
-        <DataTable
+        <DataTable<IProduct>
           data={data}
+          metadata={metadata}
           columns={productColumnDef}
           searchVal="productName"
         />

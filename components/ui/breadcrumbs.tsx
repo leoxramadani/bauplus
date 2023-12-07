@@ -2,7 +2,8 @@ import routes from '@/lib/constants/routes';
 import { capitalize } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Key, PropsWithChildren, useMemo } from 'react';
+import React, { Key, PropsWithChildren, useMemo } from 'react';
+import Topbar from '../layout/Topbar';
 
 const Crumb = ({
   children,
@@ -11,11 +12,13 @@ const Crumb = ({
 }: PropsWithChildren<any>) => {
   if (last)
     return (
-      <a className="mx-1 my-1 text-sm font-medium">{children}</a>
+      <a className="inline-flex px-1 py-0.5 text-base font-medium text-gray-600">
+        {children}
+      </a>
     );
   return (
     <Link
-      className="inline-flex items-center rounded-lg px-1 py-0.5 text-sm font-medium text-gray-700 transition-all duration-75 hover:underline"
+      className="inline-flex items-center rounded-lg px-1 py-0.5 text-base font-medium transition-all duration-75 hover:underline"
       href={href}
     >
       {children}
@@ -43,37 +46,39 @@ const Breadcrumbs = () => {
           path: subpath,
           title: capitalize(subpath),
           icon: undefined,
+          showForm: false,
         };
 
         return { ...route, href };
       });
-      // Add in a default "Home" crumb for the top-level
-      return [...crumblist];
+      return crumblist;
     },
     [router.asPath]
   );
 
   return (
-    <nav className="flex" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center space-x-1 md:space-x-3">
-        <li className="inline-flex items-center">
-          {breadcrumbs.map((crumb, i: Key) => {
-            const isLast = i === breadcrumbs.length - 1;
+    <nav
+      className="flex items-center justify-between"
+      aria-label="Breadcrumb"
+    >
+      <div className="flex w-max items-center whitespace-nowrap">
+        {breadcrumbs.map((crumb, i: Key) => {
+          const isLast = i === breadcrumbs.length - 1;
 
-            return (
-              <>
-                <Crumb {...crumb} key={i} last={isLast}>
-                  <div className="flex items-center gap-1">
-                    {crumb?.icon && crumb.icon}
-                    {crumb?.title}
-                  </div>
-                </Crumb>
-                {!isLast && <span className="mx-1">/</span>}
-              </>
-            );
-          })}
-        </li>
-      </ol>
+          return (
+            <React.Fragment key={i}>
+              <Crumb {...crumb} last={isLast}>
+                <div className="flex items-center gap-1">
+                  {crumb?.icon && crumb.icon}
+                  {crumb?.title}
+                </div>
+              </Crumb>
+              {!isLast && <span className="mx-1">/</span>}
+            </React.Fragment>
+          );
+        })}
+      </div>
+      <Topbar showForm={router.asPath === '/'} />
     </nav>
   );
 };

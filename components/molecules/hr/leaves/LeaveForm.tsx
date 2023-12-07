@@ -1,33 +1,54 @@
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
 import {
-  CREATE_BANK_ACCOUNT,
-  GET_ONE_BANKACCOUNT,
-  UPDATE_BANK_ACCOUNT,
-} from '@/lib/constants/endpoints/finance';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { GET_EMPLOYEES_BY_COMPANY } from '@/lib/constants/endpoints/employee';
+import {
+  CREATE_LEAVE,
+  GET_SPECIFIC_LEAVE,
+  UPDATE_LEAVE,
+} from '@/lib/constants/endpoints/hr/leaves';
+import useData from '@/lib/hooks/useData';
+import { IEmployee } from '@/lib/schema/hr/employee/employee';
 import { ILeaves, leavesSchema } from '@/lib/schema/hr/leaves/leaves';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
+import format from 'date-fns/format';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import format from 'date-fns/format';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
-import Drop from '@/components/atoms/Drop';
-import { CREATE_LEAVE, GET_SPECIFIC_LEAVE, UPDATE_LEAVE } from '@/lib/constants/endpoints/hr/leaves';
-import { IEmployee } from '@/lib/schema/hr/employee/employee';
-import useData from '@/lib/hooks/useData';
-import { GET_EMPLOYEES_BY_COMPANY } from '@/lib/constants/endpoints/employee';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-interface ICreateLeave {
+interface ILeavesProps {
   setIsModalOpen(open: boolean): void;
   leaveId?: string;
+  refetchLeaves: any;
 }
 
 const leaves = [
@@ -48,8 +69,11 @@ const duration = [
   { label: 'Second Half', value: 'sh' },
 ];
 
-const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
-  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const LeaveForm = ({
+  setIsModalOpen,
+  leaveId,
+  refetchLeaves,
+}: ILeavesProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [leave, setLeave] = useState<any>();
 
@@ -57,8 +81,11 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
     data: employees,
     isError: employeesIsError,
     isLoading: employeesIsLoading,
-    error: employeesError,
-  } = useData<IEmployee[]>(['employees'],GET_EMPLOYEES_BY_COMPANY+`?companyId=${`145d8d93-7ff7-4a24-a184-aa4e010e7f37`}`);
+  } = useData<IEmployee[]>(
+    ['employees'],
+    GET_EMPLOYEES_BY_COMPANY +
+      `?companyId=${`145d8d93-7ff7-4a24-a184-aa4e010e7f37`}`
+  );
 
   useEffect(() => {
     async function getData(id: string) {
@@ -66,7 +93,14 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
         .get(GET_SPECIFIC_LEAVE + `?leaveId=${id}`)
         .then((res) => {
           console.log('setting leave data -->', res);
-          setLeave(res.data);
+          setLeave({
+            ...res.data,
+            date: {
+              dateFrom: new Date(res.data.dateFrom),
+              dateTo: new Date(res.data.dateTo),
+            },
+          });
+          // setLeave(res.data);
         })
         .catch((error) => {
           console.log('error fetching leave->', error);
@@ -85,131 +119,70 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
 
   const onSubmit = useCallback(
     async (data: ILeaves) => {
-      console.log("form data=",data);
-      
+      console.log('form data=', data);
+
       setIsSubmitting(true);
-        if (leave) {
-          await axios.put(UPDATE_LEAVE, {
+      if (leave) {
+        await axios
+          .put(UPDATE_LEAVE, {
             ...data,
-            companyId: "145d8d93-7ff7-4a24-a184-aa4e010e7f37",
-            employeeId: "c8018547-7470-42d6-b1a7-269b0f4edb17",
-            filePath:"",
-              // employeeId
-              // leaveType
-              // leaveStatus
-              // duration
-              // reason
-              // filePath
-              // companyId
-              // isDeleted
-            
-          }).then((res)=>{
-            console.log("res from update =>",res);
-            
-          }).catch((error)=>{
+            ...data.date,
+            companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+            filePath: '',
+          })
+          .then(() => {
+            toast.success('Successfully updated leave');
+            refetchLeaves();
+          })
+          .catch((error) => {
             console.error('Error:', error);
-            // toast.error('There was an issue! Please try again.');
-            
+            toast.error(
+              'There was an issue updating leave! Please try again.'
+            );
           });
-          setIsSubmitting(false);
-          setIsModalOpen(false);
-        } else {
-          await axios.post(CREATE_LEAVE,{
+      } else {
+        await axios
+          .post(CREATE_LEAVE, {
             ...data,
-            companyId: "145d8d93-7ff7-4a24-a184-aa4e010e7f37",
-            filePath:"",
-          }).then((res)=>{
-            console.log("res from create=>",res);
-            
-          }).catch((error)=>{
+            ...data.date,
+            companyId: '145d8d93-7ff7-4a24-a184-aa4e010e7f37',
+            filePath: '',
+            // dateFrom: data.dateFrom,
+            // dateTo: data.dateTo,
+          })
+          .then(() => {
+            toast.success('Successfully created leave');
+            refetchLeaves();
+          })
+          .catch((error) => {
             console.error('Error:', error);
-            // toast.error('There was an issue! Please try again.');
+            toast.error(
+              'There was an issue creating leave! Please try again.'
+            );
           });
-          
-          setIsSubmitting(false);
-          setIsModalOpen(false);
-        }
-      
+      }
+      setIsSubmitting(false);
+      setIsModalOpen(false);
+
       setIsSubmitting(false);
     },
     [leave]
   );
 
-  const onError = (error:any)=>{
-    console.log("Error in leaves->",error);
-  }
-
+  const onError = (error: any) => {
+    console.log('Error in leaves->', error);
+  };
 
   return (
     <div className="z-0 flex w-full flex-col gap-4  ">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit,onError)}
+          onSubmit={form.handleSubmit(onSubmit, onError)}
           className="flex flex-col gap-4"
         >
           <div className="flex flex-col  items-center justify-center  gap-4 sm:grid sm:grid-cols-2">
             {/* project */}
-            {/* <FormField
-              control={form.control}
-              name="member"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col">
-                  <FormLabel>Choose Member</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            'flex w-full items-center justify-between gap-1',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                          disabled={isSubmitting}
-                        >
-                          {field.value
-                            ? members.find(
-                                (member) =>
-                                  member.value === field.value
-                              )?.label
-                            : 'Choose member'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[250px] p-0">
-                      <Command>
-                        <CommandInput placeholder="Search language..." />
-                        <CommandEmpty>No member found.</CommandEmpty>
-                        <CommandGroup>
-                          {members.map((member) => (
-                            <CommandItem
-                              value={member.label}
-                              key={member.value}
-                              onSelect={() => {
-                                form.setValue('member', member.value);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  'mr-2 h-4 w-4 transition-all',
-                                  member.value === field.value
-                                    ? 'opacity-100'
-                                    : 'opacity-0'
-                                )}
-                              />
-                              {member.label}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             {/* Leave type */}
             <FormField
               control={form.control}
@@ -278,88 +251,84 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
               )}
             />
 
-
-            {/* duration */}
-            <FormField
-              control={form.control}
-              name="duration"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col justify-start gap-6">
-                  <FormLabel>Select Duration</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                      className="flex flex-row gap-4"
-                      disabled={isSubmitting}
-                    >
-                      {duration.map((s) => (
-                        <FormItem
-                          key={s.value}
-                          className="flex flex-row items-center gap-2"
-                        >
-                          <FormControl>
-                            <RadioGroupItem value={s.value} />
-                          </FormControl>
-                          <FormLabel className="cursor-pointer font-normal">
-                            {s.label}
-                          </FormLabel>
-                        </FormItem>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Date */}
             <FormField
               control={form.control}
               name="date"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+              render={({ field }) => {
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <Button
+                          id="date"
                           variant={'outline'}
                           className={cn(
-                            'flex w-full items-center justify-between text-left font-normal',
+                            'w-full justify-start text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}
-                          disabled={isSubmitting}
                         >
-                          {field.value ? (
-                            format(new Date(field.value), 'PPP')
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value?.dateFrom ? (
+                            field.value?.dateTo ? (
+                              <>
+                                {format(
+                                  leaves
+                                    ? new Date(field.value.dateFrom)
+                                    : field.value.dateFrom,
+                                  'LLL dd, y'
+                                )}{' '}
+                                -{' '}
+                                {format(
+                                  leaves
+                                    ? new Date(field.value.dateTo)
+                                    : field.value.dateTo,
+                                  'LLL dd, y'
+                                )}
+                              </>
+                            ) : (
+                              format(
+                                leaves
+                                  ? new Date(field.value.dateFrom)
+                                  : field.value.dateFrom,
+                                'LLL dd, y'
+                              )
+                            )
                           ) : (
                             <span>Pick a date</span>
                           )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        //   disabled={(date) =>
-                        //     date < form.getValues('paidOn')
-                        //   }
-                        //   initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          initialFocus
+                          mode="range"
+                          selected={{
+                            from: field.value?.dateFrom,
+                            to: field.value?.dateTo,
+                          }}
+                          onSelect={(range) => {
+                            field.onChange({
+                              target: {
+                                name: 'date',
+                                value: {
+                                  dateFrom: range?.from,
+                                  dateTo: range?.to,
+                                },
+                              },
+                            });
+                          }}
+                          numberOfMonths={1}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                );
+              }}
             />
 
             {/* Employee */}
@@ -368,7 +337,7 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
               name="employeeId"
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col">
-                  <FormLabel>Employee Name</FormLabel>
+                  <FormLabel>Employee</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -398,8 +367,10 @@ const LeaveForm = ({ setIsModalOpen, leaveId }: ICreateLeave) => {
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search employee..." />
-                        <CommandEmpty>No employees found.</CommandEmpty>
+                        <CommandInput placeholder="Search for an employee..." />
+                        <CommandEmpty>
+                          No employee found.
+                        </CommandEmpty>
                         <CommandGroup className="flex h-full max-h-[200px] flex-col gap-4 overflow-y-auto">
                           {employees?.map((employee, i: Key) => (
                             <CommandItem

@@ -1,9 +1,16 @@
-import GridLayout from '@/components/molecules/GridLayout/GridLayout';
+import dynamic from 'next/dynamic';
+
+const NoSSR = dynamic(
+  () => import('@/components/molecules/GridLayout/GridLayout'),
+  {
+    ssr: false,
+  }
+);
 
 const Dashboard = () => {
   return (
     <>
-      <GridLayout />
+      <NoSSR />
     </>
   );
 };

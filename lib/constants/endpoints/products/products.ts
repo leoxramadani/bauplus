@@ -9,3 +9,5 @@ export const GET_ALL_PRODUCTS_OF_CATEGORY =
   BASE_URL + `/api/Product/CategoryProducts`;
 export const GET_ALL_PRODUCTS_OF_COMPANY =
   BASE_URL + `/api/Product/CompanyProducts`;
+export const GET_ALL_PRODUCTS_WOPAGINATION =
+  BASE_URL + `/api/Product/ProductsAll`;

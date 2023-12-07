@@ -1,52 +1,41 @@
 import Modal from '@/components/atoms/Modal';
-import ClientsCreate from '@/components/molecules/Clients/ClientsCreate';
-import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
-import { DataTable } from '@/components/molecules/table/DataTable';
+import ClientsForm from '@/components/molecules/Clients/ClientsForm';
+import { DataTable } from '@/components/molecules/DataTable';
+import { DataTableLoading } from '@/components/molecules/DataTable/DataTableLoading';
+// import { DataTable } from '@/components/molecules/table/DataTable';
+// import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_CLIENTS } from '@/lib/constants/endpoints/clients';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
   IClients,
+  clientSubColumnDef,
   clientsColumnDef,
 } from '@/lib/schema/Clients/clients';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-
-
-
 
 const Clients = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, isError, isLoading, error } = useData<IClients[]>(
-    ['clients'],
-    GET_ALL_CLIENTS
-  );
-  useEffect(() => {
-    if (router.query.id) {
-      setIsOpen(true);
-    }
-    // console.log('router==', router);
-  }, [router.query.id]);
-
-  console.log(data);
-  useEffect(() => {
-    if (!isOpen) {
-      router.replace('/clients', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isOpen]);
+  const { open, setOpen } = useModal();
+  const {
+    data,
+    metadata,
+    isError,
+    isLoading,
+    error,
+    refetch: refetchClients,
+  } = useData<IClients[]>(['clients'], GET_ALL_CLIENTS);
 
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal open={isOpen} onOpenChange={setIsOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add new client
@@ -56,8 +45,12 @@ const Clients = () => {
               title="Add New Client"
               description="Fill all the fields to add a new client"
             >
-              <ClientsCreate
-                setModal={setIsOpen}
+              <ClientsForm
+                setModal={setOpen}
+                clientId={
+                  router.isReady ? router.query.id?.toString() : ''
+                }
+                refetchClients={refetchClients}
               />
             </Modal.Content>
           </Modal>
@@ -68,10 +61,24 @@ const Clients = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && <DataTable data={data} columns={clientsColumnDef} />}
-        {isLoading && <p> Loading...</p>}
+        {data && !isLoading && (
+          <DataTable
+            data={data}
+            metadata={metadata}
+            columns={clientsColumnDef}
+            subcolumns={clientSubColumnDef}
+            getRowCanExpand={() => true}
+          />
+        )}
+        {isLoading && (
+          <DataTableLoading columnCount={clientsColumnDef.length} />
+        )}
         {isError && (
-          <p> There was something wrong, please try again later.</p>
+          <p>
+            {' '}
+            There are no records to show or there is some error.
+            Please try again later.
+          </p>
         )}
       </section>
     </>

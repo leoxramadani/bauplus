@@ -59,8 +59,9 @@ module.exports = {
           },
         },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: '#0ea5e9',
+          foreground: '#38bdf8',
+          text: '#ffffff',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -158,5 +159,6 @@ module.exports = {
   plugins: [
     require('@headlessui/tailwindcss'),
     require('tailwindcss-animate'),
+    require('tailwind-scrollbar'),
   ],
 };

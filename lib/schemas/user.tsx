@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import * as z from 'zod';
+import { searchParamsSchema } from './params';
 const PASSWORD_REGEX = new RegExp(
   '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$'
 ); // 1 uppercase, 1 lowercase, 1 number, 1 special
@@ -91,7 +92,7 @@ export const resetPasswordSchema = z
 
 export type IResetPassword = z.infer<typeof resetPasswordSchema>;
 
-const userSchema = z.object({
+export const userSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   userName: z.string(),
@@ -99,6 +100,8 @@ const userSchema = z.object({
   phoneNumber: z.string(),
   email: z.string().email(),
 });
+
+export const userParamsSchema = searchParamsSchema.merge(userSchema)
 
 export type columns = z.infer<typeof userSchema>;
 

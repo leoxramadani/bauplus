@@ -1,48 +1,37 @@
 import Modal from '@/components/atoms/Modal';
 import BankAccountCreate from '@/components/molecules/finances/bankaccount/BankAccountCreate';
 import { DataTable } from '@/components/molecules/table/DataTable';
+import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_BANKACCOUNTS } from '@/lib/constants/endpoints/finance';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import {
-  IInvoice,
-  financeColumnDef,
+  IBank,
+  bankAccountColumnDef,
 } from '@/lib/schema/Finance/bankaccounts';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const BankAccounts = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data, isError, isLoading, error } = useData<IInvoice[]>(
-    ['bank_accounts'],
-    GET_ALL_BANKACCOUNTS
-  );
-
-  useEffect(() => {
-    if (router.query.id) {
-      setIsOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      router.replace('/finance/bankaccounts', undefined, {
-        shallow: true,
-      });
-    }
-  }, [isOpen]);
+  const { open, setOpen } = useModal();
+  const {
+    data,
+    isError,
+    isLoading,
+    error,
+    refetch: bankRefetch,
+  } = useData<IBank[]>(['bank_accounts'], GET_ALL_BANKACCOUNTS);
 
   return (
     <>
       <section className="flex flex-col gap-5">
         <div className="relative flex flex-row gap-2">
-          <Modal open={isOpen} onOpenChange={setIsOpen}>
+          <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button
-                variant="destructive"
+                variant="default"
                 className="flex items-center justify-center gap-1"
               >
                 <Plus size={20} /> Add Bank Account
@@ -56,7 +45,8 @@ const BankAccounts = () => {
                 bankAccountId={
                   router.isReady ? router.query.id?.toString() : ''
                 }
-                setModal={setIsOpen}
+                setModal={setOpen}
+                bankRefetch={bankRefetch}
               />
             </Modal.Content>
           </Modal>
@@ -67,8 +57,14 @@ const BankAccounts = () => {
             <FileInput size={20} /> <span>Export</span>
           </Button>
         </div>
-        {data && <DataTable data={data} columns={financeColumnDef} />}
-        {isLoading && <p> Loading...</p>}
+        {data && (
+          <DataTable data={data} columns={bankAccountColumnDef} />
+        )}
+        {isLoading && (
+          <DataTableLoading
+            columnCount={bankAccountColumnDef.length}
+          />
+        )}
         {isError && (
           <p> There was something wrong, please try again later.</p>
         )}
