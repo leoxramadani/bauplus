@@ -86,6 +86,10 @@
   @apply hidden;
 }
 
+.test {
+
+}
+
 @layer components {
   .button {
     @apply cursor-pointer rounded-sm bg-red-500
@@ -164,4 +168,15 @@
 
 input {
   @apply [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
+}
+
+.test {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background-image: radial-gradient(#c0bfbf 1px, transparent 0);
+  background-size: 7px 7px;
+  background-position: -8.5px -8.5px;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.4), transparent 75%);
 }
