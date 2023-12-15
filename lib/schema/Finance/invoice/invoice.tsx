@@ -20,21 +20,20 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as z from 'zod';
 
-export const productLineEntity = z
-  .object({
-    // productLineItemId: z.string().optional(),
-    productId: z.string(),
-    // invoiceId: z.string().optional(),
-    quantity: z.coerce.number({
-      invalid_type_error: 'Quantity is required',
-      required_error: 'Quantity is required',
-    }),
-    productName:z.string(),
-    // price: z.coerce.number({
-    //   invalid_type_error: 'Price is required',
-    //   required_error: 'Price is required',
-    // }),
-  })
+export const productLineEntity = z.object({
+  // productLineItemId: z.string().optional(),
+  productId: z.string(),
+  // invoiceId: z.string().optional(),
+  quantity: z.coerce.number({
+    invalid_type_error: 'Quantity is required',
+    required_error: 'Quantity is required',
+  }),
+  productName: z.string(),
+  // price: z.coerce.number({
+  //   invalid_type_error: 'Price is required',
+  //   required_error: 'Price is required',
+  // }),
+});
 
 export type IproductLineEntity = z.infer<typeof productLineEntity>;
 
@@ -83,7 +82,8 @@ export const invoiceSchema = z
           invalid_type_error: 'Quantity is required',
           required_error: 'Quantity is required',
         }),
-        productName:z.string(),
+        price: z.coerce.number(),
+        productName: z.string(),
       })
       .array()
       .optional(),
