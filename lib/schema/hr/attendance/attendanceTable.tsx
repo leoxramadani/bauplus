@@ -22,7 +22,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { IAttendance } from './attendance';
+import { IAttendance, NEWIAttendance } from './attendance';
 
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
@@ -89,7 +89,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
         {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
               Delete Employee
             </div>
           </Modal.Trigger>
@@ -156,6 +156,62 @@ export const attendanceColumnDef: ColumnDef<IAttendance>[] = [
         new Date(`1970-01-01T${row.original.checkOut}`),
         'HH:mm'
       ),
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <ActionsColumn item={row.original} />,
+  },
+];
+
+export const NEWattendanceColumnDef: ColumnDef<NEWIAttendance>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value: boolean) =>
+          table.toggleAllRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: boolean) =>
+          row.toggleSelected(!!value)
+        }
+        aria-label="Select row"
+      />
+    ),
+  },
+  {
+    accessorKey: 'employeeName',
+    header: 'Employee Name',
+  },
+  {
+    accessorKey: 'date',
+    header: 'date',
+  },
+
+  {
+    accessorKey: 'checkIn',
+    header: 'Check in',
+    // cell: ({ row }) =>
+    //   format(new Date(`1970-01-01T${row.original.checkIn}`), 'HH:mm'),
+  },
+  {
+    accessorKey: 'checkOut',
+    header: 'Check out',
+    // cell: ({ row }) =>
+    //   format(
+    //     new Date(`1970-01-01T${row.original.checkOut}`),
+    //     'HH:mm'
+    //   ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
   },
   {
     id: 'actions',

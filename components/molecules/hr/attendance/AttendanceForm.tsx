@@ -59,7 +59,7 @@ import { toast } from 'react-toastify';
 interface ICreateAttendance {
   setIsModalOpen(open: boolean): void;
   attendanceId?: string;
-  refetchAttendance: any;
+  refetchAttendance?: any;
 }
 
 const AttendanceForm = ({
@@ -328,6 +328,7 @@ const AttendanceForm = ({
                 )}
               />
 
+              {/* Date */}
               <FormField
                 control={form.control}
                 name="date"

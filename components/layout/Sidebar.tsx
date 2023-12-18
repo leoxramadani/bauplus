@@ -288,9 +288,9 @@ const Sidebar = ({
                     href="/hr/shiftroster"
                   />
                   <SidebarItem
-                    text="Attendace (not finished)"
+                    text="Attendance (not finished)"
                     alert={false}
-                    href="/hr/attendace"
+                    href="/hr/attendance"
                   />
                   <SidebarItem
                     text="Holiday (not finished)"
