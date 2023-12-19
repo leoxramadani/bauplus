@@ -1,4 +1,5 @@
 import AppForm from '@/components/molecules/settings/AppForm';
+import AttendanceForm from '@/components/molecules/settings/AttendanceOptionsForm';
 import CompanyForm from '@/components/molecules/settings/CompanyForm';
 import CurrencyForm from '@/components/molecules/settings/CurrencyForm';
 import FinanceForm from '@/components/molecules/settings/FinanceForm';
@@ -28,11 +29,20 @@ const Settings = () => {
             <TabsTrigger value="company">Company</TabsTrigger>
             <TabsTrigger value="app">App</TabsTrigger>
             <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="notifications">
+              Notifications
+            </TabsTrigger>
             <TabsTrigger value="currency">Currency</TabsTrigger>
             <TabsTrigger value="finance">Finance</TabsTrigger>
-            <TabsTrigger value="roles-privileges">Roles & Privileges</TabsTrigger>
-            <TabsTrigger value="payroll">Payroll settings</TabsTrigger>
+            <TabsTrigger value="attendance">
+              Attendance options
+            </TabsTrigger>
+            <TabsTrigger value="roles-privileges">
+              Roles & Privileges
+            </TabsTrigger>
+            <TabsTrigger value="payroll">
+              Payroll settings
+            </TabsTrigger>
             <TabsTrigger value="module">Module settings</TabsTrigger>
           </TabsList>
           <Separator className="bg-slate-300" />
@@ -53,6 +63,9 @@ const Settings = () => {
           </TabsContent>
           <TabsContent value="finance">
             <FinanceForm />
+          </TabsContent>
+          <TabsContent value="attendance">
+            <AttendanceForm />
           </TabsContent>
           <TabsContent value="roles-privileges">
             <RolesPrivilegesForm />
