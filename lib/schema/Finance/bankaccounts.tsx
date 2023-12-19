@@ -26,11 +26,9 @@ import * as z from 'zod';
 
 export const bankAccountSchema = z.object({
   accountName: z.string(),
-  accountNumber: z
-    .string()
-    .length(15, {
-      message: 'The account number field must have exactly 15 digits',
-    }),
+  accountNumber: z.string().length(15, {
+    message: 'The account number field must have exactly 15 digits',
+  }),
   bankAccountStatus: z.object({
     statusName: z.string(),
   }),
@@ -77,6 +75,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
       bankRefetch();
     } catch (error) {
       console.log(error);
+      toast.error('There was an error deleting the bank account.');
     }
     setDeleting(false);
   };
@@ -111,7 +110,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
         </DropdownMenuItem>
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent focus:bg-accent focus:text-accent-foreground">
               Delete
             </div>
           </Modal.Trigger>

@@ -311,6 +311,7 @@ const Main = () => {
           <div className="flex w-full flex-col gap-4 2xl:flex-row">
             <Card className="shadow-xl">
               <Title>Income and Expenses</Title>
+              <div className="test"></div>
               <AreaChart
                 className="mt-4 h-72"
                 data={chartdata}
@@ -322,6 +323,7 @@ const Main = () => {
             </Card>
             <Card className="shadow-xl 2xl:max-w-lg">
               <Title>Gross Revenue of Projects</Title>
+              <div className="test"></div>
               <DonutChart
                 className="h-[400px] w-full p-6 text-3xl font-medium tracking-tight md:text-5xl"
                 data={projects}
@@ -345,6 +347,7 @@ const Main = () => {
               <Subtitle>
                 Revenue and Expenses by Quarter (2023)
               </Subtitle>
+              <div className="test"></div>
               <BarChart
                 className="mt-6"
                 data={chartdataBar}

@@ -217,6 +217,8 @@ const InvoiceForm2 = ({
     await axios
       .post(CREATE_PRODUCT, {
         productName: productValue,
+        price: 0,
+        quantity: 0,
       })
       .then((res) => {
         console.log(' success product data -->', res.data);
@@ -238,11 +240,11 @@ const InvoiceForm2 = ({
     console.log('Error Invoice ::', error);
   };
 
-  const handleRemoveProduct = (productId: string) => {
+  const handleRemoveProduct = (productId?: string) => {
     // Remove the product with the given productId from the productLineEntity array
     const updatedProductLineEntity = form
       ?.getValues('productLineEntity')
-      ?.filter((product) => product.productId !== productId);
+      ?.filter((product) => product.productLineItemId !== productId);
 
     form.setValue('productLineEntity', updatedProductLineEntity);
   };
@@ -626,7 +628,7 @@ const InvoiceForm2 = ({
 
             {/* <FormField
               control={form.control}
-              name="productLineEntity"
+              name="productLineEntity.productName"
               render={({ field }) => (
                 <FormItem className="sm:col-span-2">
                   <FormLabel>Select Products</FormLabel>
@@ -666,7 +668,7 @@ const InvoiceForm2 = ({
                             <Popover>
                               <PopoverTrigger asChild>
                                 <TableCell>
-                                  {item.productName}
+                                  <Input value={item.productName} />
                                 </TableCell>
                               </PopoverTrigger>
                               <PopoverContent
@@ -689,50 +691,23 @@ const InvoiceForm2 = ({
                                     }}
                                   />
                                   <CommandEmpty className="flex h-[200px] flex-col gap-2">
-                                    {/* No product found. */}
                                     <Button
                                       type="button"
                                       variant="link"
                                       className="w-full text-left no-underline"
                                       onClick={() =>
-                                        CREATE_PRODUCTs()
+                                        // CREATE_PRODUCTs()
+                                        setOpen(true)
                                       }
-                                      loading={addingProduct}
-                                      disabled={addingProduct}
+                                      // loading={addingProduct}
+                                      // disabled={addingProduct}
                                     >
-                                      {addingProduct
+                                      {/* {addingProduct
                                         ? 'Creating'
                                         : 'Create'}{' '}
-                                      {productValue}
+                                      {productValue} */}
+                                      Create {productValue}
                                     </Button>
-                                    {/* <Modal
-                                      open={open}
-                                      onOpenChange={setOpen}
-                                    >
-                                      <Modal.Trigger asChild>
-                                        <Button
-                                          type="button"
-                                          variant="link"
-                                          className="flex flex-row gap-2  text-primary"
-                                        >
-                                          Create and edit
-                                        </Button>
-                                      </Modal.Trigger>
-                                      <Modal.Content
-                                        title="New Product"
-                                        description="Add a product"
-                                      >
-                                        <ProductForm
-                                          setIsModalOpen={setOpen}
-                                          productId={
-                                            router.isReady
-                                              ? router.query.id?.toString()
-                                              : ''
-                                          }
-                                          refetchProducts={refetchProducts()}
-                                        />
-                                      </Modal.Content>
-                                    </Modal> */}
                                   </CommandEmpty>
                                   <CommandGroup>
                                     <ScrollArea className="h-[200px]  w-full">
@@ -750,14 +725,17 @@ const InvoiceForm2 = ({
                                                   field?.value?.map(
                                                     (productItem) => {
                                                       if (
-                                                        productItem.productId ===
-                                                        item.productId
+                                                        productItem.productLineItemId ==
+                                                        item.productLineItemId
                                                       ) {
                                                         return {
                                                           ...product,
                                                           productId:
                                                             product.productId ||
                                                             '',
+                                                          productLineItemId:
+                                                            crypto.randomUUID(),
+
                                                           // productName:
                                                           //   product.productName,
                                                           // price:
@@ -784,16 +762,80 @@ const InvoiceForm2 = ({
                                 </Command>
                               </PopoverContent>
                             </Popover>
-                            <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{item.price}</TableCell>
-                            <TableCell>{item.price}</TableCell>
+                            <TableCell>
+                              <Input
+                                // type="number"
+                                className="w-full max-w-[80px] "
+                                placeholder="1"
+                                defaultValue={1}
+                                onChange={(e) => {
+                                  const updatedProductLineEntity =
+                                    field?.value?.map(
+                                      (productItem) => {
+                                        if (
+                                          productItem?.productLineItemId ===
+                                          item?.productLineItemId
+                                        ) {
+                                          return {
+                                            ...productItem,
+                                            quantity: parseInt(
+                                              e.target.value,
+                                              10
+                                            ),
+                                          };
+                                        }
+                                        return productItem;
+                                      }
+                                    );
+                                  form.setValue(
+                                    'productLineEntity',
+                                    updatedProductLineEntity
+                                  );
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                className="w-full max-w-[80px]"
+                                placeholder="1"
+                                type="number"
+                                value={item.price}
+                                onChange={(e) => {
+                                  const updatedProductLineEntity =
+                                    field?.value?.map(
+                                      (productItem) => {
+                                        if (
+                                          productItem?.productLineItemId ===
+                                          item?.productLineItemId
+                                        ) {
+                                          return {
+                                            ...productItem,
+                                            price: parseInt(
+                                              e.target.value,
+                                              10
+                                            ),
+                                          };
+                                        }
+                                        return productItem;
+                                      }
+                                    );
+                                  form.setValue(
+                                    'productLineEntity',
+                                    updatedProductLineEntity
+                                  );
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell></TableCell>
                             <TableCell>
                               <Trash
                                 size={16}
                                 strokeWidth={1.5}
                                 className="cursor-pointer  text-red-500 transition-colors hover:text-red-600 "
                                 onClick={() =>
-                                  handleRemoveProduct(item.productId)
+                                  handleRemoveProduct(
+                                    item.productLineItemId
+                                  )
                                 }
                               />
                             </TableCell>
@@ -810,9 +852,11 @@ const InvoiceForm2 = ({
                               ) || []),
                               {
                                 productId: '',
+                                productLineItemId:
+                                  crypto.randomUUID(),
                                 productName: 'Select a product',
                                 quantity: 1,
-                                price: 1,
+                                price: 0,
                               },
                             ])
                           }
@@ -837,6 +881,21 @@ const InvoiceForm2 = ({
             </Button>
           </div>
         </form>
+        <Modal open={open} onOpenChange={setOpen}>
+          <Modal.Content
+            title="New Product"
+            description="Add a product"
+          >
+            <ProductForm
+              setIsModalOpen={setOpen}
+              productId={
+                router.isReady ? router.query.id?.toString() : ''
+              }
+              productName={productValue}
+              refetchProducts={refetchProducts()}
+            />
+          </Modal.Content>
+        </Modal>
       </Form>
 
       <Modal open={productsModal} onOpenChange={setProductsModal}>

@@ -77,6 +77,7 @@ export const invoiceSchema = z
     // transactionId: z.string().optional(), //this is the id for the transaction this invoice was created from
     productLineEntity: z
       .object({
+        productLineItemId: z.string().optional(),
         productId: z.string(),
         quantity: z.coerce.number({
           invalid_type_error: 'Quantity is required',
