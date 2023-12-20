@@ -13,19 +13,24 @@ const AttendanceImportForm = () => {
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      // if (files[0].type === 'application/pdf') {
-      //   console.log('file -->', URL.createObjectURL(files![0]));
-      //   console.log('file -->', files![0]);
-      // } else if (files[0].type.includes('image')) {
-      //   const reader = new FileReader();
-      //   reader.onload = (e) => {
-      //     const image = new Image();
-      //     image.src = e.target?.result as string;
-      //   };
-      //   reader.readAsDataURL(files[0]);
-      // }
-
       console.log('files inside handleUpload->', files);
+
+      if (
+        files[0].type.endsWith('.csv') ||
+        files[0].type.endsWith('.xlsx')
+      ) {
+        //   console.log('file -->', URL.createObjectURL(files![0]));
+        //   console.log('file -->', files![0]);
+        // } else if (files[0].type.includes('image')) {
+        //   const reader = new FileReader();
+        //   reader.onload = (e) => {
+        //     const image = new Image();
+        //     image.src = e.target?.result as string;
+        //   };
+        //   reader.readAsDataURL(files[0]);
+
+        console.log('This is an excel or CSV file');
+      }
     }
   };
 
@@ -35,7 +40,7 @@ const AttendanceImportForm = () => {
 
   const onSubmit = useCallback(
     async (data: any) => {
-      console.log('Cnosole file -->', file);
+      console.log('Console file -->', file);
 
       console.log('Inside of submit ', data);
       axios
