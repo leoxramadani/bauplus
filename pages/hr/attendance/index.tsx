@@ -1,5 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
+import ImportAttendanceForm from '@/components/molecules/hr/attendance/AttendanceImportForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
 // import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { useRouter } from 'next/router';
 const Attendance = () => {
   const router = useRouter();
   const { open, setOpen } = useModal();
+  const { open: openImport, setOpen: setOpenImport } = useModal();
   // const {
   //   data,
   //   isLoading,
@@ -25,6 +27,7 @@ const Attendance = () => {
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
+          {/* Add new attendance */}
           <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
               <Button variant="default" className="flex gap-2">
@@ -45,9 +48,21 @@ const Attendance = () => {
             </Modal.Content>
           </Modal>
 
-          <Button variant="outline" className="flex gap-2">
-            <FileUp size={20} /> <span>Import</span>
-          </Button>
+          {/* Import attendance */}
+          <Modal open={openImport} onOpenChange={setOpenImport}>
+            <Modal.Trigger asChild>
+              <Button variant="outline" className="flex gap-2">
+                <FileUp size={20} /> <span>Import</span>
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content
+              title="Import attendance"
+              description="Upload the CSV file"
+            >
+              <ImportAttendanceForm />
+            </Modal.Content>
+          </Modal>
+
           <Button variant="outline" className="flex gap-2">
             <FileInput /> <span>Export</span>
           </Button>

@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -78,6 +79,7 @@ export const productColumnDef: ColumnDef<IProduct>[] = [
 const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -90,6 +92,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async (id: string) => {
+    setDeleting(true);
     await axios
       .delete(DELETE_PRODUCT, {
         params: {
@@ -104,9 +107,12 @@ const ActionsColumn = ({ item }: { item: any }) => {
             ...router.query,
           },
         });
+        setDeleting(false);
       })
       .catch((error) => {
-        console.log('Error deleting product->', error);
+        // console.log('Error deleting product->', error);
+        toast.error('There was an error deleting the product.');
+        setDeleting(false);
       });
   };
 
@@ -144,24 +150,13 @@ const ActionsColumn = ({ item }: { item: any }) => {
           <Modal.Content
             title="Delete Product"
             description="Are you sure you want to delete this product?"
-            className="w-full max-w-lg"
+            className="max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  onClick={() => handleDelete(item.productId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.productId)}
+              id={item.productId}
+              deleting={deleting}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>

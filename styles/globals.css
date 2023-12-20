@@ -7,6 +7,14 @@
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
 
+    --sidebar-h: 211;
+    --sidebar-s: 22%;
+    --sidebar-l: 26%;
+
+    --sidebar-bg: #334150;
+    --sidebar-bg-hover: 211 22% 35%;
+
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 

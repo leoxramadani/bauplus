@@ -1,7 +1,6 @@
 import Modal from '@/components/atoms/Modal';
 import { DataTable } from '@/components/molecules/DataTable';
 import GenerateInvoiceForm from '@/components/molecules/finances/invoice/generateInvoice/GenerateInvoiceForm';
-import InvoiceForm from '@/components/molecules/finances/invoice/invoiceForm/InvoiceForm';
 import InvoiceForm2 from '@/components/molecules/finances/invoice/invoiceForm/InvoiceForm2';
 import { DataTableLoading } from '@/components/molecules/table/DataTableLoading';
 import { Button } from '@/components/ui/button';
@@ -65,28 +64,6 @@ const Invoice = () => {
           </Button>
         </Link> */}
 
-        <Modal open={open} onOpenChange={setOpen}>
-          <Modal.Trigger asChild>
-            <Button
-              variant="outline"
-              className="flex flex-row gap-2 text-primary"
-            >
-              <Plus size={20} /> Create Invoice
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="Create Invoice"
-            description="Fill all the fields to create an invoice"
-          >
-            <InvoiceForm
-              setIsModalOpen={setOpen}
-              invoiceId={
-                router.isReady ? router.query.id?.toString() : ''
-              }
-              refetchInvoices={refetchInvoices}
-            />
-          </Modal.Content>
-        </Modal>
         <Modal open={newInv} onOpenChange={setNewInv}>
           <Modal.Trigger asChild>
             <Button

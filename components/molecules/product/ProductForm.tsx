@@ -52,6 +52,7 @@ interface IProductForm {
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
   productId?: string;
   refetchProducts?: any;
+  productName?: string;
 }
 
 interface ICategory {
@@ -70,11 +71,13 @@ const ProductForm = ({
   setIsModalOpen,
   productId,
   refetchProducts,
+  productName,
 }: IProductForm) => {
   const router = useRouter();
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
   const [categoryToEdit, setCategoryToEdit] = useState<ICategory>();
   const [productData, setProductData] = useState<any>();
+  const [creating, setCreating] = useState<boolean>(false);
   const {
     data: productCategories,
     isLoading,
@@ -108,11 +111,15 @@ const ProductForm = ({
 
   const form = useForm<IProduct>({
     resolver: zodResolver(productSchema),
-    values: { ...productData },
+    values: {
+      ...productData,
+      productName: productId ? productData?.productName : productName,
+    },
   });
 
   const onSubmit = useCallback(
     async (data: IProduct) => {
+      setCreating(true);
       console.log('form data ->', data);
 
       if (productData) {
@@ -128,9 +135,11 @@ const ProductForm = ({
               shallow: true,
             });
             refetchProducts();
+            setCreating(false);
           })
           .catch((error) => {
             console.log('Error UPDATING product:', error);
+            setCreating(false);
           });
       } else {
         console.log('Creating product');
@@ -142,9 +151,11 @@ const ProductForm = ({
           .then((res) => {
             console.log('Successfully created product->', res);
             refetchProducts();
+            setCreating(false);
           })
           .catch((error) => {
             console.log('Error creating product:', error);
+            setCreating(false);
           });
       }
       setIsModalOpen(false);
@@ -182,7 +193,11 @@ const ProductForm = ({
                       {/* <span className="text-red-500">*</span> */}
                     </FormLabel>
                     <FormControl className="relative">
-                      <Input placeholder="Product Name" {...field} />
+                      <Input
+                        placeholder="Product Name"
+                        {...field}
+                        disabled={creating}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,6 +269,7 @@ const ProductForm = ({
                             <Button
                               variant="outline"
                               role="combobox"
+                              disabled={creating}
                               className={cn(
                                 'flex w-full items-center justify-between gap-1',
                                 !field.value &&
@@ -329,6 +345,7 @@ const ProductForm = ({
                         type="button"
                         size="sm"
                         variant="outline"
+                        disabled={creating}
                         className="flex w-max items-center justify-center "
                         onClick={() => setCategoryModal(true)}
                       >
@@ -349,6 +366,7 @@ const ProductForm = ({
                       <FormLabel>Price </FormLabel>
                       <FormControl className="relative">
                         <Input
+                          disabled={creating}
                           type="number"
                           placeholder="Price"
                           {...field}
@@ -367,6 +385,7 @@ const ProductForm = ({
                       <FormLabel>Quantity </FormLabel>
                       <FormControl className="relative">
                         <Input
+                          disabled={creating}
                           type="number"
                           placeholder="Quantity"
                           {...field}
@@ -388,7 +407,12 @@ const ProductForm = ({
             </div> */}
           </div>
 
-          <Button className="w-max" type="submit">
+          <Button
+            className="w-max"
+            type="submit"
+            disabled={creating}
+            loading={creating}
+          >
             Submit
           </Button>
         </form>
