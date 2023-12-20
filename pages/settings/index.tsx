@@ -1,5 +1,5 @@
 import AppForm from '@/components/molecules/settings/AppForm';
-import AttendanceForm from '@/components/molecules/settings/AttendanceOptionsForm';
+import AttendanceOptionsForm from '@/components/molecules/settings/AttendanceOptionsForm';
 import CompanyForm from '@/components/molecules/settings/CompanyForm';
 import CurrencyForm from '@/components/molecules/settings/CurrencyForm';
 import FinanceForm from '@/components/molecules/settings/FinanceForm';
@@ -25,7 +25,7 @@ const Settings = () => {
     <>
       <div className="">
         <Tabs defaultValue="company" className="w-full p-0">
-          <TabsList className="flex w-full justify-start gap-2">
+          <TabsList className="flex w-full justify-start gap-2 overflow-auto">
             <TabsTrigger value="company">Company</TabsTrigger>
             <TabsTrigger value="app">App</TabsTrigger>
             <TabsTrigger value="account">Account</TabsTrigger>
@@ -65,7 +65,7 @@ const Settings = () => {
             <FinanceForm />
           </TabsContent>
           <TabsContent value="attendance">
-            <AttendanceForm />
+            <AttendanceOptionsForm />
           </TabsContent>
           <TabsContent value="roles-privileges">
             <RolesPrivilegesForm />

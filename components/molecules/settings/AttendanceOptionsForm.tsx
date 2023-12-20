@@ -28,17 +28,11 @@ import {
 import { ICompanySettings } from '@/lib/schema/settings/companysettings';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-export interface IClientsCreate {
-  setModal(open: boolean): void;
-  clientId?: string;
-  refetchClients: any;
-}
 export interface YourAccountDetailsType {
   id: string;
   accountNumber: string;
@@ -57,24 +51,11 @@ export interface YourContactInfo {
   address: string;
 }
 
-const AttendanceOptionsForm = ({
-  setModal,
-  clientId,
-  refetchClients,
-}: IClientsCreate) => {
+const AttendanceOptionsForm = () => {
   const router = useRouter();
   const [edit, isEdit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [client, setClient] = useState<any>();
-  const [accountModal, setAccoundModal] = useState<boolean>(false);
-  const [businessModal, setBusinessModal] = useState<boolean>(false);
-  const [clientModal, setClientModal] = useState<boolean>(false);
-  const [accDetail, setAccDetail] = useState<YourAccountDetailsType>({
-    id: '',
-    accountNumber: '',
-    country: '',
-  });
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const [accountDetails, setAccountDetails] = useState<
     YourAccountDetailsType[]
@@ -141,15 +122,10 @@ const AttendanceOptionsForm = ({
         })
         .catch(() => {
           toast.error('There was an error! Please try again.');
-          setModal(false);
           isEdit(false);
         });
     }
-
-    if (clientId) {
-      getData(clientId);
-    }
-  }, [clientId]);
+  }, []);
 
   useEffect(() => {
     form.setValue('clientAccountNumbers', accountDetails);
@@ -164,34 +140,21 @@ const AttendanceOptionsForm = ({
   const onSubmit = useCallback(
     async (data: ICreateClientSchema) => {
       setIsSubmitting(true);
-
-      //   data.companyId = '145D8D93-7FF7-4A24-A184-AA4E010E7F37';
-      //   console.log('submit:', data);
-      if (clientId && router.query.id) {
+      if (router.query.id) {
         await axios
-          .put(
-            UPDATE_SPECIFIC_CLIENTS,
-            {
-              ...data,
-              clientAccountNumbers: accountDetails,
-              clientBusinessIds: businessDetails,
-              clientContactInfos: clientInfos,
-            },
-            {
-              params: {
-                id: clientId,
-              },
-            }
-          )
+          .put(UPDATE_SPECIFIC_CLIENTS, {
+            ...data,
+            clientAccountNumbers: accountDetails,
+            clientBusinessIds: businessDetails,
+            clientContactInfos: clientInfos,
+          })
           .then((res) => {
             console.log('UPDATED client->', res);
             router.replace('/hr/employees', undefined, {
               shallow: true,
             });
-            setModal(false);
             setIsSubmitting(false);
             toast.success('Successfully updated client');
-            refetchClients();
           })
           .catch((error) => {
             console.log('Error UPDATING employee:', error);
@@ -210,9 +173,7 @@ const AttendanceOptionsForm = ({
           .then((res) => {
             console.log('Success->', res);
             toast.success('Client added');
-            setModal(false);
             setIsSubmitting(false);
-            refetchClients();
           })
           .catch((error) => {
             console.error('Error creating client:', error);
@@ -245,34 +206,30 @@ const AttendanceOptionsForm = ({
         </div>
 
         <div>
-          {clientId && edit && (
-            <div
-              tabIndex={0}
-              className="absolute inset-0 z-50 flex h-full w-full items-center justify-center rounded-lg bg-black/30"
-            >
-              <Loader2 className="h-16 w-16 animate-spin text-slate-100" />
-            </div>
-          )}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit, onError)}
-              className="grid w-full grid-cols-2 gap-4"
+              className="flex w-full max-w-5xl flex-col justify-between gap-4 md:flex-row md:gap-0"
             >
-              <div className="flex flex-col items-center justify-center gap-4">
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Employee_id"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -286,7 +243,7 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -311,20 +268,24 @@ const AttendanceOptionsForm = ({
                     )}
                   />
                 </div>
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Department"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -338,7 +299,7 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -363,20 +324,24 @@ const AttendanceOptionsForm = ({
                     )}
                   />
                 </div>
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Check_in"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -390,7 +355,119 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {clientTypes && !ClientTypesIsLoading ? (
+                              <>
+                                {clientTypes.map((x: any) => (
+                                  <SelectItem
+                                    key={x.clientTypeId}
+                                    value={x.clientTypeId}
+                                  >
+                                    {x.clientTypeName}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            ) : (
+                              <p>Loading...</p>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Shift"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="clientTypeId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          value={field.value}
+                          disabled={isSubmitting}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a client type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {clientTypes && !ClientTypesIsLoading ? (
+                              <>
+                                {clientTypes.map((x: any) => (
+                                  <SelectItem
+                                    key={x.clientTypeId}
+                                    value={x.clientTypeId}
+                                  >
+                                    {x.clientTypeName}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            ) : (
+                              <p>Loading...</p>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Status"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="clientTypeId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          value={field.value}
+                          disabled={isSubmitting}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -416,21 +493,25 @@ const AttendanceOptionsForm = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-center gap-4">
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Name"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -444,7 +525,7 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -469,20 +550,24 @@ const AttendanceOptionsForm = ({
                     )}
                   />
                 </div>
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Date"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -496,7 +581,7 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -521,20 +606,24 @@ const AttendanceOptionsForm = ({
                     )}
                   />
                 </div>
-                <div className="flex flex-row gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <Input
-                      placeholder="Employee id"
-                      className="w-96"
-                      value={formData.companyName}
-                      onChange={(e) =>
-                        handleInputChange(
-                          'companyName',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Check_out"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="clientTypeId"
@@ -548,7 +637,119 @@ const AttendanceOptionsForm = ({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
+                              <SelectValue placeholder="Select a client type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {clientTypes && !ClientTypesIsLoading ? (
+                              <>
+                                {clientTypes.map((x: any) => (
+                                  <SelectItem
+                                    key={x.clientTypeId}
+                                    value={x.clientTypeId}
+                                  >
+                                    {x.clientTypeName}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            ) : (
+                              <p>Loading...</p>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Attended"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="clientTypeId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          value={field.value}
+                          disabled={isSubmitting}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a client type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {clientTypes && !ClientTypesIsLoading ? (
+                              <>
+                                {clientTypes.map((x: any) => (
+                                  <SelectItem
+                                    key={x.clientTypeId}
+                                    value={x.clientTypeId}
+                                  >
+                                    {x.clientTypeName}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            ) : (
+                              <p>Loading...</p>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Break"
+                            {...field}
+                            disabled={isSubmitting}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="clientTypeId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          value={field.value}
+                          disabled={isSubmitting}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a client type" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -577,6 +778,7 @@ const AttendanceOptionsForm = ({
             </form>
           </Form>
         </div>
+
         <div>
           <Button className="flex flex-row items-center justify-center gap-1">
             Save
