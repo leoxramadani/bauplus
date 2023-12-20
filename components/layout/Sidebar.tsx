@@ -6,7 +6,6 @@ import {
   ChevronsRight,
   ClipboardList,
   FileBarChart,
-  FileLineChart,
   Home,
   LayoutDashboard,
   SettingsIcon,
@@ -290,7 +289,7 @@ const Sidebar = ({
                   <SidebarItem
                     text="Attendance (WIP)"
                     alert={false}
-                    href="/hr/attendance"
+                    href="/hr/attendace"
                   />
                   <SidebarItem
                     text="Holiday (not finished)"
@@ -361,13 +360,6 @@ const Sidebar = ({
                 alert
                 href="/notices"
               ></SidebarItem>
-
-              <SidebarItem
-                Icon={FileLineChart}
-                text="Reports"
-                alert={false}
-                href="/reports"
-              />
 
               <SidebarItem
                 Icon={SettingsIcon}
@@ -465,11 +457,15 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
   return (
     <>
       {Icon && (
-        <Icon size={17} strokeWidth={2} className="absolute left-2" />
+        <Icon
+          size={20}
+          strokeWidth={1.5}
+          className="absolute left-2"
+        />
       )}
       <span
-        className={`flex w-full items-center text-left text-sm transition-[opacity,transform] ${
-          Icon && 'ml-5'
+        className={`w-full text-left transition-[opacity,transform] ${
+          Icon && 'ml-7'
         } group-hover/trigger ${
           Icon && !expanded && 'pointer-events-none opacity-0'
         }`}
@@ -523,7 +519,7 @@ function SidebarItem({
 
   return (
     <NavigationMenuItem
-      className={`focus relative flex h-[27px] w-full  text-sm focus:outline-none `}
+      className={`focus relative w-full focus:outline-none`}
       key={text}
       value={text}
     >
@@ -549,7 +545,7 @@ function SidebarItem({
               aria-hidden="true"
             />
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-2">
+          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-4">
             {children}
           </NavigationMenuContent>
         </>

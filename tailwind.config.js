@@ -18,8 +18,15 @@ module.exports = {
     },
     extend: {
       colors: {
-        sidebar: '#15202C',
-        'sidebar-light': '#A0ACBD',
+        // sidebar: '#15202C',
+        sidebar: {
+          DEFAULT: '#15202C',
+          light: '#A0ACBD',
+          faint: 'var(--sidebar-bg)',
+          hover: 'hsl(var(--sidebar-bg-hover))',
+        },
+        // 'sidebar-light': '#A0ACBD',
+        // 'sidebar-bg': 'hsl(var(--sidebar-bg))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

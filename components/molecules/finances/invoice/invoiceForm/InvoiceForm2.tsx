@@ -68,7 +68,7 @@ import {
   Check,
   ChevronsUpDown,
   Plus,
-  Trash,
+  X,
 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
@@ -252,7 +252,7 @@ const InvoiceForm2 = ({
   const { open, setOpen } = useModal();
 
   return (
-    <div className="z-0 flex w-full flex-col gap-4">
+    <div className="z-0 flex w-full flex-col gap-4 ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -828,10 +828,10 @@ const InvoiceForm2 = ({
                             </TableCell>
                             <TableCell></TableCell>
                             <TableCell>
-                              <Trash
-                                size={16}
+                              <X
+                                // size={16}
                                 strokeWidth={1.5}
-                                className="cursor-pointer  text-red-500 transition-colors hover:text-red-600 "
+                                className="size-6  cursor-pointer rounded-lg p-1 text-muted-foreground  transition-all duration-300 hover:bg-red-100 hover:text-red-400 "
                                 onClick={() =>
                                   handleRemoveProduct(
                                     item.productLineItemId
