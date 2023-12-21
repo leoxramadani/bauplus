@@ -25,7 +25,7 @@ const Settings = () => {
     <>
       <div className="">
         <Tabs defaultValue="company" className="w-full p-0">
-          <TabsList className="flex w-full justify-start gap-2 overflow-auto">
+          <TabsList className="flex w-full justify-start gap-2 overflow-y-hidden">
             <TabsTrigger value="company">Company</TabsTrigger>
             <TabsTrigger value="app">App</TabsTrigger>
             <TabsTrigger value="account">Account</TabsTrigger>

@@ -192,10 +192,6 @@ const AttendanceOptionsForm = () => {
     console.log('error submiting client form --->', error);
   };
 
-  const handleInputChange = (key: any, value: any) => {
-    setFormData({ ...formData, [key]: value });
-  };
-
   return (
     <>
       <div className="flex flex-col gap-4 rounded-lg border bg-white p-8">
@@ -209,9 +205,9 @@ const AttendanceOptionsForm = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit, onError)}
-              className="flex w-full max-w-5xl flex-col justify-between gap-4 md:flex-row md:gap-0"
+              className="flex w-full max-w-7xl flex-col justify-between gap-4 lg:flex-row"
             >
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 lg:w-[600px]">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -493,7 +489,7 @@ const AttendanceOptionsForm = () => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 lg:w-[600px]">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
