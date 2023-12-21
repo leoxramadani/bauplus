@@ -1,8 +1,7 @@
 import Modal from '@/components/atoms/Modal';
 import AttendanceForm from '@/components/molecules/hr/attendance/AttendanceForm';
-import ImportAttendanceForm from '@/components/molecules/hr/attendance/AttendanceImportForm';
+import AttendanceImportForm from '@/components/molecules/hr/attendance/AttendanceImportForm';
 import { DataTable } from '@/components/molecules/table/DataTable';
-// import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import useModal from '@/lib/hooks/useModal';
 import { NEWIAttendance } from '@/lib/schema/hr/attendance/attendance';
@@ -59,7 +58,7 @@ const Attendance = () => {
               title="Import attendance"
               description="Upload the CSV file"
             >
-              <ImportAttendanceForm />
+              <AttendanceImportForm />
             </Modal.Content>
           </Modal>
 

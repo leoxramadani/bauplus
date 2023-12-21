@@ -289,7 +289,7 @@ const Sidebar = ({
                   <SidebarItem
                     text="Attendance (WIP)"
                     alert={false}
-                    href="/hr/attendace"
+                    href="/hr/attendance"
                   />
                   <SidebarItem
                     text="Holiday (not finished)"
