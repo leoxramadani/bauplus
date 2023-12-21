@@ -205,9 +205,9 @@ const AttendanceOptionsForm = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit, onError)}
-              className="flex w-full max-w-5xl flex-col justify-between gap-4 lg:flex-row"
+              className="flex w-full max-w-7xl flex-col justify-between gap-4 lg:flex-row"
             >
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 lg:w-[600px]">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -489,7 +489,7 @@ const AttendanceOptionsForm = () => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 lg:w-[600px]">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
