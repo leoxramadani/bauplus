@@ -152,7 +152,7 @@ const NoticeForm = ({
           onSubmit={form.handleSubmit(onSubmitNotice, onError)}
           className="flex w-full flex-col gap-4"
         >
-          <div className="grid grid-cols-1 items-center  justify-center gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 items-center justify-center gap-4 sm:grid-cols-2">
             {/* noticeTitle */}
             <FormField
               control={form.control}

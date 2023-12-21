@@ -39,59 +39,62 @@ const CompanyForm = () => {
         <h1 className="text-lg font-semibold">Company settings</h1>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-col gap-2.5">
-            <Label>
-              Company Name <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              placeholder="Thor Industries"
-              className="w-96"
-              value={formData.companyName}
-              onChange={(e) =>
-                handleInputChange('companyName', e.target.value)
-              }
-            />
+        <div className="flex flex-col gap-4 xl:flex-row">
+          <div className="flex flex-col gap-4 lg:w-[500px]">
+            <div className="flex flex-col gap-2.5">
+              <Label>
+                Company Name <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                placeholder="Thor Industries"
+                className=""
+                value={formData.companyName}
+                onChange={(e) =>
+                  handleInputChange('companyName', e.target.value)
+                }
+              />
+            </div>
+            <div className="flex flex-col gap-2.5">
+              <Label>
+                Company Email <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                placeholder="info@thorindustriesmk.com"
+                className=""
+                value={formData.contactEmail}
+                onChange={(e) =>
+                  handleInputChange('companyEmail', e.target.value)
+                }
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-2.5">
-            <Label>
-              Company Email <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              placeholder="info@thorindustriesmk.com"
-              className="w-96"
-              value={formData.contactEmail}
-              onChange={(e) =>
-                handleInputChange('companyEmail', e.target.value)
-              }
-            />
-          </div>
-        </div>
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-col gap-2.5">
-            <Label>
-              Company Phone <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              placeholder="+38970000000"
-              className="w-96"
-              onChange={(e) =>
-                handleInputChange('companyPhone', e.target.value)
-              }
-            />
-          </div>
-          <div className="flex flex-col gap-2.5">
-            <Label>
-              Company Website <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              placeholder="www.thorindustries.mk"
-              className="w-96"
-              value={formData.website}
-              onChange={(e) =>
-                handleInputChange('companyWebsite', e.target.value)
-              }
-            />
+          <div className="flex flex-col gap-4 lg:w-[500px]">
+            <div className="flex flex-col gap-2.5">
+              <Label>
+                Company Phone <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                placeholder="+38970000000"
+                className=""
+                onChange={(e) =>
+                  handleInputChange('companyPhone', e.target.value)
+                }
+              />
+            </div>
+            <div className="flex flex-col gap-2.5">
+              <Label>
+                Company Website{' '}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                placeholder="www.thorindustries.mk"
+                className=""
+                value={formData.website}
+                onChange={(e) =>
+                  handleInputChange('companyWebsite', e.target.value)
+                }
+              />
+            </div>
           </div>
         </div>
         <div>
