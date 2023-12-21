@@ -45,7 +45,7 @@ const DepartmentsForm = ({
 }: DepartmentsFormProps) => {
   const router = useRouter();
   const [departmentData, setDepartmentData] = useState<any>();
-
+  const [loading, setLoading] = useState(false);
   const {
     data: parentDepartments,
     isLoading,
@@ -81,10 +81,10 @@ const DepartmentsForm = ({
 
   const onSubmit = useCallback(
     async (data: IDepartment) => {
-      console.log('form data ->', data);
+      setLoading(true);
+      // console.log('form data ->', data);
 
       if (departmentData) {
-        console.log('Updating department');
         await axios
           .put(UPDATE_DEPARTMENT, {
             departmentId: departmentId,
@@ -122,6 +122,7 @@ const DepartmentsForm = ({
           });
       }
       setIsModalOpen(false);
+      setLoading(false);
     },
     [departmentData]
   );
@@ -212,10 +213,12 @@ const DepartmentsForm = ({
               )}
             />
           </div>
-          <hr />
+
           <Button
-            className="flex w-max flex-none"
-            variant="outline"
+            className="flex w-max flex-none "
+            // variant="outline"
+            loading={loading}
+            disabled={loading}
             type="submit"
           >
             Submit
