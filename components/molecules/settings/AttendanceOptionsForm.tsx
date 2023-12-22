@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  IAttendanceOptionsSchema,
-  attendanceOptionsSchema,
+  IDatabaseColumnsSchema,
+  databaseColumnsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -59,8 +59,8 @@ const AttendanceOptionsForm = () => {
     },
   ];
 
-  const form = useForm<IAttendanceOptionsSchema>({
-    resolver: zodResolver(attendanceOptionsSchema),
+  const form = useForm<IDatabaseColumnsSchema>({
+    resolver: zodResolver(databaseColumnsSchema),
     // values: {
     //   ...client,
     //   clientBusinessIds: client?.clientBusinessIds,
