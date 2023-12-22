@@ -9,10 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { CREATE_ATTENDANCE_MAPPING } from '@/lib/constants/endpoints/hr/attendance';
-import {
-  IAttendanceOptionsSchema,
-  attendanceOptionsSchema,
-} from '@/lib/schema/hr/attendance/attendanceOptions';
+import { IAttendanceOptionsSchema } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useCallback } from 'react';
