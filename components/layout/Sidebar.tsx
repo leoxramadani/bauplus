@@ -6,6 +6,7 @@ import {
   ChevronsRight,
   ClipboardList,
   FileBarChart,
+  FileLineChart,
   Home,
   LayoutDashboard,
   SettingsIcon,
@@ -360,6 +361,13 @@ const Sidebar = ({
                 alert
                 href="/notices"
               ></SidebarItem>
+
+              <SidebarItem
+                Icon={FileLineChart}
+                text="Reports"
+                alert={false}
+                href="/reports"
+              />
 
               <SidebarItem
                 Icon={SettingsIcon}

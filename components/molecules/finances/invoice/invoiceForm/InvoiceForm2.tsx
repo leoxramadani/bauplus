@@ -691,6 +691,9 @@ const InvoiceForm2 = ({
                                     }}
                                   />
                                   <CommandEmpty className="flex h-[200px] flex-col gap-2">
+                                    <p className="p-2 text-center">
+                                      This product doesn&apos;t exist.
+                                    </p>
                                     <Button
                                       type="button"
                                       variant="link"
@@ -830,8 +833,8 @@ const InvoiceForm2 = ({
                             <TableCell>
                               <X
                                 // size={16}
-                                strokeWidth={1.5}
-                                className="size-6  cursor-pointer rounded-lg p-1 text-muted-foreground  transition-all duration-300 hover:bg-red-100 hover:text-red-400 "
+                                strokeWidth={2}
+                                className="close "
                                 onClick={() =>
                                   handleRemoveProduct(
                                     item.productLineItemId
