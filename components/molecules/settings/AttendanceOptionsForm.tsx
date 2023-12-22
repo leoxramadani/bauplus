@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { CREATE_ATTENDANCE_MAPPING } from '@/lib/constants/endpoints/hr/attendance';
 import {
+  IAttendanceOptionsSchema,
   IDatabaseColumnsSchema,
   databaseColumnsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
