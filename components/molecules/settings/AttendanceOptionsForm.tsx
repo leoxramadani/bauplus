@@ -10,8 +10,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { CREATE_ATTENDANCE_MAPPING } from '@/lib/constants/endpoints/hr/attendance';
 import {
-  IAttendanceOptionsSchema,
-  attendanceOptionsSchema,
+  IDatabaseColumnsSchema,
+  databaseColumnsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -59,8 +59,8 @@ const AttendanceOptionsForm = () => {
     // },
   ];
 
-  const form = useForm<IAttendanceOptionsSchema>({
-    resolver: zodResolver(attendanceOptionsSchema),
+  const form = useForm<IDatabaseColumnsSchema>({
+    resolver: zodResolver(databaseColumnsSchema),
     // values: {
     //   ...client,
     //   clientBusinessIds: client?.clientBusinessIds,
