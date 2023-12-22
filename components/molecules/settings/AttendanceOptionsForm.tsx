@@ -19,59 +19,15 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-const AttendanceOptionsForm = () => {
-  const attendanceOptions = [
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'employeeId',
-    },
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'date',
-    },
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'timein',
-    },
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'timeout',
-    },
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'status',
-    },
-    {
-      SystemColumnName: '',
-      DatabaseColumnName: 'note',
-    },
-    // {
-    //   SystemColumnName: 'employee.employeeId',
-    //   DatabaseColumnName: 'employee.employeeId',
-    // },
-    // {
-    //   SystemColumnName: '',
-    //   DatabaseColumnName: 'firstName',
-    // },
-    // {
-    //   SystemColumnName: '',
-    //   DatabaseColumnName: 'lastName',
-    // },
-  ];
+interface OutputObject {
+  DatabaseColumnName: string;
+  SystemColumnName: string;
+}
 
+const AttendanceOptionsForm = () => {
   const form = useForm<IAttendanceOptionsSchema>({
     resolver: zodResolver(attendanceOptionsSchema),
-    // values: {
-    //   ...client,
-    //   clientBusinessIds: client?.clientBusinessIds,
-    //   clientContactInfos: client?.clientContactInfos,
-    // },
   });
-
-  interface OutputObject {
-    DatabaseColumnName: string;
-    SystemColumnName: string;
-  }
 
   const onSubmit = useCallback(
     async (data: IAttendanceOptionsSchema) => {
