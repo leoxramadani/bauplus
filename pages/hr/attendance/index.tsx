@@ -29,8 +29,9 @@ const Attendance = () => {
           {/* Add new attendance */}
           <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
-              <Button variant="default" className="flex gap-2">
-                <Plus size={20} /> <span>New Attendance</span>
+              <Button variant="default" className="flex gap-1">
+                <Plus className="size-4" />{' '}
+                <span>New Attendance</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -50,8 +51,8 @@ const Attendance = () => {
           {/* Import attendance */}
           <Modal open={openImport} onOpenChange={setOpenImport}>
             <Modal.Trigger asChild>
-              <Button variant="outline" className="flex gap-2">
-                <FileUp size={20} /> <span>Import</span>
+              <Button variant="outline" className="flex gap-1">
+                <FileUp className="size-4" /> <span>Import</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -62,8 +63,8 @@ const Attendance = () => {
             </Modal.Content>
           </Modal>
 
-          <Button variant="outline" className="flex gap-2">
-            <FileInput /> <span>Export</span>
+          <Button variant="outline" className="flex gap-1">
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         {/* {data && (

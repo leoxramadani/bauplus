@@ -1,4 +1,3 @@
-import Topbar from '@/components/layout/Topbar';
 import { DataTable } from '@/components/molecules/table/DataTable';
 import { Button } from '@/components/ui/button';
 import {
@@ -84,8 +83,8 @@ const CreditNote = () => {
     <>
       <section className="flex flex-col gap-5">
         <div className="flex flex-row gap-2">
-          <Button variant="outline" className="flex gap-2">
-            <FileInput /> <span>Export</span>
+          <Button variant="outline" className="flex gap-1">
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         <DataTable data={data} columns={financeColumnDef} />

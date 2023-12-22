@@ -34,7 +34,7 @@ const BankAccounts = () => {
                 variant="default"
                 className="flex items-center justify-center gap-1"
               >
-                <Plus size={20} /> Add Bank Account
+                <Plus className="size-4" /> Add Bank Account
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -54,7 +54,7 @@ const BankAccounts = () => {
             variant="outline"
             className="flex items-center justify-center gap-1 "
           >
-            <FileInput size={20} /> <span>Export</span>
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         {data && (

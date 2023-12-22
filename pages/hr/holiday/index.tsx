@@ -24,8 +24,8 @@ const Holiday = () => {
         <div className="flex flex-row gap-2">
           <Modal open={open} onOpenChange={setOpen}>
             <Modal.Trigger asChild>
-              <Button variant="default" className="flex gap-2">
-                <Plus size={20} /> <span>Add Holiday</span>
+              <Button variant="default" className="flex gap-1">
+                <Plus className="size-4" /> <span>Add Holiday</span>
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -39,8 +39,8 @@ const Holiday = () => {
             </Modal.Content>
           </Modal>
 
-          <Button variant="outline" className="flex gap-2">
-            <Check size={20} /> <span>Mark Default Holidays</span>
+          <Button variant="outline" className="flex gap-1">
+            <Check  className='size-4' /> <span>Mark Default Holidays</span>
           </Button>
         </div>
         {/* <DataTable data={data} columns={financeColumnDef} /> */}

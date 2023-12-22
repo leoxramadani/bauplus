@@ -38,7 +38,7 @@ const Clients = () => {
                 variant="default"
                 className="flex items-center justify-center gap-1"
               >
-                <Plus size={20} /> Add new client
+                <Plus className="size-4" /> Add new client
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -58,7 +58,7 @@ const Clients = () => {
             variant="outline"
             className="flex items-center justify-center gap-1 "
           >
-            <FileInput size={20} /> <span>Export</span>
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         {data && !isLoading && (

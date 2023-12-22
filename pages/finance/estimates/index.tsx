@@ -25,7 +25,7 @@ const Estimates = () => {
                 variant="default"
                 className="flex items-center justify-center gap-1"
               >
-                <Plus size={20} /> Add Estimate
+                <Plus className="size-4" /> Add Estimate
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -35,11 +35,12 @@ const Estimates = () => {
               <EstimatesCreate />
             </Modal.Content>
           </Modal>
-          <Button variant="outline" className="flex gap-2">
-            <Layers size={20} /> <span>Estimate Template</span>
+          <Button variant="outline" className="flex gap-1">
+            <Layers className="size-4" />{' '}
+            <span>Estimate Template</span>
           </Button>
-          <Button variant="outline" className="flex gap-2">
-            <FileInput /> <span>Export</span>
+          <Button variant="outline" className="flex gap-1">
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         <DataTable

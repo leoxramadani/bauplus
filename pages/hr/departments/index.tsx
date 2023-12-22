@@ -33,7 +33,7 @@ const Departments = () => {
                 variant="default"
                 className="flex items-center justify-center gap-1"
               >
-                <Plus size={20} />
+                <Plus className="size-4" />
                 Add Department
               </Button>
             </Modal.Trigger>
@@ -49,8 +49,8 @@ const Departments = () => {
             </Modal.Content>
           </Modal>
 
-          <Button variant="outline" className="flex gap-2">
-            <FileInput /> <span>Export</span>
+          <Button variant="outline" className="flex gap-1">
+            <FileInput className="size-4" /> <span>Export</span>
           </Button>
         </div>
         {data && !isLoading ? (

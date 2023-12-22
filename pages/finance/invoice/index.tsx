@@ -36,8 +36,8 @@ const Invoice = () => {
           onOpenChange={setIsRegisterModalOpen}
         >
           <Modal.Trigger asChild>
-            <Button variant="default" className="flex flex-row gap-2">
-              <Plus size={20} /> Register Invoice
+            <Button variant="default" className="flex flex-row gap-1">
+              <Plus className="size-4" /> Register Invoice
             </Button>
           </Modal.Trigger>
           <Modal.Content
@@ -68,9 +68,9 @@ const Invoice = () => {
           <Modal.Trigger asChild>
             <Button
               variant="outline"
-              className="flex flex-row gap-2 text-primary"
+              className="flex flex-row gap-1 text-primary"
             >
-              <Plus size={20} /> Create Invoice
+              <Plus className="size-4" /> Create Invoice
             </Button>
           </Modal.Trigger>
           <Modal.Content
@@ -93,9 +93,9 @@ const Invoice = () => {
 
         <Button
           variant="outline"
-          className="flex flex-row items-center gap-2"
+          className="flex flex-row items-center gap-1"
         >
-          <FileInput /> <span>Export</span>
+          <FileInput className="size-4" /> <span>Export</span>
         </Button>
       </div>
 

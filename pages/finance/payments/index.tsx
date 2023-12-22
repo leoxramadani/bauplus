@@ -10,7 +10,6 @@ import {
 } from '@/lib/schema/Finance/finance';
 // import Modal from '@/components/atoms/ModalOld';
 import Modal from '@/components/atoms/Modal';
-import Topbar from '@/components/layout/Topbar';
 import { Button } from '@/components/ui/button';
 // import Button from '@/components/Button';
 const Payments = () => {
@@ -97,7 +96,7 @@ const Payments = () => {
                 variant="default"
                 className=" flex items-center justify-center gap-1"
               >
-                <Plus size={20} /> Add Payment
+                <Plus className="size-5" /> Add Payment
               </Button>
             </Modal.Trigger>
             <Modal.Content
@@ -111,13 +110,13 @@ const Payments = () => {
             variant="outline"
             className="  flex items-center justify-center gap-1"
           >
-            <Plus size={20} /> <span>Add Bulk Payment</span>
+            <Plus className="size-5" /> <span>Add Bulk Payment</span>
           </Button>
           <Button
             variant="outline"
             className=" flex items-center justify-center gap-1"
           >
-            <FileInput /> <span>Export</span>
+            <FileInput className="size-5" /> <span>Export</span>
           </Button>
         </div>
         <DataTable data={data} columns={financeColumnDef} />
