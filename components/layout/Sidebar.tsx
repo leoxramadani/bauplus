@@ -6,6 +6,7 @@ import {
   ChevronsRight,
   ClipboardList,
   FileBarChart,
+  FileLineChart,
   Home,
   LayoutDashboard,
   SettingsIcon,
@@ -289,7 +290,7 @@ const Sidebar = ({
                   <SidebarItem
                     text="Attendance (WIP)"
                     alert={false}
-                    href="/hr/attendace"
+                    href="/hr/attendance"
                   />
                   <SidebarItem
                     text="Holiday (not finished)"
@@ -360,6 +361,13 @@ const Sidebar = ({
                 alert
                 href="/notices"
               ></SidebarItem>
+
+              <SidebarItem
+                Icon={FileLineChart}
+                text="Reports"
+                alert={false}
+                href="/reports"
+              />
 
               <SidebarItem
                 Icon={SettingsIcon}
