@@ -11,3 +11,10 @@ export const GET_ALL_ATTENDANCE =
   BASE_URL + `/api/AttendanceRecord/GetAllAttendanceRecord`;
 export const GET_SPECIFIC_ATTENDANCE =
   BASE_URL + `/api/AttendanceRecord/GetSpecificAttendance`;
+
+
+/** Attendance Mapping */
+export const CREATE_ATTENDANCE_MAPPING =
+  BASE_URL + `/api/AttendanceMapping/Create`;
+export const UPDATE_ATTENDANCE_MAPPING =
+  BASE_URL + `/api/AttendanceMapping/Update`;

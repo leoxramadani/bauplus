@@ -8,55 +8,55 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { CREATE_ATTENDANCE_MAPPING } from '@/lib/constants/endpoints/hr/attendance';
 import {
   IAttendanceOptionsSchema,
   attendanceOptionsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const AttendanceOptionsForm = () => {
-  const onSubmit = (data: any) => {
-    console.log('Form Data:', data);
-  };
-
   const attendanceOptions = [
     {
-      SystemColumnName: 'employeeId',
+      SystemColumnName: '',
       DatabaseColumnName: 'employeeId',
     },
     {
-      SystemColumnName: 'date',
+      SystemColumnName: '',
       DatabaseColumnName: 'date',
     },
     {
-      SystemColumnName: 'timein',
+      SystemColumnName: '',
       DatabaseColumnName: 'timein',
     },
     {
-      SystemColumnName: 'timeout',
+      SystemColumnName: '',
       DatabaseColumnName: 'timeout',
     },
     {
-      SystemColumnName: 'status',
+      SystemColumnName: '',
       DatabaseColumnName: 'status',
     },
     {
-      SystemColumnName: 'note',
+      SystemColumnName: '',
       DatabaseColumnName: 'note',
     },
-    {
-      SystemColumnName: 'employee.employeeId',
-      DatabaseColumnName: 'employee.employeeId',
-    },
-    {
-      SystemColumnName: 'employee.firstName',
-      DatabaseColumnName: 'employee.firstName',
-    },
-    {
-      SystemColumnName: 'employee.lastName',
-      DatabaseColumnName: 'employee.lastName',
-    },
+    // {
+    //   SystemColumnName: 'employee.employeeId',
+    //   DatabaseColumnName: 'employee.employeeId',
+    // },
+    // {
+    //   SystemColumnName: '',
+    //   DatabaseColumnName: 'firstName',
+    // },
+    // {
+    //   SystemColumnName: '',
+    //   DatabaseColumnName: 'lastName',
+    // },
   ];
 
   const form = useForm<IAttendanceOptionsSchema>({
@@ -67,6 +67,57 @@ const AttendanceOptionsForm = () => {
     //   clientContactInfos: client?.clientContactInfos,
     // },
   });
+
+  interface OutputObject {
+    DatabaseColumnName: string;
+    SystemColumnName: string;
+  }
+
+  const onSubmit = useCallback(
+    async (data: IAttendanceOptionsSchema) => {
+      console.log('submited data', data);
+
+      // const outputArray: OutputObject[] = [];
+
+      // for (const key in data) {
+      //   if (
+      //     data.hasOwnProperty(key) &&
+      //     data[key as keyof IAttendanceOptionsSchema] !== undefined
+      //   ) {
+      //     outputArray.push({
+      //       DatabaseColumnName: key,
+      //       SystemColumnName: data[
+      //         key as keyof IAttendanceOptionsSchema
+      //       ] as string,
+      //     });
+      //   }
+      // }
+
+      const mappedColumns: OutputObject[] = Object.entries(data).map(
+        ([key, value]) => {
+          return {
+            DatabaseColumnName: key,
+            SystemColumnName: value,
+          };
+        }
+      );
+
+      console.log('mappedColumns=>', mappedColumns);
+
+      await axios
+        .post(CREATE_ATTENDANCE_MAPPING, mappedColumns)
+        .then(() => toast.success('Successfully mapped columns'))
+        .catch((error) => {
+          toast.error('Error mapping columns');
+          console.log('error mapping return ->', error);
+        });
+    },
+    []
+  );
+
+  const onError = (error: any) => {
+    console.log('Please check your input fields! ', error);
+  };
 
   return (
     <>
@@ -81,10 +132,11 @@ const AttendanceOptionsForm = () => {
           <Form {...form}>
             <form
               className="flex w-full max-w-7xl flex-col justify-between gap-4"
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit, onError)}
             >
               <div className="flex flex-col lg:flex-row">
                 <div className="flex flex-col gap-4 lg:w-[600px]">
+                  {/* employeeId */}
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
@@ -109,122 +161,7 @@ const AttendanceOptionsForm = () => {
                       )}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="department"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              department
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Department"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="checkIn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              check in
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Check_in"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="shift"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              shift
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Shift" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              status
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Status" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 lg:w-[600px]">
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              full name
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Full name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  {/* date */}
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
@@ -239,14 +176,134 @@ const AttendanceOptionsForm = () => {
                             column name here:
                           </FormLabel>
                           <FormControl className="relative">
-                            <Input placeholder="Date" {...field} />
+                            <Input placeholder="date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
+
+                  {/* shiftIn */}
                   <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="shiftId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Write your{' '}
+                            <span className="font-bold underline">
+                              Shift Id
+                            </span>{' '}
+                            column name here:
+                          </FormLabel>
+                          <FormControl className="relative">
+                            <Input
+                              placeholder="Shift Id"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* timeIn */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="timeIn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Write your{' '}
+                            <span className="font-bold underline">
+                              Time in
+                            </span>{' '}
+                            column name here:
+                          </FormLabel>
+                          <FormControl className="relative">
+                            <Input placeholder="Time in" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* timeOut */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="timeOut"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Write your{' '}
+                            <span className="font-bold underline">
+                              Time Out
+                            </span>{' '}
+                            column name here:
+                          </FormLabel>
+                          <FormControl className="relative">
+                            <Input
+                              placeholder="Time Out"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4 lg:w-[600px]">
+                  {/* status */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Write your{' '}
+                            <span className="font-bold underline">
+                              Status
+                            </span>{' '}
+                            column name here:
+                          </FormLabel>
+                          <FormControl className="relative">
+                            <Input placeholder="Status" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* note */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="note"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Write your{' '}
+                            <span className="font-bold underline">
+                              note
+                            </span>{' '}
+                            column name here:
+                          </FormLabel>
+                          <FormControl className="relative">
+                            <Input placeholder="note" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="checkOut"
@@ -314,7 +371,7 @@ const AttendanceOptionsForm = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div>
