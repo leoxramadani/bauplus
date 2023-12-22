@@ -111,7 +111,7 @@ const AttendanceTestUI = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="person_id"
+                    name="employeeId"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl className="relative">
@@ -129,63 +129,6 @@ const AttendanceTestUI = () => {
                   <FormField
                     control={form.control}
                     name="employeeId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* department */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="depart"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Department"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="department"
                     render={({ field }) => (
                       <FormItem>
                         <Select
@@ -242,7 +185,7 @@ const AttendanceTestUI = () => {
 
                   <FormField
                     control={form.control}
-                    name="checkIn"
+                    name="timeIn"
                     render={({ field }) => (
                       <FormItem>
                         <Select
@@ -282,7 +225,7 @@ const AttendanceTestUI = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="shifts"
+                    name="shiftId"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl className="relative">
@@ -299,7 +242,7 @@ const AttendanceTestUI = () => {
 
                   <FormField
                     control={form.control}
-                    name="shift"
+                    name="shiftId"
                     render={({ field }) => (
                       <FormItem>
                         <Select
@@ -339,7 +282,7 @@ const AttendanceTestUI = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="statuses"
+                    name="status"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl className="relative">
@@ -394,68 +337,11 @@ const AttendanceTestUI = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 lg:w-[600px]">
-                {/* fullname */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Full Name"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="fullName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
                 {/* date */}
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="dates"
+                    name="date"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl className="relative">
@@ -529,64 +415,7 @@ const AttendanceTestUI = () => {
 
                   <FormField
                     control={form.control}
-                    name="checkOut"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* attended */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="attend"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Attended"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="attended"
+                    name="timeOut"
                     render={({ field }) => (
                       <FormItem>
                         <Select
@@ -626,7 +455,7 @@ const AttendanceTestUI = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="notes"
+                    name="note"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl className="relative">
