@@ -20,10 +20,10 @@ import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
 import { toast } from 'sonner';
 
-
 interface OutputObject {
-  DatabaseColumnName: string;
-  SystemColumnName: string;
+  databaseColumnName: string;
+  systemColumnName: string;
+  branchId: string;
 }
 
 const AttendanceOptionsForm = () => {
@@ -54,8 +54,9 @@ const AttendanceOptionsForm = () => {
       const mappedColumns: OutputObject[] = Object.entries(data).map(
         ([key, value]) => {
           return {
-            DatabaseColumnName: key,
-            SystemColumnName: value,
+            databaseColumnName: key,
+            systemColumnName: value,
+            branchId: '479a3b1a-51a8-46ab-9624-09f127ba5397',
           };
         }
       );

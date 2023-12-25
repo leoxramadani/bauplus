@@ -7,7 +7,11 @@ import { useForm } from 'react-hook-form';
 import Papa from 'papaparse';
 import { toast } from 'sonner';
 
-const AttendanceImportForm = () => {
+const AttendanceImportForm = ({
+  setAttendanceOptions,
+}: {
+  setAttendanceOptions: any;
+}) => {
   const [file, setFile] = useState<any>();
   const [parsedData, setParsedData] = useState<any>();
   const [columns, setColumns] = useState<any>([]);
@@ -60,6 +64,8 @@ const AttendanceImportForm = () => {
 
           // Filtered Values
           setValues(valuesArray);
+
+          setAttendanceOptions(true);
         },
       });
 
