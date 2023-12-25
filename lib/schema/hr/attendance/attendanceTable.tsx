@@ -7,14 +7,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DELETE_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { MoreHorizontal } from 'lucide-react';
+import { Clipboard, MoreHorizontal, Pen, Trash } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 // import { toast } from 'react-toastify';
@@ -74,21 +73,23 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(item.clientId)}
+          className="flex items-center gap-1"
         >
-          Copy item id
+          <Clipboard size={14} /> Copy item id
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         <DropdownMenuItem
           onClick={() => handleEdit(item.attendanceRecordId)}
+          className="flex items-center gap-1"
         >
-          Edit row
+          <Pen size={14} /> Edit
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
-              Delete Employee
+            <div className="relative flex cursor-default select-none items-center gap-1 rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
+              <Trash size={14} /> Delete
             </div>
           </Modal.Trigger>
           <Modal.Content

@@ -135,7 +135,7 @@ const AttendanceOptionsForm = () => {
                             column name here:
                           </FormLabel>
                           <FormControl className="relative">
-                            <Input placeholder="date" {...field} />
+                            <Input placeholder="Date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -153,7 +153,7 @@ const AttendanceOptionsForm = () => {
                           <FormLabel>
                             Write your{' '}
                             <span className="font-bold underline">
-                              Shift Id
+                              shift Id
                             </span>{' '}
                             column name here:
                           </FormLabel>
@@ -178,7 +178,7 @@ const AttendanceOptionsForm = () => {
                           <FormLabel>
                             Write your{' '}
                             <span className="font-bold underline">
-                              Time in
+                              time in
                             </span>{' '}
                             column name here:
                           </FormLabel>
@@ -201,7 +201,7 @@ const AttendanceOptionsForm = () => {
                           <FormLabel>
                             Write your{' '}
                             <span className="font-bold underline">
-                              Time Out
+                              time Out
                             </span>{' '}
                             column name here:
                           </FormLabel>
@@ -228,7 +228,7 @@ const AttendanceOptionsForm = () => {
                           <FormLabel>
                             Write your{' '}
                             <span className="font-bold underline">
-                              Status
+                              status
                             </span>{' '}
                             column name here:
                           </FormLabel>
@@ -255,7 +255,7 @@ const AttendanceOptionsForm = () => {
                             column name here:
                           </FormLabel>
                           <FormControl className="relative">
-                            <Input placeholder="note" {...field} />
+                            <Input placeholder="Note" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

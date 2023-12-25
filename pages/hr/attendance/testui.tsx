@@ -40,7 +40,7 @@ const AttendanceTestUI = () => {
 
   const attendanceOptions = [
     {
-      SystemColumnName: 'Employee',
+      SystemColumnName: 'person_id',
       DatabaseColumnName: 'employeeId',
     },
     {
@@ -48,11 +48,11 @@ const AttendanceTestUI = () => {
       DatabaseColumnName: 'date',
     },
     {
-      SystemColumnName: 'timein',
+      SystemColumnName: 'check-in',
       DatabaseColumnName: 'timein',
     },
     {
-      SystemColumnName: 'timeout',
+      SystemColumnName: 'check-out',
       DatabaseColumnName: 'timeout',
     },
     {
@@ -84,7 +84,7 @@ const AttendanceTestUI = () => {
       <div className="flex flex-col gap-4 rounded-lg border bg-white p-8">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold">
-            Attendance options
+            Map attendance columns
           </h1>
         </div>
 
