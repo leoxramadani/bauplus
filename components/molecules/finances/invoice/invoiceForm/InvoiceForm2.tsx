@@ -720,7 +720,7 @@ const InvoiceForm2 = ({
                                           (product, i) => (
                                             <CommandItem
                                               value={
-                                                product.productName
+                                                product.productId
                                               }
                                               key={i}
                                               onSelect={() => {
@@ -884,21 +884,6 @@ const InvoiceForm2 = ({
             </Button>
           </div>
         </form>
-        <Modal open={open} onOpenChange={setOpen}>
-          <Modal.Content
-            title="New Product"
-            description="Add a product"
-          >
-            <ProductForm
-              setIsModalOpen={setOpen}
-              productId={
-                router.isReady ? router.query.id?.toString() : ''
-              }
-              productName={productValue}
-              refetchProducts={refetchProducts()}
-            />
-          </Modal.Content>
-        </Modal>
       </Form>
 
       <Modal open={productsModal} onOpenChange={setProductsModal}>
