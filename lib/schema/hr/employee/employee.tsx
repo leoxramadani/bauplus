@@ -16,7 +16,9 @@ import axios from 'axios';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import * as z from 'zod';
 
 const NAME_REGEX = new RegExp('/^[A-Za-z]+$/'); // only letters

@@ -10,7 +10,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '../../ui/input';
 

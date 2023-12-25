@@ -55,7 +55,8 @@ import {
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import CreateAccountDetails from './CreateAccountDetails/CreateAccountDetails';
 import CreateBusinessDetails from './CreateBusinessDetails/CreateBusinessDetails';
 import CreateInfoDetails from './CreateInfoDetails/CreateInfoDetails';

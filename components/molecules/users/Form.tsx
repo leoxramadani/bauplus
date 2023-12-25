@@ -4,7 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import CompaniesRolesAndPrivileges from './CompaniesRolesAndPrivileges';
 import { CompanyWithRoleAndPrivileges } from './CompanyWithPrivileges';
 import { Button } from '@/components/ui/button';

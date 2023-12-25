@@ -38,7 +38,8 @@ import format from 'date-fns/format';
 import { CalendarIcon } from 'lucide-react';
 import { Dispatch, SetStateAction, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 interface IGenerateProps {
   data?: IgeneratedInvoice;
@@ -365,7 +366,6 @@ const GeneratedForm = ({
                         disabled={(date) =>
                           date < new Date(form.watch('date'))
                         }
-                        
                       />
                     </PopoverContent>
                   </Popover>

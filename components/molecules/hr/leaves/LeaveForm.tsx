@@ -44,7 +44,9 @@ import format from 'date-fns/format';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 interface ILeavesProps {
   setIsModalOpen(open: boolean): void;
   leaveId?: string;

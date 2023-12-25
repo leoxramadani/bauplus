@@ -4,7 +4,9 @@ import {
 } from '@/lib/queries/user';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 
 const Disable2FA = () => {

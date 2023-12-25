@@ -73,7 +73,8 @@ import {
 import { useRouter } from 'next/router';
 import { Key, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 interface IInvoiceForm {
   setIsModalOpen(open: boolean): void;

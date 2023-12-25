@@ -1,4 +1,5 @@
 import Layout from '@/components/layout';
+import { Toaster } from '@/components/ui/sonner';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
 import {
@@ -52,6 +53,7 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
               theme="light"
               transition={Slide}
             />
+              <Toaster />
             <Component {...pageProps} />
           </Layout>
         </LanguageProvider>

@@ -11,10 +11,11 @@ import axios from 'axios';
 import { addDays, format } from 'date-fns';
 import { Trash } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { Button } from '../ui/button';
 import Delete from './Delete';
 import Modal from './Modal';
+import { toast } from 'sonner';
 
 interface IFullCalendar {
   holidays: IHoliday[];

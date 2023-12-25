@@ -31,7 +31,9 @@ import format from 'date-fns/format';
 import { CalendarIcon } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 interface IHolidayProps {
   setIsModalOpen(open: boolean): void;
   holidayId?: string;

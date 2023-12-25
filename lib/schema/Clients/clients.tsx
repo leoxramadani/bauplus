@@ -19,7 +19,9 @@ import axios from 'axios';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import * as z from 'zod';
 
 export const clientsSchema = z.object({

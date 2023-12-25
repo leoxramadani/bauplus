@@ -21,7 +21,9 @@ import { format } from 'date-fns';
 import { MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { toast } from 'sonner';
+
 import { IAttendance, NEWIAttendance } from './attendance';
 
 const ActionsColumn = ({ item }: { item: any }) => {
