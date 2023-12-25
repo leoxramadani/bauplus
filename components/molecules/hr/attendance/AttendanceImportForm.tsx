@@ -1,15 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
+import Papa from 'papaparse';
 import { toast } from 'sonner';
-
 
 const AttendanceImportForm = () => {
   const [file, setFile] = useState<any>();
-
+  const [parsedData, setParsedData] = useState<any>();
+  const [columns, setColumns] = useState<any>([]);
+  const [values, setValues] = useState<any>([]);
   const handleUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -17,24 +19,61 @@ const AttendanceImportForm = () => {
     if (files && files.length > 0) {
       console.log('files inside handleUpload->', files);
 
-      if (
-        files[0].type.endsWith('.csv') ||
-        files[0].type.endsWith('.xlsx')
-      ) {
-        //   console.log('file -->', URL.createObjectURL(files![0]));
-        //   console.log('file -->', files![0]);
-        // } else if (files[0].type.includes('image')) {
-        //   const reader = new FileReader();
-        //   reader.onload = (e) => {
-        //     const image = new Image();
-        //     image.src = e.target?.result as string;
-        //   };
-        //   reader.readAsDataURL(files[0]);
+      // if (
+      //   files[0].type.endsWith('.csv') ||
+      //   files[0].type.endsWith('.xlsx')
+      // ) {
+      //   console.log('file -->', URL.createObjectURL(files![0]));
+      //   console.log('file -->', files![0]);
+      // } else if (files[0].type.includes('image')) {
+      //   const reader = new FileReader();
+      //   reader.onload = (e) => {
+      //     const image = new Image();
+      //     image.src = e.target?.result as string;
+      //   };
+      //   reader.readAsDataURL(files[0]);
 
-        console.log('This is an excel or CSV file');
-      }
+      Papa.parse(files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results: any) {
+          const columnsArray: any = [];
+          const valuesArray: any = [];
+
+          // Iterating data to get column name and their values
+          results.data.map((d: any) => {
+            // console.log('each map d-> ', Object.keys(d));
+
+            columnsArray.push(Object.keys(d));
+            valuesArray.push(Object.values(d));
+          });
+
+          // console.log('Object.keys --->', Object.keys(results.data));
+
+          console.log('results =>', results.data);
+
+          // Parsed Data Response in array format
+          setParsedData(results.data);
+
+          // Filtered Column Names
+          setColumns(columnsArray[0]);
+
+          // Filtered Values
+          setValues(valuesArray);
+        },
+      });
+
+      // const csv = Papa.unparse(files[0], config);
     }
+
+    //     console.log('This is an excel or CSV file');
+    //   }
+    // }
   };
+
+  useEffect(() => {
+    console.log('columns->', columns);
+  }, [columns]);
 
   const form = useForm({
     mode: 'onChange',
@@ -45,6 +84,7 @@ const AttendanceImportForm = () => {
       console.log('Console file -->', file);
 
       console.log('Inside of submit ', data);
+
       axios
         .post('', {
           headers: {
@@ -111,6 +151,7 @@ const AttendanceImportForm = () => {
             <Input
               type="file"
               // value={file}
+              // accept={'.csv' || '.xls'}
               id="dropzone-file"
               className="hidden"
               onChange={handleUpload}
