@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const databaseColumnsSchema = z.object({
+export const mappingColumnsSchema = z.object({
   columns: z
     .object({
       systemColumnName: z
@@ -10,6 +10,20 @@ export const databaseColumnsSchema = z.object({
     })
     .array()
     .optional(),
+});
+
+export type IMappingColumnsSchema = z.infer<
+  typeof mappingColumnsSchema
+>;
+
+export const databaseColumnsSchema = z.object({
+  employeeId: z.string(),
+  date: z.string(),
+  shiftId: z.string(),
+  timeIn: z.string(),
+  timeOut: z.string(),
+  status: z.string(),
+  note: z.string(),
 });
 
 export type IDatabaseColumnsSchema = z.infer<

@@ -15,23 +15,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  IDatabaseColumnsSchema,
-  databaseColumnsSchema,
+  IMappingColumnsSchema,
+  mappingColumnsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const AttendanceTestUI = () => {
-  const form = useForm<IDatabaseColumnsSchema>({
-    resolver: zodResolver(databaseColumnsSchema),
+  const form = useForm<IMappingColumnsSchema>({
+    resolver: zodResolver(mappingColumnsSchema),
     // values: {
     //   ...client,
     //   clientBusinessIds: client?.clientBusinessIds,
     //   clientContactInfos: client?.clientContactInfos,
     // },
   });
-  const onSubmit = (data: IDatabaseColumnsSchema) => {
+  const onSubmit = (data: IMappingColumnsSchema) => {
     // Array to hold transformed data
     const transformedData: any[] = [];
 
@@ -92,7 +92,7 @@ const AttendanceTestUI = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-full max-w-7xl flex-col justify-between gap-4 lg:flex-row"
+              className="flex w-full max-w-7xl flex-col justify-between gap-4"
             >
               <div className="flex flex-col gap-4 lg:w-[600px]">
                 {/* employee_id */}
@@ -190,10 +190,10 @@ const AttendanceTestUI = () => {
                     })),
                   ])
                 }
-                className="flex flex-row items-center justify-center gap-2"
+                className="flex flex-row gap-2"
               >
                 {' '}
-                test
+                test button for import
               </Button>
 
               <div>
