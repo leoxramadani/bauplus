@@ -15,46 +15,32 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  IDatabaseColumnsSchema,
-  databaseColumnsSchema,
+  IMappingColumnsSchema,
+  mappingColumnsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const AttendanceTestUI = () => {
-  const form = useForm<IDatabaseColumnsSchema>({
-    resolver: zodResolver(databaseColumnsSchema),
+  const form = useForm<IMappingColumnsSchema>({
+    resolver: zodResolver(mappingColumnsSchema),
     // values: {
     //   ...client,
     //   clientBusinessIds: client?.clientBusinessIds,
     //   clientContactInfos: client?.clientContactInfos,
     // },
   });
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: IMappingColumnsSchema) => {
     // Array to hold transformed data
     const transformedData: any[] = [];
 
-    // Loop through the keys in form data
-    Object.keys(data).forEach((key) => {
-      const inputValue = data[key];
-      const matchingOption = attendanceOptions.find(
-        (option: any) => option.DatabaseColumnName === inputValue
-      );
-
-      if (matchingOption) {
-        transformedData.push({
-          DatabaseColumnName: inputValue,
-          SystemColumnName: matchingOption.SystemColumnName,
-        });
-      }
-    });
-
-    console.log('Transformed Form Data:', transformedData);
+    console.log('Transformed Form Data:', data);
   };
 
   const attendanceOptions = [
     {
-      SystemColumnName: '',
+      SystemColumnName: 'Employee',
       DatabaseColumnName: 'employeeId',
     },
     {
@@ -91,6 +77,8 @@ const AttendanceTestUI = () => {
     },
   ];
 
+  console.log(form.watch('columns'));
+
   return (
     <>
       <div className="flex flex-col gap-4 rounded-lg border bg-white p-8">
@@ -104,411 +92,109 @@ const AttendanceTestUI = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-full max-w-7xl flex-col justify-between gap-4 lg:flex-row"
+              className="flex w-full max-w-7xl flex-col justify-between gap-4"
             >
               <div className="flex flex-col gap-4 lg:w-[600px]">
                 {/* employee_id */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className=" gap-4">
                   <FormField
                     control={form.control}
-                    name="employeeId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Employee_id"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    name="columns"
+                    render={({ field }) => {
+                      return (
+                        <div className="grid w-full grid-cols-2 gap-4">
+                          {field.value &&
+                            field.value.map((item, i) => (
+                              <React.Fragment key={i}>
+                                <FormField
+                                  control={form.control}
+                                  name={`columns.${i}.systemColumnName`}
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormControl className="relative">
+                                        <Input
+                                          placeholder="Employee_id"
+                                          {...field}
+                                          // disabled={isSubmitting}
+                                        />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
 
-                  <FormField
-                    control={form.control}
-                    name="employeeId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                                <FormField
+                                  control={form.control}
+                                  name={`columns.${i}.databaseColumnName`}
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        value={field.value}
+                                        //   disabled={isSubmitting}
+                                      >
+                                        <FormControl>
+                                          <SelectTrigger>
+                                            <SelectValue placeholder="Select an entity" />
+                                          </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                          {attendanceOptions ? (
+                                            <>
+                                              {attendanceOptions.map(
+                                                (x: any) => (
+                                                  <SelectItem
+                                                    key={
+                                                      x.DatabaseColumnName
+                                                    }
+                                                    value={
+                                                      x.DatabaseColumnName
+                                                    }
+                                                  >
+                                                    {
+                                                      x.DatabaseColumnName
+                                                    }
+                                                  </SelectItem>
+                                                )
+                                              )}
+                                            </>
+                                          ) : (
+                                            <p>Loading...</p>
+                                          )}
+                                        </SelectContent>
+                                      </Select>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              </React.Fragment>
+                            ))}
+                        </div>
+                      );
+                    }}
                   />
                 </div>
                 {/* check_in */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="timeIn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Check in"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="timeIn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* shift */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="shiftId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Shift"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="shiftId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* status */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Status"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </div>
-              <div className="flex flex-col gap-4 lg:w-[600px]">
-                {/* date */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Date"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* check_out */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="timeOut"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Check out"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="timeOut"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* note */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="note"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl className="relative">
-                          <Input
-                            placeholder="Note"
-                            {...field}
-                            // disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="note"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={field.value}
-                          //   disabled={isSubmitting}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an entity" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {attendanceOptions ? (
-                              <>
-                                {attendanceOptions.map((x: any) => (
-                                  <SelectItem
-                                    key={x.DatabaseColumnName}
-                                    value={x.DatabaseColumnName}
-                                  >
-                                    {x.DatabaseColumnName}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+              <Button
+                type="button"
+                variant="link"
+                onClick={() =>
+                  form.setValue('columns', [
+                    ...(form.getValues('columns') || []),
+                    ...attendanceOptions.map((attendance) => ({
+                      systemColumnName: attendance.SystemColumnName,
+                      databaseColumnName: '',
+                    })),
+                  ])
+                }
+                className="flex flex-row gap-2"
+              >
+                {' '}
+                test button for import
+              </Button>
 
               <div>
                 <Button className="flex flex-row items-center justify-center gap-1">
