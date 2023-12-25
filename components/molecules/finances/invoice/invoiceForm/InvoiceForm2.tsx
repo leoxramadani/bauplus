@@ -47,12 +47,8 @@ import {
   INVOICE_CREATE,
   UPDATE_INVOICE,
 } from '@/lib/constants/endpoints/finance/invoice';
-import {
-  CREATE_PRODUCT,
-  GET_ALL_PRODUCTS_WOPAGINATION,
-} from '@/lib/constants/endpoints/products/products';
+import { GET_ALL_PRODUCTS_WOPAGINATION } from '@/lib/constants/endpoints/products/products';
 import useData from '@/lib/hooks/useData';
-import useModal from '@/lib/hooks/useModal';
 import { IClients } from '@/lib/schema/Clients/clients';
 import {
   IInvoice,
@@ -94,9 +90,6 @@ const InvoiceForm2 = ({
   const [addingProduct, setAddingProduct] = useState(false);
   const [productValue, setProductValue] = useState('');
 
-  const [selectedProducts, setSelectedProducts] = useState<
-    IProduct[]
-  >(invoiceData?.products || []);
   const [productsModal, setProductsModal] = useState<boolean>(false);
 
   const {
@@ -152,7 +145,7 @@ const InvoiceForm2 = ({
 
   const onSubmit = useCallback(
     async (data: IInvoice) => {
-      console.log('data', data);
+      // console.log('data', data);
       setIsLoading(true);
 
       if (invoiceData) {
@@ -177,7 +170,7 @@ const InvoiceForm2 = ({
           toast.success('Successfully updated invoice');
           refetchInvoices();
         } catch (error) {
-          console.error('Error UPDATING invoice:', error);
+          // console.error('Error UPDATING invoice:', error);
           toast.error(
             'There was an issue updating the invoice! Please try again.'
           );
@@ -196,7 +189,7 @@ const InvoiceForm2 = ({
               "yyyy-MM-dd'T'HH:mm:ss.SSSX"
             ),
           });
-          console.log('Successfully created invoice:', response);
+          // console.log('Successfully created invoice:', response);
           toast.success('Successfully added invoice');
           setIsModalOpen(false);
           refetchInvoices();
@@ -213,29 +206,29 @@ const InvoiceForm2 = ({
     [invoiceData]
   );
 
-  const CREATE_PRODUCTs = useCallback(async () => {
-    setAddingProduct(true);
-    await axios
-      .post(CREATE_PRODUCT, {
-        productName: productValue,
-        price: 0,
-        quantity: 0,
-      })
-      .then((res) => {
-        console.log(' success product data -->', res.data);
+  // const CREATE_PRODUCTs = useCallback(async () => {
+  //   setAddingProduct(true);
+  //   await axios
+  //     .post(CREATE_PRODUCT, {
+  //       productName: productValue,
+  //       price: 0,
+  //       quantity: 0,
+  //     })
+  //     .then((res) => {
+  //       console.log(' success product data -->', res.data);
 
-        setTimeout(() => {
-          setAddingProduct(false);
-          refetchProducts();
-        }, 350);
-      })
-      .catch((error) => {
-        console.log('error invoice employees->', error);
-        toast.error(
-          'There was an issue adding the product! Please try again.'
-        );
-      });
-  }, [productValue]);
+  //       setTimeout(() => {
+  //         setAddingProduct(false);
+  //         refetchProducts();
+  //       }, 250);
+  //     })
+  //     .catch((error) => {
+  //       console.log('error invoice employees->', error);
+  //       toast.error(
+  //         'There was an issue adding the product! Please try again.'
+  //       );
+  //     });
+  // }, [productValue]);
 
   const onError = (error: any) => {
     console.log('Error Invoice ::', error);
@@ -249,8 +242,6 @@ const InvoiceForm2 = ({
 
     form.setValue('productLineEntity', updatedProductLineEntity);
   };
-
-  const { open, setOpen } = useModal();
 
   return (
     <div className="z-0 flex w-full flex-col gap-4 ">
@@ -701,7 +692,7 @@ const InvoiceForm2 = ({
                                       className="w-full text-left no-underline"
                                       onClick={() =>
                                         // CREATE_PRODUCTs()
-                                        setOpen(true)
+                                        setProductsModal(true)
                                       }
                                       // loading={addingProduct}
                                       // disabled={addingProduct}
@@ -880,6 +871,8 @@ const InvoiceForm2 = ({
               className="w-max"
               type="submit"
               // disabled={!form.formState.isValid}
+              loading={isLoading}
+              disabled={isLoading}
             >
               Submit
             </Button>

@@ -78,7 +78,7 @@ const Invoice = () => {
             description="Fill all the fields to create an invoice"
           >
             <InvoiceForm2
-              setIsModalOpen={setOpen}
+              setIsModalOpen={setNewInv}
               invoiceId={
                 router.isReady ? router.query.id?.toString() : ''
               }
