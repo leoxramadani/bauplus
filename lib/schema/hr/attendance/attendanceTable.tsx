@@ -10,11 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  DELETE_ATTENDANCE,
-  GET_ALL_ATTENDANCE,
-} from '@/lib/constants/endpoints/hr/attendance';
-import useData from '@/lib/hooks/useData';
+import { DELETE_ATTENDANCE } from '@/lib/constants/endpoints/hr/attendance';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
 import { format } from 'date-fns';
@@ -30,10 +26,10 @@ const ActionsColumn = ({ item }: { item: any }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { refetch: refetchClients } = useData<IAttendance[]>(
-    ['attendance'],
-    GET_ALL_ATTENDANCE
-  );
+  // const { refetch: refetchClients } = useData<IAttendance[]>(
+  //   ['attendance'],
+  //   GET_ALL_ATTENDANCE
+  // );
 
   const handleEdit = (id: string) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -55,7 +51,7 @@ const ActionsColumn = ({ item }: { item: any }) => {
           'Successfully deleted the selected attendance.'
         );
         setIsLoading(false);
-        refetchClients();
+        // refetchClients();
       })
       .catch(() => {
         toast.error('Error deleting client!');
