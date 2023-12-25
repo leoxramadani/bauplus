@@ -14,7 +14,7 @@ import {
 import { INVOICE_DELETE } from '@/lib/constants/endpoints/finance/invoice';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, Pen, Trash } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 // import { toast } from 'react-toastify';
@@ -278,15 +278,18 @@ const ActionsColumn = ({ item }: { item: any }) => {
           Copy item id
         </DropdownMenuItem> 
         <DropdownMenuSeparator />*/}
-        <DropdownMenuItem onClick={() => handleEdit(item.invoiceId)}>
-          Edit row
+        <DropdownMenuItem
+          className="flex gap-1"
+          onClick={() => handleEdit(item.invoiceId)}
+        >
+          <Pen size={14} /> Edit
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         {/* Delete Modal */}
         <Modal open={open} onOpenChange={setOpen}>
           <Modal.Trigger asChild>
-            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
-              Delete Invoice
+            <div className="relative flex cursor-default select-none items-center gap-1 rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors data-[disabled]:pointer-events-none  data-[disabled]:opacity-50 hover:bg-accent">
+              <Trash size={14} /> Delete
             </div>
           </Modal.Trigger>
           <Modal.Content
