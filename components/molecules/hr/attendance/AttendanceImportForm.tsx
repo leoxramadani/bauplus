@@ -36,7 +36,7 @@ const AttendanceImportForm = () => {
       Papa.parse(files[0], {
         header: true,
         skipEmptyLines: true,
-        complete: function (results) {
+        complete: function (results: any) {
           const columnsArray: any = [];
           const valuesArray: any = [];
 
