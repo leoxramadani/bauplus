@@ -1,12 +1,12 @@
 import Modal from '@/components/atoms/Modal';
+import NoticeCard from '@/components/atoms/NoticeCard';
 import NoticeForm from '@/components/molecules/notices/NoticeForm';
-import NoticesCard from '@/components/molecules/notices/NoticesCard';
 import { Button } from '@/components/ui/button';
 import { GET_ALL_NOTICES } from '@/lib/constants/endpoints/notices';
 import useData from '@/lib/hooks/useData';
+import useModal from '@/lib/hooks/useModal';
 import { FileInput, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 interface Notice {
   noticeId: string;
   dateCreated: string;
@@ -22,16 +22,11 @@ interface Notice {
 }
 const Notices = () => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useModal();
   const { data: noticesData, refetch: noticesRefetch } = useData<
     Notice[]
   >(['notices'], GET_ALL_NOTICES);
-  useEffect(() => {
-    if (router.query.id) {
-      setOpen(true);
-    }
-    console.log('router==', router);
-  }, [router.query.id]);
+
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -63,14 +58,19 @@ const Notices = () => {
           </Button>
         </div>
         <div className="grid grid-cols-1 gap-4 gap-y-16 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {noticesData &&
+          {noticesData ? (
             noticesData.map((item, index) => (
-              <NoticesCard
-                cardData={item}
+              <NoticeCard
+                noticeData={item}
                 key={index}
                 noticesRefetch={noticesRefetch}
               />
-            ))}
+            ))
+          ) : (
+            // <div className="flex items-center justify-center">
+            <p>No Notices Found</p>
+            // </div>
+          )}
         </div>
       </section>
     </>
