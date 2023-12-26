@@ -8,14 +8,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { CREATE_ATTENDANCE_MAPPING } from '@/lib/constants/endpoints/hr/attendance';
+import {
+  CREATE_ATTENDANCE_MAPPING,
+  GET_ATTENDANCE_BY_BRANCH,
+} from '@/lib/constants/endpoints/hr/attendance';
 import {
   IAttendanceOptionsSchema,
   attendanceOptionsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
 import { toast } from 'sonner';
@@ -26,9 +29,72 @@ interface OutputObject {
   branchId: string;
 }
 
+type attendaceCols = {
+  templateAttendanceMappingId: string;
+  systemColumnName: string;
+  databaseColumnName: string;
+  branchId: string;
+};
+
 const AttendanceOptionsForm = () => {
+  const [attendanceColumns, setAttendanceColumns] =
+    useState<attendaceCols[]>();
+  // const {
+  //   data,
+  //   isLoading,
+  //   isError,
+  //   refetch: refetchAttendance,
+  // } = useData<any>(
+  //   ['attendance'],
+  //   GET_ATTENDANCE_BY_BRANCH +
+  //     `?branchId=${'479a3b1a-51a8-46ab-9624-09f127ba5397'}`
+  // );
+
+  useEffect(() => {
+    async function getData(Id: string) {
+      console.log('inside getData');
+      await axios
+        .get(GET_ATTENDANCE_BY_BRANCH + `?branchId=${Id}`)
+        .then((res) => {
+          console.log('fetching mapping options -->', res.data);
+          setAttendanceColumns(res.data);
+        })
+        .catch((error) => {
+          console.log('error fetching mapping options->', error);
+        });
+    }
+    // 1b6c79ae-1272-42f4-a2ba-63406cc84763
+    // 479a3b1a-51a8-46ab-9624-09f127ba5397
+    getData('1b6c79ae-1272-42f4-a2ba-63406cc84763');
+  }, []);
+
   const form = useForm<IAttendanceOptionsSchema>({
     resolver: zodResolver(attendanceOptionsSchema),
+    //@ts-expect-error
+    values: attendanceColumns &&
+      attendanceColumns?.length > 0 && {
+        employeeId: attendanceColumns?.filter(
+          (item: attendaceCols) =>
+            item.databaseColumnName === 'employeeId'
+        )[0].systemColumnName,
+
+        checkType: attendanceColumns?.filter(
+          (item: attendaceCols) =>
+            item.databaseColumnName === 'checkType'
+        )[0].systemColumnName,
+        checkTime: attendanceColumns?.filter(
+          (item: attendaceCols) =>
+            item.databaseColumnName === 'checkTime'
+        )[0].systemColumnName,
+        dataSource: attendanceColumns?.filter(
+          (item: attendaceCols) =>
+            item.databaseColumnName === 'dataSource'
+        )[0].systemColumnName,
+        checkPoint: attendanceColumns?.filter(
+          (item: attendaceCols) =>
+            item.databaseColumnName === 'checkPoint'
+        )[0].systemColumnName,
+      },
   });
 
   const onSubmit = useCallback(
@@ -75,7 +141,7 @@ const AttendanceOptionsForm = () => {
   );
 
   const onError = (error: any) => {
-    console.log('Please check your input fields! ', error);
+    console.log('Please check your input fields!', error);
   };
 
   return (
@@ -93,224 +159,160 @@ const AttendanceOptionsForm = () => {
               className="flex w-full max-w-7xl flex-col justify-between gap-4"
               onSubmit={form.handleSubmit(onSubmit, onError)}
             >
-              <div className="flex flex-col lg:flex-row">
-                <div className="flex flex-col gap-4 lg:w-[600px]">
-                  {/* employeeId */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="employeeId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              employee id
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Employee_id"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* date */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="date"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              date
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* shiftIn */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="shiftId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              shift Id
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Shift Id"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* timeIn */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="timeIn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              time in
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Time in" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* timeOut */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="timeOut"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              time Out
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Time Out"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+              <div className="grid grid-cols-2 gap-5">
+                {/* employeeId */}
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="employeeId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            employee id
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="employee id"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <div className="flex flex-col gap-4 lg:w-[600px]">
-                  {/* status */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              status
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Status" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* note */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="note"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              note
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input placeholder="Note" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="checkOut"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              check out
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Check_out"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="attended"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Write your{' '}
-                            <span className="font-bold underline">
-                              attended
-                            </span>{' '}
-                            column name here:
-                          </FormLabel>
-                          <FormControl className="relative">
-                            <Input
-                              placeholder="Attended"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
+                {/* checkType */}
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="checkType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            Check Type
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Check Type"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* checkTime */}
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="checkTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            Check Time
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Check Time"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Data Source */}
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="dataSource"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            Data Source
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Data source ..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Work Type */}
+                {/* <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="workType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            Work Type
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input placeholder="Work Type" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div> */}
+                {/* checkPoint */}
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="checkPoint"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Write your{' '}
+                          <span className="font-bold underline">
+                            Check Point
+                          </span>{' '}
+                          column name here:
+                        </FormLabel>
+                        <FormControl className="relative">
+                          <Input
+                            placeholder="Check Point"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* note */}
+                {/* <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="note"
@@ -331,7 +333,6 @@ const AttendanceOptionsForm = () => {
                       )}
                     />
                   </div> */}
-                </div>
               </div>
               <div>
                 <Button className="flex flex-row items-center justify-center gap-1">

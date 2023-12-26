@@ -31,14 +31,14 @@ export type IDatabaseColumnsSchema = z.infer<
 >;
 
 export const attendanceOptionsSchema = z.object({
-  attendanceRecordId: z.string().optional(),
-  employeeId: z.string(),
-  date: z.string(),
-  shiftId: z.string(),
-  timeIn: z.string(),
-  timeOut: z.string(),
-  status: z.string(),
-  note: z.string(),
+  checkInOutId: z.string().optional(),
+  employeeId: z.string().optional(),
+  checkType: z.string(),
+  checkTime: z.string(),
+  dataSource: z.string().optional(),
+  // timeOut: z.string(),
+  // workType: z.string(),
+  checkPoint: z.string(),
 });
 
 export type IAttendanceOptionsSchema = z.infer<

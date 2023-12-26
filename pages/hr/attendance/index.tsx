@@ -14,8 +14,10 @@ const Attendance = () => {
   const router = useRouter();
   const { open, setOpen } = useModal();
   const { open: openImport, setOpen: setOpenImport } = useModal();
-  const { open: attendanceOptions, setOpen: setAttendanceOptions } =
-    useModal();
+  const { 
+    open: attendanceOptions, 
+    setOpen: setAttendanceOptions
+   } =useModal();
   // const {
   //   data,
   //   isLoading,
