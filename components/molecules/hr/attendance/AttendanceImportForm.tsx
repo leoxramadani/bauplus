@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-// import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import Papa from 'papaparse';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const AttendanceImportForm = ({
@@ -109,11 +108,14 @@ const AttendanceImportForm = ({
           },
         });
 
-        // After the POST request is successful, navigate to the mapping route
-        router.push({
-          pathname: '/hr/attendance/mapping',
-          query: { columnsData: JSON.stringify(columns) },
-        });
+        if (columns && columns.length > 0) {
+          router.push({
+            pathname: '/hr/attendance/mapping',
+            query: { columnsData: JSON.stringify(columns) },
+          });
+        } else {
+          console.error('Columns are undefined or empty');
+        }
       } catch (error) {
         console.log('error=>', error);
         toast.error('Failed to retrieve upload file');
