@@ -8,16 +8,13 @@ import { NEWIAttendance } from '@/lib/schema/hr/attendance/attendance';
 import { NEWattendanceColumnDef } from '@/lib/schema/hr/attendance/attendanceTable';
 import { FileInput, FileUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
-import AttendanceTestUI from './testui';
 
 const Attendance = () => {
   const router = useRouter();
   const { open, setOpen } = useModal();
   const { open: openImport, setOpen: setOpenImport } = useModal();
-  const { 
-    open: attendanceOptions, 
-    setOpen: setAttendanceOptions
-   } =useModal();
+  const { open: attendanceOptions, setOpen: setAttendanceOptions } =
+    useModal();
   // const {
   //   data,
   //   isLoading,
@@ -93,25 +90,6 @@ const Attendance = () => {
         {temp && (
           <DataTable data={temp} columns={NEWattendanceColumnDef} />
         )}
-
-        {/* Import attendance */}
-        <Modal
-          open={attendanceOptions}
-          onOpenChange={setAttendanceOptions}
-        >
-          <Modal.Trigger asChild>
-            <Button variant="outline" className="flex gap-1">
-              <FileUp className="size-4" /> <span>Import</span>
-            </Button>
-          </Modal.Trigger>
-          <Modal.Content
-            title="Import attendance"
-            description="Upload the CSV file"
-            className="max-w-lg"
-          >
-            <AttendanceTestUI />
-          </Modal.Content>
-        </Modal>
       </section>
     </>
   );

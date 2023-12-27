@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 import Papa from 'papaparse';
 import { toast } from 'sonner';
 
@@ -12,15 +13,21 @@ const AttendanceImportForm = ({
 }: {
   setAttendanceOptions: any;
 }) => {
+  const router = useRouter();
   const [file, setFile] = useState<any>();
+  const [fileName, setFileName] = useState<string>('');
   const [parsedData, setParsedData] = useState<any>();
   const [columns, setColumns] = useState<any>([]);
   const [values, setValues] = useState<any>([]);
+
   const handleUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
+      const selectedFile = files[0];
+      setFile(selectedFile);
+      setFileName(selectedFile.name); // Save the file name
       console.log('files inside handleUpload->', files);
 
       // if (
@@ -87,23 +94,32 @@ const AttendanceImportForm = ({
 
   const onSubmit = useCallback(
     async (data: any) => {
+      if (!file) {
+        toast.error('Please select a file to upload.');
+        return;
+      }
       console.log('Console file -->', file);
-
       console.log('Inside of submit ', data);
 
-      axios
-        .post('', {
+      try {
+        // Perform the axios POST request first
+        await axios.post('', {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        })
-        .then((res) => {})
-        .catch((error) => {
-          console.log('error=>', error);
-          toast.error('Failed to retrieve upload file');
         });
+
+        // After the POST request is successful, navigate to the mapping route
+        router.push({
+          pathname: '/hr/attendance/mapping',
+          query: { columnsData: JSON.stringify(columns) },
+        });
+      } catch (error) {
+        console.log('error=>', error);
+        toast.error('Failed to retrieve upload file');
+      }
     },
-    [file]
+    [file, columns, router]
   );
 
   const onError = (error: any) => {
