@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import Papa from 'papaparse';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-// import { toast } from 'react-toastify';
-import Papa from 'papaparse';
 import { toast } from 'sonner';
 
 const AttendanceImportForm = ({
@@ -12,15 +12,21 @@ const AttendanceImportForm = ({
 }: {
   setAttendanceOptions: any;
 }) => {
+  const router = useRouter();
   const [file, setFile] = useState<any>();
+  const [fileName, setFileName] = useState<string>('');
   const [parsedData, setParsedData] = useState<any>();
   const [columns, setColumns] = useState<any>([]);
   const [values, setValues] = useState<any>([]);
+
   const handleUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
+      const selectedFile = files[0];
+      setFile(selectedFile);
+      setFileName(selectedFile.name); // Save the file name
       console.log('files inside handleUpload->', files);
 
       // if (
@@ -87,23 +93,38 @@ const AttendanceImportForm = ({
 
   const onSubmit = useCallback(
     async (data: any) => {
+      if (!file) {
+        toast.error('Please select a file to upload.');
+        return;
+      }
       console.log('Console file -->', file);
-
       console.log('Inside of submit ', data);
 
-      axios
-        .post('', {
+      try {
+        // Perform the axios POST request first
+        await axios.post('', {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        })
-        .then((res) => {})
-        .catch((error) => {
-          console.log('error=>', error);
-          toast.error('Failed to retrieve upload file');
         });
+
+        if (Array.isArray(columns) && columns.length > 0) {
+          const columnsData = JSON.stringify(columns);
+          router.push({
+            pathname: '/hr/attendance/mapping',
+            query: { columnsData },
+          });
+        } else {
+          console.error('Columns are not a valid array or empty');
+          // Handle the case where columns is not a valid array or empty
+          // You might redirect to another route or display an error message
+        }
+      } catch (error) {
+        console.log('error=>', error);
+        toast.error('Failed to retrieve upload file');
+      }
     },
-    [file]
+    [file, columns, router]
   );
 
   const onError = (error: any) => {
