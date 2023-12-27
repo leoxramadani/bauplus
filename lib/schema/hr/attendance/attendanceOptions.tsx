@@ -44,3 +44,16 @@ export const attendanceOptionsSchema = z.object({
 export type IAttendanceOptionsSchema = z.infer<
   typeof attendanceOptionsSchema
 >;
+
+export const objMappingAttendance = z
+  .object({
+    templateAttendanceMappingId: z.string(),
+    systemColumnName: z.string(),
+    databaseColumnName: z.string(),
+    branchId: z.string(),
+  })
+  .array();
+
+export type IobjMappingAttendance = z.infer<
+  typeof objMappingAttendance
+>;
