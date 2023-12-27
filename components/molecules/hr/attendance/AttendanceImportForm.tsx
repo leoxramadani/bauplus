@@ -108,13 +108,16 @@ const AttendanceImportForm = ({
           },
         });
 
-        if (columns && columns.length > 0) {
+        if (Array.isArray(columns) && columns.length > 0) {
+          const columnsData = JSON.stringify(columns);
           router.push({
             pathname: '/hr/attendance/mapping',
-            query: { columnsData: JSON.stringify(columns) },
+            query: { columnsData },
           });
         } else {
-          console.error('Columns are undefined or empty');
+          console.error('Columns are not a valid array or empty');
+          // Handle the case where columns is not a valid array or empty
+          // You might redirect to another route or display an error message
         }
       } catch (error) {
         console.log('error=>', error);
