@@ -16,7 +16,7 @@ export const GET_SPECIFIC_ATTENDANCE =
 export const CREATE_ATTENDANCE_MAPPING =
   BASE_URL + `/api/AttendanceMapping/Create`;
 export const UPDATE_ATTENDANCE_MAPPING =
-  BASE_URL + `/api/AttendanceMapping/Update`;
+  BASE_URL + `/api/AttendanceMapping/Update `;
 
 export const GET_ATTENDANCE_BY_BRANCH =
   BASE_URL + `/api/AttendanceMapping/GetByBranch`;

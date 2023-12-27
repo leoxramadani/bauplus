@@ -11,14 +11,16 @@ import { Input } from '@/components/ui/input';
 import {
   CREATE_ATTENDANCE_MAPPING,
   GET_ATTENDANCE_BY_BRANCH,
+  UPDATE_ATTENDANCE_MAPPING,
 } from '@/lib/constants/endpoints/hr/attendance';
+import useData from '@/lib/hooks/useData';
 import {
   IAttendanceOptionsSchema,
   attendanceOptionsSchema,
 } from '@/lib/schema/hr/attendance/attendanceOptions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
 import { toast } from 'sonner';
@@ -36,108 +38,97 @@ type attendaceCols = {
   branchId: string;
 };
 
-const AttendanceOptionsForm = () => {
-  const [attendanceColumns, setAttendanceColumns] =
-    useState<attendaceCols[]>();
-  // const {
-  //   data,
-  //   isLoading,
-  //   isError,
-  //   refetch: refetchAttendance,
-  // } = useData<any>(
-  //   ['attendance'],
-  //   GET_ATTENDANCE_BY_BRANCH +
-  //     `?branchId=${'479a3b1a-51a8-46ab-9624-09f127ba5397'}`
-  // );
+// 1b6c79ae-1272-42f4-a2ba-63406cc84763 //--AlbArchitect
+// 479a3b1a-51a8-46ab-9624-09f127ba5397 //--Thor
 
-  useEffect(() => {
-    async function getData(Id: string) {
-      console.log('inside getData');
-      await axios
-        .get(GET_ATTENDANCE_BY_BRANCH + `?branchId=${Id}`)
-        .then((res) => {
-          console.log('fetching mapping options -->', res.data);
-          setAttendanceColumns(res.data);
-        })
-        .catch((error) => {
-          console.log('error fetching mapping options->', error);
-        });
-    }
-    // 1b6c79ae-1272-42f4-a2ba-63406cc84763
-    // 479a3b1a-51a8-46ab-9624-09f127ba5397
-    getData('1b6c79ae-1272-42f4-a2ba-63406cc84763');
-  }, []);
+const BranchId = `1b6c79ae-1272-42f4-a2ba-63406cc84763`;
+
+const AttendanceOptionsForm = () => {
+  const {
+    data: attendanceColumns,
+    isLoading,
+    isError,
+    refetch: refetchAttendance,
+  } = useData<attendaceCols[]>(
+    ['attendance'],
+    GET_ATTENDANCE_BY_BRANCH + `?branchId=${BranchId}`
+  );
+
+  console.log('attendanceColumns-->', attendanceColumns);
+
+  const formValues: IAttendanceOptionsSchema =
+    attendanceColumns && attendanceColumns?.length > 0
+      ? attendanceColumns.reduce((values: any, item: any) => {
+          switch (item.databaseColumnName) {
+            case 'employeeId':
+            case 'checkType':
+            case 'checkTime':
+            case 'dataSource':
+            case 'checkPoint':
+              values[
+                item.databaseColumnName as keyof IAttendanceOptionsSchema
+              ] = item.systemColumnName;
+              break;
+            default:
+              break;
+          }
+          return values;
+        }, {} as Partial<IAttendanceOptionsSchema>)
+      : {};
 
   const form = useForm<IAttendanceOptionsSchema>({
     resolver: zodResolver(attendanceOptionsSchema),
-    //@ts-expect-error
-    values: attendanceColumns &&
-      attendanceColumns?.length > 0 && {
-        employeeId: attendanceColumns?.filter(
-          (item: attendaceCols) =>
-            item.databaseColumnName === 'employeeId'
-        )[0].systemColumnName,
-
-        checkType: attendanceColumns?.filter(
-          (item: attendaceCols) =>
-            item.databaseColumnName === 'checkType'
-        )[0].systemColumnName,
-        checkTime: attendanceColumns?.filter(
-          (item: attendaceCols) =>
-            item.databaseColumnName === 'checkTime'
-        )[0].systemColumnName,
-        dataSource: attendanceColumns?.filter(
-          (item: attendaceCols) =>
-            item.databaseColumnName === 'dataSource'
-        )[0].systemColumnName,
-        checkPoint: attendanceColumns?.filter(
-          (item: attendaceCols) =>
-            item.databaseColumnName === 'checkPoint'
-        )[0].systemColumnName,
-      },
+    values: formValues,
   });
 
   const onSubmit = useCallback(
     async (data: IAttendanceOptionsSchema) => {
       console.log('submited data', data);
-
-      // const outputArray: OutputObject[] = [];
-
-      // for (const key in data) {
-      //   if (
-      //     data.hasOwnProperty(key) &&
-      //     data[key as keyof IAttendanceOptionsSchema] !== undefined
-      //   ) {
-      //     outputArray.push({
-      //       DatabaseColumnName: key,
-      //       SystemColumnName: data[
-      //         key as keyof IAttendanceOptionsSchema
-      //       ] as string,
-      //     });
-      //   }
-      // }
-
       const mappedColumns: OutputObject[] = Object.entries(data).map(
-        ([key, value]) => {
+        ([key, value], index) => {
+          if (attendanceColumns && attendanceColumns.length > 0) {
+            console.log('there is data');
+            return {
+              templateAttendanceMappingId:
+                attendanceColumns[index].templateAttendanceMappingId,
+              databaseColumnName: key,
+              systemColumnName: value,
+              branchId: BranchId,
+            };
+          }
+
           return {
             databaseColumnName: key,
             systemColumnName: value,
-            branchId: '479a3b1a-51a8-46ab-9624-09f127ba5397',
+            branchId: BranchId,
           };
         }
       );
+      if (attendanceColumns && attendanceColumns.length > 0) {
+        console.log('UUUUPPPDDDAAATTTEEE');
 
-      console.log('mappedColumns=>', mappedColumns);
+        await axios
+          .put(UPDATE_ATTENDANCE_MAPPING, mappedColumns)
+          .then(() =>
+            toast.success('Successfully updated mapped columns')
+          )
+          .catch((error) => {
+            toast.error('Error updating mapping columns');
+            console.log('Error updating mapping return ->', error);
+          });
+      } else {
+        console.log('CCCRREEEAAATTTEEE');
 
-      await axios
-        .post(CREATE_ATTENDANCE_MAPPING, mappedColumns)
-        .then(() => toast.success('Successfully mapped columns'))
-        .catch((error) => {
-          toast.error('Error mapping columns');
-          console.log('error mapping return ->', error);
-        });
+        await axios
+          .post(CREATE_ATTENDANCE_MAPPING, mappedColumns)
+          .then(() => toast.success('Successfully mapped columns'))
+          .catch((error) => {
+            toast.error('Error mapping columns');
+            console.log('error mapping return ->', error);
+          });
+      }
     },
-    []
+    [attendanceColumns]
   );
 
   const onError = (error: any) => {

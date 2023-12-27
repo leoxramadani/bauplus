@@ -1,5 +1,5 @@
 import AppForm from '@/components/molecules/settings/AppForm';
-import Attend22 from '@/components/molecules/settings/Attend22';
+import AttendanceOptionsForm from '@/components/molecules/settings/AttendanceOptionsForm';
 import CompanyForm from '@/components/molecules/settings/CompanyForm';
 import CurrencyForm from '@/components/molecules/settings/CurrencyForm';
 import FinanceForm from '@/components/molecules/settings/FinanceForm';
@@ -65,8 +65,8 @@ const Settings = () => {
             <FinanceForm />
           </TabsContent>
           <TabsContent value="attendance">
-            {/* <AttendanceOptionsForm /> */}
-            <Attend22 />
+            <AttendanceOptionsForm />
+            {/* <Attend22 /> */}
           </TabsContent>
           <TabsContent value="roles-privileges">
             <RolesPrivilegesForm />

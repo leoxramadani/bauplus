@@ -35,7 +35,7 @@ export const attendanceOptionsSchema = z.object({
   employeeId: z.string().optional(),
   checkType: z.string(),
   checkTime: z.string(),
-  dataSource: z.string().optional(),
+  dataSource: z.string(),
   // timeOut: z.string(),
   // workType: z.string(),
   checkPoint: z.string(),
