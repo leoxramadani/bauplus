@@ -58,16 +58,17 @@ const Mapping = () => {
             Column Mapping Required
           </h1>
           <p className="">
-            It seems that you've imported a CSV file, but the columns
-            haven't been mapped to our Attendance settings yet.
+            It seems that you&apos;ve imported a CSV file, but the
+            columns haven&apos;t been mapped to our Attendance
+            settings yet.
           </p>
         </div>
 
         <div className="flex w-fit flex-col gap-4">
           <p className="">
             To ensure accurate integration of your data, please map
-            the columns from your CSV file to our system's Attendance
-            configuration.
+            the columns from your CSV file to our system&apos;s
+            Attendance configuration.
           </p>
           <p className="">
             Click the button below to go to the Attendance settings
