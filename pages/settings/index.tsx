@@ -1,4 +1,5 @@
 import AppForm from '@/components/molecules/settings/AppForm';
+import AttendanceMappingForm from '@/components/molecules/settings/AttendanceMappingForm';
 import AttendanceOptionsForm from '@/components/molecules/settings/AttendanceOptionsForm';
 import CompanyForm from '@/components/molecules/settings/CompanyForm';
 import CurrencyForm from '@/components/molecules/settings/CurrencyForm';
@@ -16,10 +17,6 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
-interface SettingComponent {
-  [key: string]: React.FC;
-}
-
 const Settings = () => {
   return (
     <>
@@ -36,6 +33,9 @@ const Settings = () => {
             <TabsTrigger value="finance">Finance</TabsTrigger>
             <TabsTrigger value="attendance">
               Attendance options
+            </TabsTrigger>
+            <TabsTrigger value="attendance2">
+              Attendance options 2
             </TabsTrigger>
             <TabsTrigger value="roles-privileges">
               Roles & Privileges
@@ -67,6 +67,9 @@ const Settings = () => {
           <TabsContent value="attendance">
             <AttendanceOptionsForm />
             {/* <Attend22 /> */}
+          </TabsContent>
+          <TabsContent value="attendance2">
+            <AttendanceMappingForm />
           </TabsContent>
           <TabsContent value="roles-privileges">
             <RolesPrivilegesForm />
