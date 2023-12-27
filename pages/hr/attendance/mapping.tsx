@@ -26,8 +26,27 @@ import { useForm } from 'react-hook-form';
 
 const Mapping = () => {
   const router = useRouter();
-  const columnsFromImportForm =
-    JSON.parse(router.query.columnsData as string) || [];
+
+  let columnsFromImportForm: string[] = [];
+
+  try {
+    const columnsData = router.query.columnsData as
+      | string
+      | undefined;
+
+    if (columnsData) {
+      // Ensure 'columnsData' is a string before attempting to parse
+      const parsedColumnsData = Array.isArray(columnsData)
+        ? columnsData
+        : [columnsData];
+      columnsFromImportForm = JSON.parse(
+        parsedColumnsData[0]
+      ) as string[];
+    }
+  } catch (error) {
+    console.error('Error parsing columnsData:', error);
+    columnsFromImportForm = []; // Set a default value or handle the error accordingly
+  }
 
   const form = useForm<IMappingColumnsSchema>({
     resolver: zodResolver(mappingColumnsSchema),
