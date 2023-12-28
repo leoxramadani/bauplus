@@ -124,7 +124,6 @@ const ActionsColumn = ({ item }: { item: any }) => {
           >
             <Delete
               handleDelete={() => handleDelete(item.bankAccountId)}
-              id={item.bankAccountId}
               deleting={deleting}
             />
           </Modal.Content>

@@ -4,8 +4,8 @@ import { Checkbox } from '../ui/checkbox';
 import Modal from './Modal';
 
 interface IDelete {
-  handleDelete: (id: string) => void;
-  id: string;
+  handleDelete: () => void;
+  id?: string;
   deleting: boolean;
 }
 
@@ -30,7 +30,7 @@ const Delete = ({ handleDelete, deleting, id }: IDelete) => {
           <Button
             variant="destructive"
             className="w-max"
-            onClick={() => handleDelete(id)}
+            onClick={() => handleDelete()}
             disabled={deleting || confirm == false}
             loading={deleting}
           >
