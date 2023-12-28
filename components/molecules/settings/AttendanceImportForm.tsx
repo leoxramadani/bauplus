@@ -111,7 +111,7 @@ const AttendanceImportForm = ({
         if (Array.isArray(columns) && columns.length > 0) {
           const columnsData = JSON.stringify(columns);
           router.push({
-            pathname: '/hr/attendance/mapping',
+            pathname: '/settings/mapping',
             query: { columnsData },
           });
         } else {
@@ -183,7 +183,7 @@ const AttendanceImportForm = ({
               className="hidden"
               onChange={handleUpload}
             />
-          </label>{' '}
+          </label>
         </div>
         <Button
           type="submit"

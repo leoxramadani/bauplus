@@ -35,7 +35,7 @@ export const attendanceOptionsSchema = z.object({
   employeeId: z.string().optional(),
   checkType: z.string(),
   checkTime: z.string(),
-  dataSource: z.string().optional(),
+  dataSource: z.string(),
   // timeOut: z.string(),
   // workType: z.string(),
   checkPoint: z.string(),
@@ -43,4 +43,17 @@ export const attendanceOptionsSchema = z.object({
 
 export type IAttendanceOptionsSchema = z.infer<
   typeof attendanceOptionsSchema
+>;
+
+export const objMappingAttendance = z
+  .object({
+    templateAttendanceMappingId: z.string(),
+    systemColumnName: z.string(),
+    databaseColumnName: z.string(),
+    branchId: z.string(),
+  })
+  .array();
+
+export type IobjMappingAttendance = z.infer<
+  typeof objMappingAttendance
 >;
