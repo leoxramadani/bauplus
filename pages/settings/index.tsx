@@ -35,7 +35,7 @@ const Settings = () => {
               Attendance options
             </TabsTrigger>
             <TabsTrigger value="attendance2">
-              Attendance options 2
+              Attendance configuration
             </TabsTrigger>
             <TabsTrigger value="roles-privileges">
               Roles & Privileges
