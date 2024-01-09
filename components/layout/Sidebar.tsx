@@ -2,8 +2,6 @@ import { cn } from '@/lib/utils';
 import {
   Calculator,
   ChevronDown,
-  ChevronsLeft,
-  ChevronsRight,
   ClipboardList,
   FileBarChart,
   FileLineChart,
@@ -14,7 +12,6 @@ import {
   UserCircle,
   Users,
   Wallet,
-  X,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -123,9 +120,9 @@ const Sidebar = ({
       className={`group/sidebar fixed left-0 top-0 z-50 h-full w-full ${
         !isWindowSmall
           ? expanded
-            ? `duration-[250ms] max-w-[15rem] transition-all`
+            ? `duration-[250ms] max-w-[224px] transition-all`
             : 'duration-[250ms] max-w-[3.5rem] transition-all'
-          : `duration-[250ms] max-w-[15rem] transition-all`
+          : `duration-[250ms] max-w-[224px] transition-all`
       }`}
     >
       <nav className="relative z-50 flex h-full w-full flex-col bg-sidebar shadow-sm">
@@ -146,39 +143,13 @@ const Sidebar = ({
               />
             </Link>
           )}
-
-          <button
-            className={`flex items-center justify-center rounded-full p-0.5 text-white transition-all hover:bg-slate-800 ${
-              !isWindowSmall && !expanded ? 'w-full' : 'w-fit'
-            }`}
-          >
-            {isWindowSmall ? (
-              <X
-                onClick={() =>
-                  setIsOpen && setIsOpen((current) => !current)
-                }
-              />
-            ) : expanded ? (
-              <ChevronsLeft
-                onClick={() => toggleSidebar()}
-                strokeWidth={1.5}
-                size={30}
-              />
-            ) : (
-              <ChevronsRight
-                onClick={() => toggleSidebar()}
-                strokeWidth={1.5}
-                size={30}
-              />
-            )}
-          </button>
         </div>
 
         <SidebarContext.Provider value={{ expanded, isWindowSmall }}>
           <NavigationMenu
             onValueChange={setValue}
             orientation="vertical"
-            className="left-0 mb-20 h-full w-full max-w-full items-start px-2"
+            className="left-0 mb-20 h-full items-start w-full max-w-full px-2"
             onClick={() => (isWindowSmall ? setIsOpen(false) : null)}
             offset={offset}
           >
@@ -463,7 +434,7 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
   const { expanded, isWindowSmall } = useContext<any>(SidebarContext);
 
   return (
-    <>
+    <div className="flex w-full items-center">
       {Icon && (
         <Icon
           size={20}
@@ -472,15 +443,15 @@ function NavigationItem({ text, Icon }: { text: string; Icon: any }) {
         />
       )}
       <span
-        className={`w-full text-left transition-[opacity,transform] ${
-          Icon && 'ml-7'
+        className={` w-full text-left transition-[opacity,transform] ${
+          Icon && 'ml-6'
         } group-hover/trigger ${
           Icon && !expanded && 'pointer-events-none opacity-0'
         }`}
       >
         {text}
       </span>
-    </>
+    </div>
   );
 }
 
@@ -537,7 +508,7 @@ function SidebarItem({
             key={text}
             ref={(node) => onNodeUpdate(node, text)}
             className={` group/trigger outline-transparent ${
-              isInCurrentPath() && 'flex text-white'
+              isInCurrentPath() && ' text-white'
             }`}
           >
             {isInCurrentPath() && (
@@ -553,7 +524,7 @@ function SidebarItem({
               aria-hidden="true"
             />
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar p-4">
+          <NavigationMenuContent className="w-max min-w-[300px] list-none bg-sidebar px-2 py-3">
             {children}
           </NavigationMenuContent>
         </>

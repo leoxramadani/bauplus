@@ -20,7 +20,7 @@ module.exports = {
       colors: {
         // sidebar: '#15202C',
         sidebar: {
-          DEFAULT: '#15202C',
+          DEFAULT: '#1E2640',
           light: '#A0ACBD',
           faint: 'var(--sidebar-bg)',
           hover: 'hsl(var(--sidebar-bg-hover))',
