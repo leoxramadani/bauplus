@@ -214,6 +214,7 @@ export const createEmployeeSchema = z.object({
   email: z.string(),
   dateOfBirth: z.coerce.date(),
   departmentId: z.string(),
+  branchId: z.string(),
 });
 
 export type ICreateEmployee = z.infer<typeof createEmployeeSchema>;

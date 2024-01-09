@@ -33,8 +33,10 @@ import {
   GET_BY_ID_EMPLOYEE,
   UPDATE_EMPLOYEES,
 } from '@/lib/constants/endpoints/employee';
+import { GET_ALL_BRANCHES_BY_COMPANY } from '@/lib/constants/endpoints/hr/companyofficesbranches';
 import { GET_ALL_DEPATRMENTS_OF_COMAPNY } from '@/lib/constants/endpoints/hr/departments';
 import useData from '@/lib/hooks/useData';
+import { IcompanyOfficesBranchesSchema } from '@/lib/schema/hr/companyOfficesBranches/companyOfficesBranches';
 import {
   ICreateEmployee,
   createEmployeeSchema,
@@ -70,6 +72,15 @@ const EmployeesForm = ({
   } = useData<any>(
     ['departments'],
     GET_ALL_DEPATRMENTS_OF_COMAPNY +
+      `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
+  );
+  const {
+    data: branches,
+    isLoading: branchesLoading,
+    isError: branchesError,
+  } = useData<IcompanyOfficesBranchesSchema[]>(
+    ['departments'],
+    GET_ALL_BRANCHES_BY_COMPANY +
       `?companyId=${'145d8d93-7ff7-4a24-a184-aa4e010e7f37'}`
   );
 
@@ -398,6 +409,51 @@ const EmployeesForm = ({
                   {/* <FormDescription>
                     Your date of birth is used to calculate your age.
                   </FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Branch Id */}
+            <FormField
+              control={form.control}
+              name="branchId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Branch</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    value={field.value}
+                    disabled={isLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Enter branch" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {branches ? (
+                        <>
+                          {branches.map(
+                            (
+                              branch: IcompanyOfficesBranchesSchema
+                            ) => (
+                              <SelectItem
+                                key={branch.branchId}
+                                value={branch.branchId}
+                              >
+                                {branch.branchName}
+                              </SelectItem>
+                            )
+                          )}
+                        </>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -69,23 +69,28 @@ const Mapping = () => {
 
   const attendanceOptions = [
     {
-      SystemColumnName: 'person_id',
+      id: '1',
+      showColumnName: 'Check time',
       DatabaseColumnName: 'checkTime',
     },
     {
-      SystemColumnName: 'date',
+      id: '2',
+      showColumnName: 'Check type',
       DatabaseColumnName: 'checkType',
     },
     {
-      SystemColumnName: 'check-in',
+      id: '3',
+      showColumnName: 'Check point',
       DatabaseColumnName: 'checkPoint',
     },
     {
-      SystemColumnName: 'check-out',
+      id: '4',
+      showColumnName: 'Data source',
       DatabaseColumnName: 'dataSource',
     },
     {
-      SystemColumnName: 'note',
+      id: '5',
+      showColumnName: 'Employee Id',
       DatabaseColumnName: 'employeeId',
     },
   ];
@@ -157,6 +162,7 @@ const Mapping = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                         value={field.value}
+                                        
                                       >
                                         <FormControl>
                                           <SelectTrigger>

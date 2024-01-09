@@ -1,3 +1,4 @@
+import Delete from '@/components/atoms/Delete';
 import Modal from '@/components/atoms/Modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -6,7 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -16,7 +16,14 @@ import {
 import useData from '@/lib/hooks/useData';
 import { ColumnDef } from '@tanstack/react-table';
 import axios from 'axios';
-import { ChevronDown, ChevronUp, Clipboard, MoreHorizontal, Pen, Trash } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  Clipboard,
+  MoreHorizontal,
+  Pen,
+  Trash,
+} from 'lucide-react';
 import { useRouter } from 'next/router';
 import { Key, useState } from 'react';
 // import { toast } from 'react-toastify';
@@ -92,8 +99,9 @@ const ActionsColumn = ({ item }: { item: any }) => {
   };
 
   const [open, setOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -107,45 +115,36 @@ const ActionsColumn = ({ item }: { item: any }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(item.clientId)}
-          className='flex items-center gap-1'
+          className="flex items-center gap-1"
         >
-           <Clipboard size={14} /> Copy item id
+          <Clipboard size={14} /> Copy item id
         </DropdownMenuItem>
-        {/* <DropdownMenuSeparator /> */}
-        <DropdownMenuItem onClick={() => handleEdit(item.clientId)} className='flex gap-1 items-center'>
-        <Pen size={14} /> Edit
+
+        <DropdownMenuItem
+          onClick={() => handleEdit(item.clientId)}
+          className="flex items-center gap-1"
+        >
+          <Pen size={14} /> Edit
         </DropdownMenuItem>
-        {/* <DropdownMenuSeparator /> */}
         {/* Delete Modal */}
-        <Modal open={open} onOpenChange={setOpen}>
+        <Modal>
           <Modal.Trigger asChild>
-            <div className="relative gap-1 flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-red-500 outline-none transition-colors hover:bg-accent  data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-            <Trash size={14} /> Delete
-            </div>
+            <DropdownMenuItem
+              onSelect={(event) => event.preventDefault()}
+              className="flex items-center gap-1 text-red-500"
+            >
+              <Trash size={14} /> Delete
+            </DropdownMenuItem>
           </Modal.Trigger>
           <Modal.Content
             title="Delete Client"
             description="Are you sure you want to delete this client?"
             className="max-w-xl"
           >
-            <div className="flex flex-row gap-2">
-              <Modal.Close asChild>
-                <Button
-                  variant="destructive"
-                  className="w-max"
-                  loading={isLoading}
-                  disabled={isLoading}
-                  onClick={() => handleDelete(item.clientId)}
-                >
-                  Delete
-                </Button>
-              </Modal.Close>
-              <Modal.Close asChild>
-                <Button variant="outline" className="w-max">
-                  Close
-                </Button>
-              </Modal.Close>
-            </div>
+            <Delete
+              handleDelete={() => handleDelete(item.clientId)}
+              deleting={isLoading}
+            />
           </Modal.Content>
         </Modal>
       </DropdownMenuContent>
