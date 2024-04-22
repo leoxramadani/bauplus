@@ -243,15 +243,6 @@ const GenerateInvoiceForm = ({
                     setIsRegisterModalOpen={setIsRegisterModalOpen}
                   />
                 </Modal.Content>
-                <Modal.Close>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={handleModalClose}
-                  >
-                    Close
-                  </Button>
-                </Modal.Close>
               </>
             ) : (
               ''
