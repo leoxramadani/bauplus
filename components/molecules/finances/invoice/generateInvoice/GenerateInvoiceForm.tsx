@@ -246,7 +246,7 @@ const GenerateInvoiceForm = ({
                 <Modal.Close onClick={handleModalClose}></Modal.Close>
               </>
             ) : (
-              'No data fetched'
+              ''
             )}
           </Modal>
         </form>
