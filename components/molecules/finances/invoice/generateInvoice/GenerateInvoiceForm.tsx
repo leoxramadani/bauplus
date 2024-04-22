@@ -18,7 +18,9 @@ import { useForm } from 'react-hook-form';
 // import { toast } from 'react-toastify';
 import { toast } from 'sonner';
 
+import Modal from '@/components/atoms/Modal';
 import FileViewer from '../FileViewer';
+import GeneratedForm from './GeneratedForm';
 
 function isValidDate(dateString: string) {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -210,13 +212,33 @@ const GenerateInvoiceForm = ({
               />
             </label>
           </div>
-          <Button
-            type="submit"
-            disabled={ocrIsLoading}
-            className="w-max"
-          >
-            Submit
-          </Button>
+          <Modal>
+            <Modal.Trigger asChild>
+              <Button
+                type="submit"
+                disabled={ocrIsLoading}
+                className="w-max"
+              >
+                Submit
+              </Button>
+            </Modal.Trigger>
+            {ocrIsLoading && ocrData ? (
+              <Modal.Content
+                title="Register Invoice"
+                description="Fill all the fields to register an invoice"
+                className="h-auto w-auto"
+              >
+                <GeneratedForm
+                  data={ocrData && ocrData}
+                  setGenerateModalOpen={setGenerateModalOpen}
+                  refetchInvoices={refetchInvoices}
+                  setIsRegisterModalOpen={setIsRegisterModalOpen}
+                />
+              </Modal.Content>
+            ) : (
+              ''
+            )}
+          </Modal>
         </form>
 
         {/* <div className="relative flex w-full items-center justify-center">
@@ -226,12 +248,7 @@ const GenerateInvoiceForm = ({
               </span>
             </div> */}
 
-        {/* <GeneratedForm
-          data={ocrData && ocrData}
-          setGenerateModalOpen={setGenerateModalOpen}
-          refetchInvoices={refetchInvoices}
-          setIsRegisterModalOpen={setIsRegisterModalOpen}
-        /> */}
+        {/*  */}
       </div>
 
       {previewFile && (
