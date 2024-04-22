@@ -222,7 +222,7 @@ const GenerateInvoiceForm = ({
                 Submit
               </Button>
             </Modal.Trigger>
-            {ocrIsLoading && ocrData ? (
+            {ocrData && ocrData ? (
               <Modal.Content
                 title="Register Invoice"
                 description="Fill all the fields to register an invoice"
