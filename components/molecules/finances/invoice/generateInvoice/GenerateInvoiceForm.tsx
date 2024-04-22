@@ -38,7 +38,9 @@ const GenerateInvoiceForm = ({
 }: IGenerateInvoiceForm) => {
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
   const [file, setFile] = useState<any>();
-  const [ocrData, setOcrData] = useState<IgeneratedInvoice>();
+  const [ocrData, setOcrData] = useState<IgeneratedInvoice | null>(
+    null
+  );
   const [ocrIsLoading, setOcrIsLoading] = useState(false);
   const [previewFile, setPreviewFile] = useState<any>();
 
@@ -152,6 +154,11 @@ const GenerateInvoiceForm = ({
     console.log('error generate->', error);
   };
 
+  const handleModalClose = () => {
+    setOcrData(null); // Reset ocrData when modal is closed
+    setGenerateModalOpen(false);
+  };
+
   return (
     <div
       className={`flex items-center justify-center gap-5 p-5 px-10`}
@@ -223,18 +230,21 @@ const GenerateInvoiceForm = ({
               </Button>
             </Modal.Trigger>
             {ocrData && ocrData ? (
-              <Modal.Content
-                title="Register Invoice"
-                description="Fill all the fields to register an invoice"
-                className="h-auto w-auto"
-              >
-                <GeneratedForm
-                  data={ocrData && ocrData}
-                  setGenerateModalOpen={setGenerateModalOpen}
-                  refetchInvoices={refetchInvoices}
-                  setIsRegisterModalOpen={setIsRegisterModalOpen}
-                />
-              </Modal.Content>
+              <>
+                <Modal.Content
+                  title="Register Invoice"
+                  description="Fill all the fields to register an invoice"
+                  className="h-auto w-auto"
+                >
+                  <GeneratedForm
+                    data={ocrData && ocrData}
+                    setGenerateModalOpen={setGenerateModalOpen}
+                    refetchInvoices={refetchInvoices}
+                    setIsRegisterModalOpen={setIsRegisterModalOpen}
+                  />
+                </Modal.Content>
+                <Modal.Close onClick={handleModalClose}></Modal.Close>
+              </>
             ) : (
               ''
             )}
