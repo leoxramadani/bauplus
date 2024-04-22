@@ -9,10 +9,10 @@ const FileViewer = ({
   setPreviewFile,
 }: FileViewerProps) => {
   if (previewFile) {
-    console.log('there is a preview file->', previewFile);
+    // console.log('there is a preview file->', previewFile);
 
     if (!previewFile.includes('blob')) {
-      console.log('the file is an image->', previewFile);
+      // console.log('the file is an image->', previewFile);
       return (
         <img
           src={previewFile}

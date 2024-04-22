@@ -50,6 +50,8 @@ const GenerateInvoiceForm = ({
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
+      console.log(files[0]);
+      setFile(files[0]);
       if (files[0].type === 'application/pdf') {
         console.log('PDF uploaded');
         setPreviewFile(URL.createObjectURL(files![0]));
@@ -61,10 +63,11 @@ const GenerateInvoiceForm = ({
         //   file: reader.result!.toString(),
         // });
         // };
-        console.log('file -->', URL.createObjectURL(files![0]));
-        console.log('file -->', files![0]);
+        // console.log('file -->', URL.createObjectURL(files![0]));
+        // console.log('file -->', files![0]);
         const formData = new FormData();
         formData.append('image', files![0]);
+        console.log(formData);
       } else if (files[0].type.includes('image')) {
         console.log('IMAGE uploaded');
         // setFileName(() => ['', files![0].name]);
@@ -80,7 +83,7 @@ const GenerateInvoiceForm = ({
           // setRecievedFile(true);
           setPreviewFile(image.src);
 
-          console.log('image.src->', typeof image.src);
+          // console.log('image.src->', typeof image.src);
         };
         reader.readAsDataURL(files[0]);
       }
@@ -88,9 +91,14 @@ const GenerateInvoiceForm = ({
   };
 
   const onSubmit = useCallback(async () => {
+    if (!file) {
+      console.log('No file provided');
+      return;
+    }
     setOcrIsLoading(true);
     const formData = new FormData();
     if (file) {
+      console.log('file is this -->', file);
       formData.append('image', file);
     }
     console.log('Inside of submit');
