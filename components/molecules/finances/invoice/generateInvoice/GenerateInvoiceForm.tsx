@@ -95,6 +95,7 @@ const GenerateInvoiceForm = ({
   };
 
   const onSubmit = useCallback(async () => {
+    setOcrData(null);
     if (!file) {
       console.log('No file provided');
       return;
@@ -148,6 +149,7 @@ const GenerateInvoiceForm = ({
       .finally(() => {
         setOcrIsLoading(false);
       });
+
   }, [file]);
 
   const onError = (error: any) => {
