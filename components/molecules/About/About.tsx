@@ -12,7 +12,7 @@ function About() {
           <div className="flex h-auto w-[100%] flex-col pt-[5px] sm:w-[50%] sm:pt-[20px]">
             <h3 className="mb-[10px] px-[20px] text-justify sm:px-[100px]">
               <b>BAUplus</b> një kompani lider në sektorin e ndërtimit
-              dhe renovimeve, e angazhuar për t'u ofruar klientëve
+              dhe renovimeve, e angazhuar për t&#39;u ofruar klientëve
               tanë zgjidhje inovative dhe cilësore për transformimin e
               hapësirave të tyre. E themeluar me pasion dhe
               përkushtim, ne jemi të specializuar në renovimin e
