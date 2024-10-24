@@ -4,7 +4,6 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import LogoPng from '/logo.png';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -54,7 +53,7 @@ export default function Navbar() {
             className="flex w-auto flex-row text-xl font-bold"
           >
             <Image
-              src={LogoPng}
+              src="/logo.png"
               alt="Logo"
               width={50}
               height={50}
