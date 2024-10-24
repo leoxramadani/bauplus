@@ -4,7 +4,7 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import LogoPng from './../../public/logo.png';
+import LogoPng from '/logo.png';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
