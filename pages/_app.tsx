@@ -1,5 +1,4 @@
 import Layout from '@/components/layout';
-import { Toaster } from '@/components/ui/sonner';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
 import {
@@ -28,7 +27,7 @@ Router.events.on('routeChangeError', () => {
   NProgress.configure({ speed: 1000 });
 });
 
-const ArkivaApp: AppType<{ session: Session | null }> = ({
+const BAUplus: AppType<{ session: Session | null }> = ({
   Component,
   router,
   pageProps: { session, ...pageProps },
@@ -38,7 +37,6 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
       <QueryClientProvider client={client}>
         <LanguageProvider>
           <Layout>
-            <Toaster />
             <Component {...pageProps} />
           </Layout>
         </LanguageProvider>
@@ -47,4 +45,4 @@ const ArkivaApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default ArkivaApp;
+export default BAUplus;

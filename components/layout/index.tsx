@@ -1,29 +1,24 @@
+import Navbar from '@/pages/Navbar/Navbar';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import Breadcrumbs from '../ui/breadcrumbs';
+import About from '../molecules/About/About';
+import Cards from '../molecules/Cards/Cards';
+import Footer from '../molecules/Footer/Footer';
 import Loading from './Loading';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
-  //state to check screen size
   const [isWindowSmall, setIsWindowSmall] = useState(false);
-
-  //this is temporary to test the loading screen
   const [status, setStatus] = useState<string>('');
-  //to open or not the sidebar
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
-  //effect to react to screen size
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 768);
       if (window.innerWidth > 768) {
         setIsOpen(isOpen);
-        // setExpanded(false);
       }
     };
 
@@ -39,57 +34,42 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
   };
+
   if (status === 'loading') return <Loading />;
-  if (router.asPath === '/login' || router.asPath === '/signup') return children;
+
+  // Check if the current route is the home page ("/")
+  const isHomePage = router.pathname === '/';
 
   return (
     <>
       <Head>
-        <title>Mimiro</title>
+        <link rel="icon" href="/Logo.png" sizes="any" />
+        <title>BAUplus</title>
       </Head>
-      <div
-        className={`scroll flex min-h-screen w-full flex-col bg-[#F5F7FA]`}
-        onClick={() => (isOpen ? setIsOpen(false) : null)}
-      >
-        {isWindowSmall ? (
-          <Navbar
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            isWindowSmall={isWindowSmall}
-            setIsWindowSmall={setIsWindowSmall}
-          />
-        ) : (
-          <Sidebar
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            isWindowSmall={isWindowSmall}
-            setIsWindowSmall={setIsWindowSmall}
-            toggleSidebar={toggleSidebar}
-            expanded={expanded}
-          />
-        )}
-        {isOpen && isWindowSmall && (
-          <div onClick={(e: any) => e.stopPropagation()}>
-            <Sidebar
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              isWindowSmall={isWindowSmall}
-              setIsWindowSmall={setIsWindowSmall}
-              toggleSidebar={toggleSidebar}
-              expanded={expanded}
-            />
-          </div>
-        )}
+      <div onClick={() => (isOpen ? setIsOpen(false) : null)}>
+        <div onClick={(e: any) => e.stopPropagation()}>
+          <Navbar />
+        </div>
+
         <main
-          className={`duration-[250ms] p-2 pr-6 transition-all ${
+          className={`duration-[250ms]  transition-all ${
             !isWindowSmall &&
             (expanded
-              ? `duration-[250ms] ml-[16rem] transition-all`
+              ? `duration-[250ms] transition-all`
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
-          }`}
+          }
+          duration-[250ms] transition-all fade-in`}
         >
-          <Breadcrumbs />
-          <div className="mt-4">{children}</div>
+          <div>{children}</div>
+
+          {isHomePage && (
+            <>
+              <About />
+              <Cards />
+            </>
+          )}
+
+          <Footer />
         </main>
       </div>
     </>
