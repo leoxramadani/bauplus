@@ -29,6 +29,14 @@ export default function Footer() {
             <ul>
               <li>
                 <Link
+                  href="/Skele"
+                  className="text-blue-600 hover:text-red-600"
+                >
+                  Skele
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/Izolime"
                   className="text-blue-600 hover:text-red-600"
                 >
@@ -43,14 +51,7 @@ export default function Footer() {
                   Dekorime
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/Skele"
-                  className="text-blue-600 hover:text-red-600"
-                >
-                  Skele
-                </Link>
-              </li>
+
               <li>
                 <Link
                   href="/Contact"

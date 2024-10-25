@@ -53,7 +53,7 @@ export default function Navbar() {
             className="flex w-auto flex-row text-xl font-bold"
           >
             <Image
-              src="/logo.png"
+              src="/Logo.png"
               alt="Logo"
               width={50}
               height={50}

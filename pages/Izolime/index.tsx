@@ -1,6 +1,6 @@
 export default function Izolime() {
   const images = [
-    '/Izolime1.jpg',
+    '/izolime1.jpg',
     '/Izolime2.jpg',
     '/Izolime3.jpg',
     '/Izolime4.jpg',
