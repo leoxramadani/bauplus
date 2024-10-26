@@ -1,41 +1,52 @@
 // app/page.tsx
 'use client';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    'https://baustela.hr/app/uploads/2021/03/skela.png',
-    'https://img.linemedia.com/img/s/construction-equipment-scaffolding-Telka-SKELE-SCAFFOLDING-eCHAFAUDAGE-500-m2-BYGGNADSSTaLLNIN---1601365294856496997_big--18022112194681893800.jpg',
-    'https://www.saferack.com/wp-content/uploads/2019/06/AdobeStock_201200158-1-1024x683.jpeg',
-  ];
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 2000);
-    return () => clearInterval(timer);
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const handleIntersection = (
+      entries: IntersectionObserverEntry[]
+    ) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          videoElement.muted = false;
+          videoElement.play().catch((error) => {
+            console.log('Autoplay prevented on iOS:', error);
+          });
+        } else {
+          videoElement.muted = true;
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.5,
+    });
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div className="relative">
       <div className="relative h-screen">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              currentSlide === index ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Image
-              src={slide}
-              alt={`Slide ${index + 1}`}
-              fill
-              className="object-cover"
-            />
-          </div>
-        ))}
+        <video
+          ref={videoRef}
+          src="enisvideo.MP4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-fill"
+        ></video>
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

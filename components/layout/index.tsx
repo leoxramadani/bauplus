@@ -5,6 +5,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import About from '../molecules/About/About';
 import Cards from '../molecules/Cards/Cards';
 import Footer from '../molecules/Footer/Footer';
+import Numbers from '../molecules/Numbers/Numbers';
 import Loading from './Loading';
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -64,8 +65,9 @@ const Layout = ({ children }: PropsWithChildren) => {
 
           {isHomePage && (
             <>
-              <About />
               <Cards />
+              <About />
+              <Numbers />
             </>
           )}
 

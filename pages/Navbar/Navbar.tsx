@@ -1,159 +1,115 @@
 'use client';
+import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconButton, Menu, MenuItem } from '@mui/material';
-import Image from 'next/image';
+import { IconButton } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isMounted, setIsMounted] = useState(false); // To check if component is mounted
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target as Node)
+    ) {
+      setIsSidebarOpen(false);
+    }
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Set isMounted to true after the first render
-    setIsMounted(true);
+    if (isSidebarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isSidebarOpen]);
 
-  const handleMenuClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  // Render only on the client side to avoid hydration errors
-  if (!isMounted) {
-    return null; // Prevent rendering until mounted
-  }
+  const isActiveLink = (path: string) =>
+    router.pathname === path ? 'text-blue-600' : 'text-gray-800';
 
   return (
-    <nav
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/30 text-slate-600 shadow-lg backdrop-blur-md'
-          : 'bg-slate-100'
-      }`}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+    <div>
+      {!isSidebarOpen && (
+        <IconButton
+          onClick={toggleSidebar}
+          color="success"
+          aria-label="menu"
+          className="fixed left-4 top-4 z-50"
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      <div
+        ref={sidebarRef}
+        className={`fixed left-0 top-0 h-full w-64 transform bg-white shadow-lg ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } z-[9999] transition-transform duration-300`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <h2 className="text-xl font-bold">Menu</h2>
+          <IconButton onClick={toggleSidebar}>
+            <CloseIcon />
+          </IconButton>
+        </div>
+        <div className="flex flex-col space-y-4 p-4 font-serif">
           <Link
             href="/"
-            className="flex w-auto flex-row text-xl font-bold"
+            onClick={toggleSidebar}
+            className={`hover:text-gray-600 ${isActiveLink('/')}`}
           >
-            <Image
-              src="/Logo.png"
-              alt="Logo"
-              width={50}
-              height={50}
-              className="bg-transparent"
-            />
-            <div className="h-auto w-auto flex-1 flex-col justify-around font-serif text-sm">
-              <p>BAUplus</p>
-              <p className="mt-[6px] font-serif">Skele & Fasada</p>
-            </div>
+            Home
           </Link>
-
-          {/* Hamburger Menu for Mobile View */}
-          <div className="md:hidden">
-            <IconButton
-              onClick={handleMenuClick}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleMenuClose}>
-                <Link
-                  href="/"
-                  className="font-serif hover:text-gray-600"
-                >
-                  Home
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link
-                  href="/Skele"
-                  className="font-serif hover:text-gray-600"
-                >
-                  Skele
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link
-                  href="/Izolime"
-                  className="font-serif hover:text-gray-600"
-                >
-                  Izolime
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link
-                  href="/Dekorime"
-                  className="font-serif hover:text-gray-600"
-                >
-                  Dekorime
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link
-                  href="/Contact"
-                  className="font-serif hover:text-gray-600"
-                >
-                  Contact
-                </Link>
-              </MenuItem>
-            </Menu>
-          </div>
-
-          {/* Desktop Links */}
-          <div className="hidden space-x-8 md:flex">
-            <Link href="/" className="font-serif hover:text-gray-600">
-              Home
-            </Link>
-            <Link
-              href="/Skele"
-              className="font-serif hover:text-gray-600"
-            >
-              Skele
-            </Link>
-            <Link
-              href="/Izolime"
-              className="font-serif hover:text-gray-600"
-            >
-              Izolime
-            </Link>
-            <Link
-              href="/Dekorime"
-              className="font-serif hover:text-gray-600"
-            >
-              Dekorime
-            </Link>
-            <Link
-              href="/Contact"
-              className="font-serif hover:text-gray-600"
-            >
-              Contact
-            </Link>
-          </div>
+          <Link
+            href="/Skele"
+            onClick={toggleSidebar}
+            className={`hover:text-gray-600 ${isActiveLink(
+              '/Skele'
+            )}`}
+          >
+            Skele
+          </Link>
+          <Link
+            href="/Izolime"
+            onClick={toggleSidebar}
+            className={`hover:text-gray-600 ${isActiveLink(
+              '/Izolime'
+            )}`}
+          >
+            Izolime
+          </Link>
+          <Link
+            href="/Dekorime"
+            onClick={toggleSidebar}
+            className={`hover:text-gray-600 ${isActiveLink(
+              '/Dekorime'
+            )}`}
+          >
+            Dekorime
+          </Link>
+          <Link
+            href="/Contact"
+            onClick={toggleSidebar}
+            className={`hover:text-gray-600 ${isActiveLink(
+              '/Contact'
+            )}`}
+          >
+            Contact
+          </Link>
         </div>
       </div>
-    </nav>
+    </div>
   );
 }
