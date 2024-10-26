@@ -1,7 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Dekorime from './../../../public/dekorime.jpeg';
 import IzolimeImg from './../../../public/izolime.png';
 import SkeleImg from './../../../public/skele.png';
+
 function Cards() {
   return (
     <div className="flex h-auto w-full flex-col">
@@ -9,7 +11,7 @@ function Cards() {
         Shërbimet tona
       </h2>
       <div className="flex w-full flex-row flex-wrap items-center justify-center gap-10 bg-slate-100 py-5 sm:my-[50px] sm:justify-around sm:gap-0 sm:py-0">
-        <a href="/Skele">
+        <Link href="/">
           <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg shadow-2xl  shadow-slate-400 hover:shadow-zinc-500	 ">
             <Image
               src={SkeleImg}
@@ -23,8 +25,8 @@ function Cards() {
               objektet tuaja
             </h1>
           </div>
-        </a>
-        <a href="/Izolime">
+        </Link>
+        <Link href="/Izolime">
           <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
             <Image
               src={IzolimeImg}
@@ -37,8 +39,8 @@ function Cards() {
               Ofrojmë izolime të shtëpive tuaja me standarde europiane
             </h1>
           </div>
-        </a>
-        <a href="/Dekorime">
+        </Link>
+        <Link href="/Dekorime">
           <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
             <Image
               src={Dekorime}
@@ -51,7 +53,7 @@ function Cards() {
               Ofrojmë dekorime të shtëpive tuaja
             </h1>
           </div>
-        </a>
+        </Link>
       </div>
     </div>
   );
