@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'fokusi.info',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.saferack.com',
+      },
     ],
   },
   reactStrictMode: true,

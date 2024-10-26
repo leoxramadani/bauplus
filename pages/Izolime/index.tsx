@@ -9,7 +9,7 @@ export default function Izolime() {
     '/Izolime7.jpg',
     '/Izolime8.jpg',
     '/Izolime9.jpg',
-    '/Izolime10.jpg',
+    '/izolime10.jpg',
     '/Izolime11.jpg',
     '/Izolime12.jpg',
     '/Izolime13.jpg',
@@ -17,12 +17,12 @@ export default function Izolime() {
   ];
   return (
     <div className="flex h-auto w-full flex-col">
-      <div className="mt-[60px] h-auto w-full pl-4 text-center text-3xl">
+      <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
         <h3>Izolime</h3>
       </div>
       <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
         {images.map((src, index) => (
-          <div key={index} className="overflow-hidden rounded-lg">
+          <div key={index} className="overflow-hidden rounded-lg ">
             <img
               src={src}
               alt={`Gallery image ${index + 1}`}

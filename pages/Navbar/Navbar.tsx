@@ -42,7 +42,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? 'bg-white/30 shadow-lg backdrop-blur-md'
+          ? 'bg-white/30 text-slate-600 shadow-lg backdrop-blur-md'
           : 'bg-slate-100'
       }`}
     >
@@ -59,9 +59,9 @@ export default function Navbar() {
               height={50}
               className="bg-transparent"
             />
-            <div className="h-auto w-auto flex-1 flex-col justify-around text-sm">
+            <div className="h-auto w-auto flex-1 flex-col justify-around font-serif text-sm">
               <p>BAUplus</p>
-              <p className="mt-[6px]">Skele & Fasada</p>
+              <p className="mt-[6px] font-serif">Skele & Fasada</p>
             </div>
           </Link>
 
@@ -80,30 +80,42 @@ export default function Navbar() {
               onClose={handleMenuClose}
             >
               <MenuItem onClick={handleMenuClose}>
-                <Link href="/" className="hover:text-gray-600">
+                <Link
+                  href="/"
+                  className="font-serif hover:text-gray-600"
+                >
                   Home
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
-                <Link href="/Skele" className="hover:text-gray-600">
+                <Link
+                  href="/Skele"
+                  className="font-serif hover:text-gray-600"
+                >
                   Skele
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
-                <Link href="/Izolime" className="hover:text-gray-600">
+                <Link
+                  href="/Izolime"
+                  className="font-serif hover:text-gray-600"
+                >
                   Izolime
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
                 <Link
                   href="/Dekorime"
-                  className="hover:text-gray-600"
+                  className="font-serif hover:text-gray-600"
                 >
                   Dekorime
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleMenuClose}>
-                <Link href="/Contact" className="hover:text-gray-600">
+                <Link
+                  href="/Contact"
+                  className="font-serif hover:text-gray-600"
+                >
                   Contact
                 </Link>
               </MenuItem>
@@ -112,19 +124,31 @@ export default function Navbar() {
 
           {/* Desktop Links */}
           <div className="hidden space-x-8 md:flex">
-            <Link href="/" className="hover:text-gray-600">
+            <Link href="/" className="font-serif hover:text-gray-600">
               Home
             </Link>
-            <Link href="/Skele" className="hover:text-gray-600">
+            <Link
+              href="/Skele"
+              className="font-serif hover:text-gray-600"
+            >
               Skele
             </Link>
-            <Link href="/Izolime" className="hover:text-gray-600">
+            <Link
+              href="/Izolime"
+              className="font-serif hover:text-gray-600"
+            >
               Izolime
             </Link>
-            <Link href="/Dekorime" className="hover:text-gray-600">
+            <Link
+              href="/Dekorime"
+              className="font-serif hover:text-gray-600"
+            >
               Dekorime
             </Link>
-            <Link href="/Contact" className="hover:text-gray-600">
+            <Link
+              href="/Contact"
+              className="font-serif hover:text-gray-600"
+            >
               Contact
             </Link>
           </div>

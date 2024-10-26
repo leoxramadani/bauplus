@@ -16,7 +16,7 @@ export default function Contact() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="mb-4 mt-[40px] text-2xl font-medium">
+      <h1 className="mb-4 mt-[40px] font-serif text-[22px] font-medium text-slate-600">
         Mund të na gjeni:
       </h1>
       <div className="flex h-auto w-full flex-col justify-around sm:flex-row">
@@ -32,10 +32,10 @@ export default function Contact() {
           ></iframe>
         </div>
         <div className="flex w-full flex-col items-center">
-          <h2 className="mb-4 mt-4 text-2xl font-medium">
+          <h2 className="mb-4 mt-4 font-serif text-[22px] font-medium text-slate-600">
             Të dhënat tona
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 font-serif">
             <p>Addresa: Kumanovë, Maqedoni e Veriut</p>
             <p>Numri: +389 70 848 844</p>
             <p>Email: enisraamadani@hotmail.com</p>

@@ -5,47 +5,53 @@ import SkeleImg from './../../../public/skele.png';
 function Cards() {
   return (
     <div className="flex h-auto w-full flex-col">
-      <h2 className="bg-slate-100 text-center text-[22px]">
+      <h2 className="text-slate-60 mt-[20px] bg-slate-100 text-center font-serif text-[22px] text-slate-600">
         Shërbimet tona
       </h2>
       <div className="flex w-full flex-row flex-wrap items-center justify-center gap-10 bg-slate-100 py-5 sm:my-[50px] sm:justify-around sm:gap-0 sm:py-0">
-        <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg shadow-2xl  shadow-slate-400 hover:shadow-zinc-500	 ">
-          <Image
-            src={SkeleImg}
-            alt="SkeleImg"
-            objectFit="cover"
-            className="rounded-lg"
-          />
-          <h1 className="text-[20px]">Skele</h1>
-          <h1 className="text-center">
-            Ofrojmë skele shumë praktike dhe me siguri te lartë për
-            objektet tuaja
-          </h1>
-        </div>
-        <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
-          <Image
-            src={IzolimeImg}
-            alt="Izolime"
-            objectFit="cover"
-            className="rounded-lg"
-          />
-          <h1 className="text-[20px]">Izolime</h1>
-          <h1 className="text-center">
-            Ofrojmë izolime të shtëpive tuaja me standarde europiane
-          </h1>
-        </div>
-        <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
-          <Image
-            src={Dekorime}
-            alt="Dekorime"
-            objectFit="cover" // To ensure it covers the parent while maintaining aspect ratio
-            className="rounded-lg"
-          />
-          <h1 className="text-[20px]">Dekorime</h1>
-          <h1 className="text-center">
-            Ofrojmë dekorime të shtëpive tuaja
-          </h1>
-        </div>
+        <a href="/Skele">
+          <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg shadow-2xl  shadow-slate-400 hover:shadow-zinc-500	 ">
+            <Image
+              src={SkeleImg}
+              alt="SkeleImg"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+            <h1 className="font-serif text-[20px]">Skele</h1>
+            <h1 className="text-center font-serif">
+              Ofrojmë skele shumë praktike dhe me siguri te lartë për
+              objektet tuaja
+            </h1>
+          </div>
+        </a>
+        <a href="/Izolime">
+          <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
+            <Image
+              src={IzolimeImg}
+              alt="Izolime"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+            <h1 className="font-serif text-[20px]">Izolime</h1>
+            <h1 className="text-center font-serif">
+              Ofrojmë izolime të shtëpive tuaja me standarde europiane
+            </h1>
+          </div>
+        </a>
+        <a href="/Dekorime">
+          <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg  shadow-2xl shadow-slate-400 hover:shadow-zinc-500	">
+            <Image
+              src={Dekorime}
+              alt="Dekorime"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+            <h1 className="font-serif text-[20px]">Dekorime</h1>
+            <h1 className="text-center font-serif">
+              Ofrojmë dekorime të shtëpive tuaja
+            </h1>
+          </div>
+        </a>
       </div>
     </div>
   );

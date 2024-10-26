@@ -8,7 +8,7 @@ export default function Home() {
   const slides = [
     'https://baustela.hr/app/uploads/2021/03/skela.png',
     'https://img.linemedia.com/img/s/construction-equipment-scaffolding-Telka-SKELE-SCAFFOLDING-eCHAFAUDAGE-500-m2-BYGGNADSSTaLLNIN---1601365294856496997_big--18022112194681893800.jpg',
-    'https://fokusi.info/wp-content/uploads/2019/03/kantier-ndertimi.jpg',
+    'https://www.saferack.com/wp-content/uploads/2019/06/AdobeStock_201200158-1-1024x683.jpeg',
   ];
 
   useEffect(() => {
@@ -40,13 +40,13 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-lg">
-              <h1 className="mb-4 text-2xl font-bold text-white md:text-4xl">
+              <h1 className="mb-4 font-serif text-2xl font-bold text-white md:text-3xl">
                 Kualitet, siguri dhe garancë.
               </h1>
-              <p className="mb-4 text-center text-xl text-white">
+              <p className="mb-4 text-center font-serif text-xl text-white">
                 Shtëpia juaj, obligimi ynë!
               </p>
-              <p className="text-center text-xl text-white">
+              <p className="text-center font-serif text-xl text-white">
                 +389 70 848 844
               </p>
             </div>
