@@ -11,7 +11,7 @@ function Cards() {
         Shërbimet tona
       </h2>
       <div className="flex w-full flex-row flex-wrap items-center justify-center gap-10 bg-slate-100 py-5 sm:my-[50px] sm:justify-around sm:gap-0 sm:py-0">
-        <Link href="/">
+        <Link href="/Skele">
           <div className="relative flex h-[380px] w-[300px] flex-col items-center justify-center rounded-lg shadow-2xl  shadow-slate-400 hover:shadow-zinc-500	 ">
             <Image
               src={SkeleImg}
