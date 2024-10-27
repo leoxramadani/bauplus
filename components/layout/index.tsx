@@ -11,15 +11,18 @@ import Numbers from '../molecules/Numbers/Numbers';
 import Loading from './Loading';
 
 const Layout = ({ children }: PropsWithChildren) => {
+  // First, declare all hooks and state
   const router = useRouter();
+  const { isExploreClicked, setExploreClicked } = useExplore();
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   const [status, setStatus] = useState<string>('');
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const { isExploreClicked, setExploreClicked } = useExplore();
   const [hasVisited, setHasVisited] = useState<boolean>(false);
+  const isHomePage = router.pathname === '/';
+  const isIzolimePage = router.pathname === '/izolime';
 
-  // Move all useEffect hooks before any conditional returns
+  // Now all useEffect hooks together
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const visited = localStorage.getItem('visited');
@@ -46,7 +49,7 @@ const Layout = ({ children }: PropsWithChildren) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isExploreClicked) {
@@ -56,6 +59,12 @@ const Layout = ({ children }: PropsWithChildren) => {
     }
   }, [isExploreClicked]);
 
+  // Early return for loading state
+  if (status === 'loading') {
+    return <Loading />;
+  }
+
+  // Regular functions after all hooks and early returns
   const toggleSidebar = () => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
@@ -66,14 +75,6 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExploreClicked(true);
     document.body.style.overflow = 'auto';
   };
-
-  const isHomePage = router.pathname === '/';
-  const isIzolimePage = router.pathname === '/izolime';
-
-  // Move the conditional return after all hooks
-  if (status === 'loading') {
-    return <Loading />;
-  }
 
   return (
     <>
