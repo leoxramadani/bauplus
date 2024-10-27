@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import Dekorime from './../../../public/decorating.png';
-import IzolimeImg from './../../../public/izolime.png';
-import SkeleImg from './../../../public/scaffolding.png';
+import Dekorime from './../../../public/decorating.webp';
+import IzolimeImg from './../../../public/izolime.webp';
+import SkeleImg from './../../../public/scaffolding.webp';
 
 function Cards() {
+  const divRef = useRef<HTMLDivElement | null>(null);
+
   const [visibleCards, setVisibleCards] = useState([
     false,
     false,
@@ -36,8 +38,19 @@ function Cards() {
     };
   }, []);
 
+  useEffect(() => {
+    // Trigger the click on component mount (or conditionally based on your needs)
+    if (divRef.current) {
+      divRef.current.click();
+    }
+  }, []);
+
   return (
-    <div className="flex h-auto w-full flex-col">
+    <div
+      className="flex h-auto w-full flex-col"
+      ref={divRef}
+      onClick={() => console.log('test')}
+    >
       <h2 className="text-slate-60 mt-[20px] bg-slate-100 text-center font-serif text-[26px] text-slate-600">
         Shërbimet tona
       </h2>

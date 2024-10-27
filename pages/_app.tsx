@@ -1,12 +1,9 @@
 import Layout from '@/components/layout';
+import { ExploreProvider } from '@/lib/contexts/ExploreContext';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
 import '@/styles/globals.css';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 import type { AppType } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
@@ -29,19 +26,16 @@ Router.events.on('routeChangeError', () => {
 
 const BAUplus: AppType<{ session: Session | null }> = ({
   Component,
-  router,
-  pageProps: { session, ...pageProps },
+  pageProps: { ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <QueryClientProvider client={client}>
-        <LanguageProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </LanguageProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+    <LanguageProvider>
+      <ExploreProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ExploreProvider>
+    </LanguageProvider>
   );
 };
 

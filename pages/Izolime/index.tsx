@@ -1,36 +1,78 @@
+import { ImageList, ImageListItem } from '@mui/material';
+import { useEffect, useState } from 'react';
+
 export default function Izolime() {
   const images = [
-    '/izolime1.jpg',
-    '/Izolime2.jpg',
-    '/Izolime3.jpg',
-    '/Izolime4.jpg',
-    '/Izolime5.jpg',
-    '/Izolime6.jpg',
-    '/Izolime7.jpg',
-    '/Izolime8.jpg',
-    '/Izolime9.jpg',
-    '/izolime10.jpg',
-    '/Izolime11.jpg',
-    '/Izolime12.jpg',
-    '/Izolime13.jpg',
-    '/Izolime14.jpg',
+    '/izolime1.webp',
+    '/Izolime2.webp',
+    '/Izolime3.webp',
+    '/Izolime4.webp',
+    '/Izolime5.webp',
+    '/Izolime6.webp',
+    '/Izolime7.webp',
+    '/Izolime8.webp',
+    '/Izolime9.webp',
+    '/izolime10.webp',
+    '/izolime11.webp',
+    '/izolime12.webp',
+    '/izolime14.webp',
   ];
+
+  const getImageListProps = (width: number) => {
+    if (width < 640) {
+      return { cols: 1, gap: 4 };
+    } else if (width < 768) {
+      return { cols: 2, gap: 8 };
+    } else if (width < 1024) {
+      return { cols: 3, gap: 8 };
+    } else {
+      return { cols: 4, gap: 8 };
+    }
+  };
+
+  const [imageListProps, setImageListProps] = useState({
+    cols: 4,
+    gap: 8,
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setImageListProps(getImageListProps(window.innerWidth));
+      };
+
+      handleResize();
+
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, []);
+
   return (
-    <div className="flex h-auto w-full flex-col">
+    <div className="flex h-auto w-full flex-col px-[15px]">
       <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
         <h3>Izolime</h3>
       </div>
-      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
+
+      <ImageList
+        variant="masonry"
+        cols={imageListProps.cols}
+        gap={imageListProps.gap}
+      >
         {images.map((src, index) => (
-          <div key={index} className="overflow-hidden rounded-lg ">
+          <ImageListItem key={index}>
             <img
-              src={src}
+              src={`${src}?w=248&fit=crop&auto=format`}
+              srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
               alt={`Gallery image ${index + 1}`}
-              className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
+              loading="lazy"
+              className="object-cover transition-transform duration-300 hover:scale-105"
             />
-          </div>
+          </ImageListItem>
         ))}
-      </div>
+      </ImageList>
     </div>
   );
 }

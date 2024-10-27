@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import AboutUsPic from '../../../public/info.jpg';
+import AboutUsPic from '../../../public/info.webp';
 
 function About() {
   const [isOpen, setIsOpen] = useState(false);
