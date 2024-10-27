@@ -17,27 +17,23 @@ const Layout = ({ children }: PropsWithChildren) => {
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const { isExploreClicked, setExploreClicked } = useExplore();
-
-  // State to determine if localStorage has been accessed
   const [hasVisited, setHasVisited] = useState<boolean>(false);
 
+  // Check localStorage for visit status on route change
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const visited = localStorage.getItem('visited');
       setHasVisited(visited === 'true');
-      if (!visited && router.pathname === '/') {
-        setExploreClicked(false);
-      } else {
-        setExploreClicked(true);
-      }
+      setExploreClicked(!visited && router.pathname === '/');
     }
   }, [router.pathname, setExploreClicked]);
 
+  // Handle window resizing
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 768);
       if (window.innerWidth > 768) {
-        setIsOpen(isOpen);
+        setIsOpen(false); // Assuming you want to close the sidebar on larger screens
       }
     };
 
@@ -49,28 +45,26 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
+  // Toggle sidebar
   const toggleSidebar = () => {
     setExpanded((prev) => !prev);
-    console.log('Toggle sidebar here:');
   };
 
+  // Loading state
   if (status === 'loading') return <Loading />;
 
+  // Handle explore button click
   const handleExploreClick = () => {
     localStorage.setItem('visited', 'true');
     setExploreClicked(true);
     document.body.style.overflow = 'auto';
   };
 
-  const isHomePage = router.pathname === '/';
-  const isIzolimePage = router.pathname === '/izolime';
-
+  // Control body overflow based on explore button state
   useEffect(() => {
-    if (!isExploreClicked) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = isExploreClicked
+      ? 'auto'
+      : 'hidden';
   }, [isExploreClicked]);
 
   return (
@@ -85,35 +79,34 @@ const Layout = ({ children }: PropsWithChildren) => {
         </div>
 
         <main
-          className={`duration-[250ms] transition-all ${
-            !isWindowSmall &&
-            (expanded
-              ? `duration-[250ms] transition-all`
-              : `duration-[250ms] transition-all md:ml-[4.5rem]`)
-          } duration-[250ms] transition-all fade-in`}
+          className={`duration-250 transition-all fade-in ${
+            !isWindowSmall && (expanded ? '' : 'md:ml-[4.5rem]')
+          }`}
         >
           {/* Show overlay only if it's not the Izolime page, explore button hasn't been clicked, and the user hasn't visited before */}
-          {!isExploreClicked && !isIzolimePage && !hasVisited && (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
-              <Image
-                src="/Logo.webp"
-                alt="Logo"
-                width={96}
-                height={96}
-              />
-              <p className="text-slate-300">BAUplus</p>
-              <button
-                onClick={handleExploreClick}
-                className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-semibold text-white"
-              >
-                Le të shohim më shumë
-              </button>
-            </div>
-          )}
+          {!isExploreClicked &&
+            !router.pathname.includes('/izolime') &&
+            !hasVisited && (
+              <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
+                <Image
+                  src="/Logo.webp"
+                  alt="Logo"
+                  width={96}
+                  height={96}
+                />
+                <p className="text-slate-300">BAUplus</p>
+                <button
+                  onClick={handleExploreClick}
+                  className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-semibold text-white"
+                >
+                  Le të shohim më shumë
+                </button>
+              </div>
+            )}
 
           <div>{children}</div>
 
-          {isHomePage && (
+          {router.pathname === '/' && (
             <>
               <Cards />
               <About />
