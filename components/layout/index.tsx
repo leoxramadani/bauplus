@@ -58,20 +58,20 @@ const Layout = ({ children }: PropsWithChildren) => {
 
   const handleExploreClick = () => {
     localStorage.setItem('visited', 'true');
-    setExploreClicked(true); // This should update the context
-    document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is removed
+    setExploreClicked(true);
+    document.body.style.overflow = 'auto';
   };
-
-  useEffect(() => {
-    if (!isExploreClicked) {
-      document.body.style.overflow = 'hidden'; // Disable scrolling while overlay is shown
-    } else {
-      document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is hidden
-    }
-  }, [isExploreClicked]);
 
   const isHomePage = router.pathname === '/';
   const isIzolimePage = router.pathname === '/izolime';
+
+  useEffect(() => {
+    if (!isExploreClicked) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isExploreClicked]);
 
   return (
     <>
