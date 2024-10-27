@@ -12,59 +12,66 @@ import Loading from './Loading';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
-  const { isExploreClicked, setExploreClicked } = useExplore();
   const [isWindowSmall, setIsWindowSmall] = useState(false);
   const [status, setStatus] = useState<string>('');
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const { isExploreClicked, setExploreClicked } = useExplore();
+
+  // State to determine if localStorage has been accessed
   const [hasVisited, setHasVisited] = useState<boolean>(false);
 
-  // Effect for localStorage access
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const visited = localStorage.getItem('visited') === 'true';
-      setHasVisited(visited);
-      setExploreClicked(!visited && router.pathname === '/');
+      const visited = localStorage.getItem('visited');
+      setHasVisited(visited === 'true');
+      if (!visited && router.pathname === '/') {
+        setExploreClicked(false);
+      } else {
+        setExploreClicked(true);
+      }
     }
   }, [router.pathname, setExploreClicked]);
 
-  // Effect for window resize
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 768);
       if (window.innerWidth > 768) {
-        setIsOpen(false); // Close sidebar on larger screens
+        setIsOpen(isOpen);
       }
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Initial call
+    handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  // Effect for body overflow based on exploration state
-  useEffect(() => {
-    document.body.style.overflow = isExploreClicked
-      ? 'auto'
-      : 'hidden';
-  }, [isExploreClicked]);
-
   const toggleSidebar = () => {
     setExpanded((prev) => !prev);
-  };
-
-  const handleExploreClick = () => {
-    localStorage.setItem('visited', 'true');
-    setExploreClicked(true);
+    console.log('Toggle sidebar here:');
   };
 
   if (status === 'loading') return <Loading />;
 
+  const handleExploreClick = () => {
+    localStorage.setItem('visited', 'true');
+    setExploreClicked(true); // This should update the context
+    document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is
+  };
+
   const isHomePage = router.pathname === '/';
   const isIzolimePage = router.pathname === '/izolime';
+
+  useEffect(() => {
+    if (!isExploreClicked) {
+      document.body.style.overflow = 'hidden'; // Disable scrolling while overlay is shown
+    } else {
+      document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is hidden
+    }
+  }, [isExploreClicked]);
 
   return (
     <>
@@ -73,15 +80,19 @@ const Layout = ({ children }: PropsWithChildren) => {
         <title>BAUplus</title>
       </Head>
       <div onClick={() => (isOpen ? setIsOpen(false) : null)}>
-        <div onClick={(e) => e.stopPropagation()}>
+        <div onClick={(e: any) => e.stopPropagation()}>
           <Navbar />
         </div>
 
         <main
-          className={`duration-250 transition-all fade-in ${
-            !isWindowSmall && (expanded ? '' : 'md:ml-[4.5rem]')
-          }`}
+          className={`duration-[250ms] transition-all ${
+            !isWindowSmall &&
+            (expanded
+              ? `duration-[250ms] transition-all`
+              : `duration-[250ms] transition-all md:ml-[4.5rem]`)
+          } duration-[250ms] transition-all fade-in`}
         >
+          {/* Show overlay only if it's not the Izolime page, explore button hasn't been clicked, and the user hasn't visited before */}
           {!isExploreClicked && !isIzolimePage && !hasVisited && (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
               <Image
