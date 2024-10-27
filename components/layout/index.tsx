@@ -17,10 +17,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   const [expanded, setExpanded] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const { isExploreClicked, setExploreClicked } = useExplore();
-
-  // State to determine if localStorage has been accessed
   const [hasVisited, setHasVisited] = useState<boolean>(false);
 
+  // Move all useEffect hooks before any conditional returns
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const visited = localStorage.getItem('visited');
@@ -49,29 +48,32 @@ const Layout = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isExploreClicked) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isExploreClicked]);
+
   const toggleSidebar = () => {
     setExpanded((prev) => !prev);
     console.log('Toggle sidebar here:');
   };
 
-  if (status === 'loading') return <Loading />;
-
   const handleExploreClick = () => {
     localStorage.setItem('visited', 'true');
-    setExploreClicked(true); // This should update the context
-    document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is
+    setExploreClicked(true);
+    document.body.style.overflow = 'auto';
   };
 
   const isHomePage = router.pathname === '/';
   const isIzolimePage = router.pathname === '/izolime';
 
-  useEffect(() => {
-    if (!isExploreClicked) {
-      document.body.style.overflow = 'hidden'; // Disable scrolling while overlay is shown
-    } else {
-      document.body.style.overflow = 'auto'; // Re-enable scrolling when overlay is hidden
-    }
-  }, [isExploreClicked]);
+  // Move the conditional return after all hooks
+  if (status === 'loading') {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -92,7 +94,6 @@ const Layout = ({ children }: PropsWithChildren) => {
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
           } duration-[250ms] transition-all fade-in`}
         >
-          {/* Show overlay only if it's not the Izolime page, explore button hasn't been clicked, and the user hasn't visited before */}
           {!isExploreClicked && !isIzolimePage && !hasVisited && (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
               <Image
