@@ -12,24 +12,28 @@ export default function Contact() {
         <div className="space-y-4 font-serif text-gray-600">
           <p>
             <LocationOnIcon className="pr-[5px] " />
-            <i className="underline">Addresa:</i> Kumanovë, Maqedoni e
-            Veriut
+            <i className="text-blue-400 underline">
+              Kumanovë, Maqedoni e Veriut
+            </i>
           </p>
           <p>
-            <AddIcCallIcon className="pr-[5px]" />
-            <i className="underline">Numri:</i> +389 70 848 844
+            <AddIcCallIcon className="pr-[5px] " />
+            <i className="text-blue-400 underline">+389 70 848 844</i>
           </p>
           <p>
             <MarkEmailReadIcon className="pr-[5px]" />{' '}
-            <i className="underline">Email:</i>
-            <a href="mailto:enisramadani@hotmail.com">
+            <a
+              href="mailto:enisramadani@hotmail.com"
+              className="italic text-blue-400 underline"
+            >
               enisraamadani@hotmail.com
             </a>
           </p>
           <p>
             <AccessTimeIcon className="pr-[5px]" />
-            <i className="underline">Orari:</i> E hënë - E premte,
-            09:00 - 17:00 PM
+            <i className="text-blue-400 underline">
+              E hënë - E premte, 09:00 - 17:00 PM
+            </i>
           </p>
         </div>
       </div>

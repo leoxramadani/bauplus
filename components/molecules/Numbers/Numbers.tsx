@@ -35,9 +35,9 @@ function Numbers() {
         return () => clearInterval(interval);
       };
 
-      countUp(setClients, 250);
-      countUp(setProjects, 150);
-      countUp(setObjects, 100);
+      countUp(setClients, 120);
+      countUp(setProjects, 85);
+      countUp(setObjects, 35);
     }
   }, [inView]);
 
