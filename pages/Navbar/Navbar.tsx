@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/lib/contexts/ThemeContext';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
@@ -39,12 +40,14 @@ export default function Navbar() {
   const isActiveLink = (path: string) =>
     router.pathname === path ? 'text-blue-600' : 'text-gray-800';
 
+  const { toggleDarkMode, isDarkMode } = useTheme();
+
   return (
     <div>
       {!isSidebarOpen && (
         <IconButton
           onClick={toggleSidebar}
-          color="success"
+          color="error"
           aria-label="menu"
           className="fixed left-4 top-4 z-50"
         >
@@ -54,7 +57,7 @@ export default function Navbar() {
 
       <div
         ref={sidebarRef}
-        className={`fixed left-0 top-0 h-full w-64 transform bg-white shadow-lg ${
+        className={`fixed left-0 top-0 h-full w-64 transform bg-white/30 text-black shadow-lg backdrop-blur-md ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } z-[9999] transition-transform duration-300`}
       >
@@ -108,6 +111,18 @@ export default function Navbar() {
           >
             Contact
           </Link>
+        </div>
+        <div className="flex items-center justify-between p-4">
+          <button
+            onClick={toggleDarkMode}
+            className={`rounded ${
+              isDarkMode
+                ? 'bg-slate-100 text-slate-900'
+                : 'bg-slate-900 text-slate-100'
+            } p-2 `}
+          >
+            {isDarkMode ? 'Light' : 'Dark'} Mode
+          </button>
         </div>
       </div>
     </div>

@@ -206,3 +206,10 @@ input {
     transparent 75%
   );
 }
+
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.3); /* Adjust opacity */
+  backdrop-filter: blur(10px); /* Adjust blur */
+  border-radius: 10px; /* Optional: for rounded edges */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+}

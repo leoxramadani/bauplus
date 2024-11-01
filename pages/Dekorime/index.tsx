@@ -1,5 +1,6 @@
 'use client';
 
+import WhyUs from '@/components/molecules/WhyUs/WhyUs';
 import { ImageList, ImageListItem } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -55,31 +56,34 @@ function Dekorime() {
   }, []);
 
   return (
-    <div className="flex h-auto w-full flex-col px-[15px]">
-      <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
-        <h3>Dekorime</h3>
-      </div>
+    <div>
+      <div className="flex h-auto w-full flex-col px-[15px]">
+        <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
+          <h3>Dekorime</h3>
+        </div>
 
-      <ImageList
-        variant="masonry"
-        cols={imageListProps.cols}
-        gap={imageListProps.gap}
-      >
-        {images.map((src, index) => (
-          <ImageListItem key={index}>
-            <motion.img
-              src={`${src}?w=248&fit=crop&auto=format`}
-              srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={`Gallery image ${index + 1}`}
-              loading="lazy"
-              initial={{ opacity: 0, y: 20 }} // Start state
-              animate={{ opacity: 1, y: 0 }} // End state
-              transition={{ duration: 0.5, delay: index * 0.1 }} // Transition settings
-              className="object-cover transition-transform duration-300 hover:scale-105"
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+        <ImageList
+          variant="masonry"
+          cols={imageListProps.cols}
+          gap={imageListProps.gap}
+        >
+          {images.map((src, index) => (
+            <ImageListItem key={index}>
+              <motion.img
+                src={`${src}?w=248&fit=crop&auto=format`}
+                srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={`Gallery image ${index + 1}`}
+                loading="lazy"
+                initial={{ opacity: 0, y: 20 }} // Start state
+                animate={{ opacity: 1, y: 0 }} // End state
+                transition={{ duration: 0.5, delay: index * 0.1 }} // Transition settings
+                className="object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </div>
+      <WhyUs />
     </div>
   );
 }

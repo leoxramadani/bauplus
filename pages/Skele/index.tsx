@@ -1,7 +1,11 @@
 'use client';
 
+import WhyUs from '@/components/molecules/WhyUs/WhyUs';
+import { useTheme } from '@/lib/contexts/ThemeContext';
 import { ImageList, ImageListItem } from '@mui/material';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import SkeleImg from '../../public/scaffolding.webp';
 
 function Skele() {
   const images = [
@@ -46,29 +50,103 @@ function Skele() {
     }
   }, []);
 
-  return (
-    <div className="flex h-auto w-full flex-col px-[15px]">
-      <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
-        <h3>Skele</h3>
-      </div>
+  const [isOpen, setIsOpen] = useState(true);
 
-      <ImageList
-        variant="masonry"
-        cols={imageListProps.cols}
-        gap={imageListProps.gap}
+  const toggleContent = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const { isDarkMode } = useTheme();
+
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center bg-slate-600/10`}
       >
-        {images.map((src, index) => (
-          <ImageListItem key={index}>
-            <img
-              src={`${src}?w=248&fit=crop&auto=format`}
-              srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={`Gallery image ${index + 1}`}
-              loading="lazy"
-              className="object-cover transition-transform duration-300 hover:scale-105"
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+        <Image
+          src={SkeleImg}
+          alt="SkeleImg"
+          objectFit="cover"
+          className="w-[300px] rounded-lg"
+        />
+        <h1
+          className={`font-serif text-[24px] ${
+            isDarkMode ? 'text-slate-200' : 'text-slate-600'
+          }`}
+        >
+          Skele
+        </h1>
+        <h1
+          className={`text-center font-serif ${
+            isDarkMode ? 'text-slate-200' : 'text-slate-600'
+          }`}
+        >
+          Ofrojmë skele shumë praktike dhe me siguri te lartë për
+          objektet tuaja
+        </h1>
+      </div>
+      <div
+        className="mt-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
+        onClick={toggleContent}
+      >
+        <h2
+          className={`flex text-[24px] ${
+            isDarkMode ? 'text-slate-200' : 'text-slate-600'
+          }`}
+        >
+          Më shumë rreth skeleve tona
+        </h2>
+        <span
+          className={`transition-transform duration-300  ${
+            isOpen ? 'rotate-180' : 'rotate-0'
+          } ${isDarkMode ? 'text-slate-200' : 'text-slate-600'}`}
+        >
+          {isOpen ? '▲' : '▼'}{' '}
+        </span>
+      </div>
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          isOpen ? 'max-h-screen' : 'max-h-0'
+        }`}
+      >
+        <div className="flex h-auto w-full justify-center ">
+          <div className="flex h-auto w-[100%] flex-col pt-[5px] sm:w-[50%] sm:pt-[10px]">
+            <h3
+              className={`px-[20px] text-justify font-serif ${
+                isDarkMode ? 'text-slate-200' : 'text-slate-600'
+              }`}
+            >
+              <b>BAUplus</b> ofron shërbime profesionale të skelave
+              për ndërtimin e objekteve të ndryshme, duke përfshirë
+              ndihmën në ndërtimin e ndërtesave rezidenciale,
+              komerciale dhe industriale. Ne kuptojmë rëndësinë e një
+              infrastrukture të fortë dhe të sigurt për çdo projekt
+              ndërtimi, prandaj ne ofrojmë skela të avancuara që
+              sigurojnë qasje të lehtë dhe të sigurt në lartësi.
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div className="mt-[30px] flex h-auto w-full flex-col px-[15px]">
+        <ImageList
+          variant="masonry"
+          cols={imageListProps.cols}
+          gap={imageListProps.gap}
+        >
+          {images.map((src, index) => (
+            <ImageListItem key={index}>
+              <img
+                src={`${src}?w=248&fit=crop&auto=format`}
+                srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={`Gallery image ${index + 1}`}
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </div>
+      <WhyUs />
     </div>
   );
 }

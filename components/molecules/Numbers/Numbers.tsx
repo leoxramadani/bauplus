@@ -1,3 +1,4 @@
+import { useTheme } from '@/lib/contexts/ThemeContext';
 import HouseIcon from '@mui/icons-material/House';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import StorefrontIcon from '@mui/icons-material/Storefront';
@@ -41,34 +42,62 @@ function Numbers() {
     }
   }, [inView]);
 
+  const { isDarkMode } = useTheme();
+
   return (
     <section
       ref={ref}
-      className="flex flex-col items-center justify-around p-10"
+      className={`flex flex-col items-center justify-around  ${
+        isDarkMode ? 'bg-slate-200' : 'bg-slate-600'
+      } p-10`}
     >
       <div className="flex flex-row space-x-10">
         <div className="flex flex-col items-center">
-          <div className="text-4xl font-bold text-slate-600">
+          <div
+            className={`text-4xl font-bold text-slate-300 ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             {clients}+
           </div>
-          <div className="text-lg text-slate-600">
+          <div
+            className={`text-lg  ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             <SentimentSatisfiedAltIcon /> Klientë të kënaqur
           </div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-4xl font-bold text-slate-600">
+          <div
+            className={`text-4xl font-bold ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             {projects}+
           </div>
-          <div className="text-lg text-slate-600">
+          <div
+            className={`text-lg ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             <HouseIcon />
             Shtëpi private
           </div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-4xl font-bold text-slate-600">
+          <div
+            className={`text-4xl font-bold ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             {objects}+
           </div>
-          <div className="text-lg text-slate-600">
+          <div
+            className={`text-lg ${
+              isDarkMode ? 'text-slate-900' : 'text-slate-200 '
+            }`}
+          >
             <StorefrontIcon /> Objekte publike
           </div>
         </div>

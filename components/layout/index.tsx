@@ -1,4 +1,5 @@
 import { useExplore } from '@/lib/contexts/ExploreContext';
+import { useTheme } from '@/lib/contexts/ThemeContext';
 import Navbar from '@/pages/Navbar/Navbar';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -8,6 +9,7 @@ import About from '../molecules/About/About';
 import Cards from '../molecules/Cards/Cards';
 import Footer from '../molecules/Footer/Footer';
 import Numbers from '../molecules/Numbers/Numbers';
+import WhyUs from '../molecules/WhyUs/WhyUs';
 import Loading from './Loading';
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -76,6 +78,8 @@ const Layout = ({ children }: PropsWithChildren) => {
     document.body.style.overflow = 'auto';
   };
 
+  const { isDarkMode } = useTheme();
+
   return (
     <>
       <Head>
@@ -93,7 +97,9 @@ const Layout = ({ children }: PropsWithChildren) => {
             (expanded
               ? `duration-[250ms] transition-all`
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
-          } duration-[250ms] transition-all fade-in`}
+          } duration-[250ms] transition-all fade-in ${
+            isDarkMode ? 'bg-slate-900' : 'bg-slate-100'
+          }`}
         >
           {!isExploreClicked && !isIzolimePage && !hasVisited && (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
@@ -118,8 +124,9 @@ const Layout = ({ children }: PropsWithChildren) => {
           {isHomePage && (
             <>
               <Cards />
-              <About />
               <Numbers />
+              <About />
+              <WhyUs />
             </>
           )}
 

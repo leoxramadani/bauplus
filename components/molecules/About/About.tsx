@@ -1,28 +1,34 @@
+import { useTheme } from '@/lib/contexts/ThemeContext';
 import Image from 'next/image';
 import { useState } from 'react';
 import AboutUsPic from '../../../public/info.webp';
 
 function About() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleContent = () => {
     setIsOpen(!isOpen);
   };
+  const { isDarkMode } = useTheme();
 
   return (
-    <div className="h-auto w-full">
+    <div className="mt-[20px] h-auto w-full">
       <div className="flex h-full w-full flex-col items-center justify-around">
         <div
           className="my-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
           onClick={toggleContent}
         >
-          <h2 className="flex items-center justify-center  text-[24px] text-slate-600">
+          <h2
+            className={`flex items-center justify-center  text-[24px]  ${
+              isDarkMode ? 'text-slate-200' : 'text-slate-600'
+            }`}
+          >
             Më shumë rreth nesh?
           </h2>
           <span
             className={`transition-transform duration-300  ${
               isOpen ? 'rotate-180' : 'rotate-0'
-            }`}
+            } ${isDarkMode ? 'text-slate-200' : 'text-slate-600'}`}
           >
             {isOpen ? '▲' : '▼'}{' '}
             {/* Up arrow when open, down arrow when closed */}
@@ -37,7 +43,11 @@ function About() {
         >
           <div className="flex h-auto w-full flex-col sm:flex-row">
             <div className="flex h-auto w-[100%] flex-col pt-[5px] sm:w-[50%] sm:pt-[20px]">
-              <h3 className="mb-[10px] px-[20px] text-justify font-serif sm:px-[100px]">
+              <h3
+                className={`mb-[10px] px-[20px] text-justify font-serif sm:px-[100px] ${
+                  isDarkMode ? 'text-slate-200' : 'text-slate-600'
+                } `}
+              >
                 <b>BAUplus</b> një kompani lider në sektorin e
                 ndërtimit dhe renovimeve, e angazhuar për t&#39;u
                 ofruar klientëve tanë zgjidhje inovative dhe cilësore
@@ -49,19 +59,31 @@ function About() {
                 stilin dhe nevojat e tyre.
               </h3>
 
-              <h3 className="mb-[10px] px-[20px] text-justify font-serif sm:px-[100px]">
+              <h3
+                className={`mb-[10px] px-[20px] text-justify font-serif sm:px-[100px] ${
+                  isDarkMode ? 'text-slate-200' : 'text-slate-600'
+                } `}
+              >
                 Izolimi i Shtëpive: Zgjidhje efektive për izolimin e
                 shtëpive tuaja, duke kontribuar në ruajtjen e
                 energjisë dhe komfortin e ambienteve, duke ulur kostot
                 e ngrohjes dhe ftohjes.
               </h3>
-              <h3 className="mb-[10px] px-[20px] text-justify font-serif sm:px-[100px]">
+              <h3
+                className={`mb-[10px] px-[20px] text-justify font-serif sm:px-[100px] ${
+                  isDarkMode ? 'text-slate-200' : 'text-slate-600'
+                }`}
+              >
                 Dekorimi i Ambientit: Stile dhe ide të ndryshme për
                 dekorimin e brendshëm dhe të jashtëm, duke ju ndihmuar
                 të krijoni një atmosferë të këndshme dhe funksionale
                 sipas shijeve tuaja.
               </h3>
-              <h3 className="mb-[10px] px-[20px] font-serif sm:px-[100px]">
+              <h3
+                className={`mb-[10px] px-[20px] font-serif sm:px-[100px] ${
+                  isDarkMode ? 'text-slate-200' : 'text-slate-600'
+                }`}
+              >
                 Skele për Objekte: Ofrimi i sistemeve të skelave të
                 sigurta dhe të qëndrueshme për të lehtësuar procesin e
                 renovimit, duke garantuar që çdo projekt të realizohet

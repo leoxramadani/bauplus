@@ -1,6 +1,7 @@
 import Layout from '@/components/layout';
 import { ExploreProvider } from '@/lib/contexts/ExploreContext';
 import LanguageProvider from '@/lib/contexts/LanguageContext';
+import { ThemeProvider } from '@/lib/contexts/ThemeContext';
 import '@/styles/globals.css';
 import { QueryClient } from '@tanstack/react-query';
 import { Session } from 'next-auth';
@@ -31,9 +32,11 @@ const BAUplus: AppType<{ session: Session | null }> = ({
   return (
     <LanguageProvider>
       <ExploreProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ThemeProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
       </ExploreProvider>
     </LanguageProvider>
   );

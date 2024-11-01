@@ -1,3 +1,4 @@
+import WhyUs from '@/components/molecules/WhyUs/WhyUs';
 import { ImageList, ImageListItem } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -51,28 +52,31 @@ export default function Izolime() {
   }, []);
 
   return (
-    <div className="flex h-auto w-full flex-col px-[15px]">
-      <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
-        <h3>Izolime</h3>
-      </div>
+    <div>
+      <div className="flex h-auto w-full flex-col px-[15px]">
+        <div className="mt-[70px] h-auto w-full pl-4 text-center font-serif text-[22px] text-slate-600">
+          <h3>Izolime</h3>
+        </div>
 
-      <ImageList
-        variant="masonry"
-        cols={imageListProps.cols}
-        gap={imageListProps.gap}
-      >
-        {images.map((src, index) => (
-          <ImageListItem key={index}>
-            <img
-              src={`${src}?w=248&fit=crop&auto=format`}
-              srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={`Gallery image ${index + 1}`}
-              loading="lazy"
-              className="object-cover transition-transform duration-300 hover:scale-105"
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+        <ImageList
+          variant="masonry"
+          cols={imageListProps.cols}
+          gap={imageListProps.gap}
+        >
+          {images.map((src, index) => (
+            <ImageListItem key={index}>
+              <img
+                src={`${src}?w=248&fit=crop&auto=format`}
+                srcSet={`${src}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={`Gallery image ${index + 1}`}
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </div>
+      <WhyUs />
     </div>
   );
 }
