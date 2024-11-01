@@ -13,6 +13,8 @@ import WhyUs from '../molecules/WhyUs/WhyUs';
 import Loading from './Loading';
 
 const Layout = ({ children }: PropsWithChildren) => {
+  const { isDarkMode } = useTheme();
+
   // First, declare all hooks and state
   const router = useRouter();
   const { isExploreClicked, setExploreClicked } = useExplore();
@@ -77,8 +79,6 @@ const Layout = ({ children }: PropsWithChildren) => {
     setExploreClicked(true);
     document.body.style.overflow = 'auto';
   };
-
-  const { isDarkMode } = useTheme();
 
   return (
     <>
