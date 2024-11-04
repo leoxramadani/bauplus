@@ -3,9 +3,7 @@
 import WhyUs from '@/components/molecules/WhyUs/WhyUs';
 import { useTheme } from '@/lib/contexts/ThemeContext';
 import { ImageList, ImageListItem } from '@mui/material';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import SkeleImg from '../../public/scaffolding.webp';
 
 function Skele() {
   const images = [
@@ -61,29 +59,21 @@ function Skele() {
   return (
     <div className="flex flex-col items-center">
       <div
-        className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center bg-slate-600/10`}
+        className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center ${
+          isDarkMode ? 'bg-transparent' : ' bg-slate-100 '
+        }`}
       >
-        <Image
-          src={SkeleImg}
-          alt="SkeleImg"
-          objectFit="cover"
-          className="w-[300px] rounded-lg"
-        />
-        <h1
-          className={`font-serif text-[24px] ${
-            isDarkMode ? 'text-slate-200' : 'text-slate-600'
-          }`}
-        >
-          Skele
-        </h1>
-        <h1
-          className={`text-center font-serif ${
-            isDarkMode ? 'text-slate-200' : 'text-slate-600'
-          }`}
-        >
-          Ofrojmë skele shumë praktike dhe me siguri te lartë për
-          objektet tuaja
-        </h1>
+        <div className="sketchfab-embed-wrapper mx-[5vw] h-[80vh] w-[90vw]">
+          {' '}
+          <iframe
+            className="h-full w-full"
+            title="3D_Building_Construction"
+            allow="autoplay; fullscreen; xr-spatial-tracking"
+            src="https://sketchfab.com/models/d2230c5644234b3781cd7b2a6cec9638/embed?autospin=1&autostart=1"
+          >
+            {' '}
+          </iframe>{' '}
+        </div>
       </div>
       <div
         className="mt-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
@@ -127,6 +117,7 @@ function Skele() {
           </div>
         </div>
       </div>
+
       <div className="mt-[30px] flex h-auto w-full flex-col px-[15px]">
         <ImageList
           variant="masonry"

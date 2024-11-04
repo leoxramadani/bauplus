@@ -8,6 +8,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import About from '../molecules/About/About';
 import Cards from '../molecules/Cards/Cards';
 import Footer from '../molecules/Footer/Footer';
+import LightDarkMode from '../molecules/LightDarkMode/LightDarkMode';
 import Numbers from '../molecules/Numbers/Numbers';
 import WhyUs from '../molecules/WhyUs/WhyUs';
 import Loading from './Loading';
@@ -89,6 +90,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <div onClick={() => (isOpen ? setIsOpen(false) : null)}>
         <div onClick={(e: any) => e.stopPropagation()}>
           <Navbar />
+          <LightDarkMode />
         </div>
 
         <main
@@ -98,11 +100,11 @@ const Layout = ({ children }: PropsWithChildren) => {
               ? `duration-[250ms] transition-all`
               : `duration-[250ms] transition-all md:ml-[4.5rem]`)
           } duration-[250ms] transition-all fade-in ${
-            isDarkMode ? 'bg-slate-900' : 'bg-slate-100'
+            isDarkMode ? 'bg-black/85' : 'bg-slate-100'
           }`}
         >
           {!isExploreClicked && !isIzolimePage && !hasVisited && (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/95">
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-6 bg-black/85">
               <Image
                 src="/Logo.webp"
                 alt="Logo"
@@ -124,6 +126,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           {isHomePage && (
             <>
               <Cards />
+
               <Numbers />
               <About />
               <WhyUs />

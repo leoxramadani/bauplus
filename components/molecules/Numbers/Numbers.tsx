@@ -48,7 +48,7 @@ function Numbers() {
     <section
       ref={ref}
       className={`flex flex-col items-center justify-around  ${
-        isDarkMode ? 'bg-slate-200' : 'bg-slate-600'
+        isDarkMode ? 'bg-slate-200' : 'bg-black/85'
       } p-10`}
     >
       <div className="flex flex-row space-x-10">

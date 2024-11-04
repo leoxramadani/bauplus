@@ -11,6 +11,7 @@ export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { toggleDarkMode, isDarkMode } = useTheme();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,19 +38,23 @@ export default function Navbar() {
     };
   }, [isSidebarOpen]);
 
-  const isActiveLink = (path: string) =>
-    router.pathname === path ? 'text-blue-600' : 'text-gray-800';
-
-  const { toggleDarkMode, isDarkMode } = useTheme();
+  const isActiveLink = (path: string) => {
+    if (router.pathname === path) {
+      return isDarkMode ? 'text-blue-300' : 'text-blue-600';
+    }
+    return isDarkMode ? 'text-slate-100' : 'text-gray-800';
+  };
 
   return (
     <div>
       {!isSidebarOpen && (
         <IconButton
           onClick={toggleSidebar}
-          color="error"
+          color="primary"
           aria-label="menu"
-          className="fixed left-4 top-4 z-50"
+          className={`fixed left-4 top-4 z-50 rounded-md  ${
+            isDarkMode ? 'bg-white ' : 'bg-black/30'
+          }`}
         >
           <MenuIcon />
         </IconButton>
@@ -57,12 +62,18 @@ export default function Navbar() {
 
       <div
         ref={sidebarRef}
-        className={`fixed left-0 top-0 h-full w-64 transform bg-white/30 text-black shadow-lg backdrop-blur-md ${
+        className={`fixed left-0 top-0 h-full w-64 transform bg-white/10 text-black shadow-lg backdrop-blur-md ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } z-[9999] transition-transform duration-300`}
       >
         <div className="flex items-center justify-between p-4">
-          <h2 className="text-xl font-bold">Menu</h2>
+          <h2
+            className={`text-xl font-bold ${
+              isDarkMode ? 'text-slate-100' : 'text-black'
+            }`}
+          >
+            Menu
+          </h2>
           <IconButton onClick={toggleSidebar}>
             <CloseIcon />
           </IconButton>
@@ -111,18 +122,6 @@ export default function Navbar() {
           >
             Contact
           </Link>
-        </div>
-        <div className="flex items-center justify-between p-4">
-          <button
-            onClick={toggleDarkMode}
-            className={`rounded ${
-              isDarkMode
-                ? 'bg-slate-100 text-slate-900'
-                : 'bg-slate-900 text-slate-100'
-            } p-2 `}
-          >
-            {isDarkMode ? 'Light' : 'Dark'} Mode
-          </button>
         </div>
       </div>
     </div>

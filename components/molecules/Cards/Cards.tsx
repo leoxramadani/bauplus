@@ -9,11 +9,11 @@ function Cards() {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className="flex h-auto w-full flex-col">
+    <div className="flex h-auto w-full flex-col ">
       <h2
         className={`mt-[20px] bg-slate-100 text-center font-serif text-[26px] ${
           isDarkMode
-            ? 'bg-slate-900 text-slate-200'
+            ? 'bg-transparent text-slate-200'
             : 'bg-slate-100 text-slate-600'
         }`}
       >
@@ -21,7 +21,7 @@ function Cards() {
       </h2>
       <div
         className={`flex w-full flex-row flex-wrap items-center justify-center gap-10  ${
-          isDarkMode ? 'bg-slate-900' : 'text-slate-100'
+          isDarkMode ? 'bg-transparent' : 'text-slate-100'
         }  py-5 sm:my-[50px] sm:justify-around sm:gap-0 sm:py-0`}
       >
         <Link href="/Skele">

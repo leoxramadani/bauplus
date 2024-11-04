@@ -71,7 +71,7 @@ export default function Home() {
           playsInline
           className="h-full w-full object-fill"
         ></video>
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 " />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="max-w-lg px-4 text-center sm:px-6 lg:px-8">
             <h1 className="mb-4 font-serif text-2xl font-bold text-white md:text-3xl">
