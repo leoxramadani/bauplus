@@ -66,7 +66,7 @@ function Dekorime() {
   return (
     <div>
       <div className="flex flex-col items-center">
-        <div
+        {/* <div
           className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center bg-transparent`}
         >
           <div className="sketchfab-embed-wrapper mx-[5vw] h-[80vh] w-[90vw] bg-slate-200">
@@ -77,7 +77,7 @@ function Dekorime() {
               src="https://sketchfab.com/models/c1248d260eed44e789c566ea0610af6e/embed?autospin=1&autostart=1"
             />
           </div>
-        </div>
+        </div> */}
         <div
           className="my-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
           onClick={toggleContent}

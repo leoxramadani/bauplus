@@ -62,7 +62,7 @@ export default function Izolime() {
   return (
     <div>
       <div className="flex flex-col items-center">
-        <div
+        {/* <div
           className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center bg-transparent`}
         >
           <div className="sketchfab-embed-wrapper mx-[5vw] h-[80vh] w-[90vw]">
@@ -76,7 +76,7 @@ export default function Izolime() {
               {' '}
             </iframe>{' '}
           </div>
-        </div>
+        </div> */}
         <div
           className="my-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
           onClick={toggleContent}

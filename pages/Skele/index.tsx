@@ -58,29 +58,29 @@ function Skele() {
 
   return (
     <div className="flex flex-col items-center">
-      <div
+      {/* <div
         className={`card1 relative flex h-[380px] w-[100vw] flex-col items-center justify-center ${
           isDarkMode ? 'bg-transparent' : ' bg-slate-100 '
         }`}
-      >
-        <div className="sketchfab-embed-wrapper mx-[5vw] h-[80vh] w-[90vw]">
+      > */}
+      {/* <div className="sketchfab-embed-wrapper mx-[5vw] h-[80vh] w-[90vw]">
           {' '}
           <iframe
             className="h-full w-full"
             title="3D_Building_Construction"
-            allow="autoplay; fullscreen; xr-spatial-tracking"
+            allow="autoplay; fullscreen" // Remove xr-spatial-tracking and accelerometer if not needed
             src="https://sketchfab.com/models/d2230c5644234b3781cd7b2a6cec9638/embed?autospin=1&autostart=1"
           >
             {' '}
           </iframe>{' '}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
       <div
-        className="mt-[20px] flex h-[30px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
+        className="mt-[80px] flex h-[50px] w-full cursor-pointer items-center justify-center font-serif text-[22px]"
         onClick={toggleContent}
       >
         <h2
-          className={`flex text-[24px] ${
+          className={`mb-[20px] flex text-center text-[24px] ${
             isDarkMode ? 'text-slate-200' : 'text-slate-600'
           }`}
         >
