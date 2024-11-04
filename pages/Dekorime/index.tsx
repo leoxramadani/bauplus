@@ -112,7 +112,7 @@ function Dekorime() {
                 <b>BAUplus</b> ofron shërbime të specializuara për
                 dekorimin e ambienteve të brendshme, duke përdorur
                 materiale cilësore si gipsi dhe tapeta dekorative për
-                t'i dhënë çdo hapësire një pamje elegante dhe
+                t&#39i dhënë çdo hapësire një pamje elegante dhe
                 funksionale. Ekipi ynë profesionist ka përvojë të
                 gjerë në krijimin e dizajneve unike që kombinojnë
                 stilin modern me preferencat personale të klientëve.
