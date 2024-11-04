@@ -15,7 +15,7 @@ function LightDarkMode() {
           isDarkMode
             ? 'bg-slate-100 text-slate-900'
             : 'bg-black/40 text-slate-100'
-        } fixed right-4 top-4 z-50 p-2`}
+        } fixed right-4 top-4 z-[9999] p-2`}
       >
         {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
       </IconButton>

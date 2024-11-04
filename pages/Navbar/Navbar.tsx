@@ -52,7 +52,7 @@ export default function Navbar() {
           onClick={toggleSidebar}
           color="primary"
           aria-label="menu"
-          className={`fixed left-4 top-4 z-50 rounded-md  ${
+          className={`fixed left-4 top-4 z-[9999] rounded-md  ${
             isDarkMode ? 'bg-white ' : 'bg-black/30'
           }`}
         >
