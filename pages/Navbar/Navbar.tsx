@@ -74,7 +74,7 @@ export default function Navbar() {
           >
             Menu
           </h2>
-          <IconButton onClick={toggleSidebar}>
+          <IconButton onClick={toggleSidebar} className="bg-blue-400">
             <CloseIcon />
           </IconButton>
         </div>

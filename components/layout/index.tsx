@@ -87,7 +87,10 @@ const Layout = ({ children }: PropsWithChildren) => {
         <link rel="icon" href="/Logo.webp" sizes="any" />
         <title>BAUplus</title>
       </Head>
-      <div onClick={() => (isOpen ? setIsOpen(false) : null)}>
+      <div
+        onClick={() => (isOpen ? setIsOpen(false) : null)}
+        className="relative"
+      >
         <div onClick={(e: any) => e.stopPropagation()}>
           <Navbar />
           <LightDarkMode />
