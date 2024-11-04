@@ -8,7 +8,6 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import About from '../molecules/About/About';
 import Cards from '../molecules/Cards/Cards';
 import Footer from '../molecules/Footer/Footer';
-import LightDarkMode from '../molecules/LightDarkMode/LightDarkMode';
 import Numbers from '../molecules/Numbers/Numbers';
 import WhyUs from '../molecules/WhyUs/WhyUs';
 import Loading from './Loading';
@@ -93,7 +92,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       >
         <div onClick={(e: any) => e.stopPropagation()}>
           <Navbar />
-          <LightDarkMode />
+          {/* <LightDarkMode /> */}
         </div>
 
         <main
