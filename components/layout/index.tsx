@@ -1,5 +1,6 @@
 import { useExplore } from '@/lib/contexts/ExploreContext';
 import { useTheme } from '@/lib/contexts/ThemeContext';
+import Gallery from '@/pages/Gallery/Gallery';
 import Navbar from '@/pages/Navbar/Navbar';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -131,6 +132,7 @@ const Layout = ({ children }: PropsWithChildren) => {
 
               <Numbers />
               <About />
+              <Gallery />
               <WhyUs />
             </>
           )}
