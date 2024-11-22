@@ -166,7 +166,7 @@ const Gallery: React.FC = () => {
         id: 25,
         title: 'Izolime11',
         genre_ids: [28],
-        backdrop_path: '/izolime11.webp',
+        backdrop_path: '/Izolime11.webp',
       },
       {
         id: 26,
