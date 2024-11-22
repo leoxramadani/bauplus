@@ -36,10 +36,10 @@ const Filter: React.FC<FilterProps> = ({
       className={` top-3 z-10 my-4 flex justify-center transition-opacity duration-300`}
     >
       <button
-        className={`hover:bg-slate-600" font sans mr-4 rounded-lg border-2 p-1 px-4 py-2 font-sans font-light ${
+        className={`font sans mr-4 rounded-lg border-2 p-1 px-4 py-2 font-sans font-light  ${
           activeGenre === 4
-            ? 'border-white bg-slate-500 text-white'
-            : 'text-black-600 border-slate-500 bg-slate-500'
+            ? 'border-black bg-blue-500 text-white'
+            : 'border-blue-500 bg-slate-300 text-blue-500'
         }`}
         onClick={() => setActiveGenre(4)}
       >
@@ -48,8 +48,8 @@ const Filter: React.FC<FilterProps> = ({
       <button
         className={`mr-4 rounded-lg border-2 p-1 font-sans font-light ${
           activeGenre === 35
-            ? 'border-white bg-slate-500 text-white'
-            : 'text-black-600 border-slate-500 bg-slate-500'
+            ? 'border-black bg-blue-500 text-white'
+            : 'border-blue-500 bg-slate-300 text-blue-500'
         }`}
         onClick={() => setActiveGenre(35)}
       >
@@ -58,8 +58,8 @@ const Filter: React.FC<FilterProps> = ({
       <button
         className={`mr-4 rounded-lg border-2 p-1 font-sans font-light ${
           activeGenre === 28
-            ? 'border-white bg-slate-500 text-white'
-            : 'text-black-600 border-slate-500 bg-slate-500'
+            ? 'border-black bg-blue-500 text-white'
+            : 'border-blue-500 bg-slate-300 text-blue-500'
         }`}
         onClick={() => setActiveGenre(28)}
       >
@@ -68,8 +68,8 @@ const Filter: React.FC<FilterProps> = ({
       <button
         className={`font sans mr-4 rounded-lg border-2 p-1 font-light ${
           activeGenre === 0
-            ? 'border-white bg-slate-500 text-white'
-            : 'text-black-600 border-slate-500 bg-slate-500'
+            ? 'border-black bg-blue-500 text-white'
+            : 'border-blue-500 bg-slate-300 text-blue-500'
         }`}
         onClick={() => setActiveGenre(0)}
       >

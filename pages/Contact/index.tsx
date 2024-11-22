@@ -37,7 +37,7 @@ export default function Contact() {
           </p>
         </div>
       </div>
-      <div className="ml-[10%] flex h-[300px] w-[80%] flex-col sm:ml-[0%] sm:w-[70%] ">
+      <div className="flex h-[300px] w-[80%] flex-col sm:ml-[0%] sm:w-[70%] ">
         <div className="flex-1  text-gray-600">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2958.4426323879134!2d21.711128892755802!3d42.140813989077635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDLCsDA4JzI2LjkiTiAyMcKwNDInNDUuOCJF!5e0!3m2!1sen!2smk!4v1729804897463!5m2!1sen!2smk"

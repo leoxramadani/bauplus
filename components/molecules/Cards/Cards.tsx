@@ -53,7 +53,7 @@ function Cards() {
           />
           <div className="ml-2 flex flex-col justify-center">
             <h1
-              className={`text-center font-sans text-[24px] font-medium underline ${
+              className={`text-center font-sans text-[24px] font-medium ${
                 isDarkMode ? 'text-slate-200' : 'text-slate-600'
               }`}
             >
@@ -87,7 +87,7 @@ function Cards() {
           />
           <div className="ml-2 flex flex-col justify-center">
             <h1
-              className={`text-center font-sans text-[24px] underline ${
+              className={`text-center font-sans text-[24px] ${
                 isDarkMode ? 'text-slate-200' : 'text-slate-600'
               }`}
             >
@@ -120,7 +120,7 @@ function Cards() {
           />
           <div className="ml-2 flex flex-col justify-center">
             <h1
-              className={`text-center font-sans text-[24px] underline ${
+              className={`text-center font-sans text-[24px] ${
                 isDarkMode ? 'text-slate-200' : 'text-slate-600'
               }`}
             >
