@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer
-      className={`py-8 ${
+      className={`py-8  ${
         isDarkMode
           ? 'bg-gradient-to-t from-black/75 to-transparent text-slate-100 '
           : 'bg-gradient-to-t from-slate-400 to-slate-100 text-slate-900 '

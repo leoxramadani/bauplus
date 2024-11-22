@@ -1,9 +1,8 @@
-// pages/index.tsx
 import Filter from '@/components/molecules/Filter/Filter';
 import Movie from '@/components/molecules/Movie/Movie';
+import Button from '@mui/material/Button';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
 type MovieType = {
   id: number;
   title: string;
@@ -15,10 +14,9 @@ const Gallery: React.FC = () => {
   const [popular, setPopular] = useState<MovieType[]>([]);
   const [filtered, setFiltered] = useState<MovieType[]>([]);
   const [activeGenre, setActiveGenre] = useState(4);
+  const [showCount, setShowCount] = useState(3);
 
   useEffect(() => {
-    console.log('Current active genre:', activeGenre);
-
     const localMovies = [
       {
         id: 1,
@@ -213,15 +211,28 @@ const Gallery: React.FC = () => {
         backdrop_path: '/skele7.webp',
       },
     ];
+
     setPopular(localMovies);
     setFiltered(localMovies);
   }, []);
 
+  // Reset showCount whenever activeGenre changes
+  useEffect(() => {
+    setShowCount(3);
+  }, [activeGenre]);
+
+  const handleShowMore = () => {
+    // Show all filtered movies instead of incrementing
+    setShowCount(filtered.length);
+  };
+
+  const visibleMovies = filtered.slice(0, showCount);
+
   return (
     <div className="mt-10 bg-white/10 p-4">
-      <h2 className={` text-center text-[24px] text-slate-200`}>
+      <h2 className="text-center font-sans text-[24px] text-slate-900">
         Galerija
-      </h2>{' '}
+      </h2>
       <Filter
         popular={popular}
         setFiltered={setFiltered}
@@ -232,12 +243,27 @@ const Gallery: React.FC = () => {
         layout
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
       >
-        <AnimatePresence mode="wait">
-          {filtered.map((movie) => (
-            <Movie key={movie.id} movie={movie} />
+        <AnimatePresence>
+          {visibleMovies.map((movie) => (
+            <motion.div
+              key={movie.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <Movie movie={movie} />
+            </motion.div>
           ))}
         </AnimatePresence>
       </motion.div>
+      {showCount < filtered.length && (
+        <div className="mt-4 text-center">
+          <Button variant="outlined" onClick={handleShowMore}>
+            {' '}
+            Më shumë
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -19,7 +19,7 @@ function About() {
           onClick={toggleContent}
         >
           <h2
-            className={`flex items-center justify-center  text-[24px]  ${
+            className={`flex items-center justify-center font-sans text-[24px]  ${
               isDarkMode ? 'text-slate-200' : 'text-slate-600'
             }`}
           >
@@ -44,7 +44,7 @@ function About() {
           <div className="flex h-auto w-full flex-col sm:flex-row">
             <div className="flex h-auto w-[100%] flex-col pt-[5px] sm:w-[50%] sm:pt-[20px]">
               <h3
-                className={`mb-[10px] px-[20px] text-justify font-serif sm:px-[100px] ${
+                className={`mb-[10px] px-[20px] text-justify font-sans font-serif sm:px-[100px] ${
                   isDarkMode ? 'text-slate-200' : 'text-slate-600'
                 } `}
               >

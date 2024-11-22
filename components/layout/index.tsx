@@ -1,7 +1,7 @@
 import { useExplore } from '@/lib/contexts/ExploreContext';
 import { useTheme } from '@/lib/contexts/ThemeContext';
+import Contact from '@/pages/Contact';
 import Gallery from '@/pages/Gallery/Gallery';
-import Navbar from '@/pages/Navbar/Navbar';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -92,12 +92,12 @@ const Layout = ({ children }: PropsWithChildren) => {
         className="relative"
       >
         <div onClick={(e: any) => e.stopPropagation()}>
-          <Navbar />
+          {/* <Navbar /> */}
           {/* <LightDarkMode /> */}
         </div>
 
         <main
-          className={`duration-[250ms] transition-all ${
+          className={`duration-[250ms] bg-[url('/metal.png')] transition-all ${
             !isWindowSmall &&
             (expanded
               ? `duration-[250ms] transition-all`
@@ -134,6 +134,7 @@ const Layout = ({ children }: PropsWithChildren) => {
               <About />
               <Gallery />
               <WhyUs />
+              <Contact />
             </>
           )}
 

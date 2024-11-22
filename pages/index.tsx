@@ -74,13 +74,13 @@ export default function Home() {
         <div className="absolute inset-0 " />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="max-w-lg px-4 text-center sm:px-6 lg:px-8">
-            <h1 className="mb-4 font-serif text-2xl font-bold text-white md:text-3xl">
+            <h1 className="mb-4 rounded-lg bg-slate-500/20 p-2 font-sans text-2xl font-bold text-white md:text-3xl">
               Kualitet, siguri dhe garancë.
             </h1>
-            <p className="mb-4 font-serif text-xl text-white">
+            <p className="mb-4 bg-slate-500/20 p-2 font-sans text-xl text-white">
               Shtëpia juaj, obligimi ynë!
             </p>
-            <p className="font-serif text-xl text-white">
+            <p className="bg-slate-500/20 p-2 font-sans text-xl text-white">
               +389 70 848 844
             </p>
           </div>
